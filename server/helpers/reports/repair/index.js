@@ -18,8 +18,39 @@ module.exports = function(data, reportsDir) {
         alignment: { wrapText: true }
     })
 
-    summary(data, ws1, defaultStyle) // Итоги
-    plan(data, ws2, defaultStyle) // План
+    const bgStyle = wb.createStyle({
+        fill: {
+            type: 'pattern',
+            patternType: 'solid',
+            bgColor: '#FFFF00',
+            fgColor: '#FFFF00'
+        }
+    })
+
+    const borderStyle = wb.createStyle({
+        border: {
+            left: {
+                style: 'hair',
+                color: 'black'
+            },
+            right: {
+                style: 'hair',
+                color: 'black'
+            },
+            top: {
+                style: 'hair',
+                color: 'black'
+            },
+            bottom: {
+                style: 'hair',
+                color: 'black'
+            },
+            outline: false
+        }
+    })
+
+    summary(data, ws1, defaultStyle, bgStyle) // Итоги
+    plan(data, ws2, defaultStyle, bgStyle, borderStyle) // План
 
     wb.write(`${reportsDir}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`, err => {
         err ? console.error(err) : console.log('Файл успешно сохранён!')

@@ -1,6 +1,6 @@
 // Сводная
 
-module.exports = function(data, ws, defaultStyle) {
+module.exports = function(data, ws, defaultStyle, bgStyle) {
     ws.row(3).freeze()
     ws.column(1).setWidth(20)
     ws.column(1).freeze()

@@ -1,6 +1,6 @@
 // План
 
-module.exports = function(data, ws, defaultStyle) {
+module.exports = function(data, ws, defaultStyle, bgStyle, borderStyle) {
     // Закрепить строку, столбец
     ws.row(4).freeze()
     ws.column(1).setWidth(15)
@@ -23,7 +23,10 @@ module.exports = function(data, ws, defaultStyle) {
         ws.cell(3, step4, 3, step4 + 3, true)
             .string(`Производство №${key}`)
             .style(defaultStyle)
-            .style({ font: { bold: true }, alignment: { horizontal: 'center' } })
+            .style({
+                font: { bold: true },
+                alignment: { horizontal: 'center' }
+            })
 
         // "Модель, инвентарный номер, цеховой номер, вид ремонта"
         ws.cell(4, stepTitle)
@@ -96,8 +99,15 @@ module.exports = function(data, ws, defaultStyle) {
                 step1 = step1 - 3
                 row++
             })
+
+            // Вертикальная граница между производствами
+            ws.cell(3, step4, row, step4).style({ border: { left: { style: 'thin' } } })
+
             row = start[i]
+            // Горизонтальная граница между временными периодами
+            ws.cell(row, 1, row, step4 + 3).style({ border: { top: { style: 'thin' } } })
         })
+
         stepTitle++
         step1 = step1 + 4
         step4 = step4 + 4
@@ -122,13 +132,13 @@ function startRowsArr(data) {
     })
     // Преобразовать maxEquipmentObj в массив
     // Добавить первым элементом номер строки, с которой начинается построение данных в таблице
-    const start = 6
+    const start = 5
     const arr = [start, ...Object.values(maxEquipmentObj)]
     // Суммировать два соседних в массиве значения, первый и второй, второй и третий и т.д.
     // Добавить отступ margin (количетство строк)
     // Сохранить в массив
     let startRowsArr = []
-    const margin = 2
+    const margin = 0
     arr.reduce((prev, current) => {
         startRowsArr = [...startRowsArr, prev]
         return prev + current + margin
