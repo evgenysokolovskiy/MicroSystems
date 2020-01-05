@@ -1,0 +1,21 @@
+@import '~antd/dist/antd.css';
+
+.header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: left;
+  align-items: center;
+  height: 120px;
+}
+
+.logo {
+  margin-right: 20px;
+  background: url(../../../data/icons/logo_header.svg);
+  width: 60px;
+  height: 60px;
+  background-size: 60px 60px;
+}
+
+.search {
+  margin-left: auto;
+}

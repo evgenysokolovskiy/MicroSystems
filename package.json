@@ -1,0 +1,25 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "excel4node": "^1.7.2",
+    "express": "^4.17.1",
+    "lodash.clonedeep": "^4.5.0",
+    "node-xlsx": "^0.15.0",
+    "xlsx-style": "^0.8.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "dev": "nodemon ./index.js",
+    "start": "node ./index.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "prettier": "prettier --write index.js server/**/*.js client/src/**/*.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
