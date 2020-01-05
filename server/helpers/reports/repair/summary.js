@@ -1,7 +1,7 @@
 // Сводная
 
 module.exports = function(data, ws, defaultStyle, bgStyle) {
-    ws.row(3).freeze()
+    ws.row(2).freeze()
     ws.column(1).setWidth(20)
     ws.column(1).freeze()
 
@@ -11,13 +11,13 @@ module.exports = function(data, ws, defaultStyle, bgStyle) {
         .style(defaultStyle)
 
     // Критерии - первый столбец
-    ws.cell(4, 1).string('Всего оборудования')
-    ws.cell(5, 1).string('Требуется ремонт')
-    ws.cell(6, 1).string('Средний ремонт')
-    ws.cell(7, 1).string('Узловой ремонт')
-    ws.cell(8, 1).string('Рем.сл. по мех.части')
-    ws.cell(9, 1).string('Рем.сл. по эл.части')
-    ws.cell(10, 1).string('Рем.сл.(мех. ч)/месяц')
+    ws.cell(3, 1).string('Всего оборудования')
+    ws.cell(4, 1).string('Требуется ремонт')
+    ws.cell(5, 1).string('Средний ремонт')
+    ws.cell(6, 1).string('Узловой ремонт')
+    ws.cell(7, 1).string('Рем.сл. по мех.части')
+    ws.cell(8, 1).string('Рем.сл. по эл.части')
+    ws.cell(9, 1).string('Рем.сл.(мех. ч)/месяц')
 
     let step1 = 2
     let step3 = 2
@@ -26,60 +26,64 @@ module.exports = function(data, ws, defaultStyle, bgStyle) {
         if (key === 'undefined' || key === 'Произ-во') return // здесь фильтровать нужные производства
 
         // Названия производств
-        ws.cell(3, step3, 3, step3 + 2, true)
+        ws.cell(2, step3, 2, step3 + 2, true)
             .string(`Производство №${key}`)
             .style(defaultStyle)
             .style({ font: { bold: true }, alignment: { horizontal: 'center' } })
 
         // Данные в соответствии с критериями в первом столбце
-        ws.cell(4, step3, 4, step3 + 2, true)
+        ws.cell(3, step3, 3, step3 + 2, true)
             .number(data[key]['allEquipment'])
             .style(defaultStyle)
-        ws.cell(5, step3, 5, step3 + 2, true)
+        ws.cell(4, step3, 4, step3 + 2, true)
             .number(data[key]['filteredEquipment'])
             .style(defaultStyle)
-        ws.cell(6, step3, 6, step3 + 2, true)
+        ws.cell(5, step3, 5, step3 + 2, true)
             .number(data[key]['middleCount'])
             .style(defaultStyle)
-        ws.cell(7, step3, 7, step3 + 2, true)
+        ws.cell(6, step3, 6, step3 + 2, true)
             .number(data[key]['nodesCount'])
             .style(defaultStyle)
-        ws.cell(8, step3, 8, step3 + 2, true)
+        ws.cell(7, step3, 7, step3 + 2, true)
             .number(data[key]['sumMechanicRepairComplexity'])
             .style(defaultStyle)
-        ws.cell(9, step3, 9, step3 + 2, true)
+        ws.cell(8, step3, 8, step3 + 2, true)
             .number(data[key]['sumElectricRepairComplexity'])
             .style(defaultStyle)
-        ws.cell(10, step3, 10, step3 + 2, true)
+        ws.cell(9, step3, 9, step3 + 2, true)
             .number(data[key]['inPlanningPeriodMechanicRepairComplexity'])
             .style(defaultStyle)
 
         step3 = step3 + 3
 
         // Строка "Узел количество время"
-        ws.cell(11, step1)
+        ws.cell(10, step1)
             .string('узел')
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
-        ws.cell(11, ++step1)
+        ws.cell(10, ++step1)
             .string('количество')
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
-        ws.cell(11, ++step1)
+        ws.cell(10, ++step1)
             .string('время')
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
         step1++
 
         // Узлы
-        let row = 13
+        let row = 12
         Object.keys(data[key]['nodes']).forEach(node => {
+            // Обозначение узла
             ws.cell(row, nodeStep)
                 .string(node)
                 .style(defaultStyle)
+                .style({ alignment: { horizontal: 'center' } })
+            // Количество аварийных остановок
             ws.cell(row, ++nodeStep)
                 .number(data[key]['nodes'][node]['amount'])
                 .style(defaultStyle)
+            // Время аварийных остановок
             ws.cell(row, ++nodeStep)
                 .number(data[key]['nodes'][node]['time'])
                 .style(defaultStyle)
@@ -97,5 +101,8 @@ module.exports = function(data, ws, defaultStyle, bgStyle) {
             .number(data[key]['sumTimeAllNodes'])
             .style(defaultStyle)
         nodeStep++
+
+        // Вертикальная граница между производствами
+        ws.cell(2, step3, row, step3).style({ border: { left: { style: 'thin' } } })
     })
 }

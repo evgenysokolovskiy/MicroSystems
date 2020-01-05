@@ -2,7 +2,7 @@
 
 module.exports = function(data, ws, defaultStyle, bgStyle, borderStyle) {
     // Закрепить строку, столбец
-    ws.row(4).freeze()
+    ws.row(3).freeze()
     ws.column(1).setWidth(15)
     ws.column(1).freeze()
     // Заголовок таблицы
@@ -20,7 +20,7 @@ module.exports = function(data, ws, defaultStyle, bgStyle, borderStyle) {
         // Ширина колонок с моделью
         ws.column(step4).setWidth(15)
         // Названия производств
-        ws.cell(3, step4, 3, step4 + 3, true)
+        ws.cell(2, step4, 2, step4 + 3, true)
             .string(`Производство №${key}`)
             .style(defaultStyle)
             .style({
@@ -29,22 +29,22 @@ module.exports = function(data, ws, defaultStyle, bgStyle, borderStyle) {
             })
 
         // "Модель, инвентарный номер, цеховой номер, вид ремонта"
-        ws.cell(4, stepTitle)
+        ws.cell(3, stepTitle)
             .string(`Модель`)
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
 
-        ws.cell(4, ++stepTitle)
+        ws.cell(3, ++stepTitle)
             .string(`Цех. номер`)
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
 
-        ws.cell(4, ++stepTitle)
+        ws.cell(3, ++stepTitle)
             .string(`Инв. номер`)
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
 
-        ws.cell(4, ++stepTitle)
+        ws.cell(3, ++stepTitle)
             .string(`Вид ремонта`)
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
@@ -101,7 +101,7 @@ module.exports = function(data, ws, defaultStyle, bgStyle, borderStyle) {
             })
 
             // Вертикальная граница между производствами
-            ws.cell(3, step4, row, step4).style({ border: { left: { style: 'thin' } } })
+            ws.cell(2, step4, row, step4).style({ border: { left: { style: 'thin' } } })
 
             row = start[i]
             // Горизонтальная граница между временными периодами
@@ -132,7 +132,7 @@ function startRowsArr(data) {
     })
     // Преобразовать maxEquipmentObj в массив
     // Добавить первым элементом номер строки, с которой начинается построение данных в таблице
-    const start = 5
+    const start = 4
     const arr = [start, ...Object.values(maxEquipmentObj)]
     // Суммировать два соседних в массиве значения, первый и второй, второй и третий и т.д.
     // Добавить отступ margin (количетство строк)
