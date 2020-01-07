@@ -1,6 +1,6 @@
 // План
 
-module.exports = function(data, ws, defaultStyle, bgStyle, borderStyle) {
+module.exports = function(data, ws, defaultStyle) {
     // Закрепить строку, столбец
     ws.row(3).freeze()
     ws.column(1).setWidth(15)

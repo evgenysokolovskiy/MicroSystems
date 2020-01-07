@@ -49,8 +49,8 @@ module.exports = function(data, reportsDir) {
         }
     })
 
-    summary(data, ws1, defaultStyle, bgStyle) // Итоги
-    plan(data, ws2, defaultStyle, bgStyle, borderStyle) // План
+    summary(data, ws1, defaultStyle) // Итоги
+    plan(data, ws2, defaultStyle) // План
 
     wb.write(`${reportsDir}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`, err => {
         err ? console.error(err) : console.log('Файл успешно сохранён!')
