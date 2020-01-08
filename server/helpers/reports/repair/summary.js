@@ -10,7 +10,7 @@ module.exports = function(data, ws, defaultStyle) {
         .string('Итоги 2019г')
         .style(defaultStyle)
 
-    // Критерии - первый столбец
+    // Первый столбец
     ws.cell(3, 1).string('Всего оборудования')
     ws.cell(4, 1).string('Требуется ремонт')
     ws.cell(5, 1).string('Средний ремонт')
@@ -65,46 +65,51 @@ module.exports = function(data, ws, defaultStyle) {
             .string('узел')
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
+        ws.column(step1).setWidth(8)
         ws.cell(10, ++step1)
-            .string('количество')
+            .string('кол-во')
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
+        ws.column(step1).setWidth(8)
         ws.cell(10, ++step1)
             .string('время')
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
+        ws.column(step1).setWidth(8)
         step1++
 
         // Узлы
         let row = 12
-        Object.keys(data[key]['nodes']).forEach(node => {
-            // Обозначение узла
-            ws.cell(row, nodeStep)
-                .string(node)
-                .style(defaultStyle)
-                .style({ alignment: { horizontal: 'center' } })
-            // Количество аварийных остановок
-            ws.cell(row, ++nodeStep)
-                .number(data[key]['nodes'][node]['amount'])
-                .style(defaultStyle)
-            // Время аварийных остановок
-            ws.cell(row, ++nodeStep)
-                .number(data[key]['nodes'][node]['time'])
-                .style(defaultStyle)
-            row++
-            nodeStep = nodeStep - 2
+        Object.keys(data[key]['nodes'])
+            .sort()
+            .forEach(node => {
+                // Обозначение узла
+                ws.cell(row, nodeStep)
+                    .string(node)
+                    .style(defaultStyle)
+                    .style({ alignment: { horizontal: 'center' } })
+                // Количество аварийных остановок
+                ws.cell(row, ++nodeStep)
+                    .number(data[key]['nodes'][node]['amount'])
+                    .style(defaultStyle)
+                // Время аварийных остановок
+                ws.cell(row, ++nodeStep)
+                    .number(data[key]['nodes'][node]['time'])
+                    .style(defaultStyle)
+                row++
+                nodeStep = nodeStep - 2
 
-            // Получить суммарные показатели по количеству и времени остановок по узлам
-            if (summaryNodes[node]) {
-                summaryNodes[node]['amount'] += data[key]['nodes'][node]['amount']
-                summaryNodes[node]['time'] += data[key]['nodes'][node]['time']
-            } else {
-                summaryNodes[node] = {
-                    amount: data[key]['nodes'][node]['amount'],
-                    time: data[key]['nodes'][node]['time']
+                // Получить суммарные показатели по количеству и времени остановок по узлам
+                if (summaryNodes[node]) {
+                    summaryNodes[node]['amount'] += data[key]['nodes'][node]['amount']
+                    summaryNodes[node]['time'] += data[key]['nodes'][node]['time']
+                } else {
+                    summaryNodes[node] = {
+                        amount: data[key]['nodes'][node]['amount'],
+                        time: data[key]['nodes'][node]['time']
+                    }
                 }
-            }
-        })
+            })
         ws.cell(row, nodeStep)
             .string('Всего:')
             .style(defaultStyle)
@@ -159,6 +164,10 @@ module.exports = function(data, ws, defaultStyle) {
     })
 
     // * ПОКАЗАТЕЛИ ПО ВСЕМ ПРОИЗВОДСТВАМ
+    ws.column(2).setWidth(8)
+    ws.column(3).setWidth(8)
+    ws.column(4).setWidth(8)
+
     ws.cell(2, 2, 2, 4, true)
         .string(`Все производства`)
         .style(defaultStyle)
@@ -198,7 +207,7 @@ module.exports = function(data, ws, defaultStyle) {
         .style(defaultStyle)
         .style({ alignment: { horizontal: 'center' } })
     ws.cell(10, 3)
-        .string('количество')
+        .string('кол-во')
         .style(defaultStyle)
         .style({ alignment: { horizontal: 'center' } })
     ws.cell(10, 4)
@@ -212,25 +221,28 @@ module.exports = function(data, ws, defaultStyle) {
     let sumAmount = 0
     let sumTime = 0
     let step = 2
-    Object.keys(summary['nodes']).forEach(node => {
-        sumAmount += summary['nodes'][node]['amount']
-        sumTime += summary['nodes'][node]['time']
-        // Обозначение узла
-        ws.cell(r, n)
-            .string(node)
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
-        // Количество аварийных остановок
-        ws.cell(r, ++n)
-            .number(summary['nodes'][node]['amount'])
-            .style(defaultStyle)
-        // Время аварийных остановок
-        ws.cell(r, ++n)
-            .number(summary['nodes'][node]['time'])
-            .style(defaultStyle)
-        r++
-        n = n - 2
-    })
+
+    Object.keys(summary['nodes'])
+        .sort()
+        .forEach(node => {
+            sumAmount += summary['nodes'][node]['amount']
+            sumTime += summary['nodes'][node]['time']
+            // Обозначение узла
+            ws.cell(r, n)
+                .string(node)
+                .style(defaultStyle)
+                .style({ alignment: { horizontal: 'center' } })
+            // Количество аварийных остановок
+            ws.cell(r, ++n)
+                .number(summary['nodes'][node]['amount'])
+                .style(defaultStyle)
+            // Время аварийных остановок
+            ws.cell(r, ++n)
+                .number(summary['nodes'][node]['time'])
+                .style(defaultStyle)
+            r++
+            n = n - 2
+        })
 
     // Данные всего:
     ws.cell(r, step)
@@ -243,4 +255,9 @@ module.exports = function(data, ws, defaultStyle) {
         .number(sumTime)
         .style(defaultStyle)
     step++
+}
+
+// Функция сортировки по свойству sumAmount
+function sortNodes(arr) {
+    arr.sort((a, b) => a - b)
 }
