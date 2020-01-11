@@ -1,14 +1,16 @@
 // 1) Схлопнуть данные по инвентарным номерам
 
 const clonedeep = require('lodash.clonedeep')
-const INDEXES = require('./constants').INDEXES
+const INDEXES = require('../constants').INDEXES
 
-module.exports = function(data) {
+module.exports = function(data, filter) {
     const d = clonedeep(data)
     const { spot, model, inn, num, code, amount, time, ps, mtbf } = INDEXES
-
     const obj = {}
+
     d.forEach(item => {
+        //if (!filter.some(num => +item[inn] === +num)) return // Фильтр
+
         const prev = obj[item[inn]] ? obj[item[inn]].nodes : []
         const nodes = {
             ...prev,
@@ -29,7 +31,7 @@ module.exports = function(data) {
         }
     })
 
-    /*
+    /* 
     // dev
     const obj = {}
     for (let i = 1; i < 100; i++) {

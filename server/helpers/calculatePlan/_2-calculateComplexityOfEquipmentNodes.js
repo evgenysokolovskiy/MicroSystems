@@ -2,10 +2,10 @@
 
 const clonedeep = require('lodash.clonedeep')
 const model = require('../../../data/model.js')
-const LENGTH_MEDIUM_REPAIR_NODES = require('./constants').LENGTH_MEDIUM_REPAIR_NODES
-const MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = require('./constants')
+const LENGTH_MEDIUM_REPAIR_NODES = require('../constants').LENGTH_MEDIUM_REPAIR_NODES
+const MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = require('../constants')
     .MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES
-const filterDataByEmergencyStopLimit = require('./_3-filterDataByEmergencyStopLimit')
+const filterDataByEmergencyStopLimit = require('./_1-filterDataByEmergencyStopLimit')
 
 module.exports = function(data) {
     // Отфильтрованные данные по лимиту аварийных остановок

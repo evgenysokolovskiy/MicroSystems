@@ -20,5 +20,5 @@ app.use(
 )
 
 const rootDir = path.join(__dirname, 'data', 'root')
-const reportsDir = path.join(__dirname, 'data', 'reports')
-require('./server/helpers/parse/rootFile')(app, rootDir, reportsDir)
+const dir = path.join(__dirname, 'data', 'reports')
+require('./server/helpers/parse/rootFile')({ app, rootDir, dir })

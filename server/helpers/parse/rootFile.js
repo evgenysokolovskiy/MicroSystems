@@ -2,11 +2,16 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const calculatePlan = require('../calculatePlan/_6-calculatePlan')
+//const splitProductionEquipment = require('../primaryDataProcessing/_2-splitProductionEquipment')
+const calculatePlan = require('../calculatePlan/_4-calculatePlan')
+const sumDataByNodes = require('../sumDataByNodes')
 const dataAPI = require('../../api/dataAPI')
-const repairPlan = require('../reports/repair/')
+const repairPlan = require('../reports/systemAnalysisAndPlanningRepairEquipment/')
 
-module.exports = function(app, rootDir, reportsDir) {
+// Оборудование Автоваз
+const filter = require('../../../data/audit/avtovaz/equipment')
+
+module.exports = function({ app, rootDir, dir }) {
     fs.readdir(rootDir, function(err, files) {
         const paths = files.map(item => `${rootDir}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -18,8 +23,14 @@ module.exports = function(app, rootDir, reportsDir) {
 
                     resolve(
                         (() => {
-                            dataAPI(app, plan)
-                            repairPlan(plan, reportsDir)
+                            // Данные к API
+                            dataAPI({ app, plan })
+                            // Данные для формирования отчётов excel
+                            repairPlan({
+                                data: (() => sumDataByNodes({ data, filter }))(),
+                                plan,
+                                dir
+                            })
                         })()
                     )
                 } else {

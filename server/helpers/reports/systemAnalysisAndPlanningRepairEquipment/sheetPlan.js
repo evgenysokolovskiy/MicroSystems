@@ -1,6 +1,6 @@
 // План
 
-module.exports = function(data, ws, defaultStyle) {
+module.exports = function({ plan, ws, defaultStyle }) {
     // Закрепить строку, столбец
     ws.row(3).freeze()
     ws.column(1).setWidth(15)
@@ -14,7 +14,7 @@ module.exports = function(data, ws, defaultStyle) {
     let step4 = 2
     let stepTitle = 2
 
-    Object.keys(data).forEach(key => {
+    Object.keys(plan).forEach(key => {
         if (key === '71' || key === '77' || key === 'undefined' || key === 'Произ-во') return // здесь фильтровать нужные производства
 
         // Ширина колонок с моделью
@@ -50,13 +50,13 @@ module.exports = function(data, ws, defaultStyle) {
             .style({ alignment: { horizontal: 'center' } })
 
         // Построение данных для производства key
-        const start = startRowsArr(data)
-        data[key]['data'].forEach((timeInterval, i) => {
+        const start = startRowsArr(plan)
+        plan[key]['data'].forEach((timeInterval, i) => {
             let row = start[i]
 
             // Название периода времени (например, месяц)
             ws.cell(row, 1)
-                .string(data[key]['period'][i])
+                .string(plan[key]['period'][i])
                 .style(defaultStyle)
                 .style({ font: { bold: true }, alignment: { horizontal: 'center' } })
 
@@ -115,16 +115,16 @@ module.exports = function(data, ws, defaultStyle) {
 }
 
 // Определить строку начала каждого периода времени
-function startRowsArr(data) {
+function startRowsArr(plan) {
     // Каждое производство имеет разное количество оборудования в определенный период
     // Требуется найти строку, которая будет ниже, чем последняя строка производства с максимальным количеством станков
     // Для этого:
     // Определить максимальное количество оборудования среди производств в плане в каждый период времени
-    // Свойства объекта - порядковый номер массива из перебираемого массива data
+    // Свойства объекта - порядковый номер массива из перебираемого массива plan
     // Значения свойств - максимальное количество станков из всех производств для каждого периода времени
     let maxEquipmentObj = {}
-    Object.keys(data).forEach(key => {
-        data[key]['data'].forEach((timeInterval, i) => {
+    Object.keys(plan).forEach(key => {
+        plan[key]['data'].forEach((timeInterval, i) => {
             if (!maxEquipmentObj[i] || timeInterval.length > maxEquipmentObj[i]) {
                 maxEquipmentObj[i] = timeInterval.length
             }

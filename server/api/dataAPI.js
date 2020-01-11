@@ -1,8 +1,8 @@
-// Отправить данные к '/api/data'
+// Отправить данные к '/api/plan'
 
-module.exports = function(app, data) {
-    app.get('/api/data', function(req, res) {
-        res.json(data)
-        console.log('Данные отправлены на /api/data')
+module.exports = function({ app, plan }) {
+    app.get('/api/plan', function(req, res) {
+        res.json(plan)
+        console.log('Данные отправлены на /api/plan')
     })
 }
