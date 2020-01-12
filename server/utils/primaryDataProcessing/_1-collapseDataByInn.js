@@ -3,7 +3,7 @@
 const clonedeep = require('lodash.clonedeep')
 const INDEXES = require('../constants').INDEXES
 
-module.exports = function(data, filter) {
+module.exports = function(data) {
     const d = clonedeep(data)
     const { spot, model, inn, num, code, amount, time, ps, mtbf } = INDEXES
     const obj = {}

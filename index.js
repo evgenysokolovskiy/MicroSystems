@@ -18,7 +18,8 @@ app.use(
         type: 'application/x-www-form-urlencoding'
     })
 )
-
+// Путь к файлу, который парсить
 const rootDir = path.join(__dirname, 'data', 'root')
-const dir = path.join(__dirname, 'data', 'reports')
-require('./server/helpers/parse/rootFile')({ app, rootDir, dir })
+// Путь, куда сохранять отчёты
+const dir = path.join(__dirname, 'data', 'build')
+require('./server/utils/')({ app, rootDir, dir })

@@ -3,10 +3,10 @@
 const clonedeep = require('lodash.clonedeep')
 const splitProductionEquipment = require('./primaryDataProcessing/_2-splitProductionEquipment')
 
-module.exports = function({ data, filter }) {
+module.exports = function(data) {
     // объект, где ключи - это номера производств
     // Значения - массив объектов, принадлежащих производству
-    const d = clonedeep(splitProductionEquipment(data, filter))
+    const d = clonedeep(splitProductionEquipment(data))
     // keys - Обозначение производств (свойства объекта)
     const keys = Object.keys(d)
     // - Первый цикл - Пройтись по каждому производству

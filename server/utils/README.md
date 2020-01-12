@@ -1,4 +1,4 @@
-1. 	Парсить данные из файла excel (./parse/rootFile)
+1. 	Парсить данные из файла excel (/utils/)
 
 2. 	Выполнить первичную обработку данных (./primaryDataProcessing)
 		- Схлопнуть данные по инвентарным номерам (./primaryDataProcessing/collapseDataByInn)

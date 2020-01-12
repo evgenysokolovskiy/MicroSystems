@@ -3,10 +3,10 @@
 const clonedeep = require('lodash.clonedeep')
 const collapseDataByInn = require('./_1-collapseDataByInn')
 
-module.exports = function(data, filter) {
+module.exports = function(data) {
     // Данные схлопнуты по инвентарным номерам
     // Представляют вид массива объектов
-    const d = clonedeep(collapseDataByInn(data, filter))
+    const d = clonedeep(collapseDataByInn(data))
     // Получить объект, где ключи - это номера производств
     // Значение - объект, включающий массив объектов оборудования и изначальное их количество
     let obj = {}
