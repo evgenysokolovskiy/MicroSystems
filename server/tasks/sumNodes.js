@@ -47,6 +47,6 @@ module.exports = function(data) {
         }
     })
 
-    //console.log(obj['56']['nodes'])
+    //console.log(obj)
     return obj
 }

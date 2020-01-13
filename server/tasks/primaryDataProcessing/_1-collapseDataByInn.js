@@ -9,8 +9,6 @@ module.exports = function(data) {
     const obj = {}
 
     d.forEach(item => {
-        //if (!filter.some(num => +item[inn] === +num)) return // Фильтр
-
         const prev = obj[item[inn]] ? obj[item[inn]].nodes : []
         const nodes = {
             ...prev,

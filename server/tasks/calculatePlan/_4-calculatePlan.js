@@ -1,4 +1,4 @@
-// 6) Расчитать план ремонтов по производствам
+// 4) Расчитать план ремонтов по производствам
 
 const NAMES_PLANNING_PERIOD = require('../constants').NAMES_PLANNING_PERIOD
 const calculateRepairComplexityInPlanningPeriod = require('./_3-calculateRepairComplexityInPlanningPeriod')

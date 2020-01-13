@@ -1,4 +1,4 @@
-1. 	Парсить данные из файла excel (/utils/)
+1. 	Парсить данные из файла excel (/tasks/). Передать данные функциям
 
 2. 	Выполнить первичную обработку данных (./primaryDataProcessing)
 		- Схлопнуть данные по инвентарным номерам (./primaryDataProcessing/collapseDataByInn)
@@ -12,7 +12,9 @@
 		- Рассчитать месячное значение трудоемкости (./calculatePlan/_3-calculateRepairComplexityInPlanningPeriod)
 		- Рассчитать план ремонтов, дополнить объект необходимыми расчётными данными (./calculatePlan/_4-calculatePlan)
 
-4.	Сформировать необходимый отчёт excel (./reports/systemAnalysisAndPlanningRepairEquipment)
+Б.	Суммировать все узлы по исходным данным (./sumNodes)
+
+4.	Сформировать необходимый отчёт excel (./build/systemAnalysisAndPlanningRepairEquipment)
 
 Константы (./constants)
 

@@ -22,4 +22,4 @@ app.use(
 const rootDir = path.join(__dirname, 'data', 'root')
 // Путь, куда сохранять отчёты
 const dir = path.join(__dirname, 'data', 'build')
-require('./server/utils/')({ app, rootDir, dir })
+require('./server/tasks/')({ app, rootDir, dir })

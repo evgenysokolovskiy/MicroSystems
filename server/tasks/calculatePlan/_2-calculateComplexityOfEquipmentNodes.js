@@ -1,4 +1,4 @@
-// 4) Рассчитать трудоемкости для узлов оборудования
+// 2) Рассчитать трудоемкости для узлов оборудования
 
 const clonedeep = require('lodash.clonedeep')
 const model = require('../../../data/model.js')

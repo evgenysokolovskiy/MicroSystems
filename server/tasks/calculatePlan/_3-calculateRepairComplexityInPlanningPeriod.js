@@ -1,4 +1,4 @@
-// 5) Рассчитать месячное значение трудоемкости
+// 3) Рассчитать месячное значение трудоемкости
 
 const clonedeep = require('lodash.clonedeep')
 const PLANNING_PERIOD = require('../constants').PLANNING_PERIOD

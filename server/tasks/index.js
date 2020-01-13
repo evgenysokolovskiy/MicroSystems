@@ -4,8 +4,8 @@ const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 //const splitProductionEquipment = require('../primaryDataProcessing/_2-splitProductionEquipment')
 const calculatePlan = require('./calculatePlan/_4-calculatePlan')
-const sumDataByNodes = require('./sumDataByNodes')
-const dataAPI = require('./../api/dataAPI')
+const sumNodes = require('./sumNodes')
+const dataAPI = require('../api/dataAPI')
 const repairPlan = require('./build/systemAnalysisAndPlanningRepairEquipment/')
 // Индекс инвентарного номера (для фильтрации исходных данных по filter)
 const inn = require('./constants').INDEXES['inn']
@@ -35,7 +35,7 @@ module.exports = function({ app, rootDir, dir }) {
                             dataAPI({ app, plan })
                             // Сформировать данные для отчётов excel
                             repairPlan({
-                                data: (() => sumDataByNodes(filteredData || data))(),
+                                data: (() => sumNodes(filteredData || data))(),
                                 plan,
                                 dir
                             })
