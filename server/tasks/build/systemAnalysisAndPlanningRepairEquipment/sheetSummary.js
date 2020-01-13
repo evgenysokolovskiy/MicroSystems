@@ -19,7 +19,7 @@ module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
     ws.cell(8, 1).string('Рем.сл. по эл.части')
     ws.cell(9, 1).string('Рем.сл.(мех. ч)/месяц')
 
-/*
+    /*
     // Наименования узлов
     ws.cell(12, 1).string('неисправность алмажения')
     ws.cell(13, 1).string('неисправность шпиндельного узла')

@@ -1,6 +1,6 @@
 // Полная информация по оборудованию
 
-module.exports = function({ plan, wb, defaultStyle }) {
+module.exports = function({ data, plan, wb, defaultStyle }) {
     const obj = {}
     Object.keys(plan).forEach(key => {
         if (key === '71' || key === '77' || key === 'undefined' || key === 'Произ-во') return // здесь фильтровать нужные производства
@@ -65,6 +65,11 @@ module.exports = function({ plan, wb, defaultStyle }) {
             .style(defaultStyle)
             .style({ alignment: { horizontal: 'center' } })
 
+        ws.cell(2, 8, 3, 8, true)
+            .string(`Наработка`)
+            .style(defaultStyle)
+            .style({ alignment: { horizontal: 'center', vertical: 'center' } })
+
         // Построение данных для производства key
         plan[key]['data'].forEach((timeInterval, i) => {
             // Модель, инвентарный номер, цеховой номер, вид ремонта
@@ -102,6 +107,13 @@ module.exports = function({ plan, wb, defaultStyle }) {
                     .string(plan[key]['period'][i])
                     .style(defaultStyle)
                     .style({ alignment: { horizontal: 'center' } })
+
+                if (item['inn']) {
+                    ws.cell(row, 8)
+                        .number(item['mtbf'])
+                        .style(defaultStyle)
+                }
+
                 row++
             })
         })

@@ -2,7 +2,6 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-//const splitProductionEquipment = require('../primaryDataProcessing/_2-splitProductionEquipment')
 const calculatePlan = require('./calculatePlan/_4-calculatePlan')
 const sumNodes = require('./sumNodes')
 const dataAPI = require('../api/dataAPI')

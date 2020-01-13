@@ -65,6 +65,7 @@ module.exports = function({ data, plan, dir }) {
         defaultStyle
     }) // План
     sheetEquipment({
+        data,
         plan,
         wb,
         defaultStyle
