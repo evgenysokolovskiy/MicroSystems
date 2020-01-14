@@ -24,13 +24,19 @@ module.exports = function(data) {
                 //let sumElectricRepairComplexityNodes = 0
                 Object.keys(item.nodes).forEach(node => {
                     if (node[0] === '1') {
-                        sumMechanicRepairComplexity += item.nodes[node]['repairСomplexityNode']
-                        sumMechanicRepairComplexityNodes += item.nodes[node]['repairСomplexityNode']
+                        const val = +item.nodes[node]['repairСomplexityNode']
+                        if (val) {
+                            sumMechanicRepairComplexity += val
+                            sumMechanicRepairComplexityNodes += val
+                        }
                     }
 
                     if (node[0] === '2') {
-                        sumElectricRepairComplexity += item.nodes[node]['repairСomplexityNode']
-                        //sumElectricRepairComplexityNodes += item.nodes[node]['repairСomplexityNode']
+                        const val = +item.nodes[node]['repairСomplexityNode']
+                        if (val) {
+                            sumElectricRepairComplexity += val
+                            //sumElectricRepairComplexityNodes += val
+                        }
                     }
 
                     // Добавить свойство - аварийные узлы с суммарным их количеством

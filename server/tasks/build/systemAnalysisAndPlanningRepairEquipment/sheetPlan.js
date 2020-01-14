@@ -66,10 +66,18 @@ module.exports = function({ plan, ws, defaultStyle }) {
                     .string('Модель')
                     .style(defaultStyle)
 
-                if (item['model']) {
-                    ws.cell(row, step1)
-                        .string(item['model'])
-                        .style(defaultStyle)
+                const model = item['model']
+                if (model) {
+                    if (typeof model === 'string') {
+                        ws.cell(row, step1)
+                            .string(model)
+                            .style(defaultStyle)
+                    } else if (typeof model === 'number') {
+                        ws.cell(row, step1)
+                            .number(model)
+                            .style(defaultStyle)
+                            .style({ alignment: { horizontal: 'left' } })
+                    }
                 }
 
                 step1++

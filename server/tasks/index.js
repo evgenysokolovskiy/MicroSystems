@@ -8,9 +8,9 @@ const dataAPI = require('../api/dataAPI')
 const repairPlan = require('./build/systemAnalysisAndPlanningRepairEquipment/')
 // Индекс инвентарного номера (для фильтрации исходных данных по filter)
 const inn = require('./constants').INDEXES['inn']
-// Фильтр - массив инвентарных номеров (при необходимости)
-// Если filter отсутствует, то обрабатываются все данные
-//const filter = require('./../../data/audit/avtovaz/equipment')
+// Фильтр - массив инвентарных номеров
+//Если filter отсутствует, то обрабатываются все данные
+//const filter = require('./../../data/audit/avtovaz/equipment').spec
 
 module.exports = function({ app, rootDir, dir }) {
     fs.readdir(rootDir, function(err, files) {

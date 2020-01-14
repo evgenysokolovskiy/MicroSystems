@@ -74,10 +74,18 @@ module.exports = function({ data, plan, wb, defaultStyle }) {
         plan[key]['data'].forEach((timeInterval, i) => {
             // Модель, инвентарный номер, цеховой номер, вид ремонта
             timeInterval.forEach(item => {
-                if (item['model']) {
-                    ws.cell(row, 1)
-                        .string(item['model'])
-                        .style(defaultStyle)
+                const model = item['model']
+                if (model) {
+                    if (typeof model === 'string') {
+                        ws.cell(row, 1)
+                            .string(model)
+                            .style(defaultStyle)
+                    } else if (typeof model === 'number') {
+                        ws.cell(row, 1)
+                            .number(model)
+                            .style(defaultStyle)
+                            .style({ alignment: { horizontal: 'left' } })
+                    }
                 }
 
                 if (item['num']) {
@@ -108,7 +116,7 @@ module.exports = function({ data, plan, wb, defaultStyle }) {
                     .style(defaultStyle)
                     .style({ alignment: { horizontal: 'center' } })
 
-                if (item['inn']) {
+                if (item['mtbf']) {
                     ws.cell(row, 8)
                         .number(item['mtbf'])
                         .style(defaultStyle)
