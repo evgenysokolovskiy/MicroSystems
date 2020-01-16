@@ -27,7 +27,6 @@ module.exports = function(data) {
             let sumOneRepairTimeElectric = 0 // Суммарное время одного ремонта всех узлов по механической части
             let lengthNodesMechanic = 0 // Количество узлов по механике
             let lengthNodesElectric = 0 // Количество узлов по электрике
-            let nodes = {}
             Object.keys(item.nodes).forEach(node => {
                 // LIMIT_NUMBER_EMERGENCY_STOPS[key] - лимит аварийных остановок для текущего производства
                 if (item.nodes[node].amount < LIMIT_NUMBER_EMERGENCY_STOPS[key]) {
@@ -72,8 +71,8 @@ module.exports = function(data) {
             // Добавить свойства количества узлов по механике и электрике
             item['lengthNodesMechanic'] = lengthNodesMechanic
             item['lengthNodesElectric'] = lengthNodesElectric
-            // Вернуть объект, если есть хотя бы один узел (т.е. если существует nodes)
-            if (nodes) return item
+
+            return item
         })
         obj[key] = {
             data: filteredObj,

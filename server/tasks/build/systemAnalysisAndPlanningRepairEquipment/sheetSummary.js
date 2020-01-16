@@ -1,23 +1,21 @@
 // Сводная
 
-module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
+module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }) {
     ws.row(2).freeze()
-    ws.column(1).setWidth(40)
+    ws.column(1).setWidth(45)
     ws.column(1).freeze()
 
-    // Заголовок таблицы
-    ws.cell(1, 1)
-        .string('Итоги 2019г')
-        .style(defaultStyle)
+    // Название листа
+    createCell(ws, [1, 1], 'Итоги 2019г', defaultStyle)
 
     // column 1
-    ws.cell(3, 1).string('Всего оборудования')
-    ws.cell(4, 1).string('Требуется ремонт')
-    ws.cell(5, 1).string('Средний ремонт')
-    ws.cell(6, 1).string('Узловой ремонт')
-    ws.cell(7, 1).string('Рем.сл. по мех.части')
-    ws.cell(8, 1).string('Рем.сл. по эл.части')
-    ws.cell(9, 1).string('Рем.сл.(мех. ч)/месяц')
+    createCell(ws, [3, 1], 'Всего оборудования', defaultStyle)
+    createCell(ws, [4, 1], 'Требуется ремонт', defaultStyle)
+    createCell(ws, [5, 1], 'Средний ремонт', defaultStyle)
+    createCell(ws, [6, 1], 'Узловой ремонт', defaultStyle)
+    createCell(ws, [7, 1], 'Рем.сл. по мех.части для выполнения ремонтов', defaultStyle)
+    createCell(ws, [8, 1], 'Рем.сл. по эл.части для выполнения ремонтов', defaultStyle)
+    createCell(ws, [9, 1], 'Рем.сл.(мех. ч)/месяц', defaultStyle)
 
     /*
     // Наименования узлов
@@ -54,57 +52,29 @@ module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
 */
 
     // Суммарные показатели по всем производствам (column 2-4)
-    const summary = calculateSummary(plan, data)
+    const summary = calculateSummary(plan, collapseNodes)
     ws.column(2).setWidth(8)
     ws.column(3).setWidth(8)
     ws.column(4).setWidth(8)
 
-    ws.cell(2, 2, 2, 4, true)
-        .string(`Все производства`)
-        .style(defaultStyle)
-        .style({ font: { bold: true }, alignment: { horizontal: 'center' } })
-
-    ws.cell(3, 2, 3, 4, true)
-        .number(summary['allEquipment'])
-        .style(defaultStyle)
-
-    ws.cell(4, 2, 4, 4, true)
-        .number(summary['filteredEquipment'])
-        .style(defaultStyle)
-
-    ws.cell(5, 2, 5, 4, true)
-        .number(summary['middleCount'])
-        .style(defaultStyle)
-
-    ws.cell(6, 2, 6, 4, true)
-        .number(summary['nodesCount'])
-        .style(defaultStyle)
-
-    ws.cell(7, 2, 7, 4, true)
-        .number(summary['sumMechanicRepairComplexity'])
-        .style(defaultStyle)
-
-    ws.cell(8, 2, 8, 4, true)
-        .number(summary['sumElectricRepairComplexity'])
-        .style(defaultStyle)
-
-    ws.cell(9, 2, 9, 4, true)
-        .number(summary['inPlanningPeriodMechanicRepairComplexity'])
-        .style(defaultStyle)
+    createCellTitle(ws, [2, 2, 2, 4, true], `Все производства`, defaultStyle)
+    createCell(ws, [3, 2, 3, 4, true], summary['allEquipment'], defaultStyle)
+    createCell(ws, [4, 2, 4, 4, true], summary['filteredEquipment'], defaultStyle)
+    createCell(ws, [5, 2, 5, 4, true], summary['middleCount'], defaultStyle)
+    createCell(ws, [6, 2, 6, 4, true], summary['nodesCount'], defaultStyle)
+    createCell(ws, [7, 2, 7, 4, true], summary['sumMechanicRepairComplexity'], defaultStyle)
+    createCell(ws, [8, 2, 8, 4, true], summary['sumElectricRepairComplexity'], defaultStyle)
+    createCell(
+        ws,
+        [9, 2, 9, 4, true],
+        summary['inPlanningPeriodMechanicRepairComplexity'],
+        defaultStyle
+    )
 
     // Строка "Узел количество время"
-    ws.cell(10, 2)
-        .string('узел')
-        .style(defaultStyle)
-        .style({ alignment: { horizontal: 'center' } })
-    ws.cell(10, 3)
-        .string('кол-во')
-        .style(defaultStyle)
-        .style({ alignment: { horizontal: 'center' } })
-    ws.cell(10, 4)
-        .string('время')
-        .style(defaultStyle)
-        .style({ alignment: { horizontal: 'center' } })
+    createCellCenter(ws, [10, 2], 'узел', defaultStyle)
+    createCellCenter(ws, [10, 3], 'кол-во', defaultStyle)
+    createCellCenter(ws, [10, 4], 'время', defaultStyle)
 
     // Узлы
     let row = 12
@@ -115,33 +85,20 @@ module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
         .sort()
         .forEach(node => {
             // Обозначение узла
-            ws.cell(row, 2)
-                .string(node)
-                .style(defaultStyle)
-                .style({ alignment: { horizontal: 'center' } })
+            createCellCenter(ws, [row, 2], node, defaultStyle)
             // Количество аварийных остановок
-            ws.cell(row, 3)
-                .number(summary['nodes'][node]['amount'])
-                .style(defaultStyle)
+            createCellCenter(ws, [row, 3], summary['nodes'][node]['amount'], defaultStyle)
             // Время аварийных остановок
-            ws.cell(row, 4)
-                .number(summary['nodes'][node]['time'])
-                .style(defaultStyle)
+            createCellCenter(ws, [row, 4], summary['nodes'][node]['time'], defaultStyle)
             row++
             amount += summary['nodes'][node]['amount']
             time += summary['nodes'][node]['time']
         })
 
     // Данные всего:
-    ws.cell(row, 2)
-        .string('Всего:')
-        .style(defaultStyle)
-    ws.cell(row, 3)
-        .number(amount)
-        .style(defaultStyle)
-    ws.cell(row, 4)
-        .number(time)
-        .style(defaultStyle)
+    createCell(ws, [row, 2], 'Всего', defaultStyle)
+    createCell(ws, [row, 3], amount, defaultStyle)
+    createCell(ws, [row, 4], time, defaultStyle)
 
     // Показатели для каждого производства (column 5 - ...)
     let step1 = 5
@@ -151,50 +108,36 @@ module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
         if (key === 'undefined' || key === 'Произ-во' || key === '71' || key === '77') return // здесь фильтровать нужные производства
 
         // Названия производств
-        ws.cell(2, step3, 2, step3 + 2, true)
-            .string(`Производство №${key}`)
-            .style(defaultStyle)
-            .style({ font: { bold: true }, alignment: { horizontal: 'center' } })
-
-        ws.cell(3, step3, 3, step3 + 2, true)
-            .number(plan[key]['allEquipment'])
-            .style(defaultStyle)
-        ws.cell(4, step3, 4, step3 + 2, true)
-            .number(plan[key]['filteredEquipment'])
-            .style(defaultStyle)
-        ws.cell(5, step3, 5, step3 + 2, true)
-            .number(plan[key]['middleCount'])
-            .style(defaultStyle)
-        ws.cell(6, step3, 6, step3 + 2, true)
-            .number(plan[key]['nodesCount'])
-            .style(defaultStyle)
-        ws.cell(7, step3, 7, step3 + 2, true)
-            .number(plan[key]['sumMechanicRepairComplexity'])
-            .style(defaultStyle)
-        ws.cell(8, step3, 8, step3 + 2, true)
-            .number(plan[key]['sumElectricRepairComplexity'])
-            .style(defaultStyle)
-        ws.cell(9, step3, 9, step3 + 2, true)
-            .number(plan[key]['inPlanningPeriodMechanicRepairComplexity'])
-            .style(defaultStyle)
+        createCellTitle(ws, [2, step3, 2, step3 + 2, true], `Производство №${key}`, defaultStyle)
+        createCell(ws, [3, step3, 3, step3 + 2, true], plan[key]['allEquipment'], defaultStyle)
+        createCell(ws, [4, step3, 4, step3 + 2, true], plan[key]['filteredEquipment'], defaultStyle)
+        createCell(ws, [5, step3, 5, step3 + 2, true], plan[key]['middleCount'], defaultStyle)
+        createCell(ws, [6, step3, 6, step3 + 2, true], plan[key]['nodesCount'], defaultStyle)
+        createCell(
+            ws,
+            [7, step3, 7, step3 + 2, true],
+            plan[key]['sumMechanicRepairComplexity'],
+            defaultStyle
+        )
+        createCell(
+            ws,
+            [8, step3, 8, step3 + 2, true],
+            plan[key]['sumElectricRepairComplexity'],
+            defaultStyle
+        )
+        createCell(
+            ws,
+            [9, step3, 9, step3 + 2, true],
+            plan[key]['inPlanningPeriodMechanicRepairComplexity'],
+            defaultStyle
+        )
 
         step3 = step3 + 3
 
         // Строка "Узел количество время"
-        ws.cell(10, step1)
-            .string('узел')
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
-        ws.column(step1).setWidth(8)
-        ws.cell(10, ++step1)
-            .string('кол-во')
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
-        ws.column(step1).setWidth(8)
-        ws.cell(10, ++step1)
-            .string('время')
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
+        createCellCenter(ws, [10, step1], 'узел', defaultStyle)
+        createCellCenter(ws, [10, ++step1], 'кол-во', defaultStyle)
+        createCellCenter(ws, [10, ++step1], 'время', defaultStyle)
         ws.column(step1).setWidth(8)
         step1++
 
@@ -203,39 +146,36 @@ module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
             .sort()
             .forEach((item, i) => {
                 let row = 12
-                Object.keys(data[key]['nodes'])
+                Object.keys(collapseNodes[key]['nodes'])
                     .sort()
                     .forEach(node => {
                         if (node === item) {
                             row = 12 + i
                             // Обозначение узла
-                            ws.cell(row, nodeStep)
-                                .string(node)
-                                .style(defaultStyle)
-                                .style({ alignment: { horizontal: 'center' } })
+                            createCellCenter(ws, [row, nodeStep], node, defaultStyle)
                             // Количество аварийных остановок
-                            ws.cell(row, ++nodeStep)
-                                .number(data[key]['nodes'][node]['amount'])
-                                .style(defaultStyle)
+                            createCellCenter(
+                                ws,
+                                [row, ++nodeStep],
+                                collapseNodes[key]['nodes'][node]['amount'],
+                                defaultStyle
+                            )
                             // Время аварийных остановок
-                            ws.cell(row, ++nodeStep)
-                                .number(data[key]['nodes'][node]['time'])
-                                .style(defaultStyle)
-                            //row++
+                            createCellCenter(
+                                ws,
+                                [row, ++nodeStep],
+                                collapseNodes[key]['nodes'][node]['time'],
+                                defaultStyle
+                            )
                             nodeStep = nodeStep - 2
                         }
                     })
             })
 
-        ws.cell(row, nodeStep)
-            .string('Всего:')
-            .style(defaultStyle)
-        ws.cell(row, ++nodeStep)
-            .number(data[key]['sumAmountAllNodes'])
-            .style(defaultStyle)
-        ws.cell(row, ++nodeStep)
-            .number(data[key]['sumTimeAllNodes'])
-            .style(defaultStyle)
+        // Данные всего:
+        createCell(ws, [row, nodeStep], 'Всего', defaultStyle)
+        createCell(ws, [row, ++nodeStep], collapseNodes[key]['sumAmountAllNodes'], defaultStyle)
+        createCell(ws, [row, ++nodeStep], collapseNodes[key]['sumTimeAllNodes'], defaultStyle)
         nodeStep++
 
         // Вертикальная граница между производствами
@@ -247,23 +187,23 @@ module.exports = function({ data, plan, ws, defaultStyle, borderStyle }) {
 }
 
 // Рассчитать суммарные данные по всем производствам
-function calculateSummary(plan, data) {
+function calculateSummary(plan, collapseNodes) {
     const nodes = {}
     let summary = {}
     Object.keys(plan).forEach(key => {
         if (key === 'undefined' || key === 'Произ-во' || key === '71' || key === '77') return // здесь фильтровать нужные производства
 
-        Object.keys(data[key]['nodes'])
+        Object.keys(collapseNodes[key]['nodes'])
             .sort()
             .forEach(node => {
                 // Получить суммарные показатели по количеству и времени остановок по узлам
                 if (nodes[node]) {
-                    nodes[node]['amount'] += data[key]['nodes'][node]['amount']
-                    nodes[node]['time'] += data[key]['nodes'][node]['time']
+                    nodes[node]['amount'] += collapseNodes[key]['nodes'][node]['amount']
+                    nodes[node]['time'] += collapseNodes[key]['nodes'][node]['time']
                 } else {
                     nodes[node] = {
-                        amount: data[key]['nodes'][node]['amount'],
-                        time: data[key]['nodes'][node]['time']
+                        amount: collapseNodes[key]['nodes'][node]['amount'],
+                        time: collapseNodes[key]['nodes'][node]['time']
                     }
                 }
             })
@@ -305,4 +245,60 @@ function calculateSummary(plan, data) {
         }
     })
     return summary
+}
+
+// Создать ячейку с данными
+function createCell(ws, int, str, defaultStyle) {
+    if (str) {
+        if (typeof str === 'string') {
+            ws.cell(...int)
+                .string(str)
+                .style(defaultStyle)
+        } else if (typeof str === 'number') {
+            ws.cell(...int)
+                .number(str)
+                .style(defaultStyle)
+                .style({ alignment: { horizontal: 'right' } })
+        }
+    }
+}
+
+// Создать ячейку с данными (текст по центру)
+function createCellCenter(ws, int, str, defaultStyle) {
+    if (str) {
+        if (typeof str === 'string') {
+            ws.cell(...int)
+                .string(str)
+                .style(defaultStyle)
+                .style({ alignment: { horizontal: 'center' } })
+        } else if (typeof str === 'number') {
+            ws.cell(...int)
+                .number(str)
+                .style(defaultStyle)
+                .style({ alignment: { horizontal: 'right' } })
+        }
+    }
+}
+
+// Создать ячейку заголовка
+function createCellTitle(ws, int, str, defaultStyle) {
+    if (str) {
+        if (typeof str === 'string') {
+            ws.cell(...int)
+                .string(str)
+                .style(defaultStyle)
+                .style({
+                    font: { bold: true },
+                    alignment: { horizontal: 'center', vertical: 'center' }
+                })
+        } else if (typeof str === 'number') {
+            ws.cell(...int)
+                .number(str)
+                .style(defaultStyle)
+                .style({
+                    font: { bold: true },
+                    alignment: { horizontal: 'center', vertical: 'center' }
+                })
+        }
+    }
 }

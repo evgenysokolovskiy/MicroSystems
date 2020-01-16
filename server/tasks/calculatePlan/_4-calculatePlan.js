@@ -34,6 +34,7 @@ module.exports = function(data) {
         // Если (accumulator полностью не заполнен, но цикл завершен) {
         // Выгрузить оставшиеся данные после завершения цикла
         // }
+
         d[key]['data'].forEach(item => {
             if (rest > 0) {
                 if (item['typeOfRepair'] === 'medium') {
@@ -59,6 +60,7 @@ module.exports = function(data) {
         if (accumulator.length) arr = [...arr, accumulator]
         plan[key] = {
             data: arr,
+            offPlan: d[key]['offPlan'],
             allEquipment: d[key]['allEquipment'],
             filteredEquipment: (() => +middleCount + +nodesCount)(),
             middleCount,
@@ -72,6 +74,7 @@ module.exports = function(data) {
                 d[key]['inPlanningPeriodMechanicRepairComplexity'],
             period: NAMES_PLANNING_PERIOD
         }
+
         arr = []
     })
 

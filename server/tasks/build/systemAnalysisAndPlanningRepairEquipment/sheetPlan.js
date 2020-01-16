@@ -5,7 +5,7 @@ module.exports = function({ plan, ws, defaultStyle }) {
     ws.row(3).freeze()
     ws.column(1).setWidth(15)
     ws.column(1).freeze()
-    // Заголовок таблицы
+    // Название листа
     ws.cell(1, 1)
         .string('План 2020г')
         .style(defaultStyle)
@@ -28,7 +28,7 @@ module.exports = function({ plan, ws, defaultStyle }) {
                 alignment: { horizontal: 'center' }
             })
 
-        // "Модель, инвентарный номер, цеховой номер, вид ремонта"
+        // // Заголовки колонок
         ws.cell(3, stepTitle)
             .string(`Модель`)
             .style(defaultStyle)

@@ -5,7 +5,7 @@ const sheetSummary = require('./sheetSummary')
 const sheetPlan = require('./sheetPlan')
 const sheetEquipment = require('./sheetEquipment')
 
-module.exports = function({ data, plan, dir }) {
+module.exports = function({ plan, offPlan, collapseNodes, dir }) {
     const wb = new xl.Workbook()
     const ws1 = wb.addWorksheet('Сводная')
     const ws2 = wb.addWorksheet('План ремонтов')
@@ -53,7 +53,7 @@ module.exports = function({ data, plan, dir }) {
     })
 
     sheetSummary({
-        data,
+        collapseNodes,
         plan,
         ws: ws1,
         defaultStyle,
@@ -65,8 +65,8 @@ module.exports = function({ data, plan, dir }) {
         defaultStyle
     }) // План
     sheetEquipment({
-        data,
         plan,
+        offPlan,
         wb,
         defaultStyle
     }) // Оборудование

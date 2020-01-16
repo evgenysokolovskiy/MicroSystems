@@ -1,9 +1,10 @@
-// Парсить данные из root и передать функциям
+// Парсить данные из root и передать функция
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 const calculatePlan = require('./calculatePlan/_4-calculatePlan')
-const sumNodes = require('./sumNodes')
+const equipmentOffPlan = require('./equipmentOffPlan')
+const collapseNodes = require('./collapseNodes')
 const dataAPI = require('../api/dataAPI')
 const repairPlan = require('./build/systemAnalysisAndPlanningRepairEquipment/')
 // Индекс инвентарного номера (для фильтрации исходных данных по filter)
@@ -27,6 +28,8 @@ module.exports = function({ app, rootDir, dir }) {
                             : null
                     // Рассчитать план с помощью функции calculatePlan
                     const plan = calculatePlan(filteredData || data)
+                    // Определить оборудование, не вошедшее в план
+                    const offPlan = equipmentOffPlan(data, plan)
 
                     resolve(
                         (() => {
@@ -34,8 +37,9 @@ module.exports = function({ app, rootDir, dir }) {
                             dataAPI({ app, plan })
                             // Сформировать данные для отчётов excel
                             repairPlan({
-                                data: (() => sumNodes(filteredData || data))(),
                                 plan,
+                                offPlan,
+                                collapseNodes: (() => collapseNodes(filteredData || data))(),
                                 dir
                             })
                         })()

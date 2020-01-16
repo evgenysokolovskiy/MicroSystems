@@ -64,7 +64,7 @@ module.exports = function(data) {
         d[key]['sumElectricRepairComplexity'] = sumElectricRepairComplexity
         // Добавить свойства - ремонтная сложность в месяц по механике и электрике
         d[key]['inPlanningPeriodMechanicRepairComplexity'] =
-            sumMechanicRepairComplexity / PLANNING_PERIOD
+            sumMechanicRepairComplexity / PLANNING_PERIOD || 1
         //d[key]['inPlanningPeriodElectricRepairComplexity'] = sumElectricRepairComplexity / PLANNING_PERIOD
         // Добавить свойство - перечень наименований узлов в производстве
         d[key]['nodes'] = nodes
