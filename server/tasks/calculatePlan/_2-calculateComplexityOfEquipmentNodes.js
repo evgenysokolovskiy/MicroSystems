@@ -1,9 +1,9 @@
 // 2) Рассчитать трудоемкости для узлов оборудования
 
 const clonedeep = require('lodash.clonedeep')
-const model = require('../../../data/model.js')
-const LENGTH_MEDIUM_REPAIR_NODES = require('../constants').LENGTH_MEDIUM_REPAIR_NODES
-const MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = require('../constants')
+const model = require('../../constants/model.js')
+const LENGTH_MEDIUM_REPAIR_NODES = require('../../config').LENGTH_MEDIUM_REPAIR_NODES
+const MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = require('../../config')
     .MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES
 const filterDataByEmergencyStopLimit = require('./_1-filterDataByEmergencyStopLimit')
 

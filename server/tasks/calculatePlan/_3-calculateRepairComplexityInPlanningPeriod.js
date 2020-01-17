@@ -1,7 +1,7 @@
 // 3) Рассчитать месячное значение трудоемкости
 
 const clonedeep = require('lodash.clonedeep')
-const PLANNING_PERIOD = require('../constants').PLANNING_PERIOD
+const PLANNING_PERIOD = require('../../config').PLANNING_PERIOD
 const calculateComplexityOfEquipmentNodes = require('./_2-calculateComplexityOfEquipmentNodes')
 
 module.exports = function(data) {

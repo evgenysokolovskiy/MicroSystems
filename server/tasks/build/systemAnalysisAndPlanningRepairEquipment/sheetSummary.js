@@ -1,5 +1,10 @@
 // Сводная
 
+const nameNodes = require('../../../constants/nameNodes')
+const createCell = require('../helpers/cellCreator').createCell
+const createCellCenter = require('../helpers/cellCreator').createCellCenter
+const createCellTitle = require('../helpers/cellCreator').createCellTitle
+
 module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }) {
     ws.row(2).freeze()
     ws.column(1).setWidth(45)
@@ -16,40 +21,6 @@ module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }
     createCell(ws, [7, 1], 'Рем.сл. по мех.части для выполнения ремонтов', defaultStyle)
     createCell(ws, [8, 1], 'Рем.сл. по эл.части для выполнения ремонтов', defaultStyle)
     createCell(ws, [9, 1], 'Рем.сл.(мех. ч)/месяц', defaultStyle)
-
-    /*
-    // Наименования узлов
-    ws.cell(12, 1).string('неисправность алмажения')
-    ws.cell(13, 1).string('неисправность шпиндельного узла')
-    ws.cell(14, 1).string('неисправность гидравлики')
-    ws.cell(15, 1).string('неисправность пневматики')
-    ws.cell(16, 1).string('неисправность загрузки-выгрузки')
-    ws.cell(17, 1).string('неисправность главного привода')
-    ws.cell(18, 1).string('неисправность коробки скоростей, подач')
-    ws.cell(19, 1).string('неисправность наладочного привода')
-    ws.cell(20, 1).string('неисправность системы стружкоудаления')
-    ws.cell(21, 1).string('неисправность траверса')
-    ws.cell(22, 1).string('неисправность шпиндельного барабана')
-    ws.cell(23, 1).string('неисправность суппорта')
-    ws.cell(24, 1).string('неисправность насоса')
-    ws.cell(25, 1).string('неисправность системы смазки')
-    ws.cell(26, 1).string('неисправность механизма подачи ленты')
-    ws.cell(27, 1).string('Неисправность ножниц')
-    ws.cell(28, 1).string('неисправность муфты-тормоза')
-    ws.cell(29, 1).string('неисправность блоков питания')
-    ws.cell(30, 1).string('неисправность электронных плат')
-    ws.cell(31, 1).string('неисправность логических элементов')
-    ws.cell(32, 1).string('неисправность асинхронного двигателя')
-    ws.cell(33, 1).string('неисправность двигателя постоянного тока')
-    ws.cell(34, 1).string('неисправность статического преобразователя частоты')
-    ws.cell(35, 1).string('неисправность механического генератора')
-    ws.cell(36, 1).string('неисправность электропривода')
-    ws.cell(37, 1).string('неисправность бесконтактных датчиков')
-    ws.cell(38, 1).string('неисправность электроаппаратуры')
-    ws.cell(39, 1).string('неисправность цепей управления, силовых цепей')
-    ws.cell(40, 1).string('неисправность электромеханических муфт')
-    ws.cell(41, 1).string('неисправность масляного насоса')
-*/
 
     // Суммарные показатели по всем производствам (column 2-4)
     const summary = calculateSummary(plan, collapseNodes)
@@ -84,6 +55,8 @@ module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }
     Object.keys(summary['nodes'])
         .sort()
         .forEach(node => {
+            // Наименование узла
+            createCell(ws, [row, 1], nameNodes[node], defaultStyle)
             // Обозначение узла
             createCellCenter(ws, [row, 2], node, defaultStyle)
             // Количество аварийных остановок
@@ -245,60 +218,4 @@ function calculateSummary(plan, collapseNodes) {
         }
     })
     return summary
-}
-
-// Создать ячейку с данными
-function createCell(ws, int, str, defaultStyle) {
-    if (str) {
-        if (typeof str === 'string') {
-            ws.cell(...int)
-                .string(str)
-                .style(defaultStyle)
-        } else if (typeof str === 'number') {
-            ws.cell(...int)
-                .number(str)
-                .style(defaultStyle)
-                .style({ alignment: { horizontal: 'right' } })
-        }
-    }
-}
-
-// Создать ячейку с данными (текст по центру)
-function createCellCenter(ws, int, str, defaultStyle) {
-    if (str) {
-        if (typeof str === 'string') {
-            ws.cell(...int)
-                .string(str)
-                .style(defaultStyle)
-                .style({ alignment: { horizontal: 'center' } })
-        } else if (typeof str === 'number') {
-            ws.cell(...int)
-                .number(str)
-                .style(defaultStyle)
-                .style({ alignment: { horizontal: 'right' } })
-        }
-    }
-}
-
-// Создать ячейку заголовка
-function createCellTitle(ws, int, str, defaultStyle) {
-    if (str) {
-        if (typeof str === 'string') {
-            ws.cell(...int)
-                .string(str)
-                .style(defaultStyle)
-                .style({
-                    font: { bold: true },
-                    alignment: { horizontal: 'center', vertical: 'center' }
-                })
-        } else if (typeof str === 'number') {
-            ws.cell(...int)
-                .number(str)
-                .style(defaultStyle)
-                .style({
-                    font: { bold: true },
-                    alignment: { horizontal: 'center', vertical: 'center' }
-                })
-        }
-    }
 }

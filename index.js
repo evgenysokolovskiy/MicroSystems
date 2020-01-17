@@ -19,7 +19,7 @@ app.use(
     })
 )
 // Путь к файлу, который парсить
-const rootDir = path.join(__dirname, 'data', 'root')
+const parsePath = path.join(__dirname, 'xlsx', 'parse')
 // Путь, куда сохранять отчёты
-const dir = path.join(__dirname, 'data', 'build')
-require('./server/tasks/')({ app, rootDir, dir })
+const buildPath = path.join(__dirname, 'xlsx', 'build')
+require('./server/tasks/')({ app, parsePath, buildPath })

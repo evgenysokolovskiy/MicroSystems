@@ -13,6 +13,7 @@ module.exports = function(data, plan) {
 
     // Модифицировать массив d путем удаления объектов оборудования, имеющихся в плане ремонтов
     keys.forEach(key => {
+        if (!plan[key]) return
         plan[key]['data'].forEach(planItem => {
             planItem.forEach(planItem1 => {
                 d[key]['data'].forEach((dataItem, index) => {

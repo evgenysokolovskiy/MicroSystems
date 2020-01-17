@@ -1,7 +1,7 @@
 // 1) Схлопнуть данные по инвентарным номерам
 
 const clonedeep = require('lodash.clonedeep')
-const INDEXES = require('../constants').INDEXES
+const INDEXES = require('../../config').INDEXES
 
 module.exports = function(data) {
     const d = clonedeep(data)

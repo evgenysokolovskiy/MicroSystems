@@ -1,14 +1,16 @@
 // План
 
+const createCell = require('../helpers/cellCreator').createCell
+const createCellTypeOfRepair = require('../helpers/cellCreator').createCellTypeOfRepair
+const createCellTitle = require('../helpers/cellCreator').createCellTitle
+
 module.exports = function({ plan, ws, defaultStyle }) {
     // Закрепить строку, столбец
     ws.row(3).freeze()
     ws.column(1).setWidth(15)
     ws.column(1).freeze()
     // Название листа
-    ws.cell(1, 1)
-        .string('План 2020г')
-        .style(defaultStyle)
+    createCell(ws, [1, 1], 'План 2020г', defaultStyle)
 
     let step1 = 2
     let step4 = 2
@@ -20,90 +22,33 @@ module.exports = function({ plan, ws, defaultStyle }) {
         // Ширина колонок с моделью
         ws.column(step4).setWidth(15)
         // Названия производств
-        ws.cell(2, step4, 2, step4 + 3, true)
-            .string(`Производство №${key}`)
-            .style(defaultStyle)
-            .style({
-                font: { bold: true },
-                alignment: { horizontal: 'center' }
-            })
+        createCellTitle(ws, [2, step4, 2, step4 + 3, true], `Производство №${key}`, defaultStyle)
 
-        // // Заголовки колонок
-        ws.cell(3, stepTitle)
-            .string(`Модель`)
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
-
-        ws.cell(3, ++stepTitle)
-            .string(`Цех. номер`)
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
-
-        ws.cell(3, ++stepTitle)
-            .string(`Инв. номер`)
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
-
-        ws.cell(3, ++stepTitle)
-            .string(`Вид ремонта`)
-            .style(defaultStyle)
-            .style({ alignment: { horizontal: 'center' } })
+        // Заголовки колонок
+        createCell(ws, [3, stepTitle], 'Модель', defaultStyle)
+        createCell(ws, [3, ++stepTitle], 'Цех. номер', defaultStyle)
+        createCell(ws, [3, ++stepTitle], 'Инв. номер', defaultStyle)
+        createCell(ws, [3, ++stepTitle], 'Вид ремонта', defaultStyle)
 
         // Построение данных для производства key
         const start = startRowsArr(plan)
         plan[key]['data'].forEach((timeInterval, i) => {
             let row = start[i]
-
             // Название периода времени (например, месяц)
-            ws.cell(row, 1)
-                .string(plan[key]['period'][i])
-                .style(defaultStyle)
-                .style({ font: { bold: true }, alignment: { horizontal: 'center' } })
+            createCellTitle(ws, [row, 1], plan[key]['period'][i], defaultStyle)
 
             // Модель, инвентарный номер, цеховой номер, вид ремонта
             timeInterval.forEach(item => {
-                ws.cell(row, step1)
-                    .string('Модель')
-                    .style(defaultStyle)
-
-                const model = item['model']
-                if (model) {
-                    if (typeof model === 'string') {
-                        ws.cell(row, step1)
-                            .string(model)
-                            .style(defaultStyle)
-                    } else if (typeof model === 'number') {
-                        ws.cell(row, step1)
-                            .number(model)
-                            .style(defaultStyle)
-                            .style({ alignment: { horizontal: 'left' } })
-                    }
-                }
-
-                step1++
-                if (item['num']) {
-                    ws.cell(row, step1)
-                        .number(item['num'])
-                        .style(defaultStyle)
-                }
-
-                step1++
-                if (item['inn']) {
-                    ws.cell(row, step1)
-                        .number(item['inn'])
-                        .style(defaultStyle)
-                }
-
-                step1++
-                if (item['typeOfRepair']) {
-                    ws.cell(row, step1)
-                        .string(
-                            item['typeOfRepair'] === 'medium'
-                                ? 'средний'
-                                : Object.keys(item['nodes']).join(' ')
-                        )
-                        .style(defaultStyle)
-                }
+                createCell(ws, [row, step1], item['model'], defaultStyle)
+                createCell(ws, [row, ++step1], item['num'], defaultStyle)
+                createCell(ws, [row, ++step1], item['inn'], defaultStyle)
+                createCellTypeOfRepair(
+                    ws,
+                    [row, ++step1],
+                    item['typeOfRepair'],
+                    item['nodes'],
+                    defaultStyle
+                )
                 step1 = step1 - 3
                 row++
             })
