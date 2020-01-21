@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-// Компоненты
 import { App } from '../components/Footer/App'
 
 export class Footer extends React.Component {

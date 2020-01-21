@@ -8,7 +8,7 @@
     "express": "^4.17.1",
     "lodash.clonedeep": "^4.5.0",
     "node-xlsx": "^0.15.0",
-    "xlsx-style": "^0.8.13"
+    "xlsx-chart": "^0.3.8"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
@@ -20,6 +20,6 @@
     "heroku-postbuild": "cd client && npm install && npm run build",
     "prettier": "prettier --write index.js server/**/*.js client/src/**/*.js"
   },
-  "author": "",
+  "author": "Evgeny Sokolovskiy",
   "license": "ISC"
 }

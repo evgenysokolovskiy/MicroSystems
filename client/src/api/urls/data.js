@@ -1,1 +1,1 @@
-export const data = 'http://localhost:3000/api/data'
+export const data = 'http://localhost:3000/api/plan'
