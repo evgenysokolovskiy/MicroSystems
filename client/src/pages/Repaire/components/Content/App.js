@@ -10,11 +10,11 @@ const { Content } = Layout
 export const App = props => {
     const { data } = props
     return (
-        <Content style={{ padding: '0 50px' }}>
+        <Content style={{ padding: '0 10px' }}>
             <BreadcrumbComponent />
-            <Layout style={{ padding: '24px 0', background: '#fff' }}>
+            <Layout style={{ /*padding: '24px 0',*/ background: '#fff' }}>
                 <MenuComponent />
-                <Content style={{ padding: '0 24px', minHeight: 280 }}>
+                <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
                     <TableComponent data={data} />
                 </Content>
             </Layout>

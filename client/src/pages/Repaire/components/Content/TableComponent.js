@@ -9,8 +9,111 @@ function onChange(pagination, filters, sorter, extra) {
 
 export const TableComponent = props => {
     const { data } = props
-    console.log(data)
-    return <Table columns={columns} /*dataSource={data}*/ onChange={onChange} />
+
+    let column = [
+        {
+            title: '№ п/п',
+            dataIndex: 'idx',
+            width: 60,
+            fixed: 'left'
+        },
+        {
+            title: 'Модель',
+            dataIndex: 'model',
+            width: 150,
+            fixed: 'left',
+            onFilter: (value, record) => record.model.indexOf(value) === 0,
+            sorter: (a, b) => a.model.length - b.model.length,
+            sortDirections: ['descend']
+        },
+        {
+            title: 'Цех. №',
+            dataIndex: 'num',
+            width: 80,
+            fixed: 'left',
+            sorter: (a, b) => a.num - b.num,
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Инв. №',
+            dataIndex: 'inn',
+            width: 90,
+            fixed: 'left',
+            sorter: (a, b) => a.inn - b.inn,
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Вид',
+            dataIndex: 'typeOfRepair',
+            width: 90,
+            fixed: 'left',
+            sorter: (a, b) => a.typeOfRepair - b.typeOfRepair,
+            sortDirections: ['descend', 'ascend']
+        }
+    ]
+
+    let nodes = []
+    let allNodes = {}
+    if (data) {
+        Object.keys(data['63']['nodes']).forEach(node => {
+            allNodes[node] = ''
+            const obj = {
+                title: node,
+                dataIndex: node,
+                width: 65,
+                filters: [
+                    {
+                        text: `Имеет неисправность ${node}`,
+                        value: '+'
+                    },
+                    {
+                        text: 'Нет данной неисправности',
+                        value: ' '
+                    }
+                ],
+                onFilter: (value, record) => record[node].indexOf(value) === 0
+            }
+
+            nodes = [...nodes, obj]
+        })
+    }
+
+    column = [...column, ...nodes]
+
+    let d = []
+    if (data) {
+        data['63']['data'][11].forEach((item, i) => {
+            let obj = {
+                key: i,
+                idx: ++i,
+                model: item['model'],
+                num: item['num'],
+                inn: item['inn'],
+                typeOfRepair: (() => (item['typeOfRepair'] === 'medium' ? 'средний' : 'текущий'))(),
+                ...allNodes
+            }
+
+            Object.keys(item['nodes']).forEach(node => {
+                obj[node] = '+'
+            })
+
+            d = [...d, obj]
+        })
+    }
+
+    //if (data) console.log(Object.keys(data['50']['nodes']), nodes)
+    //console.log(d)
+
+    return (
+        <Table
+            columns={column}
+            dataSource={d}
+            onChange={onChange}
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 1300 }}
+            size="small"
+        />
+    )
 }
 
 /*

@@ -6,6 +6,7 @@
   justify-content: left;
   align-items: center;
   height: 120px;
+  padding: 0 10px;
 }
 
 .logo {
@@ -18,4 +19,16 @@
 
 .search {
   margin-left: auto;
+}
+
+th {
+  font-size: 12px;
+}
+
+.ant-table-scroll {
+  font-size: 16px;
+}
+
+.ant-table-fixed-left {
+  font-size: 12px;
 }
