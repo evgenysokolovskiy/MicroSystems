@@ -3,8 +3,10 @@ import React from 'react'
 import { BreadcrumbComponent } from './BreadcrumbComponent'
 import { MenuComponent } from './MenuComponent'
 import { TableComponent } from './TableComponent'
+import ChartComponent from './ChartComponent'
 // Antd
 import { Layout } from 'antd'
+
 const { Content } = Layout
 
 export const App = props => {
@@ -15,7 +17,8 @@ export const App = props => {
             <Layout style={{ /*padding: '24px 0',*/ background: '#fff' }}>
                 <MenuComponent />
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
-                    <TableComponent data={data} />
+                    <TableComponent data={data} className={'table'} />
+                    {/*<ChartComponent />*/}
                 </Content>
             </Layout>
         </Content>

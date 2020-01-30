@@ -1,15 +1,14 @@
 import React from 'react'
 // Antd
-import { Table } from 'antd'
+import { Table, Tabs } from 'antd'
 import { data, columns } from '../../config'
-
-function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra)
-}
+const { TabPane } = Tabs
 
 export const TableComponent = props => {
     const { data } = props
 
+    // Найти 'column'
+    // Исходный вид
     let column = [
         {
             title: '№ п/п',
@@ -52,26 +51,48 @@ export const TableComponent = props => {
         }
     ]
 
+    // Добавить узлы
     let nodes = []
     let allNodes = {}
     if (data) {
-        Object.keys(data['63']['nodes']).forEach(node => {
+        Object.keys(data['50']['nodes']).forEach(node => {
             allNodes[node] = ''
             const obj = {
                 title: node,
                 dataIndex: node,
+                render(text) {
+                    return {
+                        props: {
+                            className: text === ' ' ? 'color' : ''
+                        },
+                        children: text
+                    }
+                },
                 width: 65,
                 filters: [
                     {
                         text: `Имеет неисправность ${node}`,
-                        value: '+'
+                        value: ' '
                     },
                     {
                         text: 'Нет данной неисправности',
-                        value: ' '
+                        value: ''
                     }
                 ],
-                onFilter: (value, record) => record[node].indexOf(value) === 0
+                // Фильтровать данные
+                onFilter: (value, record) => record[node].indexOf(value) === 0,
+                // Событие на ячейке
+                onCell: (record, rowIndex) => {
+                    return {
+                        onClick: event => {
+                            console.log(event.currentTarget, rowIndex)
+                        }, // click row
+                        onDoubleClick: event => {}, // double click row
+                        onContextMenu: event => {}, // right button click row
+                        onMouseEnter: event => {}, // mouse enter row
+                        onMouseLeave: event => {} // mouse leave row
+                    }
+                }
             }
 
             nodes = [...nodes, obj]
@@ -80,40 +101,87 @@ export const TableComponent = props => {
 
     column = [...column, ...nodes]
 
-    let d = []
-    if (data) {
-        data['63']['data'][11].forEach((item, i) => {
-            let obj = {
-                key: i,
-                idx: ++i,
-                model: item['model'],
-                num: item['num'],
-                inn: item['inn'],
-                typeOfRepair: (() => (item['typeOfRepair'] === 'medium' ? 'средний' : 'текущий'))(),
-                ...allNodes
-            }
+    let tabsWithTables = [] // Компонент для рендеринга
 
-            Object.keys(item['nodes']).forEach(node => {
-                obj[node] = '+'
+    if (data) {
+        // Для каждого периода времени строится своя таблица
+        // Далее соотносится с Tabs
+        let tables = []
+        data['50']['data'].forEach((period, index) => {
+            // Найти 'dataSource'
+            let dataSource = []
+            period.forEach((item, i) => {
+                const obj = {
+                    key: i,
+                    idx: ++i,
+                    model: item['model'],
+                    num: item['num'],
+                    inn: item['inn'],
+                    typeOfRepair: (() =>
+                        item['typeOfRepair'] === 'medium' ? 'средний' : 'текущий')(),
+                    ...allNodes
+                }
+
+                Object.keys(item['nodes']).forEach(node => {
+                    obj[node] = ' '
+                })
+
+                dataSource = [...dataSource, obj]
             })
 
-            d = [...d, obj]
+            // * Построить таблицу на основе column и datasource
+            const table = (
+                <>
+                    <Table
+                        columns={column}
+                        dataSource={dataSource}
+                        bordered
+                        onChange={onChange}
+                        pagination={false}
+                        scroll={{ x: '10vw', y: '70vh' }}
+                        size="small"
+                        // Событие на строке
+                        onRow={(record, rowIndex) => {
+                            return {
+                                onClick: event => {
+                                    console.log(event.currentTarget, rowIndex)
+                                }, // click row
+                                onDoubleClick: event => {}, // double click row
+                                onContextMenu: event => {}, // right button click row
+                                onMouseEnter: event => {}, // mouse enter row
+                                onMouseLeave: event => {} // mouse leave row
+                            }
+                        }}
+                    />
+                </>
+            )
+            tables = [...tables, table]
         })
+
+        data['50']['period'].forEach(
+            (item, i) =>
+                (tabsWithTables = [
+                    ...tabsWithTables,
+                    <TabPane tab={item} key={i}>
+                        {tables[i]}
+                    </TabPane>
+                ])
+        )
+
+        tabsWithTables = [...tabsWithTables]
     }
 
-    //if (data) console.log(Object.keys(data['50']['nodes']), nodes)
-    //console.log(d)
-
     return (
-        <Table
-            columns={column}
-            dataSource={d}
-            onChange={onChange}
-            pagination={{ pageSize: 10 }}
-            scroll={{ x: 1300 }}
-            size="small"
-        />
+        <>
+            <Tabs defaultActiveKey="1" type="card">
+                {tabsWithTables}
+            </Tabs>
+        </>
     )
+}
+
+function onChange(pagination, filters, sorter, extra) {
+    console.log('params', pagination, filters, sorter, extra)
 }
 
 /*
