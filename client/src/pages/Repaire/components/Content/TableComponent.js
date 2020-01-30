@@ -138,7 +138,7 @@ export const TableComponent = props => {
                         bordered
                         onChange={onChange}
                         pagination={false}
-                        scroll={{ x: '10vw', y: '70vh' }}
+                        scroll={{ x: '10vw', y: '60vh' }}
                         size="small"
                         // Событие на строке
                         onRow={(record, rowIndex) => {
