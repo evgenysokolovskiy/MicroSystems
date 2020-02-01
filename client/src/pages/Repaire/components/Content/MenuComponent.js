@@ -9,6 +9,10 @@ export default class MenuComponent extends React.Component {
         collapsed: false
     }
 
+    handleClick = e => {
+        this.props.getHandleClickMenu(e.key)
+    }
+
     render() {
         return (
             <div>
@@ -17,114 +21,80 @@ export default class MenuComponent extends React.Component {
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}
+                    onClick={this.handleClick}
                 >
                     <SubMenu
-                        key="sub1"
+                        key="plan"
                         title={
                             <span>
-                                <Title level={4}>50</Title>
+                                <Icon type="solution" />
                             </span>
                         }
                     >
-                        <Menu.Item key="1">
-                            <Icon type="solution" />
-                            План ремонтов
+                        <Menu.Item key="plan50">
+                            <span>50</span>
                         </Menu.Item>
-                        <Menu.Item key="2">
-                            <Icon type="tool" />
-                            Диагностика
+                        <Menu.Item key="plan56">
+                            <span>56</span>
                         </Menu.Item>
-                        <Menu.Item key="3">
-                            <Icon type="table" />
-                            Схема
+                        <Menu.Item key="plan57">
+                            <span>57</span>
+                        </Menu.Item>
+                        <Menu.Item key="plan61">
+                            <span>61</span>
+                        </Menu.Item>
+                        <Menu.Item key="plan63">
+                            <span>63</span>
                         </Menu.Item>
                     </SubMenu>
 
                     <SubMenu
-                        key="sub2"
+                        key="check"
                         title={
                             <span>
-                                <Title level={4}>56</Title>
+                                <Icon type="tool" />
                             </span>
                         }
                     >
-                        <Menu.Item key="4">
-                            <Icon type="solution" />
-                            План ремонтов
+                        <Menu.Item key="check50">
+                            <span>50</span>
                         </Menu.Item>
-                        <Menu.Item key="5">
-                            <Icon type="tool" />
-                            Диагностика
+                        <Menu.Item key="check56">
+                            <span>56</span>
                         </Menu.Item>
-                        <Menu.Item key="6">
-                            <Icon type="table" />
-                            Схема
+                        <Menu.Item key="check57">
+                            <span>57</span>
+                        </Menu.Item>
+                        <Menu.Item key="check61">
+                            <span>61</span>
+                        </Menu.Item>
+                        <Menu.Item key="check63">
+                            <span>63</span>
                         </Menu.Item>
                     </SubMenu>
 
                     <SubMenu
-                        key="sub3"
+                        key="scheme"
                         title={
                             <span>
-                                <Title level={4}>57</Title>
+                                <Icon type="table" />
                             </span>
                         }
                     >
-                        <Menu.Item key="7">
-                            <Icon type="solution" />
-                            План ремонтов
+                        <Menu.Item key="scheme50">
+                            <span>50</span>
                         </Menu.Item>
-                        <Menu.Item key="8">
-                            <Icon type="tool" />
-                            Диагностика
+                        <Menu.Item key="scheme56">
+                            <span>56</span>
                         </Menu.Item>
-                        <Menu.Item key="9">
-                            <Icon type="table" />
-                            Схема
+                        <Menu.Item key="scheme57">
+                            <span>57</span>
                         </Menu.Item>
-                    </SubMenu>
-
-                    <SubMenu
-                        key="sub4"
-                        title={
-                            <span>
-                                <Title level={4}>61</Title>
-                            </span>
-                        }
-                    >
-                        <Menu.Item key="10">
-                            <Icon type="solution" />
-                            План ремонтов
+                        <Menu.Item key="scheme61">
+                            <span>61</span>
                         </Menu.Item>
-                        <Menu.Item key="11">
-                            <Icon type="tool" />
-                            Диагностика
-                        </Menu.Item>
-                        <Menu.Item key="12">
-                            <Icon type="table" />
-                            Схема
-                        </Menu.Item>
-                    </SubMenu>
-
-                    <SubMenu
-                        key="sub5"
-                        title={
-                            <span>
-                                <Title level={4}>63</Title>
-                            </span>
-                        }
-                    >
-                        <Menu.Item key="13">
-                            <Icon type="solution" />
-                            План ремонтов
-                        </Menu.Item>
-                        <Menu.Item key="14">
-                            <Icon type="tool" />
-                            Диагностика
-                        </Menu.Item>
-                        <Menu.Item key="15">
-                            <Icon type="table" />
-                            Схема
+                        <Menu.Item key="scheme63">
+                            <span>63</span>
                         </Menu.Item>
                     </SubMenu>
                 </Menu>

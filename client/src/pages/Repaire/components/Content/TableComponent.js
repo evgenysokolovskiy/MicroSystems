@@ -2,11 +2,12 @@ import React from 'react'
 // Antd
 import { Table, Tabs } from 'antd'
 import { data, columns } from '../../config'
+import Drawer from '../Drawer/App'
+
 const { TabPane } = Tabs
 
 export const TableComponent = props => {
-    const { data } = props
-
+    const { data, handleClickOpenDrawer } = props
     // Найти 'column'
     // Исходный вид
     let column = [
@@ -55,7 +56,7 @@ export const TableComponent = props => {
     let nodes = []
     let allNodes = {}
     if (data) {
-        Object.keys(data['50']['nodes']).forEach(node => {
+        Object.keys(data['nodes']).forEach(node => {
             allNodes[node] = ''
             const obj = {
                 title: node,
@@ -85,7 +86,7 @@ export const TableComponent = props => {
                 onCell: (record, rowIndex) => {
                     return {
                         onClick: event => {
-                            console.log(event.currentTarget, rowIndex)
+                            //console.log(event.currentTarget, rowIndex)
                         }, // click row
                         onDoubleClick: event => {}, // double click row
                         onContextMenu: event => {}, // right button click row
@@ -107,7 +108,7 @@ export const TableComponent = props => {
         // Для каждого периода времени строится своя таблица
         // Далее соотносится с Tabs
         let tables = []
-        data['50']['data'].forEach((period, index) => {
+        data['data'].forEach((period, index) => {
             // Найти 'dataSource'
             let dataSource = []
             period.forEach((item, i) => {
@@ -144,7 +145,8 @@ export const TableComponent = props => {
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: event => {
-                                    console.log(event.currentTarget, rowIndex)
+                                    handleClickOpenDrawer()
+                                    //console.log(event.currentTarget, rowIndex)
                                 }, // click row
                                 onDoubleClick: event => {}, // double click row
                                 onContextMenu: event => {}, // right button click row
@@ -158,7 +160,7 @@ export const TableComponent = props => {
             tables = [...tables, table]
         })
 
-        data['50']['period'].forEach(
+        data['period'].forEach(
             (item, i) =>
                 (tabsWithTables = [
                     ...tabsWithTables,
