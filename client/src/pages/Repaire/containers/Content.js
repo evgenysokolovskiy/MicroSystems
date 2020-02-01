@@ -5,7 +5,7 @@ import { changeTargetMenu } from '../../../store/actions/targetMenuAction'
 import { changeDrawerVisible } from '../../../store/actions/drawerAction'
 
 export class Content extends React.Component {
-    getHandleClickMenu = item => this.props.changeTargetMenu(item)
+    getHandleClickMenu = item => this.props.changeTargetMenu(item) 
     handleClickOpenDrawer = () => this.props.changeDrawerVisible(true)
 
     render() {
@@ -13,8 +13,11 @@ export class Content extends React.Component {
         return (
             <>
                 <App
-                    data={data}
-                    targetMenu={targetMenu}
+                    data={
+                        targetMenu &&
+                        targetMenu.match(/plan/) &&
+                        data[targetMenu.match(/[0-9]+/)[0]]
+                    }
                     getHandleClickMenu={this.getHandleClickMenu}
                     handleClickOpenDrawer={this.handleClickOpenDrawer}
                 />

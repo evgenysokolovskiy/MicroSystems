@@ -1,21 +1,21 @@
 import React from 'react'
 import { Drawer } from 'antd'
-import ChartComponent from '../Content/ChartComponent'
+import { InfoEquipment } from './InfoEquipment'
 
 export const App = props => {
-    const { visible, handleClickCloseDrawer } = props
+    const { data, visible, handleClickCloseDrawer } = props
 
     return (
         <div>
             <Drawer
                 width={'50vw'}
-                title="Basic Drawer"
+                title="Info Equipment"
                 placement="right"
                 closable={false}
                 onClose={handleClickCloseDrawer}
                 visible={visible}
             >
-                <ChartComponent />
+                <InfoEquipment data={data} />
             </Drawer>
         </div>
     )

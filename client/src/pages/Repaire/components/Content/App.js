@@ -21,11 +21,7 @@ export const App = props => {
                 <MenuComponent getHandleClickMenu={getHandleClickMenu} />
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
                     <TableComponent
-                        data={
-                            targetMenu &&
-                            targetMenu.match(/plan/) &&
-                            data[targetMenu.match(/[0-9]+/)[0]]
-                        }
+                        data={data}
                         handleClickOpenDrawer={handleClickOpenDrawer}
                         className={'table'}
                     />

@@ -7,10 +7,18 @@ export class Drawer extends React.Component {
     handleClickCloseDrawer = () => this.props.changeDrawerVisible(false)
 
     render() {
-        const { visible } = this.props
+        const { data, targetMenu, visible } = this.props
         return (
             <>
-                <App visible={visible} handleClickCloseDrawer={this.handleClickCloseDrawer} />
+                <App 
+                    data={
+                        targetMenu &&
+                        targetMenu.match(/plan/) &&
+                        data[targetMenu.match(/[0-9]+/)[0]]
+                    }
+                    visible={visible} 
+                    handleClickCloseDrawer={this.handleClickCloseDrawer} 
+                />
             </>
         )
     }
@@ -18,6 +26,8 @@ export class Drawer extends React.Component {
 
 function mapStateToProps(store) {
     return {
+        ...store.fetchReducer,
+        ...store.targetMenuReducer,
         ...store.drawerReducer
     }
 }
