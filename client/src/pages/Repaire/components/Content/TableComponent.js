@@ -5,15 +5,8 @@ import { data, columns } from '../../config'
 
 const { TabPane } = Tabs
 
-/*
-    const tableLoading = {
-      spinning: this.state.loading,
-      indicator: <Icon type="loading"  />,
-    }
-*/
-
 export const TableComponent = props => {
-    const { data, handleClickOpenDrawer } = props
+    const { data, handleClickRow, handleClickOpenDrawer } = props
     // Найти 'column'
     // Исходный вид
     let column = [
@@ -43,6 +36,15 @@ export const TableComponent = props => {
         {
             title: 'Инв. №',
             dataIndex: 'inn',
+            render: text => {
+                return {
+                    children: text,
+                    props: {
+                        inn: text
+                    }
+                }
+            },
+
             width: 90,
             fixed: 'left',
             sorter: (a, b) => a.inn - b.inn,
@@ -147,13 +149,23 @@ export const TableComponent = props => {
                         pagination={false}
                         scroll={{ x: '10vw', y: '60vh' }}
                         size="small"
-                        //loading={tableLoading}
+                        /*
+                        loading={{
+                              spinning: true,
+                              indicator: <Icon type="loading"  />,
+                        }}*/
                         // Событие на строке
                         onRow={(record, rowIndex) => {
                             return {
                                 onClick: event => {
                                     handleClickOpenDrawer()
-                                    console.log(event.currentTarget, rowIndex)
+                                    //console.log(event.currentTarget, rowIndex)
+                                    const arr = [...event.currentTarget.children]
+                                    arr.forEach(
+                                        item =>
+                                            item.hasAttribute('inn') &&
+                                            handleClickRow(item.getAttribute('inn'))
+                                    )
                                 }, // click row
                                 onDoubleClick: event => {}, // double click row
                                 onContextMenu: event => {}, // right button click row

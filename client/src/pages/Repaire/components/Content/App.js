@@ -10,7 +10,7 @@ import { Layout } from 'antd'
 const { Content } = Layout
 
 export const App = props => {
-    const { data, targetMenu, getHandleClickMenu, handleClickOpenDrawer } = props
+    const { data, targetMenu, handleClickMenu, handleClickRow, handleClickOpenDrawer } = props
     return (
         <Content style={{ padding: '0 10px' }}>
             <BreadcrumbComponent />
@@ -18,10 +18,11 @@ export const App = props => {
                 style={{ /*padding: '24px 0',*/ background: '#fff' }}
                 className="ant-layout-has-sider"
             >
-                <MenuComponent getHandleClickMenu={getHandleClickMenu} />
+                <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
                     <TableComponent
                         data={data}
+                        handleClickRow={handleClickRow}
                         handleClickOpenDrawer={handleClickOpenDrawer}
                         className={'table'}
                     />

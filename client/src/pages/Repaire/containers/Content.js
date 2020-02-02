@@ -2,14 +2,16 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/Content/App'
 import { changeTargetMenu } from '../../../store/actions/targetMenuAction'
+import { changeTargetInn } from '../../../store/actions/targetInnAction'
 import { changeDrawerVisible } from '../../../store/actions/drawerAction'
 
 export class Content extends React.Component {
-    getHandleClickMenu = item => this.props.changeTargetMenu(item) 
+    handleClickMenu = item => this.props.changeTargetMenu(item)
+    handleClickRow = item => this.props.changeTargetInn(item)
     handleClickOpenDrawer = () => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, targetMenu } = this.props
+        const { data, targetMenu, targetInn } = this.props
         return (
             <>
                 <App
@@ -18,7 +20,8 @@ export class Content extends React.Component {
                         targetMenu.match(/plan/) &&
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
-                    getHandleClickMenu={this.getHandleClickMenu}
+                    handleClickMenu={this.handleClickMenu}
+                    handleClickRow={this.handleClickRow}
                     handleClickOpenDrawer={this.handleClickOpenDrawer}
                 />
             </>
@@ -35,6 +38,7 @@ function mapStateToProps(store) {
 
 const mapDispatchToProps = {
     changeTargetMenu,
+    changeTargetInn,
     changeDrawerVisible
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

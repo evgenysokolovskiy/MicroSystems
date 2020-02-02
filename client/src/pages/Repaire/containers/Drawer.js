@@ -7,17 +7,23 @@ export class Drawer extends React.Component {
     handleClickCloseDrawer = () => this.props.changeDrawerVisible(false)
 
     render() {
-        const { data, targetMenu, visible } = this.props
+        const { data, targetMenu, targetInn, visible } = this.props
+
+        let dataInn = {}
+        const d = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
+        d &&
+            d['data'].forEach(period =>
+                period.forEach(item => {
+                    if (+item['inn'] === +targetInn) dataInn = item
+                })
+            )
+
         return (
             <>
-                <App 
-                    data={
-                        targetMenu &&
-                        targetMenu.match(/plan/) &&
-                        data[targetMenu.match(/[0-9]+/)[0]]
-                    }
-                    visible={visible} 
-                    handleClickCloseDrawer={this.handleClickCloseDrawer} 
+                <App
+                    data={dataInn}
+                    visible={visible}
+                    handleClickCloseDrawer={this.handleClickCloseDrawer}
                 />
             </>
         )
@@ -28,6 +34,7 @@ function mapStateToProps(store) {
     return {
         ...store.fetchReducer,
         ...store.targetMenuReducer,
+        ...store.targetInnReducer,
         ...store.drawerReducer
     }
 }

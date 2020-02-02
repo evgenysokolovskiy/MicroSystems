@@ -9,9 +9,7 @@ export default class MenuComponent extends React.Component {
         collapsed: false
     }
 
-    handleClick = e => {
-        this.props.getHandleClickMenu(e.key)
-    }
+    handleClick = e => this.props.handleClickMenu(e.key)
 
     render() {
         return (

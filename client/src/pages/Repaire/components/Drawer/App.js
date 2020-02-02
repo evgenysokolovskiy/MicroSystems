@@ -9,13 +9,13 @@ export const App = props => {
         <div>
             <Drawer
                 width={'50vw'}
-                title="Info Equipment"
+                title="Информация по оборудованию"
                 placement="right"
                 closable={false}
                 onClose={handleClickCloseDrawer}
                 visible={visible}
             >
-                <InfoEquipment data={data} />
+                <InfoEquipment data={data} visible={visible} />
             </Drawer>
         </div>
     )

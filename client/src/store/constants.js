@@ -16,6 +16,15 @@ export const _TARGET_MENU = {
     }
 }
 
+export const _TARGET_INN = {
+    types: {
+        TARGET_INN: 'TARGET_INN'
+    },
+    init: {
+        targetInn: null
+    }
+}
+
 export const _DRAWER = {
     types: {
         DRAWER: 'DRAWER'
