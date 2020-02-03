@@ -1,16 +1,24 @@
-import React from 'react'
+import React, { lazy } from 'react'
 // Компоненты
 import { BreadcrumbComponent } from './BreadcrumbComponent'
 import MenuComponent from './MenuComponent'
 import { TableComponent } from './TableComponent'
-import ChartComponent from './ChartComponent'
+//import ChartComponent from './ChartComponent'
 // Antd
 import { Layout } from 'antd'
 
 const { Content } = Layout
 
 export const App = props => {
-    const { data, targetMenu, handleClickMenu, handleClickRow, handleClickOpenDrawer } = props
+    const {
+        data,
+        targetMenu,
+        loading,
+        handleClickMenu,
+        handleClickRow,
+        handleClickOpenDrawer
+    } = props
+
     return (
         <Content style={{ padding: '0 10px' }}>
             <BreadcrumbComponent />
@@ -22,6 +30,7 @@ export const App = props => {
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
                     <TableComponent
                         data={data}
+                        loading={loading}
                         handleClickRow={handleClickRow}
                         handleClickOpenDrawer={handleClickOpenDrawer}
                         className={'table'}

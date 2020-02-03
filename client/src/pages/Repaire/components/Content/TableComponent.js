@@ -1,12 +1,12 @@
 import React from 'react'
 // Antd
-import { Table, Tabs, Icon } from 'antd'
+import { Table, Tabs, Icon, Spin } from 'antd'
 import { data, columns } from '../../config'
 
 const { TabPane } = Tabs
 
 export const TableComponent = props => {
-    const { data, handleClickRow, handleClickOpenDrawer } = props
+    const { data, loading, handleClickRow, handleClickOpenDrawer } = props
     // Найти 'column'
     // Исходный вид
     let column = [
@@ -151,9 +151,10 @@ export const TableComponent = props => {
                         size="small"
                         /*
                         loading={{
-                              spinning: true,
+                              spinning: loading,
                               indicator: <Icon type="loading"  />,
-                        }}*/
+                        }}
+*/
                         // Событие на строке
                         onRow={(record, rowIndex) => {
                             return {

@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+a {
+   color:inherit;
+}
+
 .header {
   display: flex;
   flex-flow: row wrap;

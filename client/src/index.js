@@ -30,6 +30,9 @@ ReactDOM.render(
                 >
                     <Switch>
                         <Route exact path="/" component={Repaire} />
+                        <Route exact path="/plan" component={Repaire} />
+                        <Route path="/plan/:id" component={Repaire} />
+                        <Route path="*" component={Repaire} />
                     </Switch>
                 </Suspense>
             </ErrorBoundary>

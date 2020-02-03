@@ -10,11 +10,15 @@ export class Drawer extends React.Component {
         const { data, targetMenu, targetInn, visible } = this.props
 
         let dataInn = {}
+        let period
         const d = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
         d &&
-            d['data'].forEach(period =>
-                period.forEach(item => {
-                    if (+item['inn'] === +targetInn) dataInn = item
+            d['data'].forEach((item, i) =>
+                item.forEach(it => {
+                    if (+it['inn'] === +targetInn) {
+                        dataInn = it
+                        period = d['period'][i]
+                    }
                 })
             )
 
@@ -22,6 +26,7 @@ export class Drawer extends React.Component {
             <>
                 <App
                     data={dataInn}
+                    period={period}
                     visible={visible}
                     handleClickCloseDrawer={this.handleClickCloseDrawer}
                 />

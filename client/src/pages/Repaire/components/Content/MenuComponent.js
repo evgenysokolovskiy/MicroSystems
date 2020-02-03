@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Menu, Icon, Typography } from 'antd'
 
 const { SubMenu } = Menu
@@ -9,13 +10,15 @@ export default class MenuComponent extends React.Component {
         collapsed: false
     }
 
-    handleClick = e => this.props.handleClickMenu(e.key)
+    handleClick = e => {
+        this.props.handleClickMenu(e.key)
+    }
 
     render() {
         return (
             <div>
                 <Menu
-                    defaultSelectedKeys={['1']}
+                    defaultOpenKeys={['plan']}
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}
@@ -30,19 +33,29 @@ export default class MenuComponent extends React.Component {
                         }
                     >
                         <Menu.Item key="plan50">
-                            <span>50</span>
+                            <span>
+                                <Link to="/plan/50">50</Link>
+                            </span>
                         </Menu.Item>
                         <Menu.Item key="plan56">
-                            <span>56</span>
+                            <span>
+                                <Link to="/plan/56">56</Link>
+                            </span>
                         </Menu.Item>
                         <Menu.Item key="plan57">
-                            <span>57</span>
+                            <span>
+                                <Link to="/plan/57">57</Link>
+                            </span>
                         </Menu.Item>
                         <Menu.Item key="plan61">
-                            <span>61</span>
+                            <span>
+                                <Link to="/plan/61">61</Link>
+                            </span>
                         </Menu.Item>
                         <Menu.Item key="plan63">
-                            <span>63</span>
+                            <span>
+                                <Link to="/plan/63">63</Link>
+                            </span>
                         </Menu.Item>
                     </SubMenu>
 
