@@ -1,6 +1,7 @@
-import React from 'react'
-import { Drawer } from 'antd'
-import { InfoEquipment } from './InfoEquipment'
+import React, { Suspense, lazy } from 'react'
+import { Drawer, Icon } from 'antd'
+
+const InfoEquipment = lazy(() => import('./InfoEquipment'))
 
 export const App = props => {
     const { data, period, visible, handleClickCloseDrawer } = props
@@ -14,7 +15,19 @@ export const App = props => {
                 onClose={handleClickCloseDrawer}
                 visible={visible}
             >
-                <InfoEquipment data={data} period={period} visible={visible} />
+                {visible && (
+                    <Suspense
+                        fallback={
+                            <Icon
+                                type="loading"
+                                className="loading"
+                                style={{ fontSize: '20px', color: 'red' }}
+                            />
+                        }
+                    >
+                        <InfoEquipment data={data} period={period} visible={visible} />
+                    </Suspense>
+                )}
             </Drawer>
         </div>
     )

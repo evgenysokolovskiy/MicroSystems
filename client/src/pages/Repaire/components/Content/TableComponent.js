@@ -5,7 +5,7 @@ import { data, columns } from '../../config'
 
 const { TabPane } = Tabs
 
-export const TableComponent = props => {
+export default function(props) {
     const { data, loading, handleClickRow, handleClickOpenDrawer } = props
     // Найти 'column'
     // Исходный вид
@@ -154,7 +154,7 @@ export const TableComponent = props => {
                               spinning: loading,
                               indicator: <Icon type="loading"  />,
                         }}
-*/
+                        */
                         // Событие на строке
                         onRow={(record, rowIndex) => {
                             return {

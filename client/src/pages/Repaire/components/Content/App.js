@@ -1,13 +1,12 @@
-import React, { lazy } from 'react'
+import React, { Suspense, lazy } from 'react'
 // Компоненты
 import { BreadcrumbComponent } from './BreadcrumbComponent'
 import MenuComponent from './MenuComponent'
-import { TableComponent } from './TableComponent'
-//import ChartComponent from './ChartComponent'
 // Antd
-import { Layout } from 'antd'
+import { Layout, Icon } from 'antd'
 
 const { Content } = Layout
+const TableComponent = lazy(() => import('./TableComponent'))
 
 export const App = props => {
     const {
@@ -28,14 +27,25 @@ export const App = props => {
             >
                 <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
-                    <TableComponent
-                        data={data}
-                        loading={loading}
-                        handleClickRow={handleClickRow}
-                        handleClickOpenDrawer={handleClickOpenDrawer}
-                        className={'table'}
-                    />
-                    {/*<ChartComponent />*/}
+                    {loading && (
+                        <Suspense
+                            fallback={
+                                <Icon
+                                    type="loading"
+                                    className="loading"
+                                    style={{ fontSize: '20px', color: 'red' }}
+                                />
+                            }
+                        >
+                            <TableComponent
+                                data={data}
+                                loading={loading}
+                                handleClickRow={handleClickRow}
+                                handleClickOpenDrawer={handleClickOpenDrawer}
+                                className={'table'}
+                            />
+                        </Suspense>
+                    )}
                 </Content>
             </Layout>
         </Content>

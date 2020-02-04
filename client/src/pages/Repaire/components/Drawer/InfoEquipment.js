@@ -80,7 +80,7 @@ const statisticPlan = [
     }
 ]
 
-export const InfoEquipment = props => {
+export default function(props) {
     const { data, period, visible } = props
     const {
         model,
