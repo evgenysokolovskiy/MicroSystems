@@ -24,7 +24,7 @@ ReactDOM.render(
                         <Icon
                             type="loading"
                             className="loading"
-                            style={{ fontSize: '60px', color: '#1890ff' }}
+                            style={{ fontSize: '20px', color: 'red' }}
                         />
                     }
                 >

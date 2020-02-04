@@ -1,7 +1,6 @@
 import React from 'react'
 // Antd
 import { Table, Tabs, Icon, Spin } from 'antd'
-import { data, columns } from '../../config'
 
 const { TabPane } = Tabs
 
