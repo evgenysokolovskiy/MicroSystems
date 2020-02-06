@@ -148,12 +148,6 @@ export default function(props) {
                         pagination={false}
                         scroll={{ x: '10vw', y: '60vh' }}
                         size="small"
-                        /*
-                        loading={{
-                              spinning: loading,
-                              indicator: <Icon type="loading"  />,
-                        }}
-                        */
                         // Событие на строке
                         onRow={(record, rowIndex) => {
                             return {
@@ -194,9 +188,11 @@ export default function(props) {
 
     return (
         <>
-            <Tabs defaultActiveKey="1" type="card">
-                {tabsWithTables}
-            </Tabs>
+            <div className="del">
+                <Tabs defaultActiveKey="1" type="card">
+                    {tabsWithTables}
+                </Tabs>
+            </div>
         </>
     )
 }

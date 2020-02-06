@@ -5,8 +5,6 @@ const sheetSummary = require('./sheetSummary')
 const sheetPlan = require('./sheetPlan')
 const sheetEquipment = require('./sheetEquipment')
 
-const sheetCharts = require('./sheetCharts')
-
 module.exports = function({ plan, offPlan, collapseNodes, buildPath }) {
     const wb = new xl.Workbook()
     const ws1 = wb.addWorksheet('Сводная')
@@ -72,12 +70,6 @@ module.exports = function({ plan, offPlan, collapseNodes, buildPath }) {
         wb,
         defaultStyle
     }) // Оборудование
-
-    sheetCharts({
-        plan,
-        offPlan,
-        buildPath
-    }) // Графики
 
     wb.write(`${buildPath}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`, err => {
         err ? console.error(err) : console.log('Файл успешно сохранён!')

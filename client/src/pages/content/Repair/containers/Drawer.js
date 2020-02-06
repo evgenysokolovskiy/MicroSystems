@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { changeDrawerVisible } from '../../../store/actions/drawerAction'
 import { App } from '../components/Drawer/App'
+import { changeDrawerVisible } from '../../../../store/actions/drawerAction'
 
 export class Drawer extends React.Component {
     handleClickCloseDrawer = () => this.props.changeDrawerVisible(false)

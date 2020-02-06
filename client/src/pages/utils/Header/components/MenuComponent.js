@@ -12,7 +12,7 @@ export const MenuComponent = () => {
             style={{ lineHeight: '120px', marginRight: 'auto' }}
         >
             <Menu.Item key="1">
-                <Link exact to="/plan">
+                <Link exact to="/repair/plan">
                     План ремонтов
                 </Link>
             </Menu.Item>

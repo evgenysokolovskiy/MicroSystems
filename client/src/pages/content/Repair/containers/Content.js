@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/Content/App'
-import { changeTargetMenu } from '../../../store/actions/targetMenuAction'
-import { changeTargetInn } from '../../../store/actions/targetInnAction'
-import { changeDrawerVisible } from '../../../store/actions/drawerAction'
-import { changeStateLoading } from '../../../store/actions/loadingAction'
+import { changeTargetMenu } from '../../../../store/actions/targetMenuAction'
+import { changeTargetInn } from '../../../../store/actions/targetInnAction'
+import { changeDrawerVisible } from '../../../../store/actions/drawerAction'
+import { changeStateLoading } from '../../../../store/actions/loadingAction'
 
 export class Content extends React.Component {
     handleClickMenu = item => {
@@ -12,7 +12,7 @@ export class Content extends React.Component {
         this.props.changeStateLoading(true)
     }
     handleClickRow = item => this.props.changeTargetInn(item)
-    handleClickOpenDrawer = () => this.props.changeDrawerVisible(true)
+    handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
         const { data, targetMenu, targetInn, loading } = this.props
@@ -24,6 +24,7 @@ export class Content extends React.Component {
                         targetMenu.match(/plan/) &&
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
+                    targetMenu={targetMenu}
                     loading={loading}
                     handleClickMenu={this.handleClickMenu}
                     handleClickRow={this.handleClickRow}

@@ -20,11 +20,11 @@ module.exports = function(data) {
                 return
             }
             // Добавить свойство - вид ремонта
-            ;+item['lengthNodesMechanic'] + +item['lengthNodesElectric'] <
+            ;+item['lengthNodesMechanic'] + +item['lengthNodesElectric'] >=
                 LENGTH_MEDIUM_REPAIR_NODES &&
-            +item['lengthNodesMechanic'] < MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES
-                ? (item['typeOfRepair'] = 'nodes')
-                : (item['typeOfRepair'] = 'medium')
+            +item['lengthNodesMechanic'] >= MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES
+                ? (item['typeOfRepair'] = 'medium')
+                : (item['typeOfRepair'] = 'nodes')
 
             if (!model[item.model]) obj[item.model] = true
             // Добавить свойства - (полная) ремонтная сложность среднего ремонта по механике и электрике

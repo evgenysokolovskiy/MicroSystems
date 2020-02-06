@@ -12,7 +12,7 @@ import Api from './api/Api'
 import './styles/index.css'
 import * as serviceWorker from './serviceWorker'
 
-const Repaire = lazy(() => import('./pages/Repaire/App'))
+const Repair = lazy(() => import('./pages/Repair'))
 
 ReactDOM.render(
     <Provider store={store}>
@@ -29,10 +29,10 @@ ReactDOM.render(
                     }
                 >
                     <Switch>
-                        <Route exact path="/" component={Repaire} />
-                        <Route exact path="/plan" component={Repaire} />
-                        <Route path="/plan/:id" component={Repaire} />
-                        <Route path="*" component={Repaire} />
+                        <Route exact path="/repair/" component={Repair} />
+                        <Route exact path="/repair/plan" component={Repair} />
+                        <Route path="/repair/plan/:id" component={Repair} />
+                        <Route path="*" component={Repair} />
                     </Switch>
                 </Suspense>
             </ErrorBoundary>

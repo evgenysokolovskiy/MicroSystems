@@ -34,27 +34,27 @@ export default class MenuComponent extends React.Component {
                     >
                         <Menu.Item key="plan50">
                             <span>
-                                <Link to="/plan/50">50</Link>
+                                <Link to="/repair/plan/50">50</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="plan56">
                             <span>
-                                <Link to="/plan/56">56</Link>
+                                <Link to="/repair/plan/56">56</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="plan57">
                             <span>
-                                <Link to="/plan/57">57</Link>
+                                <Link to="/repair/plan/57">57</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="plan61">
                             <span>
-                                <Link to="/plan/61">61</Link>
+                                <Link to="/repair/plan/61">61</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="plan63">
                             <span>
-                                <Link to="/plan/63">63</Link>
+                                <Link to="/repair/plan/63">63</Link>
                             </span>
                         </Menu.Item>
                     </SubMenu>

@@ -39,6 +39,7 @@ export const App = props => {
                         >
                             <TableComponent
                                 data={data}
+                                targetMenu={targetMenu}
                                 loading={loading}
                                 handleClickRow={handleClickRow}
                                 handleClickOpenDrawer={handleClickOpenDrawer}

@@ -12,7 +12,7 @@ export const BreadcrumbComponent = () => {
             <Breadcrumb.Item>ДИАГНОСТИКА</Breadcrumb.Item>
             <Breadcrumb.Item>СХЕМА</Breadcrumb.Item>
             <Breadcrumb.Item>
-                <span>Empty data</span>
+                <span></span>
             </Breadcrumb.Item>
         </Breadcrumb>
     )
