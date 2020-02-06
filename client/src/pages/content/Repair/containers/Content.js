@@ -15,7 +15,7 @@ export class Content extends React.Component {
     handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, targetMenu, targetInn, loading } = this.props
+        const { data, check, targetMenu, targetInn, loading } = this.props
         return (
             <>
                 <App
@@ -24,6 +24,7 @@ export class Content extends React.Component {
                         targetMenu.match(/plan/) &&
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
+                    check={check}
                     targetMenu={targetMenu}
                     loading={loading}
                     handleClickMenu={this.handleClickMenu}
@@ -38,6 +39,7 @@ export class Content extends React.Component {
 function mapStateToProps(store) {
     return {
         ...store.fetchReducer,
+        ...store.fetchCheckReducer,
         ...store.targetMenuReducer,
         ...store.loadingReducer
     }

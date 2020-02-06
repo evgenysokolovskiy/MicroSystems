@@ -23,3 +23,6 @@ const parsePath = path.join(__dirname, 'xlsx', 'parse')
 // Путь, куда сохранять отчёты
 const buildPath = path.join(__dirname, 'xlsx', 'build')
 require('./server/tasks/')({ app, parsePath, buildPath })
+
+const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
+require('./server/tasks/parseCheck')({ app, parsePathCheck, buildPath })

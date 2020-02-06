@@ -188,7 +188,7 @@ export default function(props) {
 
     return (
         <>
-            <div className="del">
+            <div>
                 <Tabs defaultActiveKey="1" type="card">
                     {tabsWithTables}
                 </Tabs>

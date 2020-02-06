@@ -1,8 +1,8 @@
 // Отправить данные к '/api/check/наименование производства'
 
-module.exports = function({ app, data, name }) {
+module.exports = function({ app, convertData, name }) {
     app.get(`/api/check/${name}`, function(req, res) {
-        res.json(data)
+        res.json(convertData)
         console.log(`Данные отправлены на /api/check/${name}`)
     })
 }

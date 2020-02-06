@@ -7,10 +7,12 @@ import { Layout, Icon } from 'antd'
 
 const { Content } = Layout
 const TableComponent = lazy(() => import('./TableComponent'))
+const CheckComponent = lazy(() => import('./CheckComponent'))
 
 export const App = props => {
     const {
         data,
+        check,
         targetMenu,
         loading,
         handleClickMenu,
@@ -47,6 +49,7 @@ export const App = props => {
                             />
                         </Suspense>
                     )}
+                    {/*<CheckComponent check={check} />*/}
                 </Content>
             </Layout>
         </Content>

@@ -7,6 +7,15 @@ export const _FETCH = {
     }
 }
 
+export const _FETCH_CHECK = {
+    types: {
+        FETCH_CHECK: 'FETCH_CHECK'
+    },
+    init: {
+        check: null
+    }
+}
+
 export const _TARGET_MENU = {
     types: {
         TARGET_MENU: 'TARGET_MENU'
