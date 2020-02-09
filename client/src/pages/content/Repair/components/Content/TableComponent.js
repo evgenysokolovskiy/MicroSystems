@@ -5,7 +5,7 @@ import { Table, Tabs, Icon, Spin } from 'antd'
 const { TabPane } = Tabs
 
 export default function(props) {
-    const { data, loading, handleClickRow, handleClickOpenDrawer } = props
+    const { data, handleClickRow, handleClickOpenDrawer } = props
     // Найти 'column'
     // Исходный вид
     let column = [
@@ -115,7 +115,7 @@ export default function(props) {
         // Для каждого периода времени строится своя таблица
         // Далее соотносится с Tabs
         let tables = []
-        data['data'].forEach((period, index) => {
+        data['data'].forEach(period => {
             // Найти 'dataSource'
             let dataSource = []
             period.forEach((item, i) => {

@@ -28,6 +28,7 @@ module.exports = function(data) {
         })
     })
 
+    dataSource.splice(0, 1) // Удалить первый пустой объект в массиве
     return { columns, dataSource }
 }
 

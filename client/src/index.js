@@ -32,6 +32,8 @@ ReactDOM.render(
                         <Route exact path="/repair/" component={Repair} />
                         <Route exact path="/repair/plan" component={Repair} />
                         <Route path="/repair/plan/:id" component={Repair} />
+                        <Route exact path="/repair/check" component={Repair} />
+                        <Route path="/repair/check/:id" component={Repair} />
                         <Route path="*" component={Repair} />
                     </Switch>
                 </Suspense>

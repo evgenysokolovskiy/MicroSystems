@@ -4,18 +4,25 @@ import { App } from '../components/Content/App'
 import { changeTargetMenu } from '../../../../store/actions/targetMenuAction'
 import { changeTargetInn } from '../../../../store/actions/targetInnAction'
 import { changeDrawerVisible } from '../../../../store/actions/drawerAction'
-import { changeStateLoading } from '../../../../store/actions/loadingAction'
 
 export class Content extends React.Component {
     handleClickMenu = item => {
         this.props.changeTargetMenu(item)
-        this.props.changeStateLoading(true)
     }
     handleClickRow = item => this.props.changeTargetInn(item)
     handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, check, targetMenu, targetInn, loading } = this.props
+        const { data, check, targetMenu, targetInn } = this.props
+        let c
+        targetMenu &&
+            targetMenu.match(/check/) &&
+            Object.values(check).forEach(item => {
+                if (String(Object.keys(item)) === String(targetMenu.match(/[0-9]+/)[0])) {
+                    c = item[targetMenu.match(/[0-9]+/)[0]]
+                }
+            })
+
         return (
             <>
                 <App
@@ -24,9 +31,8 @@ export class Content extends React.Component {
                         targetMenu.match(/plan/) &&
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
-                    check={check}
+                    check={c}
                     targetMenu={targetMenu}
-                    loading={loading}
                     handleClickMenu={this.handleClickMenu}
                     handleClickRow={this.handleClickRow}
                     handleClickOpenDrawer={this.handleClickOpenDrawer}
@@ -40,14 +46,12 @@ function mapStateToProps(store) {
     return {
         ...store.fetchReducer,
         ...store.fetchCheckReducer,
-        ...store.targetMenuReducer,
-        ...store.loadingReducer
+        ...store.targetMenuReducer
     }
 }
 
 const mapDispatchToProps = {
     changeTargetMenu,
-    changeStateLoading,
     changeTargetInn,
     changeDrawerVisible
 }

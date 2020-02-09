@@ -42,12 +42,3 @@ export const _DRAWER = {
         visible: false
     }
 }
-
-export const _LOADING = {
-    types: {
-        LOADING: 'LOADING'
-    },
-    init: {
-        loading: false
-    }
-}

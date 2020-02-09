@@ -14,7 +14,6 @@ export const App = props => {
         data,
         check,
         targetMenu,
-        loading,
         handleClickMenu,
         handleClickRow,
         handleClickOpenDrawer
@@ -29,7 +28,7 @@ export const App = props => {
             >
                 <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
-                    {loading && (
+                    {targetMenu && targetMenu.match(/plan/) && data && (
                         <Suspense
                             fallback={
                                 <Icon
@@ -42,14 +41,26 @@ export const App = props => {
                             <TableComponent
                                 data={data}
                                 targetMenu={targetMenu}
-                                loading={loading}
                                 handleClickRow={handleClickRow}
                                 handleClickOpenDrawer={handleClickOpenDrawer}
                                 className={'table'}
                             />
                         </Suspense>
                     )}
-                    {/*<CheckComponent check={check} />*/}
+
+                    {targetMenu && targetMenu.match(/check/) && check && (
+                        <Suspense
+                            fallback={
+                                <Icon
+                                    type="loading"
+                                    className="loading"
+                                    style={{ fontSize: '20px', color: 'red' }}
+                                />
+                            }
+                        >
+                            <CheckComponent check={check} />
+                        </Suspense>
+                    )}
                 </Content>
             </Layout>
         </Content>
