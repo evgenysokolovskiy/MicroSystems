@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react'
 // Компоненты
-import { BreadcrumbComponent } from './BreadcrumbComponent'
 import MenuComponent from './MenuComponent'
 // Antd
 import { Layout, Icon } from 'antd'
@@ -21,7 +20,6 @@ export const App = props => {
 
     return (
         <Content style={{ padding: '0 10px' }}>
-            <BreadcrumbComponent />
             <Layout
                 style={{ /*padding: '24px 0',*/ background: '#fff' }}
                 className="ant-layout-has-sider"

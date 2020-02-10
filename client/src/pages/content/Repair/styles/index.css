@@ -8,7 +8,15 @@ th {
   font-size: 12px;
 }
 
-.color {
+.true {
+  background-color: lightgreen;
+}
+
+.info {
+  background-color: #909295;
+}
+
+.false {
   background-color: lightcoral;
 }
 

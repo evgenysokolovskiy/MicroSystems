@@ -71,7 +71,7 @@ export default function(props) {
                 render(text) {
                     return {
                         props: {
-                            className: text === ' ' ? 'color' : ''
+                            className: text === ' ' ? 'false' : ''
                         },
                         children: text
                     }

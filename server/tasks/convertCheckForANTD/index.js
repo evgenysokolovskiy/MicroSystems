@@ -20,7 +20,8 @@ module.exports = function(data) {
                         }
                     ]
                 } else {
-                    obj[columns[y]['dataIndex']] = text
+                    obj[columns[y]['dataIndex']] =
+                        typeof text === 'number' ? getDateFromText(text) : text
                 }
             })
 
@@ -37,4 +38,19 @@ function converString(str) {
     return text.reduce((accumulator, current) => {
         return accumulator + String(current.charCodeAt())
     }, 0)
+}
+
+function getDateFromText(text) {
+    // JSON -> UTC
+    const d = new Date(1899, 12, text)
+    // DD.MM.YYYY
+    const yyyymmdd = `${d.getUTCDate()}.${d.getUTCMonth() + 1}.${d.getUTCFullYear()}`
+    // add 0 (разбить массив на строки)
+    const arr = yyyymmdd.split('.')
+    // get str (добавить 0)
+    const day = arr[0].padStart(2, '0')
+    const month = arr[1].padStart(2, '0')
+    const year = arr[2]
+    // split str
+    return `${day}.${month}.${year}`
 }

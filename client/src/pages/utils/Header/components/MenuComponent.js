@@ -13,7 +13,7 @@ export const MenuComponent = () => {
         >
             <Menu.Item key="1">
                 <Link exact to="/repair/plan">
-                    План ремонтов
+                    Управление ремонтов
                 </Link>
             </Menu.Item>
         </Menu>
