@@ -24,5 +24,9 @@ const parsePath = path.join(__dirname, 'xlsx', 'parse')
 const buildPath = path.join(__dirname, 'xlsx', 'build')
 require('./server/tasks/')({ app, parsePath, buildPath })
 
+// Путь к файлу, который парсить
 const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
 require('./server/tasks/parseCheck')({ app, parsePathCheck, buildPath })
+
+const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
+require('./server/tasks/parseScheme')({ app, parsePathScheme, buildPath })
