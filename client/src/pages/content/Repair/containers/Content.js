@@ -13,7 +13,7 @@ export class Content extends React.Component {
     handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, check, targetMenu, targetInn } = this.props
+        const { data, check, scheme, targetMenu, targetInn } = this.props
         let c
         targetMenu &&
             targetMenu.match(/check/) &&
@@ -32,6 +32,7 @@ export class Content extends React.Component {
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
                     check={c}
+                    scheme={scheme[0]['50']}
                     targetMenu={targetMenu}
                     handleClickMenu={this.handleClickMenu}
                     handleClickRow={this.handleClickRow}
@@ -46,6 +47,7 @@ function mapStateToProps(store) {
     return {
         ...store.fetchReducer,
         ...store.fetchCheckReducer,
+        ...store.fetchSchemeReducer,
         ...store.targetMenuReducer
     }
 }

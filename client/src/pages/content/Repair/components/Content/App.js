@@ -7,11 +7,13 @@ import { Layout, Icon } from 'antd'
 const { Content } = Layout
 const TableComponent = lazy(() => import('./TableComponent'))
 const CheckComponent = lazy(() => import('./CheckComponent'))
+const SchemeComponent = lazy(() => import('./SchemeComponent'))
 
 export const App = props => {
     const {
         data,
         check,
+        scheme,
         targetMenu,
         handleClickMenu,
         handleClickRow,
@@ -57,6 +59,20 @@ export const App = props => {
                             }
                         >
                             <CheckComponent check={check} />
+                        </Suspense>
+                    )}
+
+                    {targetMenu && targetMenu.match(/scheme/) && scheme && (
+                        <Suspense
+                            fallback={
+                                <Icon
+                                    type="loading"
+                                    className="loading"
+                                    style={{ fontSize: '20px', color: 'red' }}
+                                />
+                            }
+                        >
+                            <SchemeComponent scheme={scheme} />
                         </Suspense>
                     )}
                 </Content>

@@ -8,29 +8,25 @@ const schemeAPI = require('../api/schemeAPI')
 module.exports = function({ app, parsePathScheme, buildPath }) {
     fs.readdir(parsePathScheme, function(err, files) {
         const paths = files.map(item => `${parsePathScheme}/${item}`)
-        for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
-                // Прочитать файл по ссылке paths[i]
-                const data = [xlsx.parse(`${paths[i]}`)[0].data]
-                const name = paths[i].match(/scheme\/(.*?).xlsx/)[1]
-                const convertData = {
-                    [name]: convertShemeForANTD(data)
-                }
-                if (data) {
-                    const d = xlsx.parse(`${paths[i]}`).filter(item => item['name'] === '50')[0][
-                        'data'
-                    ]
-
-                    resolve(
-                        (() => {
-                            // Отправить данные к API
-                            schemeAPI({ app, convertData, name })
-                        })()
-                    )
-                } else {
-                    reject(new Error('Err'))
-                }
-            }).catch(err => console.log(err))
-        }
+        paths.forEach(file => {
+            xlsx.parse(file).forEach(item => {
+                const name = item['name']
+                const data = item['data']
+                new Promise(function(resolve, reject) {
+                    const convertData = { [name]: data.length && convertShemeForANTD(data) }
+                    if (convertData) {
+                        resolve(
+                            (() => {
+                                // Отправить данные к API
+                                // Отправляются данные каждой вкладки каждого файла
+                                schemeAPI({ app, convertData, name })
+                            })()
+                        )
+                    } else {
+                        reject(new Error('Err'))
+                    }
+                }).catch(err => console.log(err))
+            })
+        })
     })
 }

@@ -1,4 +1,4 @@
-// Отправить данные к '/api/check/наименование производства'
+// Отправить данные к '/api/scheme/наименование цеха'
 
 module.exports = function({ app, convertData, name }) {
     app.get(`/api/scheme/${name}`, function(req, res) {

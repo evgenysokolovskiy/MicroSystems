@@ -8,23 +8,26 @@ const checkAPI = require('../api/checkAPI')
 module.exports = function({ app, parsePathCheck, buildPath }) {
     fs.readdir(parsePathCheck, function(err, files) {
         const paths = files.map(item => `${parsePathCheck}/${item}`)
-        for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
-                // Прочитать файл по ссылке paths[i]
-                const data = [xlsx.parse(`${paths[i]}`)[0].data]
-                const name = paths[i].match(/check\/(.*?).xlsx/)[1]
-                const convertData = {
-                    [name]: convertCheckForANTD(data)
-                }
-                if (convertData) {
-                    resolve(
-                        // Отправить данные к API
-                        checkAPI({ app, convertData, name })
-                    )
-                } else {
-                    reject(new Error('Err'))
-                }
-            }).catch(err => console.log(err))
-        }
+
+        paths.forEach(file => {
+            xlsx.parse(file).forEach(item => {
+                const name = item['name']
+                const data = [item['data']]
+                new Promise(function(resolve, reject) {
+                    convertData = { [name]: data.length && convertCheckForANTD(data) }
+                    if (convertData) {
+                        resolve(
+                            (() => {
+                                // Отправить данные к API
+                                // Отправляются данные каждой вкладки каждого файла
+                                checkAPI({ app, convertData, name })
+                            })()
+                        )
+                    } else {
+                        reject(new Error('Err'))
+                    }
+                }).catch(err => console.log(err))
+            })
+        })
     })
 }

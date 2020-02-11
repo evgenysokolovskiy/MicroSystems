@@ -16,6 +16,15 @@ export const _FETCH_CHECK = {
     }
 }
 
+export const _FETCH_SCHEME = {
+    types: {
+        FETCH_SCHEME: 'FETCH_SCHEME'
+    },
+    init: {
+        scheme: null
+    }
+}
+
 export const _TARGET_MENU = {
     types: {
         TARGET_MENU: 'TARGET_MENU'
