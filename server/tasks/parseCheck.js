@@ -13,6 +13,7 @@ module.exports = function({ app, parsePathCheck, buildPath }) {
             xlsx.parse(file).forEach(item => {
                 const name = item['name']
                 const data = [item['data']]
+                console.log(data)
                 new Promise(function(resolve, reject) {
                     convertData = { [name]: data.length && convertCheckForANTD(data) }
                     if (convertData) {

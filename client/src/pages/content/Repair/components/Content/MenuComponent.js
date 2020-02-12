@@ -102,20 +102,41 @@ export default class MenuComponent extends React.Component {
                             </span>
                         }
                     >
+                        <Menu.Item key="scheme1">
+                            <span>ШСЦ-1</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme2">
+                            <span>ШСЦ-2</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme3">
+                            <span>ШСЦ-3</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme4">
+                            <span>ШСЦ-4</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme5">
+                            <span>ШСЦ-5</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme6">
+                            <span>ШСЦ-6</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme7">
+                            <span>ШСЦ-7</span>
+                        </Menu.Item>
+                        <Menu.Item key="scheme10">
+                            <span>ШСЦ-10</span>
+                        </Menu.Item>
                         <Menu.Item key="scheme50">
-                            <span>50</span>
+                            <span>ТП</span>
                         </Menu.Item>
-                        <Menu.Item key="scheme56">
-                            <span>56</span>
+                        <Menu.Item key="scheme93">
+                            <span>АТЦ</span>
                         </Menu.Item>
-                        <Menu.Item key="scheme57">
-                            <span>57</span>
+                        <Menu.Item key="scheme561">
+                            <span>56(1)</span>
                         </Menu.Item>
-                        <Menu.Item key="scheme61">
-                            <span>61</span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme63">
-                            <span>63</span>
+                        <Menu.Item key="scheme562">
+                            <span>56(2)</span>
                         </Menu.Item>
                     </SubMenu>
                 </Menu>

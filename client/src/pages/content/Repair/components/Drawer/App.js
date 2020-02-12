@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react'
 import { Drawer, Icon } from 'antd'
 
 const InfoEquipment = lazy(() => import('./InfoEquipment'))
+const ChartComponent = lazy(() => import('../Content/ChartComponent'))
 
 export const App = props => {
     const { data, period, visible, handleClickCloseDrawer } = props
@@ -26,6 +27,7 @@ export const App = props => {
                         }
                     >
                         <InfoEquipment data={data} period={period} visible={visible} />
+                        <ChartComponent />
                     </Suspense>
                 )}
             </Drawer>

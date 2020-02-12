@@ -14,12 +14,24 @@ export class Content extends React.Component {
 
     render() {
         const { data, check, scheme, targetMenu, targetInn } = this.props
+
+        // check
         let c
         targetMenu &&
             targetMenu.match(/check/) &&
             Object.values(check).forEach(item => {
                 if (String(Object.keys(item)) === String(targetMenu.match(/[0-9]+/)[0])) {
                     c = item[targetMenu.match(/[0-9]+/)[0]]
+                }
+            })
+
+        // scheme
+        let s
+        targetMenu &&
+            targetMenu.match(/scheme/) &&
+            Object.values(scheme).forEach(item => {
+                if (String(Object.keys(item)) === String(targetMenu.match(/[0-9]+/)[0])) {
+                    s = item[targetMenu.match(/[0-9]+/)[0]]
                 }
             })
 
@@ -32,7 +44,7 @@ export class Content extends React.Component {
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
                     check={c}
-                    scheme={scheme[0]['50']}
+                    scheme={s}
                     targetMenu={targetMenu}
                     handleClickMenu={this.handleClickMenu}
                     handleClickRow={this.handleClickRow}

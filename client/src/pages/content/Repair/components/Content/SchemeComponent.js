@@ -15,6 +15,7 @@ export default function(props) {
                 dataSource={dataSource}
                 pagination={false}
                 size="small"
+                scroll={{ x: 'max-content' }}
                 bordered
             />
         </>
