@@ -7,6 +7,15 @@ export const _FETCH = {
     }
 }
 
+export const _FETCH_CHECK_FOR_GENERAL_USE = {
+    types: {
+        FETCH_CHECK_FOR_GENERAL_USE: 'FETCH_CHECK_FOR_GENERAL_USE'
+    },
+    init: {
+        checkForGeneralUse: null
+    }
+}
+
 export const _FETCH_CHECK = {
     types: {
         FETCH_CHECK: 'FETCH_CHECK'

@@ -1,13 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { fetchDataMiddleware } from './middlewares/fetchDataMiddleware'
-import { fetchCheckMiddleware } from './middlewares/fetchCheckMiddleware'
+import {
+    fetchCheckForGeneralUseMiddleware,
+    fetchCheckForAntdMiddleware
+} from './middlewares/fetchCheckMiddleware'
 import { fetchSchemeMiddleware } from './middlewares/fetchSchemeMiddleware'
 
 class Api extends React.Component {
     componentDidMount() {
         this.props.fetchDataMiddleware()
-        this.props.fetchCheckMiddleware()
+        this.props.fetchCheckForGeneralUseMiddleware()
+        this.props.fetchCheckForAntdMiddleware()
         this.props.fetchSchemeMiddleware()
     }
 
@@ -18,7 +22,8 @@ class Api extends React.Component {
 
 const matDispatchToProps = {
     fetchDataMiddleware,
-    fetchCheckMiddleware,
+    fetchCheckForGeneralUseMiddleware,
+    fetchCheckForAntdMiddleware,
     fetchSchemeMiddleware
 }
 

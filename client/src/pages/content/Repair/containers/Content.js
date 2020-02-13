@@ -13,7 +13,7 @@ export class Content extends React.Component {
     handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, check, scheme, targetMenu, targetInn } = this.props
+        const { data, checkForGeneralUse, check, scheme, targetMenu, targetInn } = this.props
 
         // check
         let c
@@ -58,6 +58,7 @@ export class Content extends React.Component {
 function mapStateToProps(store) {
     return {
         ...store.fetchReducer,
+        ...store.fetchCheckForGeneralUseReducer,
         ...store.fetchCheckReducer,
         ...store.fetchSchemeReducer,
         ...store.targetMenuReducer

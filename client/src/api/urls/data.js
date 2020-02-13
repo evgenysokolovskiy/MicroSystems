@@ -1,5 +1,14 @@
 export const data = 'http://localhost:3000/api/plan'
-export const check = ['http://localhost:3000/api/check/61', 'http://localhost:3000/api/check/63']
+export const checkForGeneralUse = [
+    'http://localhost:3000/api/checkForGeneralUse/61',
+    'http://localhost:3000/api/checkForGeneralUse/63'
+]
+
+export const checkForAntd = [
+    'http://localhost:3000/api/checkForAntd/61',
+    'http://localhost:3000/api/checkForAntd/63'
+]
+
 export const scheme = [
     'http://localhost:3000/api/scheme/1',
     'http://localhost:3000/api/scheme/2',
