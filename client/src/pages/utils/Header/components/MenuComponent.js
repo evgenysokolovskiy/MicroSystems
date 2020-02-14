@@ -16,6 +16,11 @@ export const MenuComponent = () => {
                     Управление ремонтов
                 </Link>
             </Menu.Item>
+            <Menu.Item key="2">
+                <Link exact to="#">
+                    Техническое управление
+                </Link>
+            </Menu.Item>
         </Menu>
     )
 }

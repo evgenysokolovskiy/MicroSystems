@@ -1,9 +1,9 @@
-// Парсить данные из xlsx/check и передать функции
+// Парсить данные из xlsx/scheme и передать функции
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 const convertShemeForANTD = require('./convertSchemeForANTD/')
-const schemeAPI = require('../api/schemeAPI')
+const schemeAPI = require('../../../api/schemeAPI')
 
 module.exports = function({ app, parsePathScheme, buildPath }) {
     fs.readdir(parsePathScheme, function(err, files) {

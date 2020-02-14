@@ -16,12 +16,12 @@ export const _FETCH_CHECK_FOR_GENERAL_USE = {
     }
 }
 
-export const _FETCH_CHECK = {
+export const _FETCH_CHECK_FOR_ANTD = {
     types: {
-        FETCH_CHECK: 'FETCH_CHECK'
+        FETCH_CHECK_FOR_ANTD: 'FETCH_CHECK_FOR_ANTD'
     },
     init: {
-        check: null
+        checkForAntd: null
     }
 }
 

@@ -3,10 +3,10 @@ import React from 'react'
 import { Table } from 'antd'
 
 export default function(props) {
-    const { check } = props
+    const { checkForAntd } = props
 
-    let columns = check['columns']
-    let dataSource = check['dataSource']
+    let columns = checkForAntd['columns']
+    let dataSource = checkForAntd['dataSource']
 
     // Добавить сортировку, фильтрацию для колонок
     const addColumns = columns.map(item => {
@@ -41,7 +41,6 @@ function sorter(item, dataIndex = item['dataIndex']) {
 
 // Функция фильтрации
 function filter(item, dataIndex = item['dataIndex']) {
-    console.log(item)
     const filter = {
         render(text) {
             return {

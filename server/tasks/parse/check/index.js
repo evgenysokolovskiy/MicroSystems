@@ -2,9 +2,10 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
+const convertCheckForGeneralUse = require('./convertCheckForGeneralUse/')
 const convertCheckForANTD = require('./convertCheckForANTD/')
-const checkForGeneralUseCheckAPI = require('../api/checkAPI').checkForGeneralUse
-const convertedCheckAPI = require('../api/checkAPI').converted
+const checkForGeneralUseCheckAPI = require('../../../api/checkAPI').checkForGeneralUse
+const convertedCheckAPI = require('../../../api/checkAPI').converted
 
 module.exports = function({ app, parsePathCheck, buildPath }) {
     fs.readdir(parsePathCheck, function(err, files) {
@@ -17,7 +18,7 @@ module.exports = function({ app, parsePathCheck, buildPath }) {
 
                 new Promise(function(resolve, reject) {
                     // Данные для общего использования
-                    const checkForGeneralUse = convertCheckForGeneralUse(source)
+                    const checkForGeneralUse = { [name]: convertCheckForGeneralUse(source) }
                     // Данные для ANTD
                     const convertedData = { [name]: data.length && convertCheckForANTD(data) }
 
@@ -37,19 +38,4 @@ module.exports = function({ app, parsePathCheck, buildPath }) {
             })
         })
     })
-}
-
-// Получить данные для общего использования
-function convertCheckForGeneralUse(source) {
-    let d = []
-    for (let i = 1; i < source.length; i++) {
-        if (!source[i].length) continue
-        const obj = {}
-        for (let j = 0; j < source[i].length; j++) {
-            obj[source[0][j]] = source[i][j]
-        }
-
-        d = [...d, obj]
-    }
-    return d
 }

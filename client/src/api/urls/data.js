@@ -1,12 +1,26 @@
 export const data = 'http://localhost:3000/api/plan'
 export const checkForGeneralUse = [
-    'http://localhost:3000/api/checkForGeneralUse/61',
-    'http://localhost:3000/api/checkForGeneralUse/63'
+    'http://localhost:3000/api/checkForGeneralUse/3',
+    'http://localhost:3000/api/checkForGeneralUse/4'
 ]
 
 export const checkForAntd = [
-    'http://localhost:3000/api/checkForAntd/61',
-    'http://localhost:3000/api/checkForAntd/63'
+    /*
+    'http://localhost:3000/api/check/1',
+    'http://localhost:3000/api/check/2',
+*/
+    'http://localhost:3000/api/check/3'
+    /*
+    'http://localhost:3000/api/check/4',
+    'http://localhost:3000/api/check/5',
+    'http://localhost:3000/api/check/6',
+    'http://localhost:3000/api/check/7',
+    'http://localhost:3000/api/check/10',
+    'http://localhost:3000/api/check/50',
+    'http://localhost:3000/api/check/93',
+    'http://localhost:3000/api/check/561',
+    'http://localhost:3000/api/check/562'
+*/
 ]
 
 export const scheme = [

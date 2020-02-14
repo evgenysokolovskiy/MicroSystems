@@ -2,13 +2,13 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const calculatePlan = require('./calculatePlan/_4-calculatePlan')
-const equipmentOffPlan = require('./equipmentOffPlan')
-const collapseNodes = require('./collapseNodes')
-const dataAPI = require('../api/dataAPI')
-const repairPlan = require('./build/systemAnalysisAndPlanningRepairEquipment/')
+const calculatePlan = require('../../calculatePlan/_4-calculatePlan')
+const equipmentOffPlan = require('../../equipmentOffPlan')
+const collapseNodes = require('../../collapseNodes')
+const dataAPI = require('../../../api/dataAPI')
+const repairPlan = require('../../build/systemAnalysisAndPlanningRepairEquipment/')
 // Индекс инвентарного номера (для фильтрации исходных данных по filter)
-const inn = require('../config').INDEXES['inn']
+const inn = require('../../../config').INDEXES['inn']
 // Фильтр - массив инвентарных номеров
 //Если filter отсутствует, то обрабатываются все данные
 //const filter = require('../constants/audit/avtovaz/equipment').safe

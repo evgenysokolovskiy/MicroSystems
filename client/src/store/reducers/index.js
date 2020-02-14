@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import fetchReducer from './fetchReducer'
 import fetchCheckForGeneralUseReducer from './fetchCheckForGeneralUseReducer'
-import fetchCheckReducer from './fetchCheckReducer'
+import fetchCheckForAntdReducer from './fetchCheckForAntdReducer'
 import fetchSchemeReducer from './fetchSchemeReducer'
 import targetMenuReducer from './targetMenuReducer'
 import targetInnReducer from './targetInnReducer'
@@ -10,7 +10,7 @@ import drawerReducer from './drawerReducer'
 export default combineReducers({
     fetchReducer,
     fetchCheckForGeneralUseReducer,
-    fetchCheckReducer,
+    fetchCheckForAntdReducer,
     fetchSchemeReducer,
     targetMenuReducer,
     targetInnReducer,

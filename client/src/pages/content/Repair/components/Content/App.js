@@ -12,7 +12,8 @@ const SchemeComponent = lazy(() => import('./SchemeComponent'))
 export const App = props => {
     const {
         data,
-        check,
+        checkForGeneralUse,
+        checkForAntd,
         scheme,
         targetMenu,
         handleClickMenu,
@@ -48,7 +49,7 @@ export const App = props => {
                         </Suspense>
                     )}
 
-                    {targetMenu && targetMenu.match(/check/) && check && (
+                    {targetMenu && targetMenu.match(/check/) && checkForAntd && (
                         <Suspense
                             fallback={
                                 <Icon
@@ -58,7 +59,7 @@ export const App = props => {
                                 />
                             }
                         >
-                            <CheckComponent check={check} />
+                            <CheckComponent checkForAntd={checkForAntd} />
                         </Suspense>
                     )}
 
@@ -72,7 +73,10 @@ export const App = props => {
                                 />
                             }
                         >
-                            <SchemeComponent scheme={scheme} />
+                            <SchemeComponent
+                                scheme={scheme}
+                                checkForGeneralUse={checkForGeneralUse}
+                            />
                         </Suspense>
                     )}
                 </Content>

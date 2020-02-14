@@ -13,13 +13,13 @@ export class Content extends React.Component {
     handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, checkForGeneralUse, check, scheme, targetMenu, targetInn } = this.props
+        const { data, checkForGeneralUse, checkForAntd, scheme, targetMenu, targetInn } = this.props
 
         // check
         let c
         targetMenu &&
             targetMenu.match(/check/) &&
-            Object.values(check).forEach(item => {
+            Object.values(checkForAntd).forEach(item => {
                 if (String(Object.keys(item)) === String(targetMenu.match(/[0-9]+/)[0])) {
                     c = item[targetMenu.match(/[0-9]+/)[0]]
                 }
@@ -43,7 +43,12 @@ export class Content extends React.Component {
                         targetMenu.match(/plan/) &&
                         data[targetMenu.match(/[0-9]+/)[0]]
                     }
-                    check={c}
+                    checkForGeneralUse={
+                        targetMenu &&
+                        targetMenu.match(/scheme/) &&
+                        checkForGeneralUse[targetMenu.match(/[0-9]+/)[0]]
+                    }
+                    checkForAntd={c}
                     scheme={s}
                     targetMenu={targetMenu}
                     handleClickMenu={this.handleClickMenu}
@@ -59,7 +64,7 @@ function mapStateToProps(store) {
     return {
         ...store.fetchReducer,
         ...store.fetchCheckForGeneralUseReducer,
-        ...store.fetchCheckReducer,
+        ...store.fetchCheckForAntdReducer,
         ...store.fetchSchemeReducer,
         ...store.targetMenuReducer
     }
