@@ -179,9 +179,6 @@ export default function(props) {
                     <Bar dataKey="uv" fill="#82ca9d" name="Количество остановок" />
                 </BarChart>
             </ResponsiveContainer>
-            <Title level={4} style={{ marginTop: '40px' }}>
-                Техническое управление:
-            </Title>
         </>
     )
 }

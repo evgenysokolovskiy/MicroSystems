@@ -13,6 +13,7 @@ import './styles/index.css'
 import * as serviceWorker from './serviceWorker'
 
 const Repair = lazy(() => import('./pages/Repair'))
+const Tech = lazy(() => import('./pages/Tech'))
 
 ReactDOM.render(
     <Provider store={store}>
@@ -30,12 +31,13 @@ ReactDOM.render(
                 >
                     <Switch>
                         <Route exact path="/repair/" component={Repair} />
-                        <Route exact path="/repair/plan" component={Repair} />
                         <Route path="/repair/plan/:id" component={Repair} />
-                        <Route exact path="/repair/check" component={Repair} />
                         <Route path="/repair/check/:id" component={Repair} />
-                        <Route exact path="/repair/scheme" component={Repair} />
                         <Route path="/repair/scheme/:id" component={Repair} />
+
+                        <Route exact path="/tech/" component={Tech} />
+                        <Route exact path="/tech/:id" component={Tech} />
+
                         <Route path="*" component={Repair} />
                     </Switch>
                 </Suspense>

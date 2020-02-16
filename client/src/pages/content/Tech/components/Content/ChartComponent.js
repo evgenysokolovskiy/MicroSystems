@@ -23,27 +23,27 @@ import { scaleLog } from 'd3-scale'
 const scale = scaleLog().base(Math.E)
 const data0 = [
     {
-        date: '01.01',
+        date: '0',
         norm: [17.71, 17.73],
         fact: 17.65
     },
     {
-        date: '03.01',
+        date: '3',
         norm: [17.627, 17.644],
         fact: 17.635
     },
     {
-        date: '07.01',
+        date: '7',
         norm: [17.584, 17.598],
         fact: 17.72
     },
     {
-        date: '10.01',
+        date: '10',
         norm: [17.551, 17.561],
         fact: 17.7
     },
     {
-        date: '14.01',
+        date: '14',
         norm: [17.498, 17.505],
         fact: 17.5
     }
@@ -60,46 +60,46 @@ const d1 = data0.map(item => {
 
 const data1 = [
     {
-        date: '01.01',
+        date: '0',
         norm: 20.0
     },
     {
-        date: '03.01',
+        date: '3',
         norm: 15.8
     },
     {
-        date: '07.01',
+        date: '7',
         norm: 11.5
     },
     {
-        date: '10.01',
+        date: '10',
         norm: 7.3
     },
     {
-        date: '14.01',
+        date: '14',
         norm: 3.0
     }
 ]
 
 const data2 = [
     {
-        date: '01.01',
+        date: '0',
         norm: 20.0
     },
     {
-        date: '03.01',
+        date: '3',
         norm: 16.3
     },
     {
-        date: '07.01',
+        date: '7',
         norm: 12.5
     },
     {
-        date: '10.01',
+        date: '10',
         norm: 8.8
     },
     {
-        date: '14.01',
+        date: '14',
         norm: 5.0
     }
 ]
@@ -215,20 +215,27 @@ export default class ChartComponent extends PureComponent {
 
         return (
             <>
-                <Table columns={columns} dataSource={d} bordered pagination={false} size="small" />
                 <div>
-                    <h4 style={{ textAlign: 'left', marginLeft: '76px', marginTop: '40px' }}>
+                    <h4 style={{ textAlign: 'left', marginLeft: '76px' }}>
                         Предельный диаметр, мм
                     </h4>
                     <ComposedChart
                         width={600}
-                        height={250}
+                        height={200}
                         data={d1}
                         syncId="anyId"
                         margin={{ top: 0, right: 20, left: 20, bottom: 5 }}
                         onClick={this.handleClick}
                     >
-                        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                        <XAxis
+                            dataKey="date"
+                            tick={{ fontSize: 10 }}
+                            label={{
+                                value: 'Время прохождения партии, час',
+                                offset: 0,
+                                position: 'insideBottom'
+                            }}
+                        />
                         <YAxis
                             type="number"
                             domain={[17.5, 17.72]}
@@ -248,13 +255,13 @@ export default class ChartComponent extends PureComponent {
                         <ReferenceLine x={date} stroke="red" />
                         <Scatter
                             dataKey="trueFact"
-                            name="В пределах нормы"
+                            name="Факт (норма)"
                             stroke="#222"
                             fill="lightgreen"
                         />
                         <Scatter
                             dataKey="falseFact"
-                            name="Вне пределов нормы"
+                            name="Факт (не норма)"
                             stroke="#222"
                             fill="lightcoral"
                         />
@@ -265,14 +272,22 @@ export default class ChartComponent extends PureComponent {
                     </h4>
                     <LineChart
                         width={600}
-                        height={250}
+                        height={200}
                         data={data1}
                         syncId="anyId"
                         margin={{ top: 0, right: 20, left: 20, bottom: 5 }}
                         onClick={this.handleClick}
                     >
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
+                        <XAxis
+                            dataKey="date"
+                            tick={{ fontSize: 10 }}
+                            label={{
+                                value: 'Время прохождения партии, час',
+                                offset: 0,
+                                position: 'insideBottom'
+                            }}
+                        />
                         <YAxis
                             tick={{ fontSize: 10 }}
                             label={
@@ -292,7 +307,7 @@ export default class ChartComponent extends PureComponent {
                     </h4>
                     <LineChart
                         width={600}
-                        height={250}
+                        height={200}
                         data={data2}
                         syncId="anyId"
                         margin={{ top: 0, right: 20, left: 20, bottom: 5 }}
@@ -314,6 +329,16 @@ export default class ChartComponent extends PureComponent {
                         <Line type="monotone" dataKey="norm" stroke="#222" />
                         <Brush />
                     </LineChart>
+                </div>
+                <div>
+                    <h4>Таблица №1. Сводные данные за выбранный момент времени</h4>
+                    <Table
+                        columns={columns}
+                        dataSource={d}
+                        bordered
+                        pagination={false}
+                        size="small"
+                    />
                 </div>
             </>
         )
