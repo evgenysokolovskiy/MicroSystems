@@ -1,9 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/Content/App'
-import { changeTargetMenu } from '../../../../store/actions/targetMenuAction'
-import { changeTargetInn } from '../../../../store/actions/targetInnAction'
-import { changeDrawerVisible } from '../../../../store/actions/drawerAction'
+import { changeTargetMenu } from '../../../../store/repair/actions/targetMenuAction'
+import { changeTargetInn } from '../../../../store/repair/actions/targetInnAction'
+import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
 
 export class Content extends React.Component {
     handleClickMenu = item => {
@@ -36,26 +36,20 @@ export class Content extends React.Component {
             })
 
         return (
-            <>
-                <App
-                    data={
-                        targetMenu &&
-                        targetMenu.match(/plan/) &&
-                        data[targetMenu.match(/[0-9]+/)[0]]
-                    }
-                    checkForGeneralUse={
-                        targetMenu &&
-                        targetMenu.match(/scheme/) &&
-                        checkForGeneralUse[targetMenu.match(/[0-9]+/)[0]]
-                    }
-                    checkForAntd={c}
-                    scheme={s}
-                    targetMenu={targetMenu}
-                    handleClickMenu={this.handleClickMenu}
-                    handleClickRow={this.handleClickRow}
-                    handleClickOpenDrawer={this.handleClickOpenDrawer}
-                />
-            </>
+            <App
+                data={targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]}
+                checkForGeneralUse={
+                    targetMenu &&
+                    targetMenu.match(/scheme/) &&
+                    checkForGeneralUse[targetMenu.match(/[0-9]+/)[0]]
+                }
+                checkForAntd={c}
+                scheme={s}
+                targetMenu={targetMenu}
+                handleClickMenu={this.handleClickMenu}
+                handleClickRow={this.handleClickRow}
+                handleClickOpenDrawer={this.handleClickOpenDrawer}
+            />
         )
     }
 }

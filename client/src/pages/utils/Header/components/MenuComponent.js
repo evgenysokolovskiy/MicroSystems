@@ -3,24 +3,26 @@ import { Link } from 'react-router-dom'
 // Antd
 import { Menu } from 'antd'
 
-export const MenuComponent = () => {
-    return (
-        <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={['1']}
-            style={{ lineHeight: '120px', marginRight: 'auto' }}
-        >
-            <Menu.Item key="1">
-                <Link exact to="/repair/">
-                    Управление ремонтов
-                </Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-                <Link exact to="/tech/">
-                    Техническое управление
-                </Link>
-            </Menu.Item>
-        </Menu>
-    )
+export default class MenuComponent extends React.Component {
+    render() {
+        const currentPath = `/${window.location.pathname.split('/')[1]}/`
+        return (
+            <Menu
+                theme="dark"
+                mode="horizontal"
+                selectedKeys={[currentPath]}
+                style={{ lineHeight: '120px', marginRight: 'auto' }}
+            >
+                <Menu.Item key="/repair/">
+                    <Link to="/repair/">Управление ремонтов</Link>
+                </Menu.Item>
+                <Menu.Item key="/tech/">
+                    <Link to="/tech/">Приказ №17</Link>
+                </Menu.Item>
+                <Menu.Item key="/vbf21/">
+                    <Link to="/vbf21/">VBF-21</Link>
+                </Menu.Item>
+            </Menu>
+        )
+    }
 }

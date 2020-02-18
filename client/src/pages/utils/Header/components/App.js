@@ -1,6 +1,6 @@
 import React from 'react'
 // Компоненты
-import { MenuComponent } from './MenuComponent'
+import MenuComponent from './MenuComponent'
 import { SearchComponent } from './SearchComponent'
 // Antd
 import { Layout } from 'antd'

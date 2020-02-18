@@ -1,5 +1,5 @@
 // Экшены
-import { fetchScheme } from '../../store/actions/fetchSchemeAction'
+import { fetchScheme } from '../../store/repair/actions/fetchSchemeAction'
 // URL
 import { scheme } from '../urls/data'
 

@@ -1,5 +1,5 @@
 // Экшены
-import { fetchData } from '../../store/actions/fetchAction'
+import { fetchData } from '../../store/repair/actions/fetchAction'
 // URL
 import { data } from '../urls/data'
 

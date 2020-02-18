@@ -4,11 +4,7 @@ import { App } from '../components/App'
 
 export class Header extends React.Component {
     render() {
-        return (
-            <>
-                <App />
-            </>
-        )
+        return <App />
     }
 }
 

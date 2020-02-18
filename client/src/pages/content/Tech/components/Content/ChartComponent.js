@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Row, Col, Table } from 'antd'
-
+import { Row, Col, Table, Collapse } from 'antd'
 import {
     ResponsiveContainer,
     ComposedChart,
@@ -17,37 +16,14 @@ import {
     ReferenceLine,
     ReferenceArea,
     Brush,
-    Text
+    Text,
+    BarChart,
+    Bar,
+    LabelList
 } from 'recharts'
-import { scaleLog } from 'd3-scale'
-const scale = scaleLog().base(Math.E)
-const data0 = [
-    {
-        date: '0',
-        norm: [17.71, 17.73],
-        fact: 17.65
-    },
-    {
-        date: '3',
-        norm: [17.627, 17.644],
-        fact: 17.635
-    },
-    {
-        date: '7',
-        norm: [17.584, 17.598],
-        fact: 17.72
-    },
-    {
-        date: '10',
-        norm: [17.551, 17.561],
-        fact: 17.7
-    },
-    {
-        date: '14',
-        norm: [17.498, 17.505],
-        fact: 17.5
-    }
-]
+import { data0, data1, data2, data3, data4 } from '../../data'
+
+const { Panel } = Collapse
 
 const d1 = data0.map(item => {
     if (item['fact'] > item['norm'][0] && item.fact < item['norm'][1]) {
@@ -57,52 +33,6 @@ const d1 = data0.map(item => {
     }
     return item
 })
-
-const data1 = [
-    {
-        date: '0',
-        norm: 20.0
-    },
-    {
-        date: '3',
-        norm: 15.8
-    },
-    {
-        date: '7',
-        norm: 11.5
-    },
-    {
-        date: '10',
-        norm: 7.3
-    },
-    {
-        date: '14',
-        norm: 3.0
-    }
-]
-
-const data2 = [
-    {
-        date: '0',
-        norm: 20.0
-    },
-    {
-        date: '3',
-        norm: 16.3
-    },
-    {
-        date: '7',
-        norm: 12.5
-    },
-    {
-        date: '10',
-        norm: 8.8
-    },
-    {
-        date: '14',
-        norm: 5.0
-    }
-]
 
 const columns = [
     {
@@ -116,12 +46,12 @@ const columns = [
         key: 'date'
     },
     {
-        title: 'Минимум',
+        title: 'Мин',
         dataIndex: 'min',
         key: 'min'
     },
     {
-        title: 'Максимум',
+        title: 'Макс',
         dataIndex: 'max',
         key: 'max'
     },
@@ -131,6 +61,18 @@ const columns = [
         key: 'fact'
     }
 ]
+
+const CustomizedAxisTick = props => {
+    const { x, y, payload } = props
+
+    return (
+        <g transform={`translate(${x}, ${y})`}>
+            <text dy={16} textAnchor="middle" fill="#666">
+                {payload.value}
+            </text>
+        </g>
+    )
+}
 
 export default class ChartComponent extends PureComponent {
     state = {
@@ -158,7 +100,7 @@ export default class ChartComponent extends PureComponent {
 
     render() {
         const { date } = this.state.target
-
+        const { width } = this.state
         // chart1
         let minChart1, maxChart1, factChart1, bool
         d1.forEach(item => {
@@ -170,19 +112,21 @@ export default class ChartComponent extends PureComponent {
             bool = item['trueFact'] ? true : false
         })
 
-        // chart2
         let maxChart2
+        let maxChart3
+        let maxChart4
+        let maxChart5
         data1.forEach(item => {
             if (item['date'] === date) {
-                maxChart2 = item['norm']
+                maxChart2 = item['inconstancy']
+                maxChart3 = item['dimension']
             }
         })
 
-        // chart3
-        let maxChart3
-        data2.forEach(item => {
+        data3.forEach(item => {
             if (item['date'] === date) {
-                maxChart3 = item['norm']
+                maxChart4 = item['pressure']
+                maxChart5 = item['speed']
             }
         })
 
@@ -210,136 +154,145 @@ export default class ChartComponent extends PureComponent {
                 min: null,
                 max: maxChart3,
                 fact: null
+            },
+            {
+                key: '4',
+                title: 'Давление, атм',
+                date,
+                min: null,
+                max: maxChart4,
+                fact: null
+            },
+            {
+                key: '3',
+                title: 'Скорость, об/мин',
+                date,
+                min: null,
+                max: maxChart5,
+                fact: null
             }
         ]
 
         return (
             <>
-                <div>
-                    <h4 style={{ textAlign: 'left', marginLeft: '76px' }}>
-                        Предельный диаметр, мм
-                    </h4>
-                    <ComposedChart
-                        width={600}
-                        height={200}
-                        data={d1}
-                        syncId="anyId"
-                        margin={{ top: 0, right: 20, left: 20, bottom: 5 }}
-                        onClick={this.handleClick}
-                    >
-                        <XAxis
-                            dataKey="date"
-                            tick={{ fontSize: 10 }}
-                            label={{
-                                value: 'Время прохождения партии, час',
-                                offset: 0,
-                                position: 'insideBottom'
-                            }}
+                <Collapse defaultActiveKey={['diameter']}>
+                    <Panel header="Таблица" key="table">
+                        <Table
+                            columns={columns}
+                            dataSource={d}
+                            bordered
+                            pagination={false}
+                            size="small"
                         />
-                        <YAxis
-                            type="number"
-                            domain={[17.5, 17.72]}
-                            scale="linear"
-                            tick={{ fontSize: 10 }}
-                            label={
-                                <Text x={0} y={0} dx={20} dy={150} offset={0} angle={-90}>
-                                    Диаметр, мм
-                                </Text>
-                            }
-                        />
-                        <Area dataKey="norm" name="Норматив (min/max)" stroke="#222" fill="#ccc" />
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <Tooltip content={this.getData} />
-                        <Legend />
-                        {/*<ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />*/}
-                        <ReferenceLine x={date} stroke="red" />
-                        <Scatter
-                            dataKey="trueFact"
-                            name="Факт (норма)"
-                            stroke="#222"
-                            fill="lightgreen"
-                        />
-                        <Scatter
-                            dataKey="falseFact"
-                            name="Факт (не норма)"
-                            stroke="#222"
-                            fill="lightcoral"
-                        />
-                    </ComposedChart>
+                    </Panel>
 
-                    <h4 style={{ textAlign: 'left', marginLeft: '76px', marginTop: '40px' }}>
-                        Непостоянство единичного диаметра, мкм
-                    </h4>
-                    <LineChart
-                        width={600}
-                        height={200}
-                        data={data1}
-                        syncId="anyId"
-                        margin={{ top: 0, right: 20, left: 20, bottom: 5 }}
-                        onClick={this.handleClick}
-                    >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis
-                            dataKey="date"
-                            tick={{ fontSize: 10 }}
-                            label={{
-                                value: 'Время прохождения партии, час',
-                                offset: 0,
-                                position: 'insideBottom'
-                            }}
-                        />
-                        <YAxis
-                            tick={{ fontSize: 10 }}
-                            label={
-                                <Text x={0} y={0} dx={20} dy={150} offset={0} angle={-90}>
-                                    Непостоянство, мкм
-                                </Text>
-                            }
-                        />
-                        <Tooltip content={this.getData} />
-                        {/*<ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />*/}
-                        <ReferenceLine x={date} stroke="red" />
-                        <Line type="monotone" dataKey="norm" stroke="#222" />
-                    </LineChart>
+                    <Panel header="Диаметр, мм" key="diameter">
+                        <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
+                            <ComposedChart data={d1} syncId="anyId" onClick={this.handleClick}>
+                                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                                <YAxis
+                                    type="number"
+                                    domain={['dataMin', 'dataMax']}
+                                    scale="linear"
+                                />
+                                <Area
+                                    dataKey="norm"
+                                    name="Норматив (min/max)"
+                                    stroke="#222"
+                                    type="linear"
+                                />
+                                <CartesianGrid stroke="#000" strokeWidth={0.2} />
+                                <Tooltip content={this.getData} />
 
-                    <h4 style={{ textAlign: 'left', marginLeft: '76px', marginTop: '40px' }}>
-                        Размерность по диаметру, мкм
-                    </h4>
-                    <LineChart
-                        width={600}
-                        height={200}
-                        data={data2}
-                        syncId="anyId"
-                        margin={{ top: 0, right: 20, left: 20, bottom: 5 }}
-                        onClick={this.handleClick}
+                                {/*<ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />*/}
+                                <ReferenceLine x={date} stroke="red" />
+                                <Scatter
+                                    dataKey="trueFact"
+                                    name="Факт (норма)"
+                                    stroke="lightgreen"
+                                    strokeWidth={1}
+                                    fill="lightgreen"
+                                >
+                                    <LabelList dataKey="trueFact" position="top" />
+                                </Scatter>
+                                <Scatter
+                                    dataKey="falseFact"
+                                    name="Факт (не норма)"
+                                    stroke="lightcoral"
+                                    strokeWidth={1}
+                                    fill="lightcoral"
+                                >
+                                    <LabelList dataKey="falseFact" position="top" />
+                                </Scatter>
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </Panel>
+
+                    <Panel
+                        header="Непостоянство, мкм - Размерность, мкм"
+                        key="inconstancyDimension"
                     >
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                        <YAxis
-                            tick={{ fontSize: 10 }}
-                            label={
-                                <Text x={0} y={0} dx={20} dy={150} offset={0} angle={-90}>
-                                    Размерность, мкм
-                                </Text>
-                            }
-                        />
-                        <Tooltip content={this.getData} />
-                        {/*<ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />*/}
-                        <ReferenceLine x={date} stroke="red" />
-                        <Line type="monotone" dataKey="norm" stroke="#222" />
-                        <Brush />
-                    </LineChart>
-                </div>
-                <div>
-                    <h4>Таблица №1. Сводные данные за выбранный момент времени</h4>
-                    <Table
-                        columns={columns}
-                        dataSource={d}
-                        bordered
-                        pagination={false}
-                        size="small"
-                    />
-                </div>
+                        <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
+                            <LineChart
+                                data={data1}
+                                syncId="anyId"
+                                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                                onClick={this.handleClick}
+                            >
+                                <CartesianGrid stroke="#000" strokeWidth={0.2} />
+                                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                                <YAxis
+                                    type="number"
+                                    domain={['dataMin', 'dataMax']}
+                                    scale="linear"
+                                />
+                                <Tooltip content={this.getData} />
+                                {/*<ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />*/}
+                                <ReferenceLine x={date} stroke="red" />
+                                <Legend />
+                                <Line
+                                    type="monotone"
+                                    dataKey="inconstancy"
+                                    stroke="#8884d8"
+                                    strokeWidth={2}
+                                    name="Непостоянство"
+                                >
+                                    <LabelList dataKey="inconstancy" position="top" />
+                                </Line>
+                                <Line
+                                    type="monotone"
+                                    dataKey="dimension"
+                                    stroke="#82ca9d"
+                                    strokeWidth={2}
+                                    name="Размерность"
+                                >
+                                    <LabelList dataKey="dimension" position="top" />
+                                </Line>
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </Panel>
+
+                    <Panel header="Давление, атм - Скорость, об/мин" key="pressureSpeed">
+                        <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
+                            <BarChart data={data3} syncId="anyId">
+                                <CartesianGrid stroke="#000" strokeWidth={0.2} />
+                                <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                                <YAxis
+                                    type="number"
+                                    domain={['dataMin', 'dataMax']}
+                                    scale="linear"
+                                />
+                                <Legend />
+                                <Bar dataKey="pressure" stackId="a" fill="#8884d8" name="Давление">
+                                    <LabelList dataKey="pressure" position="middle" />
+                                </Bar>
+                                <Bar dataKey="speed" stackId="a" fill="#82ca9d" name="Скорость">
+                                    <LabelList dataKey="speed" position="top" />
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Panel>
+                </Collapse>
             </>
         )
     }

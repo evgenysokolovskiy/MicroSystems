@@ -1,6 +1,6 @@
 // Экшены
-import { fetchCheckForGeneralUse } from '../../store/actions/fetchCheckForGeneralUseAction'
-import { fetchCheckForAntd } from '../../store/actions/fetchCheckForAntdAction'
+import { fetchCheckForGeneralUse } from '../../store/repair/actions/fetchCheckForGeneralUseAction'
+import { fetchCheckForAntd } from '../../store/repair/actions/fetchCheckForAntdAction'
 // URL
 import { checkForGeneralUse, checkForAntd } from '../urls/data'
 

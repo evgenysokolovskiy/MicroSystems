@@ -10,6 +10,10 @@ export default class MenuComponent extends React.Component {
         collapsed: false
     }
 
+    handleClick = e => {
+        this.props.handleClickMenu(e.key)
+    }
+
     render() {
         return (
             <div>
@@ -18,6 +22,7 @@ export default class MenuComponent extends React.Component {
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}
+                    onClick={this.handleClick}
                 >
                     <SubMenu
                         key="control"
@@ -37,6 +42,11 @@ export default class MenuComponent extends React.Component {
                                 <Link to="/tech/running">Обкатка</Link>
                             </span>
                         </Menu.Item>
+                        <Menu.Item key="term">
+                            <span>
+                                <Link to="/tech/term">Термообработка</Link>
+                            </span>
+                        </Menu.Item>
                         <Menu.Item key="grinding">
                             <span>
                                 <Link to="/tech/grinding">Шлифовка</Link>
@@ -47,11 +57,6 @@ export default class MenuComponent extends React.Component {
                             <Menu.Item key="rough">
                                 <span>
                                     <Link to="/tech/rough">Черновая</Link>
-                                </span>
-                            </Menu.Item>
-                            <Menu.Item key="preliminary">
-                                <span>
-                                    <Link to="/tech/preliminary">Предварительная</Link>
                                 </span>
                             </Menu.Item>
                             <Menu.Item key="clean">

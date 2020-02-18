@@ -73,26 +73,35 @@ const diameter = [
 ]
 
 export const App = props => {
+    const { techTargetMenu, handleClickMenu } = props
+
     const tabs = diameter.map(tab => (
         <TabPane tab={tab} key={tab}>
-            <Layout
-                style={{ /*padding: '24px 0',*/ background: '#fff' }}
-                className="ant-layout-has-sider"
-            >
-                <ChartComponent />
-            </Layout>
+            {techTargetMenu && techTargetMenu === 'running' && (
+                <Suspense
+                    fallback={
+                        <Icon
+                            type="loading"
+                            className="loading"
+                            style={{ fontSize: '20px', color: 'red' }}
+                        />
+                    }
+                >
+                    <ChartComponent />
+                </Suspense>
+            )}
         </TabPane>
     ))
 
     return (
-        <Content style={{ padding: '0 10px' }}>
+        <Content>
             <Layout
                 style={{ /*padding: '24px 0',*/ background: '#fff' }}
                 className="ant-layout-has-sider"
             >
-                <MenuComponent />
+                <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
-                    <Tabs defaultActiveKey="3,175" size="small">
+                    <Tabs defaultActiveKey="3,175" type="card">
                         {tabs}
                     </Tabs>
                 </Content>
