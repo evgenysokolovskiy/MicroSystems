@@ -21,7 +21,7 @@ export default function(props) {
                 return {
                     props: {
                         className: hasOilLeak.some(num => String(num) === String(text))
-                            ? 'info'
+                            ? 'false'
                             : ''
                     },
                     children: text

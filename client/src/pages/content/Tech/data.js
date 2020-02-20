@@ -1,6 +1,6 @@
 // Временный файл с данными
 
-export const data0 = [
+const diameter = [
     {
         date: '0',
         norm: [9.77, 9.826],
@@ -113,7 +113,17 @@ export const data0 = [
     }
 ]
 
-export const data1 = [
+// Определить попадание факта в нормативный диапазон
+// Если попадает, то добавить свойство 'falseFact'
+// В противном случае - свойство 'trueFact'
+export const dataDiameter = diameter.map(item => {
+    item['fact'] > item['norm'][0] && item.fact < item['norm'][1]
+        ? (item['trueFact'] = item['fact'])
+        : (item['falseFact'] = item['fact'])
+    return item
+})
+
+export const dataInconstancyDimension = [
     {
         date: '0',
         inconstancy: 40,
@@ -226,98 +236,7 @@ export const data1 = [
     }
 ]
 
-export const data2 = [
-    {
-        date: '0',
-        norm: 20
-    },
-    {
-        date: '1',
-        norm: 19.5
-    },
-    {
-        date: '2',
-        norm: 19.1
-    },
-    {
-        date: '3',
-        norm: 18.6
-    },
-    {
-        date: '4',
-        norm: 18.1
-    },
-    {
-        date: '5',
-        norm: 17.6
-    },
-    {
-        date: '6',
-        norm: 17.2
-    },
-    {
-        date: '7',
-        norm: 16.7
-    },
-    {
-        date: '8',
-        norm: 16.2
-    },
-    {
-        date: '9',
-        norm: 15.7
-    },
-    {
-        date: '10',
-        norm: 15.3
-    },
-    {
-        date: '11',
-        norm: 14.8
-    },
-    {
-        date: '12',
-        norm: 14.3
-    },
-    {
-        date: '13',
-        norm: 13.8
-    },
-    {
-        date: '14',
-        norm: 13.4
-    },
-    {
-        date: '15',
-        norm: 12.9
-    },
-    {
-        date: '16',
-        norm: 12.4
-    },
-    {
-        date: '17',
-        norm: 12.0
-    },
-    {
-        date: '18',
-        norm: 11.5
-    },
-    {
-        date: '19',
-        norm: 11.0
-    },
-    {
-        date: '20',
-        norm: 10.5
-    },
-    {
-        date: '21',
-        norm: 10
-    }
-]
-
-export const data3 = [
+export const datapPessureSpeed = [
     {
         date: '0',
         pressure: 2,
@@ -429,96 +348,3 @@ export const data3 = [
         speed: 20
     }
 ]
-
-/*
-export const data4 = [
-    {
-        date: '0',
-        norm: 50
-    },
-    {
-        date: '1',
-        norm: 50
-    },
-    {
-        date: '2',
-        norm: 50
-    },
-    {
-        date: '3',
-        norm: 40
-    },
-    {
-        date: '4',
-        norm: 40
-    },
-    {
-        date: '5',
-        norm: 40
-    },
-    {
-        date: '6',
-        norm: 60
-    },
-    {
-        date: '7',
-        norm: 60
-    },
-    {
-        date: '8',
-        norm: 60
-    },
-    {
-        date: '9',
-        norm: 60
-    },
-    {
-        date: '10',
-        norm: 70
-    },
-    {
-        date: '11',
-        norm: 70
-    },
-    {
-        date: '12',
-        norm: 70
-    },
-    {
-        date: '13',
-        norm: 30
-    },
-    {
-        date: '14',
-        norm: 30
-    },
-    {
-        date: '15',
-        norm: 30
-    },
-    {
-        date: '16',
-        norm: 60
-    },
-    {
-        date: '17',
-        norm: 60
-    },
-    {
-        date: '18',
-        norm: 45
-    },
-    {
-        date: '19',
-        norm: 45
-    },
-    {
-        date: '20',
-        norm: 20
-    },
-    {
-        date: '21',
-        norm: 20
-    }
-]
-*/

@@ -3,6 +3,13 @@ import { connect } from 'react-redux'
 import { App } from '../components/Footer/App'
 
 export class Footer extends React.Component {
+    /*
+    componentDidMount() {
+        fetch('http://localhost:3000/download/file.xlsx')
+            .then(res => res.blob())
+            .then(data => console.log(data))
+    }
+*/
     render() {
         return (
             <>

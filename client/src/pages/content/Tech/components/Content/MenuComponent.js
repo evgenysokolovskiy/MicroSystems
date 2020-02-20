@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, Icon, Typography } from 'antd'
 
 const { SubMenu } = Menu
 const { Title } = Typography
 
-export default class MenuComponent extends React.Component {
+export default class MenuComponent extends PureComponent {
     state = {
         collapsed: false
     }

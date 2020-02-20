@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/Drawer/App'
 import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
 
-export class Drawer extends React.Component {
+export class Drawer extends PureComponent {
     handleClickCloseDrawer = () => this.props.changeDrawerVisible(false)
 
     render() {

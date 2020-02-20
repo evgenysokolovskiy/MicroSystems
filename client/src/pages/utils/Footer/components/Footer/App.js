@@ -12,3 +12,5 @@ export const App = () => {
         </Footer>
     )
 }
+
+//<a href="http://localhost:3000/download/file.xlsx" download>скачать</a>

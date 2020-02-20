@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/Content/App'
 import { changeTargetMenu } from '../../../../store/repair/actions/targetMenuAction'
 import { changeTargetInn } from '../../../../store/repair/actions/targetInnAction'
 import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
 
-export class Content extends React.Component {
+export class Content extends PureComponent {
     handleClickMenu = item => {
         this.props.changeTargetMenu(item)
     }
