@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 // Antd
-import { Menu } from 'antd'
+import { Menu, Typography } from 'antd'
+const { Title, Text } = Typography
 
 export default class MenuComponent extends React.Component {
     render() {
@@ -14,10 +15,10 @@ export default class MenuComponent extends React.Component {
                 style={{ lineHeight: '120px', marginRight: 'auto' }}
             >
                 <Menu.Item key="/repair/">
-                    <Link to="/repair/">Управление ремонтов</Link>
+                    <Link to="/repair/">УПРАВЛЕНИЕ РЕМОНТОВ</Link>
                 </Menu.Item>
                 <Menu.Item key="/tech/">
-                    <Link to="/tech/">Приказ №17</Link>
+                    <Link to="/tech/">ПРИКАЗ №17</Link>
                 </Menu.Item>
                 <Menu.Item key="/vbf21/">
                     <Link to="/vbf21/">VBF-21</Link>

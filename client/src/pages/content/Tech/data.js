@@ -1,117 +1,136 @@
-// Временный файл с данными
+// ТЕХНОЛОГИЯ
 
-const diameter = [
+// Доказатели вносятся вручную
+// Начальная точка
+const START = {
+    date: 0,
+    norm: [9.77, 9.82]
+}
+// Конечная точка
+const END = {
+    date: 0,
+    norm: [9.62, 9.64]
+}
+// Длина
+const LEN = 22
+
+// Промежуточные показатели рассчитываются
+let technology = [START]
+const a = START.norm[0]
+const A = (START.norm[0] - END.norm[0]) / (LEN - 1)
+const b = START.norm[1]
+const B = (START.norm[1] - END.norm[1]) / (LEN - 1)
+for (let i = 1; i < LEN; i++) {
+    const max = (a - A * i).toFixed(3)
+    const min = (b - B * i).toFixed(3)
+    const item = {
+        date: i,
+        norm: [max, min]
+    }
+    technology = [...technology, item]
+}
+
+// Фактические показатели
+let factDiameter = [
     {
-        date: '0',
-        norm: [9.77, 9.826],
+        date: 0,
         fact: 9.65
     },
     {
-        date: '1',
-        norm: [9.76, 9.81],
+        date: 1,
         fact: 9.635
     },
     {
-        date: '2',
-        norm: [9.76, 9.8],
+        date: 2,
         fact: 9.72
     },
     {
-        date: '3',
-        norm: [9.75, 9.79],
+        date: 3,
         fact: 9.7
     },
     {
-        date: '4',
-        norm: [9.74, 9.79],
+        date: 4,
         fact: 9.68
     },
     {
-        date: '5',
-        norm: [9.73, 9.78],
+        date: 5,
         fact: 9.65
     },
     {
-        date: '6',
-        norm: [9.73, 9.77],
+        date: 6,
         fact: 9.62
     },
     {
-        date: '7',
-        norm: [9.72, 9.76],
+        date: 7,
         fact: 9.7
     },
     {
-        date: '8',
-        norm: [9.71, 9.75],
+        date: 8,
         fact: 9.7
     },
     {
-        date: '9',
-        norm: [9.71, 9.74],
+        date: 9,
         fact: 9.76
     },
     {
-        date: '10',
-        norm: [9.7, 9.73],
+        date: 10,
         fact: 9.74
     },
     {
-        date: '11',
-        norm: [9.69, 9.73],
+        date: 11,
         fact: 9.72
     },
     {
-        date: '12',
-        norm: [9.68, 9.72],
+        date: 12,
         fact: 9.72
     },
     {
-        date: '13',
-        norm: [9.68, 9.71],
+        date: 13,
         fact: 9.69
     },
     {
-        date: '14',
-        norm: [9.67, 9.7],
+        date: 14,
         fact: 9.68
     },
     {
-        date: '15',
-        norm: [9.66, 9.69],
+        date: 15,
         fact: 9.7
     },
     {
-        date: '16',
-        norm: [9.66, 9.68],
+        date: 16,
         fact: 9.68
     },
     {
-        date: '17',
-        norm: [9.65, 9.68],
+        date: 17,
         fact: 9.66
     },
     {
-        date: '18',
-        norm: [9.64, 9.67],
+        date: 18,
         fact: 9.67
     },
     {
-        date: '19',
-        norm: [9.64, 9.66],
+        date: 19,
         fact: 9.65
     },
     {
-        date: '20',
-        norm: [9.63, 9.65],
+        date: 20,
         fact: 9.642
     },
     {
-        date: '21',
-        norm: [9.62, 9.64],
+        date: 21,
         fact: 9.639
     }
 ]
+
+const diameter = technology.map(item => {
+    factDiameter.forEach(fact => {
+        if (item['date'] === fact['date']) {
+            item['fact'] = fact['fact']
+            return item
+        }
+    })
+    return item
+})
 
 // Определить попадание факта в нормативный диапазон
 // Если попадает, то добавить свойство 'falseFact'

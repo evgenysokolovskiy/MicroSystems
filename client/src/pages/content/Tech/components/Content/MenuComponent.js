@@ -34,39 +34,39 @@ export default class MenuComponent extends PureComponent {
                     >
                         <Menu.Item key="stamping">
                             <span>
-                                <Link to="/tech/stamping">Штамповка</Link>
+                                <Link to="/tech/stamping">ШТАМПОВКА</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="running">
                             <span>
-                                <Link to="/tech/running">Обкатка</Link>
+                                <Link to="/tech/running">ОБКАТКА</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="term">
                             <span>
-                                <Link to="/tech/term">Термообработка</Link>
+                                <Link to="/tech/term">ТЕРМООБРАБОТКА</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="grinding">
                             <span>
-                                <Link to="/tech/grinding">Шлифовка</Link>
+                                <Link to="/tech/grinding">ШЛИФОВКА</Link>
                             </span>
                         </Menu.Item>
 
-                        <SubMenu key="tweaking" title="Доводка">
+                        <SubMenu key="tweaking" title="ДОВОДКА">
                             <Menu.Item key="rough">
                                 <span>
-                                    <Link to="/tech/rough">Черновая</Link>
+                                    <Link to="/tech/rough">ЧЕРНОВАЯ</Link>
                                 </span>
                             </Menu.Item>
                             <Menu.Item key="clean">
                                 <span>
-                                    <Link to="/tech/clean">Чистовая</Link>
+                                    <Link to="/tech/clean">ЧИСТОВАЯ</Link>
                                 </span>
                             </Menu.Item>
                             <Menu.Item key="final">
                                 <span>
-                                    <Link to="/tech/final">Окончательная</Link>
+                                    <Link to="/tech/final">ОКОНЧАТЕЛЬНАЯ</Link>
                                 </span>
                             </Menu.Item>
                         </SubMenu>

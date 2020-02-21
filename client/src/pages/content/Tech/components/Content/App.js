@@ -57,7 +57,7 @@ export default class App extends PureComponent {
         // Контент на странице
         const elements = techTargetMenu && techTargetMenu === 'running' && (
             <Collapse defaultActiveKey={['diameter']}>
-                <Panel header="Диаметр, мм" key="diameter">
+                <Panel header="ДИАМЕТР, мм" key="diameter">
                     <DiameterComponent
                         date={date}
                         dataDiameter={dataDiameter}
@@ -67,7 +67,7 @@ export default class App extends PureComponent {
                     />
                 </Panel>
 
-                <Panel header="Непостоянство, мкм - Размерность, мкм" key="inconstancyDimension">
+                <Panel header="НЕПОСТОЯНСТВО, мкм - РАЗМЕРНОСТЬ, мкм" key="inconstancyDimension">
                     <InconstancyComponent
                         date={date}
                         dataInconstancyDimension={dataInconstancyDimension}
@@ -77,7 +77,7 @@ export default class App extends PureComponent {
                     />
                 </Panel>
 
-                <Panel header="Давление, атм - Скорость, об/мин" key="pressureSpeed">
+                <Panel header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин" key="pressureSpeed">
                     <PressureComponent
                         date={date}
                         datapPessureSpeed={datapPessureSpeed}

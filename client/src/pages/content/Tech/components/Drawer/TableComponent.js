@@ -41,11 +41,11 @@ const columns = [
 
 export default class TableComponent extends PureComponent {
     onChange = page => {
-        this.props.changeTechTargetTimeStamp(String(page))
+        this.props.changeTechTargetTimeStamp(+page)
     }
 
     render() {
-        const { techTargetTimeStamp: date } = this.props
+        const { techTargetTimeStamp: date, onGetData } = this.props
         const {
             minDiameter,
             maxDiameter,
@@ -63,6 +63,11 @@ export default class TableComponent extends PureComponent {
             ? factDiameter - minDiameter
             : 0
         ).toFixed(3)
+
+        const diff = maxDiameter - minDiameter
+        const percentDiameter = differenceDiameter / diff
+
+        onGetData({ diff, percentDiameter })
 
         const dataSource = [
             {
@@ -112,6 +117,8 @@ export default class TableComponent extends PureComponent {
                     pagination={false}
                     size="small"
                 />
+
+               
                 <Pagination
                     defaultPageSize={1}
                     defaultCurrent={+date}
@@ -119,6 +126,7 @@ export default class TableComponent extends PureComponent {
                     style={{ marginTop: '20px', textAlign: 'right' }}
                     onChange={this.onChange}
                 />
+
             </>
         )
     }

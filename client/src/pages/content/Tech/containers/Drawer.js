@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { App } from '../components/Drawer/App'
+import App from '../components/Drawer/App'
 import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDrawerAction'
 import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
 
