@@ -1,3 +1,12 @@
+export const _TECH_TECHNOLOGY = {
+    types: {
+        TECH_TECHNOLOGY: 'TECH_TECHNOLOGY'
+    },
+    init: {
+        techTechnology: null
+    }
+}
+
 export const _TECH_TARGET_MENU = {
     types: {
         TECH_TARGET_MENU: 'TECH_TARGET_MENU'

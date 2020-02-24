@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Table, Pagination } from 'antd'
-import { dataDiameter, dataInconstancyDimension, datapPessureSpeed } from '../../data'
+import { Table, Pagination, InputNumber } from 'antd'
 
 const columns = [
     {
@@ -13,7 +12,15 @@ const columns = [
             },
             {
                 title: 'Мин',
-                dataIndex: 'min'
+                dataIndex: 'min',
+                render(text) {
+                    return {
+                        props: {
+                            className: text && text !== 0 ? 'false' : text === 0 ? 'true' : ''
+                        },
+                        children: text
+                    }
+                }
             },
             {
                 title: 'Макс',
@@ -27,15 +34,7 @@ const columns = [
     },
     {
         title: 'РАСХОЖДЕНИЕ',
-        dataIndex: 'difference',
-        render(text) {
-            return {
-                props: {
-                    className: text && text !== 0 ? 'false' : text === 0 ? 'true' : ''
-                },
-                children: text
-            }
-        }
+        dataIndex: 'difference'
     }
 ]
 
@@ -44,18 +43,16 @@ export default class TableComponent extends PureComponent {
         this.props.changeTechTargetTimeStamp(+page)
     }
 
-    render() {
-        const { techTargetTimeStamp: date, onGetData } = this.props
-        const {
-            minDiameter,
-            maxDiameter,
-            inconstancy,
-            dimension,
-            pressure,
-            speed
-        } = this.props.technology
+    onInput = value => {
+        console.log(value)
+    }
+    // <InputNumber min={1} max={10} defaultValue={3} onChange={onInput}
 
-        const { factDiameter } = this.props.fact
+    render() {
+        const { techTargetTimeStamp: date, technology, fact, onGetData } = this.props
+        const { minDiameter, maxDiameter, inconstancy, dimension, pressure, speed } = technology
+
+        const { factDiameter } = fact
 
         let differenceDiameter = +(factDiameter >= maxDiameter
             ? factDiameter - maxDiameter
@@ -118,7 +115,6 @@ export default class TableComponent extends PureComponent {
                     size="small"
                 />
 
-               
                 <Pagination
                     defaultPageSize={1}
                     defaultCurrent={+date}
@@ -126,7 +122,6 @@ export default class TableComponent extends PureComponent {
                     style={{ marginTop: '20px', textAlign: 'right' }}
                     onChange={this.onChange}
                 />
-
             </>
         )
     }

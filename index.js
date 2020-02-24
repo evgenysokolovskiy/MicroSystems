@@ -31,6 +31,8 @@ require('./server/tasks/parse/check/')({ app, parsePathCheck, buildPath })
 const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
 require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
 
+require('./server/api/technologyAPI')({ app })
+
 /*
 app.get('/download/file.xlsx', function(req, res) {
 	const file = `${buildPath}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`

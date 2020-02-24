@@ -4,8 +4,7 @@ import App from '../components/Content/App'
 import { changeTechTargetMenu } from '../../../../store/tech/actions/techTargetMenuAction'
 import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
 import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDrawerAction'
-// Входящие данные
-import { dataDiameter, dataInconstancyDimension, datapPessureSpeed } from '../data'
+import { changeTechTechnology } from '../../../../store/tech/actions/techTechnologyAction'
 
 export class Content extends PureComponent {
     handleClickMenu = item => {
@@ -18,9 +17,9 @@ export class Content extends PureComponent {
     }
 
     render() {
-        const { techTargetMenu, techTargetTimeStamp } = this.props
+        const { techTargetMenu, techTargetTimeStamp, techTechnology: data } = this.props
         // Исходные данные для графиков
-        const data = { dataDiameter, dataInconstancyDimension, datapPessureSpeed }
+        const { dataDiameter, dataInconstancyDimension, datapPessureSpeed } = data
         // Получить данные (в момент времени 'techTargetTimeStamp')
         let minDiameter, maxDiameter, inconstancy, dimension, pressure, speed
         let factDiameter
@@ -77,7 +76,8 @@ export class Content extends PureComponent {
 function mapStateToProps(store) {
     return {
         ...store.techTargetMenuReducer,
-        ...store.techTargetTimeStampReducer
+        ...store.techTargetTimeStampReducer,
+        ...store.techTechnologyReducer
     }
 }
 

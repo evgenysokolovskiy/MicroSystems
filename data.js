@@ -135,14 +135,14 @@ const diameter = technology.map(item => {
 // Определить попадание факта в нормативный диапазон
 // Если попадает, то добавить свойство 'falseFact'
 // В противном случае - свойство 'trueFact'
-export const dataDiameter = diameter.map(item => {
+module.exports.dataDiameter = diameter.map(item => {
     item['fact'] > item['norm'][0] && item.fact < item['norm'][1]
         ? (item['trueFact'] = item['fact'])
         : (item['falseFact'] = item['fact'])
     return item
 })
 
-export const dataInconstancyDimension = [
+module.exports.dataInconstancyDimension = [
     {
         date: '0',
         inconstancy: 40,
@@ -255,7 +255,7 @@ export const dataInconstancyDimension = [
     }
 ]
 
-export const datapPessureSpeed = [
+module.exports.datapPessureSpeed = [
     {
         date: '0',
         pressure: 2,

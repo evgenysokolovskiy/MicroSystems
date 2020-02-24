@@ -1,8 +1,8 @@
 import React, { PureComponent, Suspense, lazy } from 'react'
-import { Drawer, Icon, Typography, Statistic, Card, Row, Col, InputNumber } from 'antd'
+import { Drawer, Icon, Typography } from 'antd'
 
 const TableComponent = lazy(() => import('./TableComponent'))
-const PercentPieChartComponent = lazy(() => import('./PercentPieChartComponent'))
+const StatisticComponent = lazy(() => import('./StatisticComponent'))
 const { Title, Text } = Typography
 
 export default class App extends PureComponent {
@@ -29,7 +29,6 @@ export default class App extends PureComponent {
 
         const { diff, percentDiameter } = this.state
 
-
         return (
             <div>
                 <Drawer
@@ -49,76 +48,9 @@ export default class App extends PureComponent {
                                 />
                             }
                         >
-                            <Title level={4}>Временная отметка: {date}</Title>
+                            <Title level={4}>Дата: {date}</Title>
 
-
-  <div style={{ background: '#ECECEC', padding: '30px' }}>
-    <Row gutter={16}>
-      <Col span={8}>
-        <Card>
-          <Statistic
-            title={<Text>Диаметр</Text>}
-            value={182.12}
-            precision={2}
-            valueStyle={{ color: '#3f8600' }}
-            prefix={<Icon type="arrow-up" />}
-            suffix="%"
-          />
-        </Card>
-      </Col>
-      <Col span={8}>
-        <Card>
-          <Statistic
-            title={<Text>Непостоянство</Text>}
-            value={9.3}
-            precision={2}
-            valueStyle={{ color: '#cf1322' }}
-            prefix={<Icon type="arrow-down" />}
-            suffix="%"
-          />
-        </Card>
-      </Col>
-      <Col span={8}>
-        <Card>
-          <Statistic
-            title={<Text>Размерность</Text>}
-            value={9.3}
-            precision={2}
-            valueStyle={{ color: '#cf1322' }}
-            prefix={<Icon type="arrow-down" />}
-            suffix="%"
-          />
-        </Card>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={8}>
-        <Card>
-          <Statistic
-            title={<Text>Давление</Text>}
-            value={11.28}
-            precision={2}
-            valueStyle={{ color: '#3f8600' }}
-            prefix={<Icon type="arrow-up" />}
-            suffix="%"
-          />
-        </Card>
-      </Col>
-      <Col span={8}>
-        <Card>
-          <Statistic
-            title={<Text>Скорость</Text>}
-            value={182.12}
-            precision={2}
-            valueStyle={{ color: '#cf1322' }}
-            prefix={<Icon type="arrow-down" />}
-            suffix="%"
-          />
-        </Card>
-      </Col>
-    </Row>
-  </div>
-
+                            <StatisticComponent percentDiameter={percentDiameter} />
                             <TableComponent
                                 technology={technology}
                                 fact={fact}
@@ -126,7 +58,6 @@ export default class App extends PureComponent {
                                 changeTechTargetTimeStamp={changeTechTargetTimeStamp}
                                 onGetData={this.onGetData}
                             />
-
                         </Suspense>
                     )}
                 </Drawer>

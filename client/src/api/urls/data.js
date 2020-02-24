@@ -37,3 +37,5 @@ export const scheme = [
     'http://localhost:3000/api/scheme/561',
     'http://localhost:3000/api/scheme/562'
 ]
+
+export const technology = 'http://localhost:3000/api/technology'

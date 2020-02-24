@@ -3,18 +3,16 @@ import { connect } from 'react-redux'
 import App from '../components/Drawer/App'
 import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDrawerAction'
 import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
-
-// Входящие данные
-import { dataDiameter, dataInconstancyDimension, datapPessureSpeed } from '../data'
+import { changeTechTechnology } from '../../../../store/tech/actions/techTechnologyAction'
 
 export class Drawer extends PureComponent {
     handleClickCloseTechDrawer = () => this.props.changeTechDrawerVisible(false)
 
     render() {
-        const { techDrawerVisible: visible, techTargetTimeStamp } = this.props
-
+        const { techDrawerVisible: visible, techTargetTimeStamp, techTechnology } = this.props
         // Исходные данные для графиков
-        const data = { dataDiameter, dataInconstancyDimension, datapPessureSpeed }
+        const { dataDiameter, dataInconstancyDimension, datapPessureSpeed } = techTechnology
+
         // Получить данные (в момент времени 'techTargetTimeStamp')
         let minDiameter, maxDiameter, inconstancy, dimension, pressure, speed
         let factDiameter
@@ -63,6 +61,7 @@ export class Drawer extends PureComponent {
                     visible={visible}
                     handleClickCloseTechDrawer={this.handleClickCloseTechDrawer}
                     changeTechTargetTimeStamp={this.props.changeTechTargetTimeStamp}
+                    changeTechTechnology={this.props.changeTechTechnology}
                 />
             </>
         )
@@ -72,13 +71,15 @@ export class Drawer extends PureComponent {
 function mapStateToProps(store) {
     return {
         ...store.techDrawerReducer,
-        ...store.techTargetTimeStampReducer
+        ...store.techTargetTimeStampReducer,
+        ...store.techTechnologyReducer
     }
 }
 
 const mapDispatchToProps = {
     changeTechDrawerVisible,
-    changeTechTargetTimeStamp
+    changeTechTargetTimeStamp,
+    changeTechTechnology
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drawer)

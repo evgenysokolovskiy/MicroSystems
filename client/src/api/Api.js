@@ -6,6 +6,7 @@ import {
     fetchCheckForAntdMiddleware
 } from './middlewares/fetchCheckMiddleware'
 import { fetchSchemeMiddleware } from './middlewares/fetchSchemeMiddleware'
+import { fetchTechnologyMiddleware } from './middlewares/fetchTechnologyMiddleware'
 
 class Api extends React.Component {
     componentDidMount() {
@@ -13,6 +14,7 @@ class Api extends React.Component {
         this.props.fetchCheckForGeneralUseMiddleware()
         this.props.fetchCheckForAntdMiddleware()
         this.props.fetchSchemeMiddleware()
+        this.props.fetchTechnologyMiddleware()
     }
 
     render() {
@@ -24,7 +26,8 @@ const matDispatchToProps = {
     fetchDataMiddleware,
     fetchCheckForGeneralUseMiddleware,
     fetchCheckForAntdMiddleware,
-    fetchSchemeMiddleware
+    fetchSchemeMiddleware,
+    fetchTechnologyMiddleware
 }
 
 export default connect(null, matDispatchToProps)(Api)
