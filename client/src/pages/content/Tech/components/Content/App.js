@@ -39,7 +39,7 @@ export default class App extends PureComponent {
     // При клике данные из стейта
     handleClick = () => {
         const { date } = this.state
-        this.props.handleClickTimeStamp(date)
+        this.props.handleClickTimeStamp(+date)
     }
 
     render() {
@@ -67,7 +67,10 @@ export default class App extends PureComponent {
                     />
                 </Panel>
 
-                <Panel header="НЕПОСТОЯНСТВО, мкм - РАЗМЕРНОСТЬ, мкм" key="inconstancyDimension">
+                <Panel
+                    header="НЕПОСТОЯНСТВО, мкм - РАЗНОРАЗМЕРНОСТЬ, мкм"
+                    key="inconstancyDimension"
+                >
                     <InconstancyComponent
                         date={date}
                         dataInconstancyDimension={dataInconstancyDimension}
@@ -101,7 +104,7 @@ export default class App extends PureComponent {
                     className="ant-layout-has-sider"
                 >
                     <MenuComponent handleClickMenu={handleClickMenu} />
-                    <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
+                    <Content style={{ /*padding: '0 24px',*/ minHeight: '92vh' }}>
                         <Tabs defaultActiveKey="3,175" type="card">
                             {tabs}
                         </Tabs>

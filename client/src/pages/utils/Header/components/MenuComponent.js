@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 // Antd
-import { Menu, Typography } from 'antd'
-const { Title, Text } = Typography
+import { Menu } from 'antd'
 
 export default class MenuComponent extends React.Component {
     render() {
@@ -12,7 +11,7 @@ export default class MenuComponent extends React.Component {
                 theme="dark"
                 mode="horizontal"
                 selectedKeys={[currentPath]}
-                style={{ lineHeight: '120px', marginRight: 'auto' }}
+                style={{ lineHeight: '15vh', marginRight: 'auto' }}
             >
                 <Menu.Item key="/repair/">
                     <Link to="/repair/">УПРАВЛЕНИЕ РЕМОНТОВ</Link>

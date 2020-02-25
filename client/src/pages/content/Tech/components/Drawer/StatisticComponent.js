@@ -5,6 +5,7 @@ const { Text } = Typography
 export default class StatisticComponent extends PureComponent {
     render() {
         const { percentDiameter } = this.props
+
         return (
             <div style={{ background: '#ECECEC', padding: '30px' }}>
                 <Row gutter={16}>
@@ -45,7 +46,7 @@ export default class StatisticComponent extends PureComponent {
                     <Col span={8}>
                         <Card>
                             <Statistic
-                                title={<Text>Размерность</Text>}
+                                title={<Text>Разноразмерность</Text>}
                                 value={0}
                                 precision={2}
                                 valueStyle={{ color: '#3f8600' }}

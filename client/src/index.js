@@ -12,6 +12,7 @@ import Api from './api/Api'
 import './styles/index.css'
 import * as serviceWorker from './serviceWorker'
 
+const Greet = lazy(() => import('./pages/Greet'))
 const Repair = lazy(() => import('./pages/Repair'))
 const Tech = lazy(() => import('./pages/Tech'))
 
@@ -30,6 +31,7 @@ ReactDOM.render(
                     }
                 >
                     <Switch>
+                        <Route exact path="/" component={Greet} />
                         <Route exact path="/repair/" component={Repair} />
                         <Route path="/repair/plan/:id" component={Repair} />
                         <Route path="/repair/check/:id" component={Repair} />
@@ -38,7 +40,7 @@ ReactDOM.render(
                         <Route exact path="/tech/" component={Tech} />
                         <Route path="/tech/:id" component={Tech} />
 
-                        <Route path="*" component={Repair} />
+                        <Route path="*" component={Greet} />
                     </Switch>
                 </Suspense>
             </ErrorBoundary>

@@ -28,7 +28,7 @@ export const App = props => {
                 className="ant-layout-has-sider"
             >
                 <MenuComponent handleClickMenu={handleClickMenu} />
-                <Content style={{ /*padding: '0 24px',*/ minHeight: 280 }}>
+                <Content style={{ /*padding: '0 24px',*/ minHeight: '92vh' }}>
                     {targetMenu && targetMenu.match(/plan/) && data && (
                         <Suspense
                             fallback={

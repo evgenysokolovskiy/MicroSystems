@@ -21,7 +21,7 @@ export default class DiameterComponent extends PureComponent {
                     <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
                     <YAxis type="number" domain={['dataMin', 'dataMax']} scale="linear" />
                     <Area dataKey="norm" name="Норматив (min/max)" stroke="#222" type="linear" />
-                    <CartesianGrid stroke="#000" strokeWidth={0.2} />
+                    <CartesianGrid stroke="#000" strokeWidth={0.5} />
                     <Tooltip content={getData} />
 
                     <ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />

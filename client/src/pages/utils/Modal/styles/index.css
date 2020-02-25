@@ -1,0 +1,12 @@
+@import '~antd/dist/antd.css';
+
+.ant-modal-close-x {
+	display: none;
+}
+.ant-modal-footer {
+	display: none;
+}
+.modal_btn {
+	text-align: right;
+	padding: 10vh 10px 0 0;
+}

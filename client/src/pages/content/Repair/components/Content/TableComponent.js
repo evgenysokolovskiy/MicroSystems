@@ -146,7 +146,7 @@ export default function(props) {
                         bordered
                         onChange={onChange}
                         pagination={false}
-                        scroll={{ x: 'max-content', y: '60vh' }}
+                        scroll={{ x: 'max-content', y: '80vh' }}
                         size="small"
                         // Событие на строке
                         onRow={(record, rowIndex) => {

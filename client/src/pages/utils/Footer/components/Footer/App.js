@@ -7,7 +7,7 @@ const { Footer } = Layout
 
 export const App = () => {
     return (
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer className="footer" style={{ textAlign: 'center' }}>
             <CopyrightComponent />
         </Footer>
     )

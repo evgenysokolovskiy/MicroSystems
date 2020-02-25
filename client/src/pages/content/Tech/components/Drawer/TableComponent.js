@@ -12,15 +12,7 @@ const columns = [
             },
             {
                 title: 'Мин',
-                dataIndex: 'min',
-                render(text) {
-                    return {
-                        props: {
-                            className: text && text !== 0 ? 'false' : text === 0 ? 'true' : ''
-                        },
-                        children: text
-                    }
-                }
+                dataIndex: 'min'
             },
             {
                 title: 'Макс',
@@ -34,7 +26,15 @@ const columns = [
     },
     {
         title: 'РАСХОЖДЕНИЕ',
-        dataIndex: 'difference'
+        dataIndex: 'difference',
+        render(text) {
+            return {
+                props: {
+                    className: text && text !== 0 ? 'false' : text === 0 ? 'true' : ''
+                },
+                children: text
+            }
+        }
     }
 ]
 
@@ -42,11 +42,6 @@ export default class TableComponent extends PureComponent {
     onChange = page => {
         this.props.changeTechTargetTimeStamp(+page)
     }
-
-    onInput = value => {
-        console.log(value)
-    }
-    // <InputNumber min={1} max={10} defaultValue={3} onChange={onInput}
 
     render() {
         const { techTargetTimeStamp: date, technology, fact, onGetData } = this.props
@@ -64,7 +59,7 @@ export default class TableComponent extends PureComponent {
         const diff = maxDiameter - minDiameter
         const percentDiameter = differenceDiameter / diff
 
-        onGetData({ diff, percentDiameter })
+        onGetData({ percentDiameter, diff })
 
         const dataSource = [
             {
@@ -84,7 +79,7 @@ export default class TableComponent extends PureComponent {
             },
             {
                 key: '3',
-                title: 'Размерность по диаметру, мкм',
+                title: 'Разноразмерность по диаметру, мкм',
                 min: null,
                 max: dimension,
                 fact: null

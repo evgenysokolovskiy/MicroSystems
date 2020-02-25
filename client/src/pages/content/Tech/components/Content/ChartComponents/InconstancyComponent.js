@@ -30,7 +30,7 @@ export default class InconstancyComponent extends PureComponent {
                     margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
                     onClick={handleClick}
                 >
-                    <CartesianGrid stroke="#000" strokeWidth={0.2} />
+                    <CartesianGrid stroke="#000" strokeWidth={0.5} />
                     <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
                     <YAxis type="number" domain={['dataMin', 'dataMax']} scale="linear" />
                     <Tooltip content={getData} />

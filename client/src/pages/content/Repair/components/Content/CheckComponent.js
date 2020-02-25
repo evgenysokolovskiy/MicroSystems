@@ -25,7 +25,7 @@ export default function(props) {
                 columns={addColumns}
                 dataSource={dataSource}
                 pagination={false}
-                scroll={{ x: '10vw', y: '60vh' }}
+                scroll={{ x: '10vw', y: '80vh' }}
                 size="small"
                 bordered
             />

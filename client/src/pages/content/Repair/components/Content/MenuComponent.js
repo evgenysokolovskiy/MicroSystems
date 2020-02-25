@@ -18,7 +18,6 @@ export default class MenuComponent extends PureComponent {
         return (
             <div>
                 <Menu
-                    defaultOpenKeys={['plan']}
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}
@@ -69,42 +68,42 @@ export default class MenuComponent extends PureComponent {
                     >
                         <Menu.Item key="scheme1">
                             <span>
-                                <Link to="/repair/scheme/1">Ц-1</Link>
+                                <Link to="/repair/scheme/1">ШСЦ1</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme2">
                             <span>
-                                <Link to="/repair/scheme/2">Ц-2</Link>
+                                <Link to="/repair/scheme/2">ШСЦ2</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme3">
                             <span>
-                                <Link to="/repair/scheme/3">Ц-3</Link>
+                                <Link to="/repair/scheme/3">ШСЦ3</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme4">
                             <span>
-                                <Link to="/repair/scheme/4">Ц-4</Link>
+                                <Link to="/repair/scheme/4">ШСЦ4</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme5">
                             <span>
-                                <Link to="/repair/scheme/5">Ц-5</Link>
+                                <Link to="/repair/scheme/5">ШСЦ5</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme6">
                             <span>
-                                <Link to="/repair/scheme/6">Ц-6</Link>
+                                <Link to="/repair/scheme/6">ШСЦ6</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme7">
                             <span>
-                                <Link to="/repair/scheme/7">Ц-7</Link>
+                                <Link to="/repair/scheme/7">ШСЦ7</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme10">
                             <span>
-                                <Link to="/repair/scheme/10">Ц-10</Link>
+                                <Link to="/repair/scheme/10">ШСЦ10</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="scheme50">
@@ -139,42 +138,42 @@ export default class MenuComponent extends PureComponent {
                     >
                         <Menu.Item key="check1">
                             <span>
-                                <Link to="/repair/check/1">Ц-1</Link>
+                                <Link to="/repair/check/1">ШСЦ1</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check2">
                             <span>
-                                <Link to="/repair/check/2">Ц-2</Link>
+                                <Link to="/repair/check/2">ШСЦ2</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check3">
                             <span>
-                                <Link to="/repair/check/3">Ц-3</Link>
+                                <Link to="/repair/check/3">ШСЦ3</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check4">
                             <span>
-                                <Link to="/repair/check/4">Ц-4</Link>
+                                <Link to="/repair/check/4">ШСЦ4</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check5">
                             <span>
-                                <Link to="/repair/check/5">Ц-5</Link>
+                                <Link to="/repair/check/5">ШСЦ5</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check6">
                             <span>
-                                <Link to="/repair/check/6">Ц-6</Link>
+                                <Link to="/repair/check/6">ШСЦ6</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check7">
                             <span>
-                                <Link to="/repair/check/7">Ц-7</Link>
+                                <Link to="/repair/check/7">ШСЦ7</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check10">
                             <span>
-                                <Link to="/repair/check/10">Ц-10</Link>
+                                <Link to="/repair/check/10">ШСЦ10</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="check50">

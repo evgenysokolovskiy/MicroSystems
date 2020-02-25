@@ -9,7 +9,7 @@ a {
   flex-flow: row wrap;
   justify-content: left;
   align-items: center;
-  height: 120px;
+  height: 15vh;
   padding: 0 10px 0 0;
 }
 
@@ -35,5 +35,5 @@ a {
 }
 
 .ant-menu {
-  font-size: 16px;
+  font-size: 18px;
 }

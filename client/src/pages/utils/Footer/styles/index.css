@@ -1,1 +1,10 @@
 @import '~antd/dist/antd.css';
+
+.footer {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  height: 5vh;
+  padding: 0 10px 0 0;
+}

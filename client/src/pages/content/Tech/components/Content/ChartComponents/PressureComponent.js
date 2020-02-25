@@ -17,7 +17,7 @@ export default class ChartComponent extends PureComponent {
         return (
             <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
                 <BarChart data={datapPessureSpeed} syncId="composedChart">
-                    <CartesianGrid stroke="#000" strokeWidth={0.2} />
+                    <CartesianGrid stroke="#000" strokeWidth={0.5} />
                     <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
                     <YAxis type="number" domain={['dataMin', 'dataMax']} scale="linear" />
                     <Legend />
