@@ -18,19 +18,27 @@ app.use(
         type: 'application/x-www-form-urlencoding'
     })
 )
-// Путь к файлу, который парсить
-const parsePath = path.join(__dirname, 'xlsx', 'parse')
+
 // Путь, куда сохранять отчёты
 const buildPath = path.join(__dirname, 'xlsx', 'build')
-require('./server/tasks/parse/main/')({ app, parsePath, buildPath })
-
-// Путь к файлу, который парсить
+// Путь, что парсить
+const parsePath = path.join(__dirname, 'xlsx', 'parse')
+const parsePathRepairCompleted = path.join(__dirname, 'xlsx', 'repairCompleted')
 const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
-require('./server/tasks/parse/check/')({ app, parsePathCheck, buildPath })
-
 const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
-require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
+const parseShp = path.join(__dirname, 'xlsx', 'shp')
 
+const repairCompleted = require('./server/tasks/parse/repairCompleted/')
+require('./server/tasks/parse/main/')({
+    app,
+    parsePath,
+    parsePathRepairCompleted,
+    buildPath,
+    repairCompleted
+})
+require('./server/tasks/parse/check/')({ app, parsePathCheck, buildPath })
+require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
+require('./server/tasks/parse/shp/')({ app, parseShp })
 require('./server/api/technologyAPI')({ app })
 
 /*

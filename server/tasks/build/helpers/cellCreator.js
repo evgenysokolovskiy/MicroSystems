@@ -5,6 +5,7 @@ module.exports.createCell = function(ws, int, str, defaultStyle) {
             ws.cell(...int)
                 .string(str)
                 .style(defaultStyle)
+                .style({ alignment: { horizontal: 'left', vertical: 'center' } })
         } else if (typeof str === 'number') {
             ws.cell(...int)
                 .number(str)
@@ -65,9 +66,10 @@ module.exports.createCellTypeOfRepair = function createCellTypeOfRepair(
     if (str) {
         if (typeof str === 'string') {
             ws.cell(...int)
-                .string(str === 'medium' ? 'средний' : Object.keys(nodes).join(' '))
+                .string(str === 'medium' ? 'Средний' : 'nodes' ? 'Текущий' : '')
                 .style(defaultStyle)
-                .style({ alignment: { horizontal: 'center', vertical: 'center' } })
+                .style({ alignment: { horizontal: 'left', vertical: 'center' } })
         }
     }
 }
+// Object.keys(nodes).join(' ')

@@ -27,16 +27,18 @@ export default class InconstancyComponent extends PureComponent {
                 <LineChart
                     data={dataInconstancyDimension}
                     syncId="composedChart"
-                    margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                    margin={{
+                        top: 0, right: 20, left: 10, bottom: 40,
+                    }}
                     onClick={handleClick}
                 >
                     <CartesianGrid stroke="#000" strokeWidth={0.5} />
                     <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
-                    <YAxis type="number" domain={['dataMin', 'dataMax']} scale="linear" />
+                    <YAxis type="number" domain={['dataMin', 'dataMax']} scale="linear" fill="#000" fontSize={12} />
                     <Tooltip content={getData} />
                     <ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />
                     <ReferenceLine x={date} stroke="red" />
-                    <Legend />
+                    <Legend wrapperStyle={{ paddingTop: '60px' }} />
                     <Line
                         type="monotone"
                         dataKey="inconstancy"

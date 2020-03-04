@@ -5,7 +5,7 @@ const INDEXES = require('../../config').INDEXES
 
 module.exports = function(data) {
     const d = clonedeep(data)
-    const { spot, model, inn, num, code, amount, time, ps, mtbf } = INDEXES
+    const { spot, model, inn, num, code, description, amount, time, ps, mtbf } = INDEXES
     const obj = {}
 
     d.forEach(item => {
@@ -14,7 +14,8 @@ module.exports = function(data) {
             ...prev,
             [item[code]]: {
                 time: item[time],
-                amount: item[amount]
+                amount: item[amount],
+                description: item[description]
             }
         }
 

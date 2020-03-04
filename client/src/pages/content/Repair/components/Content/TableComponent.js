@@ -189,7 +189,7 @@ export default function(props) {
     return (
         <>
             <div>
-                <Tabs defaultActiveKey="1" type="card">
+                <Tabs defaultActiveKey="2" type="card">
                     {tabsWithTables}
                 </Tabs>
             </div>

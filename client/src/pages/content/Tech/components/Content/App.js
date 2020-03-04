@@ -18,7 +18,7 @@ const CustomizedAxisTick = props => {
 
     return (
         <g transform={`translate(${x}, ${y})`}>
-            <text dy={16} textAnchor="middle" fill="#666">
+            <text x={0} y={0} dy={16} textAnchor="end" fill="#000" transform="rotate(-35)" fontSize={12}>
                 {payload.value}
             </text>
         </g>
@@ -39,12 +39,17 @@ export default class App extends PureComponent {
     // При клике данные из стейта
     handleClick = () => {
         const { date } = this.state
-        this.props.handleClickTimeStamp(+date)
+        this.props.handleClickTimeStamp(date)
+    }
+
+    handleChange = e => {
+        this.props.handleClickChangeTechType(e)
     }
 
     render() {
         const {
             data,
+            techType,
             technology,
             fact,
             techTargetMenu,
@@ -104,8 +109,8 @@ export default class App extends PureComponent {
                     className="ant-layout-has-sider"
                 >
                     <MenuComponent handleClickMenu={handleClickMenu} />
-                    <Content style={{ /*padding: '0 24px',*/ minHeight: '92vh' }}>
-                        <Tabs defaultActiveKey="3,175" type="card">
+                    <Content style={{ minHeight: '92vh' }}>
+                        <Tabs defaultActiveKey={techType} type="card" onChange={this.handleChange}>
                             {tabs}
                         </Tabs>
                     </Content>

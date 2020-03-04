@@ -13,7 +13,13 @@ const inn = require('../../../config').INDEXES['inn']
 //Если filter отсутствует, то обрабатываются все данные
 //const filter = require('../constants/audit/avtovaz/equipment').safe
 
-module.exports = function({ app, parsePath, buildPath }) {
+module.exports = function({
+    app,
+    parsePath,
+    parsePathRepairCompleted,
+    buildPath,
+    repairCompleted
+}) {
     fs.readdir(parsePath, function(err, files) {
         const paths = files.map(item => `${parsePath}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -31,17 +37,20 @@ module.exports = function({ app, parsePath, buildPath }) {
 
                     resolve(
                         (() => {
-                            // Отправить данные к API
-                            dataAPI({ app, plan })
                             // Сформировать данные для отчётов excel
-                            repairPlan({
+                            repairCompleted({
+                                app,
+                                parsePathRepairCompleted,
+                                repairPlan,
                                 plan,
-                                // Оборудование, не вошедшее в план
                                 offPlan: (() => equipmentOffPlan(filteredData || data, plan))(),
                                 // Сумма всех узлов по производствам
                                 collapseNodes: (() => collapseNodes(filteredData || data))(),
                                 buildPath
                             })
+
+                            // Отправить данные к API
+                            dataAPI({ app, plan })
                         })()
                     )
                 } else {

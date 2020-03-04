@@ -109,15 +109,18 @@ export default class TableComponent extends PureComponent {
                     pagination={false}
                     size="small"
                 />
-
-                <Pagination
-                    defaultPageSize={1}
-                    defaultCurrent={+date}
-                    total={21}
-                    style={{ marginTop: '20px', textAlign: 'right' }}
-                    onChange={this.onChange}
-                />
             </>
         )
     }
 }
+
+/*
+
+                <Pagination
+                    defaultPageSize={1}
+                    defaultCurrent={1}
+                    total={21}
+                    style={{ marginTop: '20px', textAlign: 'right' }}
+                    onChange={this.onChange}
+                />
+*/

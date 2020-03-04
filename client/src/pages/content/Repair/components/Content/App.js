@@ -24,11 +24,11 @@ export const App = props => {
     return (
         <Content style={{ padding: '0 10px' }}>
             <Layout
-                style={{ /*padding: '24px 0',*/ background: '#fff' }}
+                style={{ background: '#fff' }}
                 className="ant-layout-has-sider"
             >
                 <MenuComponent handleClickMenu={handleClickMenu} />
-                <Content style={{ /*padding: '0 24px',*/ minHeight: '92vh' }}>
+                <Content style={{ minHeight: '92vh' }}>
                     {targetMenu && targetMenu.match(/plan/) && data && (
                         <Suspense
                             fallback={

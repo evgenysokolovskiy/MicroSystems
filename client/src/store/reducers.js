@@ -12,6 +12,8 @@ import techTechnologyReducer from './tech/reducers/techTechnologyReducer'
 import techTargetMenuReducer from './tech/reducers/techTargetMenuReducer'
 import techTargetTimeStampReducer from './tech/reducers/techTargetTimeStampReducer'
 import techDrawerReducer from './tech/reducers/techDrawerReducer'
+import techShpFactReducer from './tech/reducers/techShpFactReducer'
+import techTypeReducer from './tech/reducers/techTypeReducer'
 
 export default combineReducers({
     // repair
@@ -26,5 +28,7 @@ export default combineReducers({
     techTechnologyReducer,
     techTargetMenuReducer,
     techTargetTimeStampReducer,
-    techDrawerReducer
+    techDrawerReducer,
+    techShpFactReducer,
+    techTypeReducer
 })

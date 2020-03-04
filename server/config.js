@@ -17,6 +17,7 @@ module.exports.INDEXES = {
     inn: 3,
     num: 4,
     code: 5,
+    description: 6,
     amount: 8,
     time: 9,
     ps: 10,
@@ -25,7 +26,7 @@ module.exports.INDEXES = {
 
 // Предельное количество аварийных остановок для производств
 module.exports.LIMIT_NUMBER_EMERGENCY_STOPS = {
-    '50': 10,
+    '50': 12,
     '56': 10,
     '57': 10,
     '61': 10,

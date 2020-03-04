@@ -11,7 +11,10 @@ export class Drawer extends PureComponent {
     render() {
         const { techDrawerVisible: visible, techTargetTimeStamp, techTechnology } = this.props
         // Исходные данные для графиков
-        const { dataDiameter, dataInconstancyDimension, datapPessureSpeed } = techTechnology
+        const { testDiameter, dataDiameter, dataInconstancyDimension, datapPessureSpeed } = techTechnology
+
+        // Технология (начальная, конечная точки, длина графика)
+        const { LEN } = testDiameter
 
         // Получить данные (в момент времени 'techTargetTimeStamp')
         let minDiameter, maxDiameter, inconstancy, dimension, pressure, speed
@@ -72,7 +75,7 @@ function mapStateToProps(store) {
     return {
         ...store.techDrawerReducer,
         ...store.techTargetTimeStampReducer,
-        ...store.techTechnologyReducer
+        ...store.techTechnologyReducer,
     }
 }
 

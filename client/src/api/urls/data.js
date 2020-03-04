@@ -39,3 +39,4 @@ export const scheme = [
 ]
 
 export const technology = 'http://localhost:3000/api/technology'
+export const shpFact = 'http://localhost:3000/api/shpFact'

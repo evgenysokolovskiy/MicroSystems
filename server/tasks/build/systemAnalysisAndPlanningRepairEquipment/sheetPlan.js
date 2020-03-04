@@ -1,7 +1,6 @@
 // План
 
 const createCell = require('../helpers/cellCreator').createCell
-const createCellTypeOfRepair = require('../helpers/cellCreator').createCellTypeOfRepair
 const createCellTitle = require('../helpers/cellCreator').createCellTitle
 
 module.exports = function({ plan, ws, defaultStyle }) {
@@ -42,13 +41,20 @@ module.exports = function({ plan, ws, defaultStyle }) {
                 createCell(ws, [row, step1], item['model'], defaultStyle)
                 createCell(ws, [row, ++step1], item['num'], defaultStyle)
                 createCell(ws, [row, ++step1], item['inn'], defaultStyle)
-                createCellTypeOfRepair(
-                    ws,
-                    [row, ++step1],
-                    item['typeOfRepair'],
-                    item['nodes'],
-                    defaultStyle
-                )
+
+                // Если средний ремонт, вывести "Средний"
+                if (item['typeOfRepair'] === 'medium') {
+                    createCell(ws, [row, ++step1], 'Средний', defaultStyle)
+                }
+                // Если текущий ремонт, вывести перечень узлов
+                if (item['typeOfRepair'] === 'nodes') {
+                    createCell(
+                        ws,
+                        [row, ++step1],
+                        Object.keys(item['nodes']).join('\n'),
+                        defaultStyle
+                    )
+                }
                 step1 = step1 - 3
                 row++
             })
