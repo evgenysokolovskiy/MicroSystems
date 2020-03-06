@@ -22,6 +22,7 @@ export default class InconstancyComponent extends PureComponent {
             handleClick,
             getData
         } = this.props
+
         return (
             <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
                 <LineChart

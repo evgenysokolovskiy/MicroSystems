@@ -11,10 +11,7 @@ export class Drawer extends PureComponent {
     render() {
         const { techDrawerVisible: visible, techTargetTimeStamp, techTechnology } = this.props
         // Исходные данные для графиков
-        const { testDiameter, dataDiameter, dataInconstancyDimension, datapPessureSpeed } = techTechnology
-
-        // Технология (начальная, конечная точки, длина графика)
-        const { LEN } = testDiameter
+        const { dataDiameter, dataInconstancyDimension, dataPressureSpeed } = techTechnology
 
         // Получить данные (в момент времени 'techTargetTimeStamp')
         let minDiameter, maxDiameter, inconstancy, dimension, pressure, speed
@@ -35,7 +32,7 @@ export class Drawer extends PureComponent {
             }
         })
         // Данные по отсечке времени для графика "Давление-скорость"
-        datapPessureSpeed.forEach(item => {
+        dataPressureSpeed.forEach(item => {
             if (item['date'] === techTargetTimeStamp) {
                 pressure = item['pressure']
                 speed = item['speed']

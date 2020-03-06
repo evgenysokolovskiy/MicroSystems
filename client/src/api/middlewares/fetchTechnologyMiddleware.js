@@ -6,7 +6,7 @@ import { technology } from '../urls/data'
 // Получить с сервера данные из таблицы Excel
 // Записать в стор
 export function fetchTechnologyMiddleware() {
-    changeTechTechnology({ ...technology })
+    //changeTechTechnology({ ...technology })
     return dispatch => {
         fetch(technology)
             .then(res => res.json())

@@ -6,7 +6,7 @@ import { shpFact } from '../urls/data'
 // Получить с сервера данные из таблицы Excel
 // Записать в стор
 export function fetchShpFactMiddleware() {
-    changeTechShpFact({ ...shpFact })
+    //changeTechShpFact({ ...shpFact })
     return dispatch => {
         fetch(shpFact)
             .then(res => res.json())

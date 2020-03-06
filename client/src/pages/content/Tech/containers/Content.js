@@ -22,30 +22,9 @@ export class Content extends PureComponent {
     }
 
     render() {
-        const { techType, techTargetMenu, techTargetTimeStamp, techTechnology: data, techShpFact } = this.props
-        // techType - тип подшипника
-        // techTargetMenu - вид процедуры
-  
-        // Исходные данные для графиков
-        const { testDiameter, /*dataDiameter,*/ dataInconstancyDimension, datapPessureSpeed } = data
-        // Технология (начальная, конечная точки, длина графика)
-        const { START, END, LEN } = testDiameter
-        // 1) Расчитать данные технологии на основании начальной, конечной точек и длины графика
-        let dataDiameter = [START]
-        const a = START.norm[0]
-        const A = (START.norm[0] - END.norm[0]) / (LEN - 1)
-        const b = START.norm[1]
-        const B = (START.norm[1] - END.norm[1]) / (LEN - 1)
-        for (let i = 1; i < LEN; i++) {
-            const max = (a - A * i).toFixed(3)
-            const min = (b - B * i).toFixed(3)
-            const item = {
-                norm: [max, min]
-            }
-            dataDiameter = [...dataDiameter, item]
-        }
+        const { techType, techTargetMenu, techTargetTimeStamp, techTechnology, techShpFact } = this.props
+        const { LEN, dataInconstancyDimension, dataPressureSpeed, dataDiameter, dataInconstancy, dataDimension, technologyPressure, technologySpeed } = techTechnology
 
-        // 2) Включить фактические показатели в данные технологии 
 
         // Получить фактические данные, соответствующие выбранному типу подшипника
         const factType = techTargetMenu && techTargetMenu === 'running' && techShpFact[techTargetMenu].filter(item => item['type'] === techType)
@@ -64,7 +43,7 @@ export class Content extends PureComponent {
             // От этой точки будет строиться технология
             dataDiameter[0]['date'] = `${dd}.${mm}.${yyyy} ${hours}:${minutes}`
             dataInconstancyDimension[0]['date'] = `${dd}.${mm}.${yyyy} ${hours}:${minutes}`
-            datapPessureSpeed[0]['date'] = `${dd}.${mm}.${yyyy} ${hours}:${minutes}`
+            dataPressureSpeed[0]['date'] = `${dd}.${mm}.${yyyy} ${hours}:${minutes}`
 
             for (let i = 1; i < LEN; i++) {
                 start.setHours(start.getHours() + 1)
@@ -75,11 +54,11 @@ export class Content extends PureComponent {
 
                 dataDiameter[i]['date'] = `${date}.${month}.${year} ${hours}:${minutes}`
                 dataInconstancyDimension[i]['date'] = `${date}.${month}.${year} ${hours}:${minutes}`
-                datapPessureSpeed[i]['date'] = `${date}.${month}.${year} ${hours}:${minutes}`
+                dataPressureSpeed[i]['date'] = `${date}.${month}.${year} ${hours}:${minutes}`
             }
 
             for (let i = 0; i < dataDiameter.length; i++) {
-                const techDate = converTechnologyToDate(dataDiameter[i]['date'])
+                const techDate = convertTechnologyToDate(dataDiameter[i]['date'])
                 for (let j = 0; j < factType.length; j++) {
                     const factDate = converFactToDate(factType[j])
                     if (techDate.toLocaleString() === factDate.toLocaleString()) {
@@ -94,13 +73,6 @@ export class Content extends PureComponent {
                 }
             }
         }
-
-        data['dataDiameter'] = dataDiameter
-
-
-
-
-
 
 
 
@@ -124,12 +96,26 @@ export class Content extends PureComponent {
             }
         })
         // Данные по отсечке времени для графика "Давление-скорость"
-        datapPessureSpeed.forEach(item => {
+        dataPressureSpeed.forEach(item => {
             if (item['date'] === techTargetTimeStamp) {
                 pressure = item['pressure']
                 speed = item['speed']
             }
         })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Технология (в момент времени 'techTargetTimeStamp')
         const technology = {
             minDiameter,
@@ -146,7 +132,9 @@ export class Content extends PureComponent {
 
         return (
             <App
-                data={data}
+                dataDiameter={dataDiameter}
+                dataInconstancyDimension={dataInconstancyDimension}
+                dataPressureSpeed={dataPressureSpeed}
                 techType={techType}
                 technology={technology}
                 fact={fact}
@@ -183,7 +171,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(Content)
 
 
 
-function converTechnologyToDate(str) {
+
+
+
+
+
+
+
+function convertTechnologyToDate(str) {
     const dd = str.split(' ')[0].split('.')[0]
     const mm = str.split(' ')[0].split('.')[1]
     const yyyy = str.split(' ')[0].split('.')[2]

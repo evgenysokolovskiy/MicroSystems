@@ -26,7 +26,8 @@ const parsePath = path.join(__dirname, 'xlsx', 'parse')
 const parsePathRepairCompleted = path.join(__dirname, 'xlsx', 'repairCompleted')
 const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
 const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
-const parseShp = path.join(__dirname, 'xlsx', 'shp')
+const parseShpFact = path.join(__dirname, 'xlsx', 'shp', 'fact')
+const parseShpTechnology = path.join(__dirname, 'xlsx', 'shp', 'technology')
 
 const repairCompleted = require('./server/tasks/parse/repairCompleted/')
 require('./server/tasks/parse/main/')({
@@ -38,7 +39,8 @@ require('./server/tasks/parse/main/')({
 })
 require('./server/tasks/parse/check/')({ app, parsePathCheck, buildPath })
 require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
-require('./server/tasks/parse/shp/')({ app, parseShp })
+require('./server/tasks/parse/shp/fact')({ app, parseShpFact })
+require('./server/tasks/parse/shp/technology')({ app, parseShpTechnology })
 require('./server/api/technologyAPI')({ app })
 
 /*

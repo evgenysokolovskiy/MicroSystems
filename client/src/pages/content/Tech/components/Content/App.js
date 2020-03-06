@@ -57,7 +57,7 @@ export default class App extends PureComponent {
             handleClickMenu
         } = this.props
 
-        const { dataDiameter, dataInconstancyDimension, datapPessureSpeed } = data
+        const { dataDiameter, dataInconstancyDimension, dataPressureSpeed } = this.props
 
         // Контент на странице
         const elements = techTargetMenu && techTargetMenu === 'running' && (
@@ -88,7 +88,7 @@ export default class App extends PureComponent {
                 <Panel header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин" key="pressureSpeed">
                     <PressureComponent
                         date={date}
-                        datapPessureSpeed={datapPessureSpeed}
+                        dataPressureSpeed={dataPressureSpeed}
                         CustomizedAxisTick={CustomizedAxisTick}
                     />
                 </Panel>

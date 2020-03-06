@@ -1,7 +1,7 @@
 // 1) Фильтровать данные по лимиту аварийных остановок
 
 const clonedeep = require('lodash.clonedeep')
-const LIMIT_NUMBER_EMERGENCY_STOPS = require('../../config').LIMIT_NUMBER_EMERGENCY_STOPS
+const LIMIT_NUMBER_EMERGENCY_STOPS = require('../../config/repaire/').LIMIT_NUMBER_EMERGENCY_STOPS
 const splitProductionEquipment = require('../primaryDataProcessing/_2-splitProductionEquipment')
 
 module.exports = function(data) {

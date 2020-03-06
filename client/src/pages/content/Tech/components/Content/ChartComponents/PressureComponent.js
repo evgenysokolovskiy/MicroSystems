@@ -13,11 +13,11 @@ import {
 
 export default class ChartComponent extends PureComponent {
     render() {
-        const { date, datapPessureSpeed, CustomizedAxisTick } = this.props
+        const { date, dataPressureSpeed, CustomizedAxisTick } = this.props
         return (
             <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
                 <BarChart 
-                    data={datapPessureSpeed} 
+                    data={dataPressureSpeed} 
                     syncId="composedChart"
                     margin={{
                         top: 0, right: 20, left: 10, bottom: 40,

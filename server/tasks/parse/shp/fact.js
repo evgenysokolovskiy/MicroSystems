@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const INDEXES = require('../../../configShp')
+const INDEXES = require('../../../config/shp/fact')
 const {
     INDEXES_STAMPING,
     INDEXES_RUNNING,
@@ -11,30 +11,14 @@ const {
     INDEXES_CLEAN,
     INDEXES_FINAL
 } = INDEXES
+const convertFact = require('../../shp/convertFact/')
 const shpFactAPI = require('../../../api/shpFactAPI')
 
-function convertData(data, INDEXES) {
-    let arr = []
-    // Преобразовать объект в массив
-    const indexes = [...Object.entries(INDEXES)]
-    data.forEach(item => {
-        if (!item[0]) return
-        const obj = {}
-        indexes.forEach(i => {
-            const indexDate = (i[0] === 'date') ? i[1] : null
-            obj[i[0]] = typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]
-        })
-        arr = [...arr, obj]
-    })
-    return arr
-}
-
-module.exports = function({ app, parseShp }) {
-    fs.readdir(parseShp, function(err, files) {
-        const paths = files.map(item => `${parseShp}/${item}`)
+module.exports = function({ app, parseShpFact }) {
+    fs.readdir(parseShpFact, function(err, files) {
+        const paths = files.map(item => `${parseShpFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
             new Promise(function(resolve, reject) {
-                // Прочитать файл по ссылке paths[i]
                 let stamping, running, grinding, rough, clean, final
 
                 xlsx.parse(`${paths[i]}`).forEach(sheet => {
@@ -61,11 +45,12 @@ module.exports = function({ app, parseShp }) {
                     final
                 }
 
+                const convertedData = convertFact({ data })
                 if (data) {
                     resolve(
                         (() => {
                             // Отправить факт к API
-                            shpFactAPI({ app, data })
+                            shpFactAPI({ app, data/*: convertedData*/ })
                         })()
                     )
                 } else {
@@ -74,6 +59,22 @@ module.exports = function({ app, parseShp }) {
             }).catch(err => console.log(err))
         }
     })
+}
+
+function convertData(data, INDEXES) {
+    let arr = []
+    // Преобразовать объект в массив
+    const indexes = [...Object.entries(INDEXES)]
+    data.forEach(item => {
+        if (!item[0]) return
+        const obj = {}
+        indexes.forEach(i => {
+            const indexDate = (i[0] === 'date') ? i[1] : null
+            obj[i[0]] = typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]
+        })
+        arr = [...arr, obj]
+    })
+    return arr
 }
 
 function getDateFromText(text) {
