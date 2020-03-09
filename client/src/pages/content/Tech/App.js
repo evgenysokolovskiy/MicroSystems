@@ -11,7 +11,12 @@ export default function App() {
     return (
         <Layout>
             <Content />
-            <Drawer />
         </Layout>
     )
 }
+
+/*
+
+<Drawer />
+
+*/

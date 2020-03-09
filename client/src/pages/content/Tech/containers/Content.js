@@ -8,6 +8,7 @@ import { changeTechTechnology } from '../../../../store/tech/actions/techTechnol
 import { changeType } from '../../../../store/tech/actions/techTypeAction'
 
 export class Content extends PureComponent {
+
     handleClickMenu = item => {
         this.props.changeTechTargetMenu(item)
     }
@@ -22,9 +23,13 @@ export class Content extends PureComponent {
     }
 
     render() {
+
+        const { techJoinTechnologyFact } = this.props
+        console.log(techJoinTechnologyFact)
+
+/*
         const { techType, techTargetMenu, techTargetTimeStamp, techTechnology, techShpFact } = this.props
         const { LEN, dataInconstancyDimension, dataPressureSpeed, dataDiameter, dataInconstancy, dataDimension, technologyPressure, technologySpeed } = techTechnology
-
 
         // Получить фактические данные, соответствующие выбранному типу подшипника
         const factType = techTargetMenu && techTargetMenu === 'running' && techShpFact[techTargetMenu].filter(item => item['type'] === techType)
@@ -129,21 +134,9 @@ export class Content extends PureComponent {
         const fact = {
             factDiameter
         }
-
+*/
         return (
-            <App
-                dataDiameter={dataDiameter}
-                dataInconstancyDimension={dataInconstancyDimension}
-                dataPressureSpeed={dataPressureSpeed}
-                techType={techType}
-                technology={technology}
-                fact={fact}
-                techTargetMenu={techTargetMenu}
-                techTargetTimeStamp={techTargetTimeStamp}
-                handleClickMenu={this.handleClickMenu}
-                handleClickTimeStamp={this.handleClickTimeStamp}
-                handleClickChangeTechType={this.handleClickChangeTechType}
-            />
+            <div>Hello world!</div>
         )
     }
 }
@@ -152,6 +145,7 @@ function mapStateToProps(store) {
     return {
         ...store.techTargetMenuReducer,
         ...store.techTargetTimeStampReducer,
+        ...store.techJoinTechnologyFactReducer,
         ...store.techTechnologyReducer,
         ...store.techShpFactReducer,
         ...store.techTypeReducer
@@ -170,7 +164,22 @@ export default connect(mapStateToProps, mapDispatchToProps)(Content)
 
 
 
+/*
 
+            <App
+                dataDiameter={dataDiameter}
+                dataInconstancyDimension={dataInconstancyDimension}
+                dataPressureSpeed={dataPressureSpeed}
+                techType={techType}
+                technology={technology}
+                fact={fact}
+                techTargetMenu={techTargetMenu}
+                techTargetTimeStamp={techTargetTimeStamp}
+                handleClickMenu={this.handleClickMenu}
+                handleClickTimeStamp={this.handleClickTimeStamp}
+                handleClickChangeTechType={this.handleClickChangeTechType}
+            />
+*/
 
 
 

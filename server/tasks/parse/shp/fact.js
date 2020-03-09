@@ -36,7 +36,7 @@ module.exports = function({ app, parseShpFact }) {
                         final = convertData(sheet['data'], INDEXES_FINAL)
                 })
 
-                const data = {
+                const fact = {
                     stamping,
                     running,
                     grinding,
@@ -45,12 +45,14 @@ module.exports = function({ app, parseShpFact }) {
                     final
                 }
 
-                const convertedData = convertFact({ data })
-                if (data) {
+                if (fact) {
                     resolve(
                         (() => {
                             // Отправить факт к API
-                            shpFactAPI({ app, data/*: convertedData*/ })
+                            shpFactAPI({ 
+                                app, 
+                                fact: (() => convertFact({ fact }) )()
+                            })
                         })()
                     )
                 } else {

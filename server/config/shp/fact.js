@@ -6,11 +6,13 @@ module.exports.INDEXES_STAMPING = {
     type: 1, // Тип шара по диаметру, мм
     cardNumber: 2, // Номер карты
     batchLoadingTime: 3, // Время загрузки партии
-    weight: 4, // Вес партии, кг
-    measurementTime: 5, // Время измерения
-    diameter: 6, // Текущий диаметр шара, мм
-    inconstancy: 7, // Непостоянство, мкм
-    dimension: 8, // Разноразмерность, мкм
+    weight: 8, // Вес партии, кг
+    measurementTime: 4, // Время измерения
+    diameter: 5, // Текущий диаметр шара, мм
+    height: 6, // Высота
+    d: 7, // Диаметр облоя
+    //inconstancy: 7, // Непостоянство, мкм
+    //dimension: 8, // Разноразмерность, мкм
     qualityProducts: 9, //Качественная продукция
     defectiveProducts: 10 // Бракованная продукция
 }
@@ -74,7 +76,8 @@ module.exports.INDEXES_CLEAN = {
     diameter: 7, // Текущий диаметр шара, мм
     inconstancy: 8, // Непостоянство, мкм
     sphere: 9, // Сфера, мкм
-    dimension: 10, // Разноразмерность, мкм
+    //dimension: 10, // Разноразмерность, мкм
+    surfaceСondition: 10, // Состояние поверхности
     qualityProducts: 11, //Качественная продукция
     defectiveProducts: 12 // Бракованная продукция
 }
@@ -91,7 +94,8 @@ module.exports.INDEXES_FINAL = {
     diameter: 7, // Текущий диаметр шара, мм
     inconstancy: 8, // Непостоянство, мкм
     sphere: 9, // Сфера, мкм
-    dimension: 10, // Разноразмерность, мкм
+    //dimension: 10, // Разноразмерность, мкм
+    surfaceСondition: 10, // Состояние поверхности
     qualityProducts: 11, //Качественная продукция
     defectiveProducts: 12 // Бракованная продукция
 }

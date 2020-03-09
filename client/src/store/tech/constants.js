@@ -1,3 +1,12 @@
+export const _TECH_JOIN_TECHNOLOGY_FACT = {
+    types: {
+        TECH_JOIN_TECHNOLOGY_FACT: 'TECH_JOIN_TECHNOLOGY_FACT'
+    },
+    init: {
+        techJoinTechnologyFact: null
+    }
+}
+
 export const _TECH_TECHNOLOGY = {
     types: {
         TECH_TECHNOLOGY: 'TECH_TECHNOLOGY'

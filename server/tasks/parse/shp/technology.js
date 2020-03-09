@@ -2,7 +2,6 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const convertTechnology = require('../../shp/convertTechnology/conv')
 const INDEXES = require('../../../config/shp/technology')
 const {
     INDEXES_STAMPING,
@@ -12,6 +11,8 @@ const {
     INDEXES_CLEAN,
     INDEXES_FINAL
 } = INDEXES
+const convertTechnology = require('../../shp/convertTechnology/conv')
+const technologyAPI = require('../../../api/technologyAPI')
 
 module.exports = function({ app, parseShpTechnology }) {
     fs.readdir(parseShpTechnology, function(err, files) {
@@ -38,19 +39,15 @@ module.exports = function({ app, parseShpTechnology }) {
                     final
                 }
 
-                const d = convertTechnology({ technology })
-
-                //const convertedData = convertFact({ data })
 
                 if (technology) {
                     resolve(
-                        //console.log(stamping)
-                        /*
                         (() => {
-                            // Отправить факт к API
-                            shpFactAPI({ app, data: convertedData })
+                            technologyAPI({ 
+                                app, 
+                                technology: (() => convertTechnology({ technology }) )()
+                            })
                         })()
-                        */
                     )
                 } else {
                     reject(new Error('Err'))
