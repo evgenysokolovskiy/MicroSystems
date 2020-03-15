@@ -9,3 +9,7 @@
 .false {
 	background-color: lightcoral;
 }
+
+.ant-tabs-bar {
+	margin-bottom: 0;
+}

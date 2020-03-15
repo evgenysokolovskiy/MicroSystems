@@ -30,7 +30,7 @@ export const _TECH_TARGET_MENU = {
         TECH_TARGET_MENU: 'TECH_TARGET_MENU'
     },
     init: {
-        techTargetMenu: null
+        techTargetMenu: 'running'
     }
 }
 
@@ -39,7 +39,16 @@ export const _TECH_TYPE = {
         TECH_TYPE: 'TECH_TYPE'
     },
     init: {
-        techType: 3.175
+        techType: '9.525'
+    }
+}
+
+export const _CARD_NUMBER = {
+    types: {
+        CARD_NUMBER: 'CARD_NUMBER'
+    },
+    init: {
+        techCardNumber: null
     }
 }
 

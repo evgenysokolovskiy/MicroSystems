@@ -19,6 +19,7 @@ export default class MenuComponent extends PureComponent {
             <div>
                 <Menu
                     defaultOpenKeys={['control']}
+                    defaultSelectedKeys='running'
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}
@@ -32,19 +33,9 @@ export default class MenuComponent extends PureComponent {
                             </span>
                         }
                     >
-                        <Menu.Item key="stamping">
-                            <span>
-                                <Link to="/tech/stamping">ШТАМПОВКА</Link>
-                            </span>
-                        </Menu.Item>
                         <Menu.Item key="running">
                             <span>
                                 <Link to="/tech/running">ОБКАТКА</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="term">
-                            <span>
-                                <Link to="/tech/term">ТЕРМООБРАБОТКА</Link>
                             </span>
                         </Menu.Item>
                         <Menu.Item key="grinding">
@@ -76,3 +67,18 @@ export default class MenuComponent extends PureComponent {
         )
     }
 }
+
+/*
+<Menu.Item key="stamping">
+    <span>
+        <Link to="/tech/stamping">ШТАМПОВКА</Link>
+    </span>
+</Menu.Item>
+
+<Menu.Item key="term">
+    <span>
+        <Link to="/tech/term">ТЕРМООБРАБОТКА</Link>
+    </span>
+</Menu.Item>
+
+*/

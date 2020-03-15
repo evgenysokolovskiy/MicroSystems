@@ -18,7 +18,7 @@ export default class ErrorBoundary extends React.Component {
 
     render() {
         if (this.state.hasError) {
-            return <Result status="404" title="404" subTitle="Когда-нибудь всё заработает!" />
+            return <Result status="404" title="404" subTitle="Ошибка... Попробуйте перезагрузить приложение!" />
         }
 
         return this.props.children

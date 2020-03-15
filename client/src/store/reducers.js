@@ -15,6 +15,7 @@ import techTargetTimeStampReducer from './tech/reducers/techTargetTimeStampReduc
 import techDrawerReducer from './tech/reducers/techDrawerReducer'
 import techShpFactReducer from './tech/reducers/techShpFactReducer'
 import techTypeReducer from './tech/reducers/techTypeReducer'
+import techCardNumberReducer from './tech/reducers/techCardNumberReducer'
 
 export default combineReducers({
     // repair
@@ -32,5 +33,6 @@ export default combineReducers({
     techTargetTimeStampReducer,
     techDrawerReducer,
     techShpFactReducer,
-    techTypeReducer
+    techTypeReducer,
+    techCardNumberReducer
 })

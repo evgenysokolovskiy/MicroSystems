@@ -47,7 +47,7 @@ export default class InconstancyComponent extends PureComponent {
                         strokeWidth={2}
                         name="Непостоянство"
                     >
-                        <LabelList dataKey="inconstancy" position="top" />
+                        {/*<LabelList dataKey="inconstancy" position="top" />*/}
                     </Line>
                     <Line
                         type="monotone"
@@ -56,7 +56,7 @@ export default class InconstancyComponent extends PureComponent {
                         strokeWidth={2}
                         name="Размерность"
                     >
-                        <LabelList dataKey="dimension" position="top" />
+                        {/*<LabelList dataKey="dimension" position="top" />*/}
                     </Line>
                 </LineChart>
             </ResponsiveContainer>

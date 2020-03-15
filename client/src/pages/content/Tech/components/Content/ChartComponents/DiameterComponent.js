@@ -16,7 +16,6 @@ import {
 export default class DiameterComponent extends PureComponent {
     render() {
         const { date, dataDiameter, CustomizedAxisTick, handleClick, getData } = this.props
-        
         return (
             <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
                 <ComposedChart 
