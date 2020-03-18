@@ -1,10 +1,9 @@
 // Рассчитать промежуточные точки
 
-
 const PRESSURE = 10
 const SPEED = 60
 
-module.exports = function( data ) {
+module.exports = function(data) {
     calculateIntermediatePointsTechnologyDiameter(data)
     calculateIntermediatePointsTechnologyInconstancy(data)
     calculateIntermediatePointsTechnologyDimension(data)
@@ -22,7 +21,7 @@ function calculateIntermediatePointsTechnologyInconstancy(data) {
         for (let i = 1; i < len; i++) {
             const point = +(a - A * i).toFixed(3)
 
-            pointsInconstancy = [...pointsInconstancy, point ]
+            pointsInconstancy = [...pointsInconstancy, point]
         }
         item['pointsInconstancy'] = pointsInconstancy
     })
@@ -39,7 +38,7 @@ function calculateIntermediatePointsTechnologyDimension(data) {
         for (let i = 1; i < len; i++) {
             const point = +(a - A * i).toFixed(3)
 
-            pointsDimension = [...pointsDimension, point ]
+            pointsDimension = [...pointsDimension, point]
         }
         item['pointsDimension'] = pointsDimension
     })
@@ -48,11 +47,11 @@ function calculateIntermediatePointsTechnologyDimension(data) {
 // Рассчитать промежуточные точки для Диаметра
 function calculateIntermediatePointsTechnologyDiameter(data) {
     data.map(item => {
-        let { 
-            minDiameter: min, 
-            maxDiameter: max, 
-            minDiameterEnd: minEnd, 
-            maxDiameterEnd: maxEnd, 
+        let {
+            minDiameter: min,
+            maxDiameter: max,
+            minDiameterEnd: minEnd,
+            maxDiameterEnd: maxEnd,
             len
         } = item
         let pointsDiameter = [{ norm: [min, max] }]
@@ -72,10 +71,11 @@ function calculateIntermediatePointsTechnologyDiameter(data) {
     })
 }
 
-function addPressureSpeed( data, PRESSURE, SPEED ) {
+function addPressureSpeed(data, PRESSURE, SPEED) {
     data.map(item => {
         const { len } = item
-        let pointsPressure = [], pointsSpeed = []
+        let pointsPressure = [],
+            pointsSpeed = []
         for (let i = 0; i < len - 1; i++) {
             pointsPressure = [...pointsPressure, PRESSURE]
             pointsSpeed = [...pointsSpeed, SPEED]

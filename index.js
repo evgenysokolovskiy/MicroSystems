@@ -21,6 +21,7 @@ app.use(
 
 // Путь, куда сохранять отчёты
 const buildPath = path.join(__dirname, 'xlsx', 'build')
+const buildPathDetail = path.join(__dirname, 'xlsx', 'build', 'detail')
 // Путь, что парсить
 const parsePath = path.join(__dirname, 'xlsx', 'parse')
 const parsePathRepairCompleted = path.join(__dirname, 'xlsx', 'repairCompleted')
@@ -28,6 +29,7 @@ const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
 const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
 const parseShpFact = path.join(__dirname, 'xlsx', 'shp', 'fact')
 const parseShpTechnology = path.join(__dirname, 'xlsx', 'shp', 'technology')
+const parsePathDetail = path.join(__dirname, 'xlsx', 'detail')
 
 const repairCompleted = require('./server/tasks/parse/repairCompleted/')
 require('./server/tasks/parse/main/')({
@@ -42,6 +44,7 @@ require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
 require('./server/tasks/parse/shp/fact')({ app, parseShpFact })
 require('./server/tasks/parse/shp/technology')({ app, parseShpTechnology })
 require('./server/api/technologyAPI')({ app })
+//require('./server/tasks/parse/detail/')({ app, parsePathDetail, buildPathDetail })
 
 /*
 app.get('/download/file.xlsx', function(req, res) {

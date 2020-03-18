@@ -8,26 +8,48 @@ const { Title, Text } = Typography
 export default class App extends PureComponent {
     state = {
         diff: null,
-        percentDiameter: null
+        differenceDiameter: null,
+        differenceInconstancy: null,
+        differenceDimension: null,
+        differencePressure: null,
+        differenceSpeed: null
     }
     onGetData = data => {
-        const { diff, percentDiameter } = data
+        const {
+            diff,
+            differenceDiameter,
+            differenceInconstancy,
+            differenceDimension,
+            differencePressure,
+            differenceSpeed
+        } = data
+
         this.setState({
             diff,
-            percentDiameter
+            differenceDiameter,
+            differenceInconstancy,
+            differenceDimension,
+            differencePressure,
+            differenceSpeed
         })
     }
     render() {
         const {
+            data,
+            target,
             visible,
             handleClickCloseTechDrawer,
-            technology,
-            fact,
-            techTargetTimeStamp: date,
             changeTechTargetTimeStamp
         } = this.props
 
-        const { diff, percentDiameter } = this.state
+        const {
+            diff,
+            differenceDiameter,
+            differenceInconstancy,
+            differenceDimension,
+            differencePressure,
+            differenceSpeed
+        } = this.state
 
         return (
             <div>
@@ -35,8 +57,8 @@ export default class App extends PureComponent {
                     width={'50vw'}
                     placement="right"
                     closable={false}
-                    onClose={handleClickCloseTechDrawer}
                     visible={visible}
+                    onClose={handleClickCloseTechDrawer}
                 >
                     {visible && (
                         <Suspense
@@ -48,13 +70,17 @@ export default class App extends PureComponent {
                                 />
                             }
                         >
-                            <Title level={4}>Дата: {date}</Title>
+                            <Title level={4}>Дата: {target}</Title>
 
-                            <StatisticComponent percentDiameter={percentDiameter} />
+                            <StatisticComponent
+                                differenceDiameter={differenceDiameter}
+                                differenceInconstancy={differenceInconstancy}
+                                differenceDimension={differenceDimension}
+                                differencePressure={differencePressure}
+                                differenceSpeed={differenceSpeed}
+                            />
                             <TableComponent
-                                technology={technology}
-                                fact={fact}
-                                techTargetTimeStamp={date}
+                                data={data}
                                 changeTechTargetTimeStamp={changeTechTargetTimeStamp}
                                 onGetData={this.onGetData}
                             />

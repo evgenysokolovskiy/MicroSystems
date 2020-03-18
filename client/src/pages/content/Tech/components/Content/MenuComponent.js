@@ -19,7 +19,7 @@ export default class MenuComponent extends PureComponent {
             <div>
                 <Menu
                     defaultOpenKeys={['control']}
-                    defaultSelectedKeys='running'
+                    defaultSelectedKeys="running"
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}

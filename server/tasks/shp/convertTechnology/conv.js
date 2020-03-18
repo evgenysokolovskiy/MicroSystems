@@ -4,7 +4,6 @@ const calculateIntermediatePoints = require('../helpers/calculateIntermediatePoi
 const calculateLength = require('../helpers/calculateLength')
 
 module.exports = function({ technology }) {
-
     const { stamping, running, grinding, rough, clean, final } = technology
 
     // Добавить продолжительность операции в часах
@@ -22,7 +21,6 @@ module.exports = function({ technology }) {
     calculateIntermediatePoints(newClean)
     calculateIntermediatePoints(newFinal)
 
-
     const obj = {
         running: (() => convertDataFinal(newRunning))(),
         grinding: (() => convertDataFinal(newGrinding))(),
@@ -32,11 +30,6 @@ module.exports = function({ technology }) {
     }
 
     return obj
-
-
-
-
-
 
     /*
     const { technologyDiameter, technologyInconstancy, technologyDimension, technologyPressure, technologySpeed } = technology
@@ -81,11 +74,11 @@ module.exports = function({ technology }) {
     */
 }
 
-
 function convertDataFinal(data) {
     const obj = {}
-    data && Object.values(data).forEach(item => {
-        obj[item['type']] = item
-    })
+    data &&
+        Object.values(data).forEach(item => {
+            obj[item['type']] = item
+        })
     return obj
 }

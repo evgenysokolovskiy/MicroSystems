@@ -23,10 +23,7 @@ export const App = props => {
 
     return (
         <Content style={{ padding: '0 10px' }}>
-            <Layout
-                style={{ background: '#fff' }}
-                className="ant-layout-has-sider"
-            >
+            <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                 <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ minHeight: '92vh' }}>
                     {targetMenu && targetMenu.match(/plan/) && data && (

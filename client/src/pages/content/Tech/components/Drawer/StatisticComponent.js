@@ -4,7 +4,18 @@ const { Text } = Typography
 
 export default class StatisticComponent extends PureComponent {
     render() {
-        const { percentDiameter } = this.props
+        const {
+            // Диаметр
+            differenceDiameter,
+            // Непостоянство
+            differenceInconstancy,
+            // Разноразмерность
+            differenceDimension,
+            // Давление
+            differencePressure,
+            // Скорость
+            differenceSpeed
+        } = this.props
 
         return (
             <div style={{ background: '#ECECEC', padding: '30px' }}>
@@ -13,21 +24,21 @@ export default class StatisticComponent extends PureComponent {
                         <Card>
                             <Statistic
                                 title={<Text>Диаметр</Text>}
-                                value={Math.abs(percentDiameter) * 100}
+                                value={Math.abs(differenceDiameter)}
                                 precision={2}
-                                valueStyle={{ color: percentDiameter ? '#cf1322' : '#3f8600' }}
+                                valueStyle={{ color: differenceDiameter ? '#cf1322' : '#3f8600' }}
                                 prefix={
                                     <Icon
                                         type={
-                                            percentDiameter > 0
+                                            differenceDiameter > 0
                                                 ? 'arrow-up'
-                                                : percentDiameter < 0
+                                                : differenceDiameter < 0
                                                 ? 'arrow-down'
                                                 : null
                                         }
                                     />
                                 }
-                                suffix="%"
+                                suffix="(мкр)"
                             />
                         </Card>
                     </Col>
@@ -35,11 +46,23 @@ export default class StatisticComponent extends PureComponent {
                         <Card>
                             <Statistic
                                 title={<Text>Непостоянство</Text>}
-                                value={0}
+                                value={Math.abs(differenceInconstancy)}
                                 precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                prefix={<Icon type={null} />}
-                                suffix="%"
+                                valueStyle={{
+                                    color: differenceInconstancy > 0 ? '#cf1322' : '#3f8600'
+                                }}
+                                prefix={
+                                    <Icon
+                                        type={
+                                            differenceInconstancy > 0
+                                                ? 'arrow-up'
+                                                : differenceInconstancy < 0
+                                                ? 'arrow-down'
+                                                : null
+                                        }
+                                    />
+                                }
+                                suffix="(мкр)"
                             />
                         </Card>
                     </Col>
@@ -47,11 +70,23 @@ export default class StatisticComponent extends PureComponent {
                         <Card>
                             <Statistic
                                 title={<Text>Разноразмерность</Text>}
-                                value={0}
+                                value={Math.abs(differenceDimension)}
                                 precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                prefix={<Icon type={null} />}
-                                suffix="%"
+                                valueStyle={{
+                                    color: differenceDimension > 0 ? '#cf1322' : '#3f8600'
+                                }}
+                                prefix={
+                                    <Icon
+                                        type={
+                                            differenceDimension > 0
+                                                ? 'arrow-up'
+                                                : differenceDimension < 0
+                                                ? 'arrow-down'
+                                                : null
+                                        }
+                                    />
+                                }
+                                suffix="(мкр)"
                             />
                         </Card>
                     </Col>
@@ -61,11 +96,21 @@ export default class StatisticComponent extends PureComponent {
                         <Card>
                             <Statistic
                                 title={<Text>Давление</Text>}
-                                value={0}
+                                value={Math.abs(differencePressure)}
                                 precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                prefix={<Icon type={null} />}
-                                suffix="%"
+                                valueStyle={{ color: differencePressure ? '#cf1322' : '#3f8600' }}
+                                prefix={
+                                    <Icon
+                                        type={
+                                            differencePressure > 0
+                                                ? 'arrow-up'
+                                                : differencePressure < 0
+                                                ? 'arrow-down'
+                                                : null
+                                        }
+                                    />
+                                }
+                                suffix="(Па)"
                             />
                         </Card>
                     </Col>
@@ -73,11 +118,21 @@ export default class StatisticComponent extends PureComponent {
                         <Card>
                             <Statistic
                                 title={<Text>Скорость</Text>}
-                                value={0}
+                                value={Math.abs(differenceSpeed)}
                                 precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                prefix={<Icon type={null} />}
-                                suffix="%"
+                                valueStyle={{ color: differenceSpeed ? '#cf1322' : '#3f8600' }}
+                                prefix={
+                                    <Icon
+                                        type={
+                                            differenceSpeed > 0
+                                                ? 'arrow-up'
+                                                : differenceSpeed < 0
+                                                ? 'arrow-down'
+                                                : null
+                                        }
+                                    />
+                                }
+                                suffix="(об/мин)"
                             />
                         </Card>
                     </Col>

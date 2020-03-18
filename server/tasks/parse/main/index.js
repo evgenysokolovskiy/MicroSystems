@@ -37,6 +37,7 @@ module.exports = function({
 
                     resolve(
                         (() => {
+                            /*
                             // Сформировать данные для отчётов excel
                             repairCompleted({
                                 app,
@@ -48,7 +49,7 @@ module.exports = function({
                                 collapseNodes: (() => collapseNodes(filteredData || data))(),
                                 buildPath
                             })
-
+                            */
                             // Отправить данные к API
                             dataAPI({ app, plan })
                         })()

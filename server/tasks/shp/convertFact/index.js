@@ -1,8 +1,7 @@
 // Преобразовать фактические данные
 
 module.exports = function({ fact }) {
-
-	const { running, grinding, rough, clean, final } = fact
+    const { running, grinding, rough, clean, final } = fact
 
     const obj = {
         running: (() => convertDataFinal(running))(),
@@ -11,17 +10,18 @@ module.exports = function({ fact }) {
         clean: (() => convertDataFinal(clean))(),
         final: (() => convertDataFinal(final))()
     }
-	return obj
+    return obj
 }
 
 function convertDataFinal(data) {
     const obj = {}
-    data && Object.values(data).forEach(item => {
-        if (obj[item['type']]) {
-            obj[item['type']] = [ ...obj[item['type']], item ]
-        } else {
-            obj[item['type']] = [ item ]
-        }
-    })
+    data &&
+        Object.values(data).forEach(item => {
+            if (obj[item['type']]) {
+                obj[item['type']] = [...obj[item['type']], item]
+            } else {
+                obj[item['type']] = [item]
+            }
+        })
     return obj
 }

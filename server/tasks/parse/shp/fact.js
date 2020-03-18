@@ -49,9 +49,9 @@ module.exports = function({ app, parseShpFact }) {
                     resolve(
                         (() => {
                             // Отправить факт к API
-                            shpFactAPI({ 
-                                app, 
-                                fact: (() => convertFact({ fact }) )()
+                            shpFactAPI({
+                                app,
+                                fact: (() => convertFact({ fact }))()
                             })
                         })()
                     )
@@ -71,8 +71,9 @@ function convertData(data, INDEXES) {
         if (!item[0]) return
         const obj = {}
         indexes.forEach(i => {
-            const indexDate = (i[0] === 'date') ? i[1] : null
-            obj[i[0]] = typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]
+            const indexDate = i[0] === 'date' ? i[1] : null
+            obj[i[0]] =
+                typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]
         })
         arr = [...arr, obj]
     })

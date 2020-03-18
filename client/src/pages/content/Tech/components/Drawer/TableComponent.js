@@ -44,22 +44,54 @@ export default class TableComponent extends PureComponent {
     }
 
     render() {
-        const { techTargetTimeStamp: date, technology, fact, onGetData } = this.props
-        const { minDiameter, maxDiameter, inconstancy, dimension, pressure, speed } = technology
+        const { data, onGetData } = this.props
+        const {
+            minDiameter,
+            maxDiameter,
+            inconstancy,
+            dimension,
+            pressure,
+            speed,
+            factDiameter,
+            factInconstancy,
+            factDimension,
+            factPressure,
+            factSpeed
+        } = data
 
-        const { factDiameter } = fact
-
-        let differenceDiameter = +(factDiameter >= maxDiameter
+        // Диаметр
+        const differenceDiameter = +(factDiameter >= maxDiameter
             ? factDiameter - maxDiameter
             : factDiameter <= minDiameter
             ? factDiameter - minDiameter
             : 0
         ).toFixed(3)
-
+        /*
         const diff = maxDiameter - minDiameter
         const percentDiameter = differenceDiameter / diff
+        */
+        // Непостоянство
+        const differenceInconstancy = factInconstancy ? factInconstancy - inconstancy : 0
+        // Разноразмерность
+        const differenceDimension = factDimension ? factDimension - dimension : 0
+        // Давление
+        const differencePressure = factPressure ? factPressure - pressure : 0
+        // Скорость
+        const differenceSpeed = factSpeed ? factSpeed - speed : 0
 
-        onGetData({ percentDiameter, diff })
+        onGetData({
+            // Диаметр
+            //diff,
+            differenceDiameter,
+            // Непостоянство
+            differenceInconstancy,
+            // Разноразмерность
+            differenceDimension,
+            // Давление
+            differencePressure,
+            // Скорость
+            differenceSpeed
+        })
 
         const dataSource = [
             {
@@ -75,28 +107,28 @@ export default class TableComponent extends PureComponent {
                 title: 'Непостоянство единичного диаметра, мкм',
                 min: null,
                 max: inconstancy,
-                fact: null
+                fact: factInconstancy
             },
             {
                 key: '3',
                 title: 'Разноразмерность по диаметру, мкм',
                 min: null,
                 max: dimension,
-                fact: null
+                fact: factDimension
             },
             {
                 key: '4',
                 title: 'Давление, атм',
                 min: null,
                 max: pressure,
-                fact: null
+                fact: factPressure
             },
             {
                 key: '3',
                 title: 'Скорость, об/мин',
                 min: null,
                 max: speed,
-                fact: null
+                fact: factSpeed
             }
         ]
 

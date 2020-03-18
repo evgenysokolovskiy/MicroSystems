@@ -17,7 +17,15 @@ const CustomizedAxisTick = props => {
 
     return (
         <g transform={`translate(${x}, ${y})`}>
-            <text x={0} y={0} dy={16} textAnchor="end" fill="#000" transform="rotate(-35)" fontSize={12}>
+            <text
+                x={0}
+                y={0}
+                dy={16}
+                textAnchor="end"
+                fill="#000"
+                transform="rotate(-35)"
+                fontSize={12}
+            >
                 {payload.value}
             </text>
         </g>
@@ -36,66 +44,63 @@ export default class App extends PureComponent {
         }
     }
 
-    // При клике данные из стейта
+    // Событие выбора временной отметки (при клике данные из стейта)
     handleClick = () => {
         const { date } = this.state
         this.props.handleClickTimeStamp(date)
     }
 
+    // Событие по типу подшипника
     handleChangeType = e => {
         this.props.handleClickChangeTechType(e)
     }
 
+    // Событие по карте
     handleChangeCards = e => {
         this.props.handleClickChangeTechCards(e)
     }
 
     render() {
         const {
-            types,
-            cardNumbers,
-            techCardNumber,
-            data,
-            techType,
-            technology,
-            fact,
-            techTargetMenu,
-            techTargetTimeStamp: date,
-            dataDiameter, 
-            dataInconstancyDimension, 
-            dataPressureSpeed,
+            types, // Все типы
+            cards, // Все номера карт
+            menu, // Текущая процедура
+            card, // Текущая карта
+            target: date, // Текущая временная отметка
+            data, // Данные для построения графиков
             handleClickMenu
         } = this.props
 
+        const { diameter, inconstancyDimension, pressureSpeed } = data
 
-        const disabledCards = cardNumbers && cardNumbers['notBatchLoadingTime'].map(card => (
-            <TabPane tab={card} key={card} disabled />
-        ))
+        // Активные карты
+        const visibleCards =
+            cards && cards['hasBatchLoadingTime'].map(card => <TabPane tab={card} key={card} />)
 
-        const visibleCards = cardNumbers && cardNumbers['hasBatchLoadingTime'].map(card => (
-            <TabPane tab={card} key={card} />
-        ))
+        // Неактивные карты
+        const disabledCards =
+            cards &&
+            cards['notBatchLoadingTime'].map(card => <TabPane tab={card} key={card} disabled />)
 
-        const cards = [...visibleCards, ...disabledCards]
+        // Все карты
+        const convertedCards = [...visibleCards, ...disabledCards]
 
-
-
-/*
-        const cards = cardNumbers && cardNumbers.map(card => (
-           <TabPane tab={card} key={card} />
-        ))
-*/
         // Контент на странице
-        const elements = techTargetMenu && (
+        const elements = menu && (
             <>
-              <Tabs defaultActiveKey={techCardNumber} type="card" size="small" onChange={this.handleChangeCards}>
-                {cards}
-              </Tabs>
+                <Tabs
+                    defaultActiveKey={card}
+                    type="card"
+                    size="small"
+                    onChange={this.handleChangeCards}
+                >
+                    {convertedCards}
+                </Tabs>
                 <Collapse defaultActiveKey={['diameter']}>
                     <Panel header="ДИАМЕТР, мм" key="diameter">
                         <DiameterComponent
                             date={date}
-                            dataDiameter={dataDiameter}
+                            diameter={diameter}
                             CustomizedAxisTick={CustomizedAxisTick}
                             handleClick={this.handleClick}
                             getData={this.getData}
@@ -108,7 +113,7 @@ export default class App extends PureComponent {
                     >
                         <InconstancyComponent
                             date={date}
-                            dataInconstancyDimension={dataInconstancyDimension}
+                            inconstancyDimension={inconstancyDimension}
                             CustomizedAxisTick={CustomizedAxisTick}
                             handleClick={this.handleClick}
                             getData={this.getData}
@@ -118,30 +123,32 @@ export default class App extends PureComponent {
                     <Panel header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин" key="pressureSpeed">
                         <PressureComponent
                             date={date}
-                            dataPressureSpeed={dataPressureSpeed}
+                            pressureSpeed={pressureSpeed}
                             CustomizedAxisTick={CustomizedAxisTick}
                         />
                     </Panel>
                 </Collapse>
             </>
         )
-        // Каждому Tab соответствует свой контент
-        // Структура контента идентична. Различие во входящих данных
-        const tabs = types && types.map(tab => (
-            <TabPane tab={tab} key={tab}>
-                {elements}
-            </TabPane>
-        ))
+
+        const tabs =
+            types &&
+            types.map(tab => (
+                <TabPane tab={tab} key={tab}>
+                    {elements}
+                </TabPane>
+            ))
 
         return (
             <Content>
-                <Layout
-                    style={{ background: '#fff' }}
-                    className="ant-layout-has-sider"
-                >
+                <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
-                          <Tabs defaultActiveKey={'9.525'} type="card" onChange={this.handleChangeType}>
+                        <Tabs
+                            defaultActiveKey={'9.525'}
+                            type="card"
+                            onChange={this.handleChangeType}
+                        >
                             {tabs}
                         </Tabs>
                     </Content>

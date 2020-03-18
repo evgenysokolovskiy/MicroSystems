@@ -3,7 +3,13 @@
 const technology = require('../../../../technology')
 
 module.exports = function() {
-    const { technologyDiameter, technologyInconstancy, technologyDimension, technologyPressure, technologySpeed } = technology
+    const {
+        technologyDiameter,
+        technologyInconstancy,
+        technologyDimension,
+        technologyPressure,
+        technologySpeed
+    } = technology
     const { LEN } = technologyDiameter
 
     // Рассчитать промежуточные точки
@@ -16,7 +22,7 @@ module.exports = function() {
     let dataPressureSpeed = []
     for (let i = 0; i < LEN; i++) {
         dataInconstancyDimension = [
-            ...dataInconstancyDimension, 
+            ...dataInconstancyDimension,
             {
                 inconstancy: dataInconstancy[i],
                 dimension: dataDimension[i]
@@ -24,7 +30,7 @@ module.exports = function() {
         ]
 
         dataPressureSpeed = [
-            ...dataPressureSpeed, 
+            ...dataPressureSpeed,
             {
                 pressure: technologyPressure[i],
                 speed: technologySpeed[i]
@@ -32,15 +38,15 @@ module.exports = function() {
         ]
     }
 
-    return { 
-        LEN, 
-        dataInconstancyDimension, 
-        dataPressureSpeed, 
-        dataDiameter, 
-        dataInconstancy, 
-        dataDimension, 
-        technologyPressure, 
-        technologySpeed 
+    return {
+        LEN,
+        dataInconstancyDimension,
+        dataPressureSpeed,
+        dataDiameter,
+        dataInconstancy,
+        dataDimension,
+        technologyPressure,
+        technologySpeed
     }
 }
 
@@ -61,7 +67,7 @@ function calculateIntermediatePointsTechnology(data) {
 // Рассчитать промежуточные точки для Диаметра
 function calculateIntermediatePointsTechnologyDiameter(data) {
     const { START, END, LEN } = data
-    let max = START[0] 
+    let max = START[0]
     let min = START[1]
     // 1) Расчитать данные технологии на основании начальной, конечной точек и длины графика
     let dataDiameter = [{ norm: [max, min] }]

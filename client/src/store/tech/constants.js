@@ -61,6 +61,15 @@ export const _TECH_TARGET_TIME_STAMP = {
     }
 }
 
+export const _TECH_TARGET_TIME_STAMP_DATA = {
+    types: {
+        TECH_TARGET_TIME_STAMP_DATA: 'TECH_TARGET_TIME_STAMP_DATA'
+    },
+    init: {
+        techTargetTimeStampData: null
+    }
+}
+
 export const _TECH_DRAWER_VISIBLE = {
     types: {
         TECH_DRAWER_VISIBLE: 'TECH_DRAWER_VISIBLE'
