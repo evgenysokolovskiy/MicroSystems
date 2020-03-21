@@ -1,16 +1,16 @@
 // Экшены
 import { changeTechJoinTechnologyFact } from '../../store/tech/actions/techJoinTechnologyFactAction'
 // URL
-import { technology, shpFact } from '../urls/data'
+import { technology, fact } from '../urls/data'
 
 // Получить с сервера данные из таблицы Excel
 // Записать в стор
 export function fetchJoinTechnologyFactMiddleware() {
-    async function getData(technology, shpFact) {
+    async function getData(technology, fact) {
         let res1 = await fetch(technology)
-        let res2 = await fetch(shpFact)
+        let res2 = await fetch(fact)
         const tech = await res1.json()
-        const fact = await res2.json()
+        const f = await res2.json()
 
         // Создать новый объект, включающий технологию и факт
 
@@ -34,7 +34,7 @@ export function fetchJoinTechnologyFactMiddleware() {
         // Добавить факт
         Object.entries(obj).forEach(item => {
             Object.entries(item[1]).forEach(type => {
-                const factItem = fact[item[0]][type[0]]
+                const factItem = f[item[0]][type[0]]
                 if (factItem) item[1][type[0]]['fact'] = factItem
             })
         })
@@ -54,7 +54,7 @@ export function fetchJoinTechnologyFactMiddleware() {
     }
 
     return dispatch => {
-        getData(technology, shpFact).then(data => {
+        getData(technology, fact).then(data => {
             dispatch(changeTechJoinTechnologyFact({ ...data }))
         })
     }

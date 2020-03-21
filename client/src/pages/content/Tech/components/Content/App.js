@@ -73,6 +73,10 @@ export default class App extends PureComponent {
 
         const { diameter, inconstancyDimension, pressureSpeed } = data
 
+
+
+
+
         // Активные карты
         const visibleCards =
             cards && cards['hasBatchLoadingTime'].map(card => <TabPane tab={card} key={card} />)
@@ -89,7 +93,7 @@ export default class App extends PureComponent {
         const elements = menu && (
             <>
                 <Tabs
-                    defaultActiveKey={card}
+                    defaultActiveKey='Сводная'
                     type="card"
                     size="small"
                     onChange={this.handleChangeCards}
@@ -100,7 +104,9 @@ export default class App extends PureComponent {
                     <Panel header="ДИАМЕТР, мм" key="diameter">
                         <DiameterComponent
                             date={date}
+                            card={card}
                             diameter={diameter}
+                            len={visibleCards.length}
                             CustomizedAxisTick={CustomizedAxisTick}
                             handleClick={this.handleClick}
                             getData={this.getData}

@@ -2,9 +2,9 @@
 
 module.exports = function({ app, fact }) {
     if (fact) {
-        app.get('/api/shpFact', function(req, res) {
+        app.get('/api/fact', function(req, res) {
             res.json(fact)
-            console.log('Данные отправлены на /api/shpFact')
+            console.log('Данные отправлены на /api/fact')
         })
     }
 }

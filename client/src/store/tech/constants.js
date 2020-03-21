@@ -48,7 +48,7 @@ export const _CARD_NUMBER = {
         CARD_NUMBER: 'CARD_NUMBER'
     },
     init: {
-        techCardNumber: null
+        techCardNumber: 'Сводная'
     }
 }
 

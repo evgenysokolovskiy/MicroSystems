@@ -1,5 +1,8 @@
+import clonedeep from 'lodash.clonedeep'
+
 // Определить номера карт для выбранного типа подшипника
-export function getCards(fact) {
+export function getCards({ fact: f }) {
+    const fact = clonedeep(f)
     // Карты, для которых из фактических данных определено время загрузки
     const hasBatchLoadingTime = {}
     Object.entries(fact).forEach(item => {
@@ -8,6 +11,7 @@ export function getCards(fact) {
             if (batchLoadingTime) hasBatchLoadingTime[item[0]] = batchLoadingTime
         })
     })
+
     // Карты, для которых из фактических данных не определено время загрузки
     const notBatchLoadingTime = Object.keys(fact).filter(item => {
         const abc = Object.keys(hasBatchLoadingTime).some(val => val === item)
@@ -15,21 +19,25 @@ export function getCards(fact) {
     })
 
     return {
-        hasBatchLoadingTime: Object.keys(hasBatchLoadingTime),
+        hasBatchLoadingTime: ['Сводная', ...Object.keys(hasBatchLoadingTime)],
         notBatchLoadingTime
     }
 }
 
-// Исходные данные преобразовать в данные, подходящие для построения графиков
-export function getData(
-    fact,
-    card,
-    pointsDiameter,
-    pointsInconstancy,
-    pointsDimension,
-    pointsPressure,
-    pointsSpeed
-) {
+// Совместить технологию с фактом
+export function getData({ technology: t, fact: f, card }) {
+    if (card === 'Сводная') return
+    const technology = clonedeep(t)
+    const fact = clonedeep(f)
+
+    const {
+        pointsDiameter,
+        pointsInconstancy,
+        pointsDimension,
+        pointsPressure,
+        pointsSpeed
+    } = technology
+
     // 1) Получить дату факта: конкатенировать дату и время как строку --------------------------------------
     // Конвертировать конкатенированную дату в миллисекунды
     // Записать свойство convertFactJointDate['jointDate'], которое будет отображать дату фактического действия в миллисекундах
@@ -59,7 +67,7 @@ export function getData(
 
     // 4) Определить временные отметки от начальной отметки start до конечной на расстоянии длины len -------
 
-    // Интервал между отмеками составляет заданный интервал int в миллисекундах
+    // Интервал между отметками составляет заданный интервал int в миллисекундах
     let arr = [start]
     // 1800000 - полчаса
     // 3600000 - час
@@ -69,7 +77,7 @@ export function getData(
         arr = [...arr, start]
     }
 
-    // 5) Получить новый массивы, дополненные date в миллисекундах ------------------------------------------
+    // 5) Получить новые массивы, дополненные date в миллисекундах ------------------------------------------
     // Диаметр
     const pointsDiameterDate = [...pointsDiameter].map((item, i) => {
         item['date'] = arr[i]
@@ -232,6 +240,7 @@ function convertStringToDateBatchLoadingTime(str) {
 
 // Получить данные по отметке времени
 export function getTargetData(data, target) {
+    if (!data) return
     const { diameter, inconstancyDimension, pressureSpeed } = data
 
     // Получить данные (в момент времени 'target')

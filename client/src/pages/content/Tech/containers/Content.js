@@ -12,16 +12,19 @@ import { changeCardNumber } from '../../../../store/tech/actions/techCardNumberA
 import { getCards, getData, getTargetData } from '../helpers/'
 
 export class Content extends PureComponent {
-    componentDidMount() {
-        const { techJoinTechnologyFact, techTargetMenu, techType, changeCardNumber } = this.props
 
-        if (techJoinTechnologyFact && techTargetMenu && techType) {
+    /*
+    componentDidMount() {
+        const { techJoinTechnologyFact: joinData, techTargetMenu: menu, techType: type, changeCardNumber } = this.props
+
+        if (joinData && menu && type) {
             // Присвоить techCardNumber номер первой карты для выбранного типа
             changeCardNumber(
-                [...Object.keys(techJoinTechnologyFact[techTargetMenu][techType]['fact'])][0]
+                [...Object.keys(joinData[menu][type]['fact'])][0]
             )
         }
     }
+    */
 
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
@@ -32,9 +35,12 @@ export class Content extends PureComponent {
     handleClickChangeTechType = e => {
         // Изменить тип подшипника
         this.props.changeType(+e)
+        this.props.changeCardNumber('Сводная')
         // При смене типа подшипника присвоить techCardNumber номер первой карты для выбранного типа
-        const { techJoinTechnologyFact, techTargetMenu, changeCardNumber } = this.props
-        changeCardNumber([...Object.keys(techJoinTechnologyFact[techTargetMenu][+e]['fact'])][0])
+        /*
+        const { techJoinTechnologyFact: joinData, techTargetMenu: menu, changeCardNumber } = this.props
+        changeCardNumber([...Object.keys(joinData[menu][+e]['fact'])][0])
+        */
     }
 
     // Событие по карте
@@ -54,50 +60,126 @@ export class Content extends PureComponent {
             techTargetMenu: menu, // Меню (процедура)
             techType: type, // Тип подшипника
             techCardNumber: card, // Номер карты
-            techJoinTechnologyFact: joinData, // Данные технология и факт
+            techJoinTechnologyFact, // Данные технология и факт
             techTargetTimeStamp: target // Момент времени
         } = this.props
 
         // Искомые данные
         let types, // Все типы подшипника
             cards = {}, // Все номера карт
-            data = {} // Данные для построения графиков
+            data = {}, // Данные для построения графиков,
+            diameterTotal = [],
+            inconstancyDimensionTotal = [],
+            pressureSpeedTotal = []
 
-        // Произвести глубокое клонирование объекта
         // Технология - это расчитанные данные, в рамки которого должен укладываться факт
         // Технология имеет свою длину и определенное положение каждой точки в рамкаках этой длины
         // Факт - фактические данные
-        const techJoinTechnologyFact = clonedeep(joinData)
+        const joinData = clonedeep(techJoinTechnologyFact)
 
-        if (techJoinTechnologyFact) {
+        if (joinData && menu && type) {
             // Отсекаем технологию и факт в соответствии с выбором меню (процедура) и типом подшипника
             // Технология
-            const technology = techJoinTechnologyFact[menu][type]['technology']
+            const technology = joinData[menu][type]['technology']
             // Факт
-            const fact = techJoinTechnologyFact[menu][type]['fact']
-            // Технология для разных графиков
-            const {
-                pointsDiameter, // Технология для diameter
-                pointsInconstancy, // Технология для inconstancy
-                pointsDimension, // Технология для dimension
-                pointsPressure, // Технология по pressure
-                pointsSpeed // Технология по speed
-            } = technology
+            const fact = joinData[menu][type]['fact']
             // Типы подшипника, определённые в технологии (для вывода в меню типов)
-            types = Object.keys(techJoinTechnologyFact[menu]).filter(item => +item)
+            types = Object.keys(joinData[menu]).filter(item => +item)
             // Номера карт для выбранного типа
-            cards = getCards(fact)
-            // Данные для построения графиков
-            data = getData(
-                fact,
-                card,
-                pointsDiameter,
-                pointsInconstancy,
-                pointsDimension,
-                pointsPressure,
-                pointsSpeed
-            )
+            cards = getCards({ fact })
 
+
+
+
+
+
+
+diameterTotal = technology['pointsDiameter']
+
+for (let i = 0, date = 0; i < diameterTotal.length; i++, date = date + .5) {
+    diameterTotal[i]['date'] = date
+}
+
+for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + .5) {
+    const item = { 
+        inconstancy: technology['pointsInconstancy'][i],
+        dimension: technology['pointsDimension'][i],
+        date
+    }
+    inconstancyDimensionTotal[i] = item
+}
+
+for (let i = 0, date = 0; i < technology['pointsPressure'].length; i++, date = date + .5) {
+    const item = { 
+        pressure: technology['pointsPressure'][i],
+        speed: technology['pointsSpeed'][i],
+        date
+    }
+    pressureSpeedTotal[i] = item
+}
+
+
+
+cards['hasBatchLoadingTime'].forEach((card, index) => {
+    if (card === 'Сводная') return
+    const data = clonedeep(getData({ technology, fact, card }))
+
+    for (let i = 0; i < diameterTotal.length; i++) {
+        if (data['diameter'][i]['fact']) {
+            diameterTotal[i][`fact${index}`] = data['diameter'][i]['fact']
+
+            if (data['diameter'][i]['falseFact']) {
+                diameterTotal[i][`falseFact${index}`] = data['diameter'][i]['falseFact']
+            }
+
+            if (data['diameter'][i]['trueFact']) {
+                diameterTotal[i][`trueFact${index}`] = data['diameter'][i]['trueFact']
+            }
+
+        }
+    }
+
+
+    for (let i = 0; i < inconstancyDimensionTotal.length; i++) {
+        if (data['inconstancyDimension'][i]['factInconstancy']) {
+            inconstancyDimensionTotal[i][`factInconstancy${index}`] = data['inconstancyDimension'][i]['factInconstancy']
+
+            if (data['inconstancyDimension'][i]['factInconstancyFalse']) {
+                inconstancyDimensionTotal[i][`factInconstancyFalse${index}`] = data['inconstancyDimension'][i]['factInconstancyFalse']
+            }
+
+            if (data['inconstancyDimension'][i]['factInconstancyTrue']) {
+                inconstancyDimensionTotal[i][`factInconstancyTrue${index}`] = data['inconstancyDimension'][i]['factInconstancyTrue']
+            }
+        }
+
+        if (data['inconstancyDimension'][i]['factDimension']) {
+            inconstancyDimensionTotal[i][`factDimension${index}`] = data['inconstancyDimension'][i]['factDimension']
+
+            if (data['inconstancyDimension'][i]['factDimensionFalse']) {
+                inconstancyDimensionTotal[i][`factDimensionFalse${index}`] = data['inconstancyDimension'][i]['factDimensionFalse']
+            }
+
+            if (data['inconstancyDimension'][i]['factDimensionTrue']) {
+                inconstancyDimensionTotal[i][`factDimensionTrue${index}`] = data['inconstancyDimension'][i]['factDimensionTrue']
+            }
+        }
+    } 
+
+})
+
+
+if (card !== 'Сводная') {
+    data = clonedeep(getData({ technology, fact, card }))
+} else {
+    data = {}
+    data['diameter'] = diameterTotal
+    data['inconstancyDimension'] = inconstancyDimensionTotal
+    data['pressureSpeed'] = pressureSpeedTotal
+}
+
+
+            // Данные по отметке времени
             const targetData = getTargetData(data, target)
             this.props.changeTechTargetTimeStampData(targetData)
         }
