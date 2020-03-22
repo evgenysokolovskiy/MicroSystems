@@ -13,7 +13,7 @@ import {
 
 export default class ChartComponent extends PureComponent {
     render() {
-        const { date, pressureSpeed, CustomizedAxisTick } = this.props
+        const { date, pressureSpeed, CustomizedAxisTick, card, len, nameTotalTab } = this.props
         // Для верного отображения столбцов из показателя скорости вычесть показатель давления
         const convertedDataPressureSpeed = pressureSpeed.map(item => {
             const diff = item['speed'] - item['pressure']

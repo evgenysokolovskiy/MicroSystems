@@ -68,14 +68,11 @@ export default class App extends PureComponent {
             card, // Текущая карта
             target: date, // Текущая временная отметка
             data, // Данные для построения графиков
+            nameTotalTab,
             handleClickMenu
         } = this.props
 
         const { diameter, inconstancyDimension, pressureSpeed } = data
-
-
-
-
 
         // Активные карты
         const visibleCards =
@@ -93,7 +90,7 @@ export default class App extends PureComponent {
         const elements = menu && (
             <>
                 <Tabs
-                    defaultActiveKey='Сводная'
+                    defaultActiveKey={nameTotalTab}
                     type="card"
                     size="small"
                     onChange={this.handleChangeCards}
@@ -107,6 +104,7 @@ export default class App extends PureComponent {
                             card={card}
                             diameter={diameter}
                             len={visibleCards.length}
+                            nameTotalTab={nameTotalTab}
                             CustomizedAxisTick={CustomizedAxisTick}
                             handleClick={this.handleClick}
                             getData={this.getData}
@@ -119,7 +117,10 @@ export default class App extends PureComponent {
                     >
                         <InconstancyComponent
                             date={date}
+                            card={card}
                             inconstancyDimension={inconstancyDimension}
+                            len={visibleCards.length}
+                            nameTotalTab={nameTotalTab}
                             CustomizedAxisTick={CustomizedAxisTick}
                             handleClick={this.handleClick}
                             getData={this.getData}
@@ -129,7 +130,10 @@ export default class App extends PureComponent {
                     <Panel header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин" key="pressureSpeed">
                         <PressureComponent
                             date={date}
+                            card={card}
                             pressureSpeed={pressureSpeed}
+                            len={visibleCards.length}
+                            nameTotalTab={nameTotalTab}
                             CustomizedAxisTick={CustomizedAxisTick}
                         />
                     </Panel>

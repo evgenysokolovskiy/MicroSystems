@@ -9,10 +9,11 @@ import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDraw
 import { changeTechTechnology } from '../../../../store/tech/actions/techTechnologyAction'
 import { changeType } from '../../../../store/tech/actions/techTypeAction'
 import { changeCardNumber } from '../../../../store/tech/actions/techCardNumberAction'
-import { getCards, getData, getTargetData } from '../helpers/'
+import { getCards } from '../helpers/getCards'
+import { calculateTargetData } from '../helpers/calculateTargetData'
+import { calculateDataOneCard, calculateDataFewCards } from '../helpers/calculateData'
 
 export class Content extends PureComponent {
-
     /*
     componentDidMount() {
         const { techJoinTechnologyFact: joinData, techTargetMenu: menu, techType: type, changeCardNumber } = this.props
@@ -25,6 +26,10 @@ export class Content extends PureComponent {
         }
     }
     */
+    constructor(props) {
+        super(props)
+        this.nameTotalTab = this.props.techCardNumber
+    }
 
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
@@ -35,7 +40,7 @@ export class Content extends PureComponent {
     handleClickChangeTechType = e => {
         // Изменить тип подшипника
         this.props.changeType(+e)
-        this.props.changeCardNumber('Сводная')
+        this.props.changeCardNumber(this.nameTotalTab)
         // При смене типа подшипника присвоить techCardNumber номер первой карты для выбранного типа
         /*
         const { techJoinTechnologyFact: joinData, techTargetMenu: menu, changeCardNumber } = this.props
@@ -67,10 +72,7 @@ export class Content extends PureComponent {
         // Искомые данные
         let types, // Все типы подшипника
             cards = {}, // Все номера карт
-            data = {}, // Данные для построения графиков,
-            diameterTotal = [],
-            inconstancyDimensionTotal = [],
-            pressureSpeedTotal = []
+            data = {} // Данные для построения графиков,
 
         // Технология - это расчитанные данные, в рамки которого должен укладываться факт
         // Технология имеет свою длину и определенное положение каждой точки в рамкаках этой длины
@@ -87,100 +89,12 @@ export class Content extends PureComponent {
             types = Object.keys(joinData[menu]).filter(item => +item)
             // Номера карт для выбранного типа
             cards = getCards({ fact })
-
-
-
-
-
-
-
-diameterTotal = technology['pointsDiameter']
-
-for (let i = 0, date = 0; i < diameterTotal.length; i++, date = date + .5) {
-    diameterTotal[i]['date'] = date
-}
-
-for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + .5) {
-    const item = { 
-        inconstancy: technology['pointsInconstancy'][i],
-        dimension: technology['pointsDimension'][i],
-        date
-    }
-    inconstancyDimensionTotal[i] = item
-}
-
-for (let i = 0, date = 0; i < technology['pointsPressure'].length; i++, date = date + .5) {
-    const item = { 
-        pressure: technology['pointsPressure'][i],
-        speed: technology['pointsSpeed'][i],
-        date
-    }
-    pressureSpeedTotal[i] = item
-}
-
-
-
-cards['hasBatchLoadingTime'].forEach((card, index) => {
-    if (card === 'Сводная') return
-    const data = clonedeep(getData({ technology, fact, card }))
-
-    for (let i = 0; i < diameterTotal.length; i++) {
-        if (data['diameter'][i]['fact']) {
-            diameterTotal[i][`fact${index}`] = data['diameter'][i]['fact']
-
-            if (data['diameter'][i]['falseFact']) {
-                diameterTotal[i][`falseFact${index}`] = data['diameter'][i]['falseFact']
-            }
-
-            if (data['diameter'][i]['trueFact']) {
-                diameterTotal[i][`trueFact${index}`] = data['diameter'][i]['trueFact']
-            }
-
-        }
-    }
-
-
-    for (let i = 0; i < inconstancyDimensionTotal.length; i++) {
-        if (data['inconstancyDimension'][i]['factInconstancy']) {
-            inconstancyDimensionTotal[i][`factInconstancy${index}`] = data['inconstancyDimension'][i]['factInconstancy']
-
-            if (data['inconstancyDimension'][i]['factInconstancyFalse']) {
-                inconstancyDimensionTotal[i][`factInconstancyFalse${index}`] = data['inconstancyDimension'][i]['factInconstancyFalse']
-            }
-
-            if (data['inconstancyDimension'][i]['factInconstancyTrue']) {
-                inconstancyDimensionTotal[i][`factInconstancyTrue${index}`] = data['inconstancyDimension'][i]['factInconstancyTrue']
-            }
-        }
-
-        if (data['inconstancyDimension'][i]['factDimension']) {
-            inconstancyDimensionTotal[i][`factDimension${index}`] = data['inconstancyDimension'][i]['factDimension']
-
-            if (data['inconstancyDimension'][i]['factDimensionFalse']) {
-                inconstancyDimensionTotal[i][`factDimensionFalse${index}`] = data['inconstancyDimension'][i]['factDimensionFalse']
-            }
-
-            if (data['inconstancyDimension'][i]['factDimensionTrue']) {
-                inconstancyDimensionTotal[i][`factDimensionTrue${index}`] = data['inconstancyDimension'][i]['factDimensionTrue']
-            }
-        }
-    } 
-
-})
-
-
-if (card !== 'Сводная') {
-    data = clonedeep(getData({ technology, fact, card }))
-} else {
-    data = {}
-    data['diameter'] = diameterTotal
-    data['inconstancyDimension'] = inconstancyDimensionTotal
-    data['pressureSpeed'] = pressureSpeedTotal
-}
-
-
+            // Совместить технологию с фактом
+            card == this.nameTotalTab
+                ? (data = clonedeep(calculateDataFewCards({ technology, fact, card, cards })))
+                : (data = clonedeep(calculateDataOneCard({ technology, fact, card })))
             // Данные по отметке времени
-            const targetData = getTargetData(data, target)
+            const targetData = calculateTargetData(data, target)
             this.props.changeTechTargetTimeStampData(targetData)
         }
 
@@ -192,6 +106,7 @@ if (card !== 'Сводная') {
                 card={card}
                 target={target}
                 data={data}
+                nameTotalTab={this.nameTotalTab}
                 handleClickMenu={this.handleClickMenu}
                 handleClickTimeStamp={this.handleClickTimeStamp}
                 handleClickChangeTechType={this.handleClickChangeTechType}
