@@ -33,7 +33,7 @@ export default class ChartComponent extends PureComponent {
                         bottom: 40
                     }}
                 >
-                    <CartesianGrid stroke="#000" strokeWidth={0.5} />
+                    {/*<CartesianGrid stroke="#000" strokeWidth={0.5} />*/}
                     <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
                     <YAxis
                         type="number"

@@ -42,14 +42,16 @@ export function calculateDataFewCards({ technology, fact, card, cards }) {
 
         for (let i = 0; i < diameter.length; i++) {
             if (data['diameter'][i]['fact']) {
-                diameter[i][`fact${index}`] = data['diameter'][i]['fact']
+                diameter[i][`fact${index}`] = replaceToDot(data['diameter'][i]['fact'])
 
                 if (data['diameter'][i]['falseFact']) {
-                    diameter[i][`falseFact${index}`] = data['diameter'][i]['falseFact']
+                    diameter[i][`falseFact${index}`] = replaceToDot(
+                        data['diameter'][i]['falseFact']
+                    )
                 }
 
                 if (data['diameter'][i]['trueFact']) {
-                    diameter[i][`trueFact${index}`] = data['diameter'][i]['trueFact']
+                    diameter[i][`trueFact${index}`] = replaceToDot(data['diameter'][i]['trueFact'])
                 }
             }
         }
@@ -190,9 +192,9 @@ export function calculateDataOneCard({ technology: t, fact: f, card }) {
         convertFactJointDate &&
             [...convertFactJointDate].forEach(fact => {
                 if (technology['date'] === fact['jointDate']) {
-                    const factDiameter = fact['diameter']
+                    const factDiameter = replaceToDot(fact['diameter'])
                     // 'fact' необходим для построения линейного графика, соединяющего точки
-                    technology['fact'] = factDiameter
+                    technology['fact'] = +factDiameter
                     // 'trueFact' и 'falseFact' необходимы для построения точек
                     factDiameter > technology['norm'][0] && factDiameter < technology['norm'][1]
                         ? (technology['trueFact'] = factDiameter)
@@ -258,4 +260,9 @@ export function calculateDataOneCard({ technology: t, fact: f, card }) {
         inconstancyDimension,
         pressureSpeed
     }
+}
+
+function replaceToDot(str) {
+    const newStr = typeof str === 'string' ? str.replace(',', '.') : str
+    return +newStr
 }

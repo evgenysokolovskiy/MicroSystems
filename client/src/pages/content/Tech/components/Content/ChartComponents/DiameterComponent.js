@@ -128,7 +128,7 @@ export default class DiameterComponent extends PureComponent {
                         fill="#000"
                         fontSize={12}
                     />
-                    <CartesianGrid stroke="#000" strokeWidth={0.5} />
+                    {/*<CartesianGrid stroke="#000" strokeWidth={0.5} />*/}
                     <Tooltip content={getData} />
                     <ReferenceLine x={date} stroke="rgba(230,200,215,0.2)" strokeWidth={60} />
                     <ReferenceLine x={date} stroke="red" />
