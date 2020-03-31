@@ -41,9 +41,7 @@ require('./server/tasks/parse/main/')({
 })
 require('./server/tasks/parse/check/')({ app, parsePathCheck, buildPath })
 require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
-require('./server/tasks/parse/shp/fact')({ app, parseShpFact })
-require('./server/tasks/parse/shp/technology')({ app, parseShpTechnology })
-require('./server/api/technologyAPI')({ app })
+require('./server/tasks/parse/shp/joinTechnologyFact')({ app, parseShpTechnology, parseShpFact })
 //require('./server/tasks/parse/detail/')({ app, parsePathDetail, buildPathDetail })
 
 /*

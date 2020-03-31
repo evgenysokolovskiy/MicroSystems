@@ -3,11 +3,10 @@ import { Drawer, Icon, Typography } from 'antd'
 
 const TableComponent = lazy(() => import('./TableComponent'))
 const StatisticComponent = lazy(() => import('./StatisticComponent'))
-const { Title, Text } = Typography
+const { Title } = Typography
 
 export default class App extends PureComponent {
     state = {
-        diff: null,
         differenceDiameter: null,
         differenceInconstancy: null,
         differenceDimension: null,
@@ -16,7 +15,6 @@ export default class App extends PureComponent {
     }
     onGetData = data => {
         const {
-            diff,
             differenceDiameter,
             differenceInconstancy,
             differenceDimension,
@@ -25,7 +23,6 @@ export default class App extends PureComponent {
         } = data
 
         this.setState({
-            diff,
             differenceDiameter,
             differenceInconstancy,
             differenceDimension,
@@ -43,7 +40,6 @@ export default class App extends PureComponent {
         } = this.props
 
         const {
-            diff,
             differenceDiameter,
             differenceInconstancy,
             differenceDimension,

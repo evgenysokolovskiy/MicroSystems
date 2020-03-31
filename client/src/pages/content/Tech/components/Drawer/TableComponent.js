@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react'
-import { Table, Pagination, InputNumber } from 'antd'
+import { Table } from 'antd'
 
 const columns = [
     {
         title: 'ТЕХНОЛОГИЯ',
         dataIndex: 'technology',
+        key: 'technology',
         children: [
             {
                 title: 'График',
@@ -22,11 +23,13 @@ const columns = [
     },
     {
         title: 'ФАКТ',
-        dataIndex: 'fact'
+        dataIndex: 'fact',
+        key: 'fact'
     },
     {
         title: 'РАСХОЖДЕНИЕ',
         dataIndex: 'difference',
+        key: 'difference',
         render(text) {
             return {
                 props: {
@@ -124,7 +127,7 @@ export default class TableComponent extends PureComponent {
                 fact: factPressure
             },
             {
-                key: '3',
+                key: '5',
                 title: 'Скорость, об/мин',
                 min: null,
                 max: speed,

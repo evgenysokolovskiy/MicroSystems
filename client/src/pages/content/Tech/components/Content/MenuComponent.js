@@ -1,9 +1,12 @@
 import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, Icon, Typography } from 'antd'
+import { Menu, Icon } from 'antd'
+import {
+    TableOutlined,
+    LineChartOutlined
+} from '@ant-design/icons'
 
 const { SubMenu } = Menu
-const { Title } = Typography
 
 export default class MenuComponent extends PureComponent {
     state = {
@@ -18,18 +21,25 @@ export default class MenuComponent extends PureComponent {
         return (
             <div>
                 <Menu
-                    defaultOpenKeys={['control']}
-                    defaultSelectedKeys="running"
+                    //defaultOpenKeys={['graph']}
+                    //defaultSelectedKeys="running"
                     mode="inline"
                     theme="light"
                     inlineCollapsed={this.state.collapsed}
                     onClick={this.handleClick}
                 >
+
+                    <Menu.Item key="table">
+                        <Link to="/tech/table">
+                            <TableOutlined /> Отчёт
+                        </Link>
+                    </Menu.Item>
+
                     <SubMenu
-                        key="control"
+                        key="graph"
                         title={
                             <span>
-                                <Icon type="solution" />
+                                <LineChartOutlined /> Графика
                             </span>
                         }
                     >

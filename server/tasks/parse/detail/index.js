@@ -71,6 +71,7 @@ module.exports = function({ app, parsePathDetail, buildPathDetail }) {
                         factItem[1].forEach(inn => {
                             data.forEach(item => {
                                 if (inn == item[6]) {
+                                    if (item[4] == 61) console.log(item)
                                     const date = convertStringToDate(item[2])
                                     const obj = {
                                         start: date,

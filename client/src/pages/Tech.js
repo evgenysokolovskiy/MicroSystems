@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { lazy } from 'react'
 import { Link } from 'react-router-dom'
 // Antd
 import { Layout, Icon } from 'antd'

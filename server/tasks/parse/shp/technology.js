@@ -12,9 +12,8 @@ const {
     INDEXES_FINAL
 } = INDEXES
 const convertTechnology = require('../../shp/convertTechnology/conv')
-const technologyAPI = require('../../../api/technologyAPI')
 
-module.exports = function({ app, parseShpTechnology }) {
+module.exports = function({ app, parseShpTechnology, parseShpFact, fact }) {
     fs.readdir(parseShpTechnology, function(err, files) {
         const paths = files.map(item => `${parseShpTechnology}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -40,11 +39,13 @@ module.exports = function({ app, parseShpTechnology }) {
                 }
 
                 if (technology) {
+                    const convertedTechnology = convertTechnology({ technology })
                     resolve(
                         (() => {
-                            technologyAPI({
+                            fact({
                                 app,
-                                technology: (() => convertTechnology({ technology }))()
+                                parseShpFact,
+                                technology: convertedTechnology
                             })
                         })()
                     )

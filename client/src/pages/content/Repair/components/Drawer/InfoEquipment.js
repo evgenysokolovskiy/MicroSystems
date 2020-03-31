@@ -6,7 +6,6 @@ import {
     ResponsiveContainer,
     BarChart,
     Bar,
-    Cell,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -82,17 +81,7 @@ const statisticPlan = [
 
 export default function(props) {
     const { data, period, visible } = props
-    const {
-        model,
-        inn,
-        num,
-        mtbf,
-        sumAmount,
-        sumTime,
-        typeOfRepair,
-        mechanicRepairComplexity,
-        electricRepairComplexity
-    } = data
+    const { model, inn, num, mtbf, sumAmount, sumTime, typeOfRepair } = data
 
     const plan = [
         {

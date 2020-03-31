@@ -1,5 +1,3 @@
-import clonedeep from 'lodash.clonedeep'
-
 // Получить данные по отметке времени
 export function calculateTargetData(data, target) {
     if (!data) return

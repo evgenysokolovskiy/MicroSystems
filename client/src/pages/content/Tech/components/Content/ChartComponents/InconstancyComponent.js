@@ -1,14 +1,12 @@
 import React, { PureComponent } from 'react'
-import { Table, Collapse } from 'antd'
 import {
     ResponsiveContainer,
     ComposedChart,
-    LineChart,
     Line,
     Scatter,
     XAxis,
     YAxis,
-    CartesianGrid,
+    //CartesianGrid,
     Tooltip,
     Legend,
     ReferenceLine,
@@ -41,18 +39,22 @@ export default class InconstancyComponent extends PureComponent {
             <Line
                 type="monotone"
                 dataKey="inconstancy"
+                key="inconstancy"
                 stroke="#8884d8"
                 strokeWidth={2}
                 name="Непостоянство"
+                isAnimationActive={false}
             >
                 {/*<LabelList dataKey="inconstancy" position="top" />*/}
             </Line>,
             <Line
                 type="monotone"
                 dataKey="dimension"
+                key="dimension"
                 stroke="#82ca9d"
                 strokeWidth={2}
                 name="Разноразмерность"
+                isAnimationActive={false}
             >
                 {/*<LabelList dataKey="dimension" position="top" />*/}
             </Line>
@@ -63,6 +65,7 @@ export default class InconstancyComponent extends PureComponent {
             <Line
                 type="linear"
                 dataKey="factInconstancy"
+                key="factInconstancy"
                 legendType="none"
                 stroke="lightcoral"
                 strokeWidth={2}
@@ -70,45 +73,55 @@ export default class InconstancyComponent extends PureComponent {
             />,
             <Scatter
                 dataKey="factInconstancyTrue"
+                key="factInconstancyTrue"
                 name="Факт (норма)"
                 stroke="#8884d8"
                 strokeWidth={2}
                 fill="lightgreen"
+                isAnimationActive={false}
             >
                 <LabelList dataKey="factInconstancyTrue" position="top" />
             </Scatter>,
             <Scatter
                 dataKey="factInconstancyFalse"
+                key="factInconstancyFalse"
                 name="Факт (не норма)"
                 stroke="#8884d8"
                 strokeWidth={2}
                 fill="lightcoral"
+                isAnimationActive={false}
             >
                 <LabelList dataKey="factInconstancyFalse" position="top" />
             </Scatter>,
             <Line
                 type="linear"
                 dataKey="factDimension"
+                key="factDimension"
                 legendType="none"
                 stroke="lightcoral"
                 strokeWidth={2}
                 connectNulls={true}
+                isAnimationActive={false}
             />,
             <Scatter
                 dataKey="factDimensionTrue"
+                key="factDimensionTrue"
                 legendType="none"
                 stroke="#82ca9d"
                 strokeWidth={2}
                 fill="lightgreen"
+                isAnimationActive={false}
             >
                 <LabelList dataKey="factDimensionTrue" position="top" />
             </Scatter>,
             <Scatter
                 dataKey="factDimensionFalse"
+                key="factDimensionFalse"
                 legendType="none"
                 stroke="#82ca9d"
                 strokeWidth={2}
                 fill="lightcoral"
+                isAnimationActive={false}
             >
                 <LabelList dataKey="factDimensionFalse" position="top" />
             </Scatter>
@@ -120,19 +133,23 @@ export default class InconstancyComponent extends PureComponent {
                 <Line
                     type="linear"
                     dataKey={`factInconstancy${i}`}
+                    key={`factInconstancy${i}`}
                     legendType="none"
                     stroke="lightcoral"
                     strokeWidth={2}
                     connectNulls={true}
+                    isAnimationActive={false}
                 />
             )
             const scatterInconstancyTrue = (
                 <Scatter
                     dataKey={`factInconstancyTrue${i}`}
+                    key={`factInconstancyTrue${i}`}
                     legendType="none"
                     stroke="#8884d8"
                     strokeWidth={2}
                     fill="lightgreen"
+                    isAnimationActive={false}
                 >
                     <LabelList dataKey={`factInconstancyTrue${i}`} position="bottom" />
                 </Scatter>
@@ -140,10 +157,12 @@ export default class InconstancyComponent extends PureComponent {
             const scatterInconstancyFalse = (
                 <Scatter
                     dataKey={`factInconstancyFalse${i}`}
+                    key={`factInconstancyFalse${i}`}
                     legendType="none"
                     stroke="#8884d8"
                     strokeWidth={2}
                     fill="lightcoral"
+                    isAnimationActive={false}
                 >
                     <LabelList dataKey={`factInconstancyFalse${i}`} position="bottom" />
                 </Scatter>
@@ -156,19 +175,23 @@ export default class InconstancyComponent extends PureComponent {
                 <Line
                     type="linear"
                     dataKey={`factDimension${i}`}
+                    key={`factDimension${i}`}
                     legendType="none"
                     stroke="lightcoral"
                     strokeWidth={2}
                     connectNulls={true}
+                    isAnimationActive={false}
                 />
             )
             const scatterDimensionTrue = (
                 <Scatter
                     dataKey={`factDimensionTrue${i}`}
+                    key={`factDimensionTrue${i}`}
                     legendType="none"
                     stroke="#82ca9d"
                     strokeWidth={2}
                     fill="lightgreen"
+                    isAnimationActive={false}
                 >
                     <LabelList dataKey={`factDimensionTrue${i}`} position="bottom" />
                 </Scatter>
@@ -176,10 +199,12 @@ export default class InconstancyComponent extends PureComponent {
             const scatterDimensionFalse = (
                 <Scatter
                     dataKey={`factDimensionFalse${i}`}
+                    key={`factDimensionFalse${i}`}
                     legendType="none"
                     stroke="#82ca9d"
                     strokeWidth={2}
                     fill="lightcoral"
+                    isAnimationActive={false}
                 >
                     <LabelList dataKey={`factDimensionFalse${i}`} position="bottom" />
                 </Scatter>

@@ -30,48 +30,6 @@ module.exports = function({ technology }) {
     }
 
     return obj
-
-    /*
-    const { technologyDiameter, technologyInconstancy, technologyDimension, technologyPressure, technologySpeed } = technology
-    const { LEN } = technologyDiameter
-
-    // Рассчитать промежуточные точки
-    const dataDiameter = calculateIntermediatePointsTechnologyDiameter(technologyDiameter)
-    const dataInconstancy = calculateIntermediatePointsTechnology(technologyInconstancy)
-    const dataDimension = calculateIntermediatePointsTechnology(technologyDimension)
-
-    // Для построения графиков объединить нужные объекты
-    let dataInconstancyDimension = []
-    let dataPressureSpeed = []
-    for (let i = 0; i < LEN; i++) {
-        dataInconstancyDimension = [
-            ...dataInconstancyDimension, 
-            {
-                inconstancy: dataInconstancy[i],
-                dimension: dataDimension[i]
-            }
-        ]
-
-        dataPressureSpeed = [
-            ...dataPressureSpeed, 
-            {
-                pressure: technologyPressure[i],
-                speed: technologySpeed[i]
-            }
-        ]
-    }
-
-    return { 
-        LEN, 
-        dataInconstancyDimension, 
-        dataPressureSpeed, 
-        dataDiameter, 
-        dataInconstancy, 
-        dataDimension, 
-        technologyPressure, 
-        technologySpeed 
-    }
-    */
 }
 
 function convertDataFinal(data) {

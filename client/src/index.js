@@ -10,7 +10,6 @@ import ErrorBoundary from './ErrorBoundary'
 import Api from './api/Api'
 // Стили
 import './styles/index.css'
-import * as serviceWorker from './serviceWorker'
 
 const Greet = lazy(() => import('./pages/Greet'))
 const Repair = lazy(() => import('./pages/Repair'))

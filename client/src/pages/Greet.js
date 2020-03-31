@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { lazy } from 'react'
 // Antd
 import { Layout } from 'antd'
 // Utils

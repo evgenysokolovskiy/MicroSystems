@@ -6,7 +6,6 @@ import { data } from '../urls/data'
 // Получить с сервера данные из таблицы Excel
 // Записать в стор
 export function fetchDataMiddleware() {
-    //fetchData({ ...data })
     return dispatch => {
         fetch(data)
             .then(res => res.json())

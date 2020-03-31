@@ -1,6 +1,6 @@
 import React from 'react'
 // Antd
-import { Table, Tabs, Icon, Spin } from 'antd'
+import { Table, Tabs } from 'antd'
 
 const { TabPane } = Tabs
 

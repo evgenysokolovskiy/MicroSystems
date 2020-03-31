@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Modal, Input, Button, Typography } from 'antd'
 import './styles/index.css'
 
-const { Title, Text } = Typography
+const { Title } = Typography
 const pass = '12345'
 
 export default class App extends React.Component {

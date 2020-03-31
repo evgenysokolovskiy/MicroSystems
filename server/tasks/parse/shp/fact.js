@@ -11,10 +11,14 @@ const {
     INDEXES_CLEAN,
     INDEXES_FINAL
 } = INDEXES
-const convertFact = require('../../shp/convertFact/')
-const shpFactAPI = require('../../../api/shpFactAPI')
 
-module.exports = function({ app, parseShpFact }) {
+const convertData = require('../../shp/convertFact/').convertData
+const convertTechnologyFact = require('../../shp/convertTechnologyFact/')
+const convertTechnologyFactToJsx = require('../../shp/convertTechnologyFactToJsx/')
+const joinTechnologyFactAPI = require('../../../api/joinTechnologyFactAPI')
+const jsxAPI = require('../../../api/jsxAPI')
+
+module.exports = function({ app, parseShpFact, technology }) {
     fs.readdir(parseShpFact, function(err, files) {
         const paths = files.map(item => `${parseShpFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -45,14 +49,20 @@ module.exports = function({ app, parseShpFact }) {
                     final
                 }
 
-                if (fact) {
+                if (technology && fact) {
+                    const joinTechnologyFact = convertTechnologyFact({ technology, fact })
+                    //const jsx = convertTechnologyFactToJsx({ joinTechnologyFact })
+                    const jsx = convertTechnologyFactToJsx()
+                    //console.log(jsx)
                     resolve(
                         (() => {
-                            // Отправить факт к API
-                            shpFactAPI({
+                            // Отправить данные к API
+                            joinTechnologyFactAPI({
                                 app,
-                                fact: (() => convertFact({ fact }))()
+                                joinTechnologyFact
                             })
+
+                            jsxAPI({ app, jsx })
                         })()
                     )
                 } else {
@@ -62,45 +72,3 @@ module.exports = function({ app, parseShpFact }) {
         }
     })
 }
-
-function convertData(data, INDEXES) {
-    let arr = []
-    // Преобразовать объект в массив
-    const indexes = [...Object.entries(INDEXES)]
-    data.forEach(item => {
-        if (!item[0]) return
-        const obj = {}
-        indexes.forEach(i => {
-            const indexDate = i[0] === 'date' ? i[1] : null
-            obj[i[0]] =
-                typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]
-        })
-        arr = [...arr, obj]
-    })
-    return arr
-}
-
-function getDateFromText(text) {
-    // JSON -> UTC
-    const d = new Date(1899, 12, text)
-    // DD.MM.YYYY
-    const yyyymmdd = `${d.getUTCDate()}.${d.getUTCMonth() + 1}.${d.getUTCFullYear()}`
-    // add 0 (разбить массив на строки)
-    const arr = yyyymmdd.split('.')
-    // get str (добавить 0)
-    const day = arr[0].padStart(2, '0')
-    const month = arr[1].padStart(2, '0')
-    const year = arr[2]
-
-    return `${day}.${month}.${year}`
-}
-
-/*
-function converUTCDateToLocalDate(date) {
-    let newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000)
-    let offset = date.getTimezoneOffset() / 60
-    let hours = date.getHours()
-    newDate.setHours(hours - offset)
-    return newDate
-}
-*/

@@ -40,5 +40,4 @@ export const scheme = [
     `${HOST}/api/scheme/562`
 ]
 
-export const technology = `${HOST}/api/technology`
-export const fact = `${HOST}/api/fact`
+export const joinTechnologyFact = `${HOST}/api/jointechnologyfact`

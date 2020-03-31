@@ -7,102 +7,112 @@ import {
     Scatter,
     XAxis,
     YAxis,
-    CartesianGrid,
+    //CartesianGrid,
     Tooltip,
     ReferenceLine,
     LabelList
 } from 'recharts'
 
+import { Icon } from 'antd'
 const color = 'lightcoral'
 
 export default class DiameterComponent extends PureComponent {
     render() {
         const {
-            date,
             card,
-            diameter,
-            len,
             nameTotalTab,
-            CustomizedAxisTick,
+            len,
+            date,
+            diameter,
             handleClick,
+            CustomizedAxisTick,
             getData
         } = this.props
-
-        let total = [],
+        let component = [],
             lines = [],
+            line,
             scattersTrue = [],
-            scattersFalse = []
+            scattersFalse = [],
+            scatterTrue,
+            scatterFalse
 
-        // Технология
-        const technology = (
-            <Area dataKey="norm" name="Норматив (min/max)" stroke="#222" type="linear" />
-        )
+        if (card === nameTotalTab) {
+            for (let i = 0; i < len - 1; i++) {
+                line = (
+                    <Line
+                        type="linear"
+                        key={`fact${i}`}
+                        dataKey={`fact${i}`}
+                        stroke={color}
+                        strokeWidth={2}
+                        connectNulls={true}
+                        isAnimationActive={false}
+                    />
+                )
+                scatterTrue = (
+                    <Scatter
+                        dataKey={`trueFact${i}`}
+                        key={`trueFact${i}`}
+                        stroke="lightgreen"
+                        strokeWidth={2}
+                        fill="lightgreen"
+                        isAnimationActive={false}
+                    >
+                        <LabelList dataKey={`trueFact${i}`} position="bottom" />
+                    </Scatter>
+                )
+                scatterFalse = (
+                    <Scatter
+                        dataKey={`falseFact${i}`}
+                        key={`falseFact${i}`}
+                        stroke="lightcoral"
+                        strokeWidth={2}
+                        fill="lightcoral"
+                        isAnimationActive={false}
+                    >
+                        <LabelList dataKey={`falseFact${i}`} position="bottom" />
+                    </Scatter>
+                )
+                lines = [...lines, line]
+                scattersTrue = [...scattersTrue, scatterTrue]
+                scattersFalse = [...scattersFalse, scatterFalse]
 
-        // Отображение текущего графика
-        const current = [
-            <Line
-                type="linear"
-                dataKey="fact"
-                stroke="lightcoral"
-                strokeWidth={2}
-                connectNulls={true}
-            />,
-            <Scatter
-                dataKey="trueFact"
-                name="Факт (норма)"
-                stroke="lightgreen"
-                strokeWidth={2}
-                fill="lightgreen"
-            >
-                <LabelList dataKey="trueFact" position="bottom" />
-            </Scatter>,
-            <Scatter
-                dataKey="falseFact"
-                name="Факт (не норма)"
-                stroke="lightcoral"
-                strokeWidth={2}
-                fill="lightcoral"
-            >
-                <LabelList dataKey="falseFact" position="bottom" />
-            </Scatter>
-        ]
-
-        // Отображение всех графиков
-        for (let i = 0; i < len - 1; i++) {
-            const line = (
+                component = [...lines, ...scattersTrue, scattersFalse]
+            }
+        } else {
+            component = [
                 <Line
                     type="linear"
-                    dataKey={`fact${i}`}
-                    stroke={color}
+                    dataKey="fact"
+                    key="fact"
+                    stroke="lightcoral"
                     strokeWidth={2}
                     connectNulls={true}
-                />
-            )
-            const scatterTrue = (
+                    isAnimationActive={false}
+                />,
                 <Scatter
-                    dataKey={`trueFact${i}`}
+                    dataKey="trueFact"
+                    key="trueFact"
+                    name="Факт (норма)"
                     stroke="lightgreen"
                     strokeWidth={2}
                     fill="lightgreen"
+                    isAnimationActive={false}
                 >
-                    <LabelList dataKey={`trueFact${i}`} position="bottom" />
-                </Scatter>
-            )
-            const scatterFalse = (
+                    <LabelList dataKey="trueFact" position="bottom" />
+                </Scatter>,
                 <Scatter
-                    dataKey={`falseFact${i}`}
+                    dataKey="falseFact"
+                    key="falseFact"
+                    name="Факт (не норма)"
                     stroke="lightcoral"
                     strokeWidth={2}
                     fill="lightcoral"
+                    isAnimationActive={false}
                 >
-                    <LabelList dataKey={`falseFact${i}`} position="bottom" />
+                    <LabelList dataKey="falseFact" position="bottom" />
                 </Scatter>
-            )
-            lines = [...lines, line]
-            scattersTrue = [...scattersTrue, scatterTrue]
-            scattersFalse = [...scattersFalse, scatterFalse]
-
-            total = [...lines, ...scattersTrue, scattersFalse]
+            ]
         }
 
         return (
@@ -118,8 +128,24 @@ export default class DiameterComponent extends PureComponent {
                     }}
                     onClick={handleClick}
                 >
-                    {technology}
-                    {card === nameTotalTab ? total : current}
+                    const technology = (
+                    <Area
+                        dataKey="norm"
+                        name="Норматив (min/max)"
+                        stroke="#222"
+                        type="linear"
+                        isAnimationActive={false}
+                    />
+                    )
+                    {component ? (
+                        component
+                    ) : (
+                        <Icon
+                            type="loading"
+                            className="loading"
+                            style={{ fontSize: '20px', color: 'red' }}
+                        />
+                    )}
                     <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
                     <YAxis
                         type="number"

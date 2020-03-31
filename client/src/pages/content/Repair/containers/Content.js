@@ -13,7 +13,7 @@ export class Content extends PureComponent {
     handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
 
     render() {
-        const { data, checkForGeneralUse, checkForAntd, scheme, targetMenu, targetInn } = this.props
+        const { data, checkForGeneralUse, checkForAntd, scheme, targetMenu } = this.props
 
         // check
         let c

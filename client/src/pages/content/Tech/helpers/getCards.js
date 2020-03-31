@@ -14,10 +14,9 @@ export function getCards({ fact: f }) {
     })
 
     // Карты, для которых из фактических данных не определено время загрузки
-    const notBatchLoadingTime = Object.keys(fact).filter(item => {
-        const abc = Object.keys(hasBatchLoadingTime).some(val => val === item)
-        if (!abc) return item
-    })
+    const notBatchLoadingTime = Object.keys(fact).filter(
+        item => !Object.keys(hasBatchLoadingTime).some(val => val === item)
+    )
 
     return {
         hasBatchLoadingTime: ['Сводная', ...Object.keys(hasBatchLoadingTime)],

@@ -1,19 +1,18 @@
 import React, { PureComponent } from 'react'
-import { Table, Collapse } from 'antd'
 import {
     ResponsiveContainer,
     XAxis,
     YAxis,
-    CartesianGrid,
+    //CartesianGrid,
     Legend,
     BarChart,
     Bar,
     LabelList
 } from 'recharts'
 
-export default class ChartComponent extends PureComponent {
+export default class PressureComponent extends PureComponent {
     render() {
-        const { date, pressureSpeed, CustomizedAxisTick, card, len, nameTotalTab } = this.props
+        const { pressureSpeed, CustomizedAxisTick } = this.props
         // Для верного отображения столбцов из показателя скорости вычесть показатель давления
         const convertedDataPressureSpeed = pressureSpeed.map(item => {
             const diff = item['speed'] - item['pressure']
@@ -34,19 +33,41 @@ export default class ChartComponent extends PureComponent {
                     }}
                 >
                     {/*<CartesianGrid stroke="#000" strokeWidth={0.5} />*/}
-                    <XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+                    <XAxis dataKey="date" key="date" tick={<CustomizedAxisTick />} />
                     <YAxis
                         type="number"
                         domain={['dataMin', 'dataMax']}
-                        scale="linear"
+                        scale="sqrt"
                         fill="#000"
                         fontSize={12}
                     />
                     <Legend wrapperStyle={{ paddingTop: '60px' }} />
-                    <Bar dataKey="pressure" stackId="a" fill="#8884d8" name="Давление">
+                    <Bar
+                        dataKey="speedElevator"
+                        key="speedElevator"
+                        stackId="a"
+                        fill="lightcoral"
+                        name="Скорость элеватора"
+                    >
+                        <LabelList dataKey="speedElevator" position="middle" />
+                    </Bar>
+                    <Bar
+                        dataKey="pressure"
+                        key="pressure"
+                        stackId="a"
+                        fill="#8884d8"
+                        name="Давление"
+                    >
                         <LabelList dataKey="pressure" position="middle" />
                     </Bar>
-                    <Bar dataKey="convertedSpeed" stackId="a" fill="#82ca9d" name="Скорость">
+
+                    <Bar
+                        dataKey="convertedSpeed"
+                        key="convertedSpeed"
+                        stackId="a"
+                        fill="#82ca9d"
+                        name="Скорость"
+                    >
                         <LabelList dataKey="speed" position="middle" />
                     </Bar>
                 </BarChart>

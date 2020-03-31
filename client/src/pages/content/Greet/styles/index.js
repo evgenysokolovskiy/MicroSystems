@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 import image1 from '../../../../images/image1.jpg'

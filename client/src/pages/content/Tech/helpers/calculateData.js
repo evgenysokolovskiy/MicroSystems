@@ -7,8 +7,7 @@ import {
 
 // Совместить технологию с фактом по нескольким картам
 export function calculateDataFewCards({ technology, fact, card, cards }) {
-    let data = {},
-        diameter = [],
+    let diameter = [],
         inconstancyDimension = [],
         pressureSpeed = []
 
@@ -31,6 +30,7 @@ export function calculateDataFewCards({ technology, fact, card, cards }) {
         const item = {
             pressure: technology['pointsPressure'][i],
             speed: technology['pointsSpeed'][i],
+            speedElevator: technology['pointsSpeedElevator'][i],
             date
         }
         pressureSpeed[i] = item
@@ -106,7 +106,8 @@ export function calculateDataOneCard({ technology: t, fact: f, card }) {
         pointsInconstancy,
         pointsDimension,
         pointsPressure,
-        pointsSpeed
+        pointsSpeed,
+        pointsSpeedElevator
     } = technology
 
     // 1) Получить дату факта: конкатенировать дату и время как строку
@@ -176,7 +177,8 @@ export function calculateDataOneCard({ technology: t, fact: f, card }) {
     for (let i = 0; i < pointsPressure.length; i++) {
         const itemPressureSpeed = {
             pressure: pointsPressure[i],
-            speed: pointsSpeed[i]
+            speed: pointsSpeed[i],
+            speedElevator: pointsSpeedElevator[i]
         }
         pointsPressureSpeed = [...pointsPressureSpeed, itemPressureSpeed]
     }
@@ -248,6 +250,13 @@ export function calculateDataOneCard({ technology: t, fact: f, card }) {
                     factSpeed > technology['speed']
                         ? (technology['factSpeedFalse'] = factSpeed)
                         : (technology['factSpeedTrue'] = factSpeed)
+
+                    // Скорость элеватора
+                    const factSpeedElevator = fact['speedElevator']
+                    technology['factSpeedElevator'] = factSpeedElevator
+                    factSpeedElevator > technology['speedElevator']
+                        ? (technology['factSpeedElevatorFalse'] = factSpeedElevator)
+                        : (technology['factSpeedElevatorTrue'] = factSpeedElevator)
                 }
             })
 

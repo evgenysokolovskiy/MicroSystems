@@ -6,7 +6,6 @@ import { changeTechTargetMenu } from '../../../../store/tech/actions/techTargetM
 import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
 import { changeTechTargetTimeStampData } from '../../../../store/tech/actions/techTargetTimeStampDataAction'
 import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDrawerAction'
-import { changeTechTechnology } from '../../../../store/tech/actions/techTechnologyAction'
 import { changeType } from '../../../../store/tech/actions/techTypeAction'
 import { changeCardNumber } from '../../../../store/tech/actions/techCardNumberAction'
 import { getCards } from '../helpers/getCards'
@@ -34,6 +33,7 @@ export class Content extends PureComponent {
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
         this.props.changeTechTargetMenu(item)
+        this.props.changeCardNumber(this.nameTotalTab)
     }
 
     // Событие по типу подшипника
@@ -79,7 +79,65 @@ export class Content extends PureComponent {
         // Факт - фактические данные
         const joinData = clonedeep(techJoinTechnologyFact)
 
-        if (joinData && menu && type) {
+
+
+
+
+
+let obj = {}
+/*
+Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
+    Object.values(procedure).forEach(item => {
+        if (typeof item !== 'object') return
+        Object.entries(item).forEach(type => {
+            if (!+type[0]) return
+            obj[type[0]] = {...obj[type[0]], ...{[procedure[0]]: type[1]}}
+        })
+    })
+})
+*/
+
+
+Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
+    Object.values(procedure).forEach(item => {
+        if (typeof item !== 'object') return
+        Object.entries(item).forEach(type => {
+            if (!+type[0]) return
+
+            obj[type[0]] = {
+                ...obj[type[0]],
+                [procedure[0]]: {...type[1]['fact']}
+            }
+
+            // Добавить время загрузки
+            Object.entries(type[1]['fact']).forEach(card => {
+                obj[type[0]][procedure[0]][card[0]] = {
+                    data: card[1]
+                }
+                const batchLoadingTimeItem = card[1].find(date => date['batchLoadingTime'])
+                if (batchLoadingTimeItem) {
+                    obj[type[0]][procedure[0]][card[0]]['batchLoadingTime'] = batchLoadingTimeItem['batchLoadingTime']
+                } 
+            })
+
+            // Добавить предположительное время выгрузки согласно технологии
+            console.log(type[1]['technology']['len'])
+        })
+    })
+})
+
+
+//console.log(obj)
+//obj['9.525']['running']['234-56-20']['batchLoadingTime']
+
+
+
+
+
+
+
+        // Построить графическую часть
+        if (joinData && menu && menu !== 'table' && type) {
             // Отсекаем технологию и факт в соответствии с выбором меню (процедура) и типом подшипника
             // Технология
             const technology = joinData[menu][type]['technology']
@@ -90,7 +148,7 @@ export class Content extends PureComponent {
             // Номера карт для выбранного типа
             cards = getCards({ fact })
             // Совместить технологию с фактом
-            card == this.nameTotalTab
+            card === this.nameTotalTab
                 ? (data = clonedeep(calculateDataFewCards({ technology, fact, card, cards })))
                 : (data = clonedeep(calculateDataOneCard({ technology, fact, card })))
             // Данные по отметке времени
@@ -103,6 +161,7 @@ export class Content extends PureComponent {
                 types={types}
                 cards={cards}
                 menu={menu}
+                type={type}
                 card={card}
                 target={target}
                 data={data}
