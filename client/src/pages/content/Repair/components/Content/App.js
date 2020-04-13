@@ -2,7 +2,8 @@ import React, { Suspense, lazy } from 'react'
 // Компоненты
 import MenuComponent from './MenuComponent'
 // Antd
-import { Layout, Icon } from 'antd'
+import { Layout } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const { Content } = Layout
 const TableComponent = lazy(() => import('./TableComponent'))
@@ -27,15 +28,7 @@ export const App = props => {
                 <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ minHeight: '92vh' }}>
                     {targetMenu && targetMenu.match(/plan/) && data && (
-                        <Suspense
-                            fallback={
-                                <Icon
-                                    type="loading"
-                                    className="loading"
-                                    style={{ fontSize: '20px', color: 'red' }}
-                                />
-                            }
-                        >
+                        <Suspense fallback={<LoadingOutlined className="loading" />}>
                             <TableComponent
                                 data={data}
                                 targetMenu={targetMenu}
@@ -47,29 +40,13 @@ export const App = props => {
                     )}
 
                     {targetMenu && targetMenu.match(/check/) && checkForAntd && (
-                        <Suspense
-                            fallback={
-                                <Icon
-                                    type="loading"
-                                    className="loading"
-                                    style={{ fontSize: '20px', color: 'red' }}
-                                />
-                            }
-                        >
+                        <Suspense fallback={<LoadingOutlined className="loading" />}>
                             <CheckComponent checkForAntd={checkForAntd} />
                         </Suspense>
                     )}
 
                     {targetMenu && targetMenu.match(/scheme/) && scheme && (
-                        <Suspense
-                            fallback={
-                                <Icon
-                                    type="loading"
-                                    className="loading"
-                                    style={{ fontSize: '20px', color: 'red' }}
-                                />
-                            }
-                        >
+                        <Suspense fallback={<LoadingOutlined className="loading" />}>
                             <SchemeComponent
                                 scheme={scheme}
                                 checkForGeneralUse={checkForGeneralUse}

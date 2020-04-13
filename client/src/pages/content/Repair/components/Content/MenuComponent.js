@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
-import { Menu, Icon } from 'antd'
+import { Menu } from 'antd'
+import { SolutionOutlined, TableOutlined, ToolOutlined } from '@ant-design/icons'
 
 const { SubMenu } = Menu
 
@@ -26,7 +27,7 @@ export default class MenuComponent extends PureComponent {
                         key="plan"
                         title={
                             <span>
-                                <Icon type="solution" />
+                                <SolutionOutlined />
                             </span>
                         }
                     >
@@ -61,7 +62,7 @@ export default class MenuComponent extends PureComponent {
                         key="scheme"
                         title={
                             <span>
-                                <Icon type="table" />
+                                <TableOutlined />
                             </span>
                         }
                     >
@@ -131,7 +132,7 @@ export default class MenuComponent extends PureComponent {
                         key="check"
                         title={
                             <span>
-                                <Icon type="tool" />
+                                <ToolOutlined />
                             </span>
                         }
                     >

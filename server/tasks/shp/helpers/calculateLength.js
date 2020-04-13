@@ -1,10 +1,11 @@
 // Рассчитать продолжительность операции в часах
 
+const interval = require('../../../config/shp/interval')
+
 module.exports = function(data) {
     const newData = data.map(item => {
-        // В часах
         item['len'] = Math.round(
-            ((item['maxWeight'] / item['weight1000']) * item['machineTime']) / 30
+            ((item['maxWeight'] / item['weight1000']) * item['machineTime']) / interval
         )
         return item
     })

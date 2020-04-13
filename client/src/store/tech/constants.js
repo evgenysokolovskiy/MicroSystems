@@ -7,6 +7,24 @@ export const _TECH_JOIN_TECHNOLOGY_FACT = {
     }
 }
 
+export const _TECH_QUALITY_PRODUCTION = {
+    types: {
+        TECH_QUALITY_PRODUCTION: 'TECH_QUALITY_PRODUCTION'
+    },
+    init: {
+        techQualityProduction: null
+    }
+}
+
+export const _TECH_INTERVAL = {
+    types: {
+        TECH_INTERVAL: 'TECH_INTERVAL'
+    },
+    init: {
+        techInterval: 0
+    }
+}
+
 export const _TECH_TARGET_MENU = {
     types: {
         TECH_TARGET_MENU: 'TECH_TARGET_MENU'

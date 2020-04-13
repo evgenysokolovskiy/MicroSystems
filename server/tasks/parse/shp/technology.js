@@ -11,7 +11,7 @@ const {
     INDEXES_CLEAN,
     INDEXES_FINAL
 } = INDEXES
-const convertTechnology = require('../../shp/convertTechnology/conv')
+const convertTechnology = require('../../shp/convertTechnology/')
 
 module.exports = function({ app, parseShpTechnology, parseShpFact, fact }) {
     fs.readdir(parseShpTechnology, function(err, files) {

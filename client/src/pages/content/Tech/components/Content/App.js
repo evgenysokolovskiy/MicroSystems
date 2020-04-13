@@ -4,7 +4,9 @@ import MenuComponent from './MenuComponent'
 import InconstancyComponent from './ChartComponents/InconstancyComponent'
 import PressureComponent from './ChartComponents/PressureComponent'
 // Antd
-import { Layout, Collapse, Tabs, Icon } from 'antd'
+import { Layout, Collapse, Tabs } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+
 const { Content } = Layout
 const { Panel } = Collapse
 const { TabPane } = Tabs
@@ -155,7 +157,7 @@ export default class App extends PureComponent {
     }
 
     render() {
-        const { menu, card, handleClickMenu } = this.props
+        const { quality, menu, card, handleClickMenu } = this.props
         const { component } = this.state
 
         return (
@@ -163,31 +165,14 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
-
                         {menu && menu === 'table' && (
-                            <Suspense
-                                fallback={
-                                    <Icon
-                                        type="loading"
-                                        className="loading"
-                                        style={{ fontSize: '20px', color: 'red' }}
-                                    />
-                                }
-                            >
-                                <TableComponent />
+                            <Suspense fallback={<LoadingOutlined className="loading" />}>
+                                <TableComponent quality={quality} />
                             </Suspense>
                         )}
 
                         {menu && menu !== 'table' && (
-                            <Suspense
-                                fallback={
-                                    <Icon
-                                        type="loading"
-                                        className="loading"
-                                        style={{ fontSize: '20px', color: 'red' }}
-                                    />
-                                }
-                            >
+                            <Suspense fallback={<LoadingOutlined className="loading" />}>
                                 <Tabs
                                     defaultActiveKey={card}
                                     type="card"
@@ -196,11 +181,7 @@ export default class App extends PureComponent {
                                     {component ? (
                                         component
                                     ) : (
-                                        <Icon
-                                            type="loading"
-                                            className="loading"
-                                            style={{ fontSize: '20px', color: 'red' }}
-                                        />
+                                        <LoadingOutlined className="loading" />
                                     )}
                                 </Tabs>
                             </Suspense>

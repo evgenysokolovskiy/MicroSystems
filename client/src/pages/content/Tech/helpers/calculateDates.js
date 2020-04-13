@@ -22,7 +22,7 @@ export function convertStringToDate(obj) {
     const minutes = obj['measurementTime'].split('.')[1]
 
     // Округлить время до получаса
-    const m = minutes > 15 && minutes < 45 && minutes !== 0 ? '30' : '00'
+    const m = minutes > 15 && minutes < 45 && minutes !== 0 ? 30 : '00'
     const h = minutes > 44 ? (hours === 23 ? '00' : ++hours) : hours
     const d = new Date(yyyy, mm, dd, h, m).getTime() /* - 86400000*/
     return d
@@ -38,7 +38,7 @@ export function convertStringToDateBatchLoadingTime(str) {
     const minutes = str.split('  ')[1].split('.')[1]
 
     // Округлить время до получаса
-    const m = minutes > 15 && minutes < 45 && minutes !== 0 ? '30' : '00'
+    const m = minutes > 15 && minutes < 45 && minutes !== 0 ? 30 : '00'
     const h = minutes > 44 ? (hours === 23 ? '00' : ++hours) : hours
 
     return new Date(yyyy, mm, dd, h, m).getTime()

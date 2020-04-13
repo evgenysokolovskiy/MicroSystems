@@ -14,9 +14,10 @@ const {
 
 const convertData = require('../../shp/convertFact/').convertData
 const convertTechnologyFact = require('../../shp/convertTechnologyFact/')
-const convertTechnologyFactToJsx = require('../../shp/convertTechnologyFactToJsx/')
+const qualityProduction = require('../../shp/qualityProduction')
 const joinTechnologyFactAPI = require('../../../api/joinTechnologyFactAPI')
-const jsxAPI = require('../../../api/jsxAPI')
+const qualityProductionAPI = require('../../../api/qualityProductionAPI')
+const intervalAPI = require('../../../api/intervalAPI')
 
 module.exports = function({ app, parseShpFact, technology }) {
     fs.readdir(parseShpFact, function(err, files) {
@@ -51,18 +52,20 @@ module.exports = function({ app, parseShpFact, technology }) {
 
                 if (technology && fact) {
                     const joinTechnologyFact = convertTechnologyFact({ technology, fact })
-                    //const jsx = convertTechnologyFactToJsx({ joinTechnologyFact })
-                    const jsx = convertTechnologyFactToJsx()
-                    //console.log(jsx)
+                    const quality = qualityProduction(joinTechnologyFact)
                     resolve(
                         (() => {
-                            // Отправить данные к API
                             joinTechnologyFactAPI({
                                 app,
                                 joinTechnologyFact
                             })
 
-                            jsxAPI({ app, jsx })
+                            qualityProductionAPI({
+                                app,
+                                qualityProduction: quality
+                            })
+
+                            intervalAPI({ app })
                         })()
                     )
                 } else {

@@ -1,7 +1,9 @@
 import React, { lazy } from 'react'
 import { Link } from 'react-router-dom'
 // Antd
-import { Layout, Icon } from 'antd'
+import { Layout } from 'antd'
+import { HomeOutlined } from '@ant-design/icons'
+
 // Utils
 const Modal = lazy(() => import('./utils/Modal/App'))
 const Footer = lazy(() => import('./utils/Footer/App'))
@@ -24,7 +26,7 @@ export default function App() {
                 }}
             >
                 <Link to="/">
-                    <Icon type="home" style={{ fontSize: '16px', textAlign: 'right' }} />
+                    <HomeOutlined style={{ fontSize: '16px', textAlign: 'right' }} />
                 </Link>
             </div>
             <Content />

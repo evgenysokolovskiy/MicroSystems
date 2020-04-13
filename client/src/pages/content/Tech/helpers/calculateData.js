@@ -6,18 +6,22 @@ import {
 } from './calculateDates'
 
 // Совместить технологию с фактом по нескольким картам
-export function calculateDataFewCards({ technology, fact, card, cards }) {
+export function calculateDataFewCards({ technology, fact, card, cards, interval }) {
+    // Интервал (дробная часть от единицы как количество минут от часа)
+    // Необходимо для построения дробной части на сводном по нескольким картам графике
+    const int = interval && +interval / 60
+
     let diameter = [],
         inconstancyDimension = [],
         pressureSpeed = []
 
     diameter = technology['pointsDiameter']
 
-    for (let i = 0, date = 0; i < diameter.length; i++, date = date + 0.5) {
+    for (let i = 0, date = 0; i < diameter.length; i++, date = date + int) {
         diameter[i]['date'] = date
     }
 
-    for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + 0.5) {
+    for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + int) {
         const item = {
             inconstancy: technology['pointsInconstancy'][i],
             dimension: technology['pointsDimension'][i],
@@ -26,7 +30,7 @@ export function calculateDataFewCards({ technology, fact, card, cards }) {
         inconstancyDimension[i] = item
     }
 
-    for (let i = 0, date = 0; i < technology['pointsPressure'].length; i++, date = date + 0.5) {
+    for (let i = 0, date = 0; i < technology['pointsPressure'].length; i++, date = date + int) {
         const item = {
             pressure: technology['pointsPressure'][i],
             speed: technology['pointsSpeed'][i],
@@ -38,7 +42,7 @@ export function calculateDataFewCards({ technology, fact, card, cards }) {
 
     cards['hasBatchLoadingTime'].forEach((card, index) => {
         if (card === 'Сводная') return
-        const data = clonedeep(calculateDataOneCard({ technology, fact, card }))
+        const data = clonedeep(calculateDataOneCard({ technology, fact, card, interval }))
 
         for (let i = 0; i < diameter.length; i++) {
             if (data['diameter'][i]['fact']) {
@@ -97,7 +101,7 @@ export function calculateDataFewCards({ technology, fact, card, cards }) {
 }
 
 // Совместить технологию с фактом по одной карте
-export function calculateDataOneCard({ technology: t, fact: f, card }) {
+export function calculateDataOneCard({ technology: t, fact: f, card, interval }) {
     if (card === 'Сводная') return
     const technology = clonedeep(t)
     const fact = clonedeep(f)
@@ -139,13 +143,16 @@ export function calculateDataOneCard({ technology: t, fact: f, card }) {
 
     // 4) Определить временные отметки от начальной отметки start до конечной на расстоянии длины len
 
-    // Интервал между отметками составляет заданный интервал int в миллисекундах
+    // Интервал между отметками составляет заданный интервал intervalMilliseconds в миллисекундах
     let arr = [start]
+    // interval - количество минут (30 - полчаса)
+    // 60000 - количество миллисекунд в одной минуте
     // 1800000 - полчаса
     // 3600000 - час
-    const int = 1800000
+    const intervalMilliseconds = interval && +interval * 60000
+
     for (let i = 1; i < len; i++) {
-        start = start + int
+        start = start + intervalMilliseconds
         arr = [...arr, start]
     }
 

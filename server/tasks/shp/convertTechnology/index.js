@@ -1,87 +1,42 @@
 // Преобразовать данные технологии
 
-const technology = require('../../../../technology')
+const calculateIntermediatePoints = require('../helpers/calculateIntermediatePoints')
+const calculateLength = require('../helpers/calculateLength')
 
-module.exports = function() {
-    const {
-        technologyDiameter,
-        technologyInconstancy,
-        technologyDimension,
-        technologyPressure,
-        technologySpeed
-    } = technology
-    const { LEN } = technologyDiameter
+module.exports = function({ technology }) {
+    const { stamping, running, grinding, rough, clean, final } = technology
 
-    // Рассчитать промежуточные точки
-    const dataDiameter = calculateIntermediatePointsTechnologyDiameter(technologyDiameter)
-    const dataInconstancy = calculateIntermediatePointsTechnology(technologyInconstancy)
-    const dataDimension = calculateIntermediatePointsTechnology(technologyDimension)
+    // Добавить продолжительность операции в часах
+    const newStamping = calculateLength(stamping)
+    const newRunning = calculateLength(running)
+    const newGrinding = calculateLength(grinding)
+    const newRough = calculateLength(rough)
+    const newClean = calculateLength(clean)
+    const newFinal = calculateLength(final)
 
-    // Для построения графиков объединить нужные объекты
-    let dataInconstancyDimension = []
-    let dataPressureSpeed = []
-    for (let i = 0; i < LEN; i++) {
-        dataInconstancyDimension = [
-            ...dataInconstancyDimension,
-            {
-                inconstancy: dataInconstancy[i],
-                dimension: dataDimension[i]
-            }
-        ]
+    // Рассчитать промежуточные точки (для stamping не рассчитываем)
+    calculateIntermediatePoints(newRunning)
+    calculateIntermediatePoints(newGrinding)
+    calculateIntermediatePoints(newRough)
+    calculateIntermediatePoints(newClean)
+    calculateIntermediatePoints(newFinal)
 
-        dataPressureSpeed = [
-            ...dataPressureSpeed,
-            {
-                pressure: technologyPressure[i],
-                speed: technologySpeed[i]
-            }
-        ]
+    const obj = {
+        running: (() => convertDataFinal(newRunning))(),
+        grinding: (() => convertDataFinal(newGrinding))(),
+        rough: (() => convertDataFinal(newRough))(),
+        clean: (() => convertDataFinal(newClean))(),
+        final: (() => convertDataFinal(newFinal))()
     }
 
-    return {
-        LEN,
-        dataInconstancyDimension,
-        dataPressureSpeed,
-        dataDiameter,
-        dataInconstancy,
-        dataDimension,
-        technologyPressure,
-        technologySpeed
-    }
+    return obj
 }
 
-// Рассчитать промежуточные точки
-function calculateIntermediatePointsTechnology(data) {
-    const { START, END, LEN } = data
-    // 1) Расчитать данные технологии на основании начальной, конечной точек и длины графика
-    let arr = [START]
-    const a = START
-    const A = (START - END) / (LEN - 1)
-
-    for (let i = 1; i < LEN; i++) {
-        arr = [...arr, (a - A * i).toFixed(3)]
-    }
-    return arr
-}
-
-// Рассчитать промежуточные точки для Диаметра
-function calculateIntermediatePointsTechnologyDiameter(data) {
-    const { START, END, LEN } = data
-    let max = START[0]
-    let min = START[1]
-    // 1) Расчитать данные технологии на основании начальной, конечной точек и длины графика
-    let dataDiameter = [{ norm: [max, min] }]
-    const a = START[0]
-    const A = (START[0] - END[0]) / (LEN - 1)
-    const b = START[1]
-    const B = (START[1] - END[1]) / (LEN - 1)
-    for (let i = 1; i < LEN; i++) {
-        max = +(a - A * i).toFixed(3)
-        min = +(b - B * i).toFixed(3)
-        const item = {
-            norm: [max, min]
-        }
-        dataDiameter = [...dataDiameter, item]
-    }
-    return dataDiameter
+function convertDataFinal(data) {
+    const obj = {}
+    data &&
+        Object.values(data).forEach(item => {
+            obj[item['type']] = item
+        })
+    return obj
 }
