@@ -62,12 +62,19 @@ const columns = [
     }
 ]
 
+
+const now = (function() {
+    const date = new Date()
+    return date && date.toISOString().slice(0, 10).split('-').reverse().join('.')
+})()
+
+
 export default function(props) {
     const { quality } = props
 
     console.log(quality)
 
-    const dataSource = [
+    const dataSourceWeight = [
         {
             key: '1',
             title: 'Общий вес',
@@ -136,11 +143,102 @@ export default function(props) {
         }
     ]
 
+    const dataSourceAmount = [
+        {
+            key: '1',
+            title: 'Всего',
+            stamping: '',
+            running: '',
+            grinding: '',
+            rough: '',
+            clear: '',
+            final: '',
+            total: ''
+        },
+        {
+            key: '2',
+            title: 'Годные',
+            stamping: '',
+            running: getAmountCards(quality['running']['quality']),
+            grinding: getAmountCards(quality['grinding']['quality']),
+            rough: '',
+            clear: '',
+            final: '',
+            total: getTotalQualityAmountCards(quality, 'quality')
+        },
+        {
+            key: '3',
+            title: 'Отклонение',
+            stamping: '',
+            running: getAmountCards(quality['running']['defect']),
+            grinding: getAmountCards(quality['grinding']['defect']),
+            rough: '',
+            clear: '',
+            final: '',
+            total: getTotalQualityAmountCards(quality, 'defect')
+        },
+        {
+            key: '4',
+            title: 'Отсутствуют данные о проверке',
+            stamping: '',
+            running: '',
+            grinding: '',
+            rough: '',
+            clear: '',
+            final: '',
+            total: ''
+        },
+        /*{
+            key: '5',
+            title: 'Годных, %',
+            stamping: '',
+            running: (() =>
+                (
+                    (quality['running']['qualityWeight'] / quality['running']['weight']) *
+                    100
+                ).toFixed(1))(),
+            grinding: (() =>
+                (
+                    (quality['grinding']['qualityWeight'] / quality['grinding']['weight']) *
+                    100
+                ).toFixed(1))(),
+            rough: '',
+            clear: '',
+            final: '',
+            total: (() =>
+                ((quality['total']['qualityWeight'] / quality['total']['weight']) * 100).toFixed(
+                    1
+                ))()
+        }*/
+    ]    
+
     return (
         <>
             <div>
-                <Table dataSource={dataSource} columns={columns} bordered size="small" />
+                <h4>Статистика производства шарика относительно веса на {now}</h4>
+                <Table dataSource={dataSourceWeight} columns={columns} bordered size="small" />
+                <h4>Статистика производства шарика относительно количества запущенных процессов на {now}</h4>
+                <Table dataSource={dataSourceAmount} columns={columns} bordered size="small" />
             </div>
         </>
     )
+}
+
+
+
+function getAmountCards(obj) {
+  let count = 0
+  Object.values(obj).forEach(item => {
+      count += Object.keys(item).length
+  })
+  return count
+}
+
+function getTotalQualityAmountCards(obj, param) {
+  let count = 0
+  Object.entries(obj).forEach(procedure => {
+    if (procedure[0] === 'total') return
+      count += getAmountCards(procedure[1][param])
+  })
+  return count
 }
