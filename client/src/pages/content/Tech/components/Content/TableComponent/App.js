@@ -56,23 +56,29 @@ const columns = [
         key: 'final'
     },
     {
-        title: 'Сумма',
+        title: 'ИТОГ',
         dataIndex: 'total',
         key: 'total'
     }
 ]
 
-
 const now = (function() {
     const date = new Date()
-    return date && date.toISOString().slice(0, 10).split('-').reverse().join('.')
+    return (
+        date &&
+        date
+            .toISOString()
+            .slice(0, 10)
+            .split('-')
+            .reverse()
+            .join('.')
+    )
 })()
-
 
 export default function(props) {
     const { quality } = props
 
-    console.log(quality)
+    //console.log(quality)
 
     const dataSourceWeight = [
         {
@@ -84,7 +90,7 @@ export default function(props) {
             rough: '',
             clear: '',
             final: '',
-            total: quality['total']['weight']
+            total: ''
         },
         {
             key: '2',
@@ -95,7 +101,7 @@ export default function(props) {
             rough: '',
             clear: '',
             final: '',
-            total: quality['total']['qualityWeight']
+            total: ''
         },
         {
             key: '3',
@@ -106,7 +112,7 @@ export default function(props) {
             rough: '',
             clear: '',
             final: '',
-            total: quality['total']['defectWeight']
+            total: ''
         },
         {
             key: '4',
@@ -117,7 +123,7 @@ export default function(props) {
             rough: '',
             clear: '',
             final: '',
-            total: quality['total']['notCheckWeight']
+            total: ''
         },
         {
             key: '5',
@@ -136,10 +142,7 @@ export default function(props) {
             rough: '',
             clear: '',
             final: '',
-            total: (() =>
-                ((quality['total']['qualityWeight'] / quality['total']['weight']) * 100).toFixed(
-                    1
-                ))()
+            total: ''
         }
     ]
 
@@ -148,8 +151,8 @@ export default function(props) {
             key: '1',
             title: 'Всего',
             stamping: '',
-            running: '',
-            grinding: '',
+            running: quality['running']['items'],
+            grinding: quality['grinding']['items'],
             rough: '',
             clear: '',
             final: '',
@@ -159,86 +162,80 @@ export default function(props) {
             key: '2',
             title: 'Годные',
             stamping: '',
-            running: getAmountCards(quality['running']['quality']),
-            grinding: getAmountCards(quality['grinding']['quality']),
-            rough: '',
-            clear: '',
-            final: '',
-            total: getTotalQualityAmountCards(quality, 'quality')
-        },
-        {
-            key: '3',
-            title: 'Отклонение',
-            stamping: '',
-            running: getAmountCards(quality['running']['defect']),
-            grinding: getAmountCards(quality['grinding']['defect']),
-            rough: '',
-            clear: '',
-            final: '',
-            total: getTotalQualityAmountCards(quality, 'defect')
-        },
-        {
-            key: '4',
-            title: 'Отсутствуют данные о проверке',
-            stamping: '',
-            running: '',
-            grinding: '',
+            running: quality['running']['qualityItems'],
+            grinding: quality['grinding']['qualityItems'],
             rough: '',
             clear: '',
             final: '',
             total: ''
         },
-        /*{
+        {
+            key: '3',
+            title: 'Отклонение',
+            stamping: '',
+            running: quality['running']['defectItems'],
+            grinding: quality['grinding']['defectItems'],
+            rough: '',
+            clear: '',
+            final: '',
+            total: ''
+        },
+        {
+            key: '4',
+            title: 'Отсутствуют данные о проверке',
+            stamping: '',
+            running: quality['running']['notCheckItems'],
+            grinding: quality['grinding']['notCheckItems'],
+            rough: '',
+            clear: '',
+            final: '',
+            total: ''
+        },
+        {
             key: '5',
             title: 'Годных, %',
             stamping: '',
             running: (() =>
-                (
-                    (quality['running']['qualityWeight'] / quality['running']['weight']) *
-                    100
-                ).toFixed(1))(),
+                ((quality['running']['qualityItems'] / quality['running']['items']) * 100).toFixed(
+                    1
+                ))(),
             grinding: (() =>
                 (
-                    (quality['grinding']['qualityWeight'] / quality['grinding']['weight']) *
+                    (quality['grinding']['qualityItems'] / quality['grinding']['items']) *
                     100
                 ).toFixed(1))(),
             rough: '',
             clear: '',
             final: '',
-            total: (() =>
-                ((quality['total']['qualityWeight'] / quality['total']['weight']) * 100).toFixed(
-                    1
-                ))()
-        }*/
-    ]    
+            total: ''
+        }
+    ]
 
     return (
         <>
             <div>
-                <h4>Статистика производства шарика относительно веса на {now}</h4>
-                <Table dataSource={dataSourceWeight} columns={columns} bordered size="small" />
-                <h4>Статистика производства шарика относительно количества запущенных процессов на {now}</h4>
-                <Table dataSource={dataSourceAmount} columns={columns} bordered size="small" />
+                <h4 style={{ paddingLeft: 20 }}>
+                    Статистика производства шарика относительно веса на {now}
+                </h4>
+                <Table
+                    dataSource={dataSourceWeight}
+                    columns={columns}
+                    bordered
+                    size="small"
+                    pagination={false}
+                />
+                <h4 style={{ paddingLeft: 20 }}>
+                    Статистика производства шарика относительно количества запущенных процессов на{' '}
+                    {now}
+                </h4>
+                <Table
+                    dataSource={dataSourceAmount}
+                    columns={columns}
+                    bordered
+                    size="small"
+                    pagination={false}
+                />
             </div>
         </>
     )
-}
-
-
-
-function getAmountCards(obj) {
-  let count = 0
-  Object.values(obj).forEach(item => {
-      count += Object.keys(item).length
-  })
-  return count
-}
-
-function getTotalQualityAmountCards(obj, param) {
-  let count = 0
-  Object.entries(obj).forEach(procedure => {
-    if (procedure[0] === 'total') return
-      count += getAmountCards(procedure[1][param])
-  })
-  return count
 }
