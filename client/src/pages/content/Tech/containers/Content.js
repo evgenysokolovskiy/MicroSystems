@@ -79,90 +79,20 @@ export class Content extends PureComponent {
         // Технология имеет свою длину и определенное положение каждой точки в рамкаках этой длины
         // Факт - фактические данные
         const joinData = clonedeep(techJoinTechnologyFact)
-
+        console.log(quality)
         /*
-Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
-    Object.values(procedure).forEach(item => {
-        if (typeof item !== 'object') return
-        Object.entries(item).forEach(type => {
-            if (!+type[0]) return
-            obj[type[0]] = {...obj[type[0]], ...{[procedure[0]]: type[1]}}
-        })
-    })
-})
-*/
-
-        /*
-Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
-    Object.values(procedure).forEach(item => {
-        if (typeof item !== 'object') return
-        Object.entries(item).forEach(type => {
-            if (!+type[0]) return
-
-            obj[type[0]] = {
-                ...obj[type[0]],
-                [procedure[0]]: {...type[1]['fact']}
-            }
-
-            // Добавить время загрузки
-            Object.entries(type[1]['fact']).forEach(card => {
-                obj[type[0]][procedure[0]][card[0]] = {
-                    data: card[1]
-                }
-                const batchLoadingTimeItem = card[1].find(date => date['batchLoadingTime'])
-                if (batchLoadingTimeItem) {
-                    obj[type[0]][procedure[0]][card[0]]['batchLoadingTime'] = batchLoadingTimeItem['batchLoadingTime']
-                    // Добавить предположительное время выгрузки согласно технологии
-                    // type[1]['technology']['len'] - количество отсечек по технологии
-                    // interval - столько минут составляет каждый интервал между отсечками
-                    // Т.е. чтобы получить дату окончания тех.процесса по технологии необходимо:
-                    // Если интервал равен 30 минутам, а длина 42 отсечки, то к времени загрузки необходимо прибавить
-                    // 42 раза по 30 минут
-                    if (procedure[0] !== 'running' && procedure[0] !== 'grinding' && procedure[0] !== 'stamping') return
-                    // Длина тех.процесса в миллисекундах
-                    const msTechnology = type[1]['technology']['len'] * interval * 60000
-                    const msBatchLoadingTime = convertStringToDateBatchLoadingTime(batchLoadingTimeItem['batchLoadingTime'])
-                    const msUnloadingTime = msBatchLoadingTime + msTechnology
-                    const strUnloadingTime = convertDateToString(msUnloadingTime)
-                    obj[type[0]][procedure[0]][card[0]]['unloadingTime'] = strUnloadingTime
-                }
+        let obj = {}      
+        Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
+            Object.values(procedure).forEach(item => {
+                if (typeof item !== 'object') return
+                Object.entries(item).forEach(type => {
+                    if (!+type[0]) return
+                    obj[type[0]] = {...obj[type[0]], ...{[procedure[0]]: type[1]}}
+                })
             })
         })
-    })
-})
-
-
-// Конвертировать строку в дату (в миллисекундах) с округлением до получаса
-function convertStringToDateBatchLoadingTime(str) {
-    if (!str) return
-    const dd = str.split('.')[0]
-    const mm = str.split('.')[1] - 1
-    const yyyy = str.split('.')[2].split('  ')[0]
-    let hours = str.split('  ')[1].split('.')[0]
-    const minutes = str.split('  ')[1].split('.')[1]
-
-    // Округлить время до получаса
-    const m = minutes > 15 && minutes < 45 && minutes !== 0 ? 30 : '00'
-    const h = minutes > 44 ? (hours === 23 ? '00' : ++hours) : hours
-
-    return new Date(yyyy, mm, dd, h, m).getTime()
-}
-
-// Конвертировать дату в строку
-function convertDateToString(milliseconds) {
-    if (!milliseconds) return
-    const date = new Date(milliseconds)
-    const hours = date.getHours()
-    const minutes = date.getMinutes()
-    const d = String(date.getDate()).padStart(2, '0')
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const year = date.getFullYear()
-
-    return `${d}.${month}.${year} ${hours}:${minutes}`
-}
-
-*/
-
+        console.log(obj)
+        */
         // Построить графическую часть
         if (joinData && menu && menu !== 'table' && type) {
             // Отсекаем технологию и факт в соответствии с выбором меню (процедура) и типом подшипника

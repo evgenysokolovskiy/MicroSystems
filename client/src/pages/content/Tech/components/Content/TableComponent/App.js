@@ -1,23 +1,7 @@
 import React from 'react'
+import AxisCardComponent from './AxisCardComponent'
 // Antd
 import { Table } from 'antd'
-
-/*
-const dataSource = [
-  {
-    key: '1',
-    type: '9.525',
-    card: '234-56-20',
-    batchLoadingTime: '26.02.20 21:00',
-    unLoadingTime: '01.01.20 19:00',
-    running: '220',
-    grinding: '205',
-    rough: '',
-    clear: '',
-    final: ''
-  },
-]
-*/
 
 const columns = [
     {
@@ -116,10 +100,10 @@ export default function(props) {
         },
         {
             key: '4',
-            title: 'Отсутствуют данные о проверке, кг',
+            title: 'Нет проверки, кг',
             stamping: '',
-            running: quality['running']['notCheckWeight'],
-            grinding: quality['grinding']['notCheckWeight'],
+            running: quality['running']['notFactWeight'],
+            grinding: quality['grinding']['notFactWeight'],
             rough: '',
             clear: '',
             final: '',
@@ -156,7 +140,7 @@ export default function(props) {
             rough: '',
             clear: '',
             final: '',
-            total: ''
+            total: quality['total']['amountCards']
         },
         {
             key: '2',
@@ -182,10 +166,10 @@ export default function(props) {
         },
         {
             key: '4',
-            title: 'Отсутствуют данные о проверке',
+            title: 'Нет проверки',
             stamping: '',
-            running: quality['running']['notCheckItems'],
-            grinding: quality['grinding']['notCheckItems'],
+            running: quality['running']['notFactItems'],
+            grinding: quality['grinding']['notFactItems'],
             rough: '',
             clear: '',
             final: '',
@@ -224,7 +208,7 @@ export default function(props) {
                     size="small"
                     pagination={false}
                 />
-                <h4 style={{ paddingLeft: 20 }}>
+                <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
                     Статистика производства шарика относительно количества запущенных процессов на{' '}
                     {now}
                 </h4>
@@ -235,6 +219,10 @@ export default function(props) {
                     size="small"
                     pagination={false}
                 />
+                <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
+                    Осевой график запущенных процессов
+                </h4>
+                <AxisCardComponent />
             </div>
         </>
     )

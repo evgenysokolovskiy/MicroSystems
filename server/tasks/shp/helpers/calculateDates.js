@@ -41,5 +41,5 @@ module.exports.convertStringToDateBatchLoadingTime = function(str) {
     const m = minutes > 15 && minutes < 45 && minutes !== 0 ? 30 : '00'
     const h = minutes > 44 ? (hours === 23 ? '00' : ++hours) : hours
 
-    return new Date(yyyy, mm, dd, h, m).getTime()
+    return new Date(yyyy, mm, dd, h, m).getTime() /* - 86400000*/
 }
