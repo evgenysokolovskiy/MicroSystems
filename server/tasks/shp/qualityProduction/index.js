@@ -6,7 +6,12 @@ const convertStringToDateBatchLoadingTime = require('../helpers/calculateDates')
     .convertStringToDateBatchLoadingTime
 
 module.exports = function({ joinTechnologyFact }) {
-    let d = {}
+    let rememberCompletedSteps = {}
+let forgetCompletedSteps = {}
+
+//const arr = joinTechnologyFact['running']['14.288']['fact']['336-56-20']
+//console.log(arr)
+
 
     Object.entries(clonedeep(joinTechnologyFact)).forEach(procedure => {
         if (
@@ -18,12 +23,22 @@ module.exports = function({ joinTechnologyFact }) {
         const obj = {
             quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
             defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
-            notFact: {},
+            notFact: {}, // Перечень карт без проверки (на момент последней проверки)
             weight: 0, // Общий загруженный вес продукции
             qualityWeight: 0, // Вес качественной продукции
             defectWeight: 0, // Вес дефектной продукции
             notFactWeight: 0 // Вес продукции, проверка качества которого не производилась
         }
+
+const forget = {
+    quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
+    defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
+    notFact: {}, // Перечень карт без проверки (на момент последней проверки)
+    weight: 0, // Общий загруженный вес продукции
+    qualityWeight: 0, // Вес качественной продукции
+    defectWeight: 0, // Вес дефектной продукции
+    notFactWeight: 0 // Вес продукции, проверка качества которого не производилась
+}
 
         Object.values(procedure).forEach(item => {
             if (typeof item !== 'object') return
@@ -38,6 +53,66 @@ module.exports = function({ joinTechnologyFact }) {
                     let val = clonedeep(
                         calculateDataOneCard({ technology, fact, card: card[0], interval })
                     )
+
+
+
+
+// Начальный вес партии
+const hasWeight = card[1].find(item => item['weight'])
+const weight = hasWeight && hasWeight['weight']
+// Проработка партии на данной процедуре завершена (имеет вес качественной продукции)
+const hasQualityWeight = card[1].reverse().find(item => item['qualityProducts'])
+const qualityWeight = hasQualityWeight && hasQualityWeight['qualityProducts']
+// Вес дефектной продукции
+const defectiveWeight = weight && qualityWeight && +weight - +qualityWeight
+
+
+// Если не имеет годного веса продукции на выходе, значит данная процедура еще не закончилась 
+// или закончилась, но вся продукция имеет брак. Тогда тоже принадлежит данной процедуре
+if (!qualityWeight) {
+    let forgetQuality, forgetDefect, forgetNotFact
+    const forgetHasFact = val['diameter']
+        .reverse()
+        .find(item => item['falseFact'] || item['trueFact'])
+
+    if (forgetHasFact) {
+        forgetQuality =
+            forgetHasFact['trueFact'] && card[1].find(item => item['weight'])
+        forgetDefect =
+            forgetHasFact['falseFact'] && card[1].find(item => item['weight'])
+    } else {
+        forgetNotFact = card[1].find(item => item['weight'])
+    }
+
+    const forgetQualityItem = forgetQuality && {
+        [type[0]]: {
+            ...forget['quality'][type[0]],
+            [[card[0]]]: forgetQuality
+        }
+    }
+    const forgetDefectItem = forgetDefect && {
+        [type[0]]: {
+            ...forget['defect'][type[0]],
+            [[card[0]]]: forgetDefect
+        }
+    }
+    const forgetNotFactItem = forgetNotFact && {
+        [type[0]]: {
+            ...forget['notFact'][type[0]],
+            [[card[0]]]: forgetNotFact
+        }
+    }
+
+    forget['quality'] = { ...forget['quality'], ...forgetQualityItem }
+    forget['defect'] = { ...forget['defect'], ...forgetDefectItem }
+    forget['notFact'] = { ...forget['notFact'], ...forgetNotFactItem }
+
+    // Получить вес качественной и дефектной продукции
+    if (forgetQuality) forget['qualityWeight'] += +forgetQuality['weight']
+    if (forgetDefect) forget['defectWeight'] += +forgetDefect['weight']
+    if (forgetNotFact) forget['notFactWeight'] += +forgetNotFact['weight']
+}
+
 
                     // Заполнить данными свойства quality, defect, notFact
                     let quality, defect, notFact
@@ -84,15 +159,24 @@ module.exports = function({ joinTechnologyFact }) {
             })
             obj['weight'] = (() =>
                 obj['qualityWeight'] + obj['defectWeight'] + obj['notFactWeight'])()
+
+            forget['weight'] = (() =>
+                forget['qualityWeight'] + forget['defectWeight'] + forget['notFactWeight'])()
         })
 
         const it = {
             [procedure[0]]: obj
         }
-        d = { ...d, ...it }
+
+        const forgetIt = {
+            [procedure[0]]: forget
+        }
+
+        rememberCompletedSteps = { ...rememberCompletedSteps, ...it }
+        forgetCompletedSteps = { ...forgetCompletedSteps, ...forgetIt }
     })
 
-    Object.entries(d).forEach(procedure => {
+    Object.entries(rememberCompletedSteps).forEach(procedure => {
         //qualityItems - Количество карт, выпускающих качественную продукцию
         //defectItems - Количество карт, выпускающих дефектную продукцию
         //notFactItems - Количество карт, по которым не осуществлялась проверка
@@ -101,22 +185,57 @@ module.exports = function({ joinTechnologyFact }) {
         const defect = getAmountCards(procedure[1]['defect'])
         const notFact = getAmountCards(procedure[1]['notFact'])
 
-        d[procedure[0]]['qualityItems'] = quality
-        d[procedure[0]]['defectItems'] = defect
-        d[procedure[0]]['notFactItems'] = notFact
-        d[procedure[0]]['items'] = quality + defect + notFact
+        rememberCompletedSteps[procedure[0]]['qualityItems'] = quality
+        rememberCompletedSteps[procedure[0]]['defectItems'] = defect
+        rememberCompletedSteps[procedure[0]]['notFactItems'] = notFact
+        rememberCompletedSteps[procedure[0]]['items'] = quality + defect + notFact
     })
 
-    const cards = getCardsQualityBatchLoadingUnLoadingTime(d, joinTechnologyFact)
+    Object.entries(forgetCompletedSteps).forEach(procedure => {
+        if (procedure[0] === 'total' || procedure[0] === 'cards') return
+        const quality = getAmountCards(procedure[1]['quality'])
+        const defect = getAmountCards(procedure[1]['defect'])
+        const notFact = getAmountCards(procedure[1]['notFact'])
+
+        forgetCompletedSteps[procedure[0]]['qualityItems'] = quality
+        forgetCompletedSteps[procedure[0]]['defectItems'] = defect
+        forgetCompletedSteps[procedure[0]]['notFactItems'] = notFact
+        forgetCompletedSteps[procedure[0]]['items'] = quality + defect + notFact
+    })
+
+    const [types, cards] = getCardsQualityBatchLoadingUnLoadingTime(rememberCompletedSteps, joinTechnologyFact)
+    const [forgetTypes, forgetCards] = getCardsQualityBatchLoadingUnLoadingTime(forgetCompletedSteps, joinTechnologyFact)
     const total = {
         amountCards: (() => Object.keys(cards).length)()
     }
 
-    d['cards'] = cards
-    d['total'] = total
+    const forgetTotal = {
+        amountCards: (() => Object.keys(forgetCards).length)()
+    }
 
-    return d
+    rememberCompletedSteps['types'] = types
+    rememberCompletedSteps['cards'] = cards
+    rememberCompletedSteps['total'] = total
+
+    forgetCompletedSteps['types'] = forgetTypes
+    forgetCompletedSteps['cards'] = forgetCards
+    forgetCompletedSteps['total'] = forgetTotal
+
+    //console.log(rememberCompletedSteps['cards']['336-56-20'])
+    return forgetCompletedSteps
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getAmountCards(obj) {
     let count = 0
@@ -130,6 +249,7 @@ function getAmountCards(obj) {
 // И состояние продукции на каждом этапе
 function getCardsQualityBatchLoadingUnLoadingTime(obj, join) {
     const cards = {}
+    const types = {}
     Object.entries(obj).forEach(procedure => {
         Object.entries(procedure[1]).forEach(quality => {
             Object.entries(quality[1]).forEach(type => {
@@ -186,11 +306,22 @@ function getCardsQualityBatchLoadingUnLoadingTime(obj, join) {
                                 msUnloadingTime
                             }
                         }
+
+                        let it = {}
+                        if (types[type[0]]) {
+                            it = types[type[0]][card[0]]
+                        }
+
+                        const val = {
+                            [card[0]]: { ...it, ...value }
+                        }
                         cards[card[0]] = { ...cards[card[0]], ...value }
+                        types[type[0]] = { ...types[type[0]], ...val }
                     }
                 })
             })
         })
     })
-    return cards
+
+    return [ types, cards ]
 }
