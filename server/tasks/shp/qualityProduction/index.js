@@ -5,13 +5,13 @@ const convertDateToString = require('../helpers/calculateDates').convertDateToSt
 const convertStringToDateBatchLoadingTime = require('../helpers/calculateDates')
     .convertStringToDateBatchLoadingTime
 
+// На выходе необходимо получить 2 объекта:
+// - Помнит все данные после завершения процедуры (для анализа, например, для осевого графика)
+// - Данные в реальном времени (не сохраняет данные по завершенным процедурам)
 module.exports = function({ joinTechnologyFact }) {
-    let rememberCompletedSteps = {}
-let forgetCompletedSteps = {}
 
-//const arr = joinTechnologyFact['running']['14.288']['fact']['336-56-20']
-//console.log(arr)
-
+    let realTimeObj = {} // Данные в реальном времени (не сохраняет завершенные процедуры)
+    let rememberObj = {} // Помнит данные по завершенным процедурам
 
     Object.entries(clonedeep(joinTechnologyFact)).forEach(procedure => {
         if (
@@ -20,7 +20,8 @@ let forgetCompletedSteps = {}
             procedure[0] !== 'stamping'
         )
             return
-        const obj = {
+
+        const realTime = {
             quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
             defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
             notFact: {}, // Перечень карт без проверки (на момент последней проверки)
@@ -30,16 +31,17 @@ let forgetCompletedSteps = {}
             notFactWeight: 0 // Вес продукции, проверка качества которого не производилась
         }
 
-const forget = {
-    quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
-    defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
-    notFact: {}, // Перечень карт без проверки (на момент последней проверки)
-    weight: 0, // Общий загруженный вес продукции
-    qualityWeight: 0, // Вес качественной продукции
-    defectWeight: 0, // Вес дефектной продукции
-    notFactWeight: 0 // Вес продукции, проверка качества которого не производилась
-}
+        const remember = {
+            quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
+            defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
+            notFact: {}, // Перечень карт без проверки (на момент последней проверки)
+            weight: 0, // Общий загруженный вес продукции
+            qualityWeight: 0, // Вес качественной продукции
+            defectWeight: 0, // Вес дефектной продукции
+            notFactWeight: 0 // Вес продукции, проверка качества которого не производилась
+        }
 
+        // 1) По весу продукции
         Object.values(procedure).forEach(item => {
             if (typeof item !== 'object') return
             Object.entries(item).forEach(type => {
@@ -54,189 +56,173 @@ const forget = {
                         calculateDataOneCard({ technology, fact, card: card[0], interval })
                     )
 
+                    // Начальный вес партии
+                    const hasWeight = card[1].find(item => item['weight'])
+                    const weight = hasWeight && hasWeight['weight']
+                    // Проработка партии на данной процедуре завершена (имеет вес качественной продукции)
+                    const hasQualityWeight = card[1].reverse().find(item => item['qualityProducts'])
+                    const qualityWeight = hasQualityWeight && hasQualityWeight['qualityProducts']
+                    // Вес дефектной продукции
+                    const defectiveWeight = weight && qualityWeight && +weight - +qualityWeight
 
+                    // Исходя из наличия qualityWeight (вес качественной продукции при сдаче партии) можно сделать вывод:
+                    // Если есть - партия сдана, в настоящий момент перешла на следующую процедуру или ожидает её
+                    // Если нет - процедура выполняется в данный момент
 
+                    if (!qualityWeight) {
+                        // *** Партия выполняется на данной процедуре
+                        let realQuality, realDefect, realNotFact
+                        const realHasFact = val['diameter']
+                            .reverse()
+                            .find(item => item['falseFact'] || item['trueFact'])
 
-// Начальный вес партии
-const hasWeight = card[1].find(item => item['weight'])
-const weight = hasWeight && hasWeight['weight']
-// Проработка партии на данной процедуре завершена (имеет вес качественной продукции)
-const hasQualityWeight = card[1].reverse().find(item => item['qualityProducts'])
-const qualityWeight = hasQualityWeight && hasQualityWeight['qualityProducts']
-// Вес дефектной продукции
-const defectiveWeight = weight && qualityWeight && +weight - +qualityWeight
+                        if (realHasFact) {
+                            realQuality =
+                                realHasFact['trueFact'] && card[1].find(item => item['weight'])
+                            realDefect =
+                                realHasFact['falseFact'] && card[1].find(item => item['weight'])
+                        } else {
+                            realNotFact = card[1].find(item => item['weight'])
+                        }
 
+                        const realQualityItem = realQuality && {
+                            [type[0]]: {
+                                ...realTime['quality'][type[0]],
+                                [[card[0]]]: realQuality
+                            }
+                        }
+                        const realDefectItem = realDefect && {
+                            [type[0]]: {
+                                ...realTime['defect'][type[0]],
+                                [[card[0]]]: realDefect
+                            }
+                        }
+                        const realNotFactItem = realNotFact && {
+                            [type[0]]: {
+                                ...realTime['notFact'][type[0]],
+                                [[card[0]]]: realNotFact
+                            }
+                        }
 
-// Если не имеет годного веса продукции на выходе, значит данная процедура еще не закончилась 
-// или закончилась, но вся продукция имеет брак. Тогда тоже принадлежит данной процедуре
-if (!qualityWeight) {
-    let forgetQuality, forgetDefect, forgetNotFact
-    const forgetHasFact = val['diameter']
-        .reverse()
-        .find(item => item['falseFact'] || item['trueFact'])
+                        realTime['quality'] = { ...realTime['quality'], ...realQualityItem }
+                        realTime['defect'] = { ...realTime['defect'], ...realDefectItem }
+                        realTime['notFact'] = { ...realTime['notFact'], ...realNotFactItem }
 
-    if (forgetHasFact) {
-        forgetQuality =
-            forgetHasFact['trueFact'] && card[1].find(item => item['weight'])
-        forgetDefect =
-            forgetHasFact['falseFact'] && card[1].find(item => item['weight'])
-    } else {
-        forgetNotFact = card[1].find(item => item['weight'])
-    }
-
-    const forgetQualityItem = forgetQuality && {
-        [type[0]]: {
-            ...forget['quality'][type[0]],
-            [[card[0]]]: forgetQuality
-        }
-    }
-    const forgetDefectItem = forgetDefect && {
-        [type[0]]: {
-            ...forget['defect'][type[0]],
-            [[card[0]]]: forgetDefect
-        }
-    }
-    const forgetNotFactItem = forgetNotFact && {
-        [type[0]]: {
-            ...forget['notFact'][type[0]],
-            [[card[0]]]: forgetNotFact
-        }
-    }
-
-    forget['quality'] = { ...forget['quality'], ...forgetQualityItem }
-    forget['defect'] = { ...forget['defect'], ...forgetDefectItem }
-    forget['notFact'] = { ...forget['notFact'], ...forgetNotFactItem }
-
-    // Получить вес качественной и дефектной продукции
-    if (forgetQuality) forget['qualityWeight'] += +forgetQuality['weight']
-    if (forgetDefect) forget['defectWeight'] += +forgetDefect['weight']
-    if (forgetNotFact) forget['notFactWeight'] += +forgetNotFact['weight']
-}
-
-
-                    // Заполнить данными свойства quality, defect, notFact
-                    let quality, defect, notFact
-                    const hasFact = val['diameter']
-                        .reverse()
-                        .find(item => item['falseFact'] || item['trueFact'])
-                    if (hasFact) {
-                        quality =
-                            hasFact['trueFact'] && card[1].reverse().find(item => item['weight'])
-                        defect =
-                            hasFact['falseFact'] && card[1].reverse().find(item => item['weight'])
+                        // Получить вес качественной и дефектной продукции
+                        if (realQuality) realTime['qualityWeight'] += +realQuality['weight']
+                        if (realDefect) realTime['defectWeight'] += +realDefect['weight']
+                        if (realNotFact) realTime['notFactWeight'] += +realNotFact['weight']
                     } else {
-                        notFact = card[1].reverse().find(item => item['weight'])
-                    }
-
-                    const qualityItem = quality && {
-                        [type[0]]: {
-                            ...obj['quality'][type[0]],
-                            [[card[0]]]: quality
+                        // *** Партия сдана на данной процедуры (процедура закрыта)
+                        let rememberQuality, rememberDefect, rememberNotFact
+                        const hasFact = val['diameter']
+                            .reverse()
+                            .find(item => item['falseFact'] || item['trueFact'])
+                        if (hasFact) {
+                            rememberQuality =
+                                hasFact['trueFact'] && card[1].reverse().find(item => item['weight'])
+                            rememberDefect =
+                                hasFact['falseFact'] && card[1].reverse().find(item => item['weight'])
+                        } else {
+                            rememberNotFact = card[1].reverse().find(item => item['weight'])
                         }
-                    }
-                    const defectItem = defect && {
-                        [type[0]]: {
-                            ...obj['defect'][type[0]],
-                            [[card[0]]]: defect
-                        }
-                    }
-                    const notFactItem = notFact && {
-                        [type[0]]: {
-                            ...obj['notFact'][type[0]],
-                            [[card[0]]]: notFact
-                        }
-                    }
 
-                    obj['quality'] = { ...obj['quality'], ...qualityItem }
-                    obj['defect'] = { ...obj['defect'], ...defectItem }
-                    obj['notFact'] = { ...obj['notFact'], ...notFactItem }
+                        const qualityItem = rememberQuality && {
+                            [type[0]]: {
+                                ...remember['quality'][type[0]],
+                                [[card[0]]]: rememberQuality
+                            }
+                        }
+                        const defectItem = rememberDefect && {
+                            [type[0]]: {
+                                ...remember['defect'][type[0]],
+                                [[card[0]]]: rememberDefect
+                            }
+                        }
+                        const notFactItem = rememberNotFact && {
+                            [type[0]]: {
+                                ...remember['notFact'][type[0]],
+                                [[card[0]]]: rememberNotFact
+                            }
+                        }
 
-                    // Получить вес качественной и дефектной продукции
-                    if (quality) obj['qualityWeight'] += +quality['weight']
-                    if (defect) obj['defectWeight'] += +defect['weight']
-                    if (notFact) obj['notFactWeight'] += +notFact['weight']
+                        remember['quality'] = { ...remember['quality'], ...qualityItem }
+                        remember['defect'] = { ...remember['defect'], ...defectItem }
+                        remember['notFact'] = { ...remember['notFact'], ...notFactItem }
+
+                        // Получить вес качественной и дефектной продукции
+                        if (rememberQuality) remember['qualityWeight'] += +rememberQuality['weight']
+                        if (rememberDefect) remember['defectWeight'] += +rememberDefect['weight']
+                        if (rememberNotFact) remember['notFactWeight'] += +rememberNotFact['weight']
+                    }
                 })
             })
-            obj['weight'] = (() =>
-                obj['qualityWeight'] + obj['defectWeight'] + obj['notFactWeight'])()
 
-            forget['weight'] = (() =>
-                forget['qualityWeight'] + forget['defectWeight'] + forget['notFactWeight'])()
+            realTime['weight'] = (() =>
+                realTime['qualityWeight'] + realTime['defectWeight'] + realTime['notFactWeight'])()
+
+            remember['weight'] = (() =>
+                remember['qualityWeight'] + remember['defectWeight'] + remember['notFactWeight'])()                
         })
 
-        const it = {
-            [procedure[0]]: obj
-        }
-
-        const forgetIt = {
-            [procedure[0]]: forget
-        }
-
-        rememberCompletedSteps = { ...rememberCompletedSteps, ...it }
-        forgetCompletedSteps = { ...forgetCompletedSteps, ...forgetIt }
+        realTimeObj = { ...realTimeObj, [procedure[0]]: realTime }
+        rememberObj = { ...rememberObj, [procedure[0]]: remember }
     })
 
-    Object.entries(rememberCompletedSteps).forEach(procedure => {
-        //qualityItems - Количество карт, выпускающих качественную продукцию
-        //defectItems - Количество карт, выпускающих дефектную продукцию
-        //notFactItems - Количество карт, по которым не осуществлялась проверка
+    // 2) По количеству карт
+
+    // По процедурам в реальном времени
+    Object.entries(realTimeObj).forEach(procedure => {
         if (procedure[0] === 'total' || procedure[0] === 'cards') return
         const quality = getAmountCards(procedure[1]['quality'])
         const defect = getAmountCards(procedure[1]['defect'])
         const notFact = getAmountCards(procedure[1]['notFact'])
 
-        rememberCompletedSteps[procedure[0]]['qualityItems'] = quality
-        rememberCompletedSteps[procedure[0]]['defectItems'] = defect
-        rememberCompletedSteps[procedure[0]]['notFactItems'] = notFact
-        rememberCompletedSteps[procedure[0]]['items'] = quality + defect + notFact
+        realTimeObj[procedure[0]]['qualityItems'] = quality
+        realTimeObj[procedure[0]]['defectItems'] = defect
+        realTimeObj[procedure[0]]['notFactItems'] = notFact
+        realTimeObj[procedure[0]]['items'] = quality + defect + notFact
     })
 
-    Object.entries(forgetCompletedSteps).forEach(procedure => {
+    // По завершенным процедурам
+    Object.entries(rememberObj).forEach(procedure => {
         if (procedure[0] === 'total' || procedure[0] === 'cards') return
         const quality = getAmountCards(procedure[1]['quality'])
         const defect = getAmountCards(procedure[1]['defect'])
         const notFact = getAmountCards(procedure[1]['notFact'])
 
-        forgetCompletedSteps[procedure[0]]['qualityItems'] = quality
-        forgetCompletedSteps[procedure[0]]['defectItems'] = defect
-        forgetCompletedSteps[procedure[0]]['notFactItems'] = notFact
-        forgetCompletedSteps[procedure[0]]['items'] = quality + defect + notFact
+        rememberObj[procedure[0]]['qualityItems'] = quality
+        rememberObj[procedure[0]]['defectItems'] = defect
+        rememberObj[procedure[0]]['notFactItems'] = notFact
+        rememberObj[procedure[0]]['items'] = quality + defect + notFact
     })
 
-    const [types, cards] = getCardsQualityBatchLoadingUnLoadingTime(rememberCompletedSteps, joinTechnologyFact)
-    const [forgetTypes, forgetCards] = getCardsQualityBatchLoadingUnLoadingTime(forgetCompletedSteps, joinTechnologyFact)
-    const total = {
-        amountCards: (() => Object.keys(cards).length)()
+    // 3) Добавить свойства группировки по типам и картам
+    // Добавить время начала и предположительное время окончания процедуры (для realTime)
+    const [rememberTypes, rememberCards] = groupCardsQualityBatchLoadingUnLoadingTime(rememberObj, joinTechnologyFact)
+    const [realTypes, realCards] = groupCardsQualityBatchLoadingUnLoadingTime(realTimeObj, joinTechnologyFact)
+
+    const realTotal = {
+        amountCards: (() => Object.keys(realCards).length)()
     }
+    realTimeObj['types'] = realTypes
+    realTimeObj['cards'] = realCards
+    realTimeObj['total'] = realTotal
 
-    const forgetTotal = {
-        amountCards: (() => Object.keys(forgetCards).length)()
+    const rememberTotal = {
+        amountCards: (() => Object.keys(rememberCards).length)()
     }
+    rememberObj['types'] = rememberTypes
+    rememberObj['cards'] = rememberCards
+    rememberObj['total'] = rememberTotal
 
-    rememberCompletedSteps['types'] = types
-    rememberCompletedSteps['cards'] = cards
-    rememberCompletedSteps['total'] = total
-
-    forgetCompletedSteps['types'] = forgetTypes
-    forgetCompletedSteps['cards'] = forgetCards
-    forgetCompletedSteps['total'] = forgetTotal
-
-    //console.log(rememberCompletedSteps['cards']['336-56-20'])
-    return forgetCompletedSteps
+    //console.log(realTimeObj)
+    return realTimeObj
 }
 
+/* HELPERS */
 
-
-
-
-
-
-
-
-
-
-
-
+// Подсчитать количество карт
 function getAmountCards(obj) {
     let count = 0
     Object.values(obj).forEach(item => {
@@ -245,9 +231,10 @@ function getAmountCards(obj) {
     return count
 }
 
-// Определить все уникальные карты
-// И состояние продукции на каждом этапе
-function getCardsQualityBatchLoadingUnLoadingTime(obj, join) {
+// Определить все уникальные карты и состояние продукции на каждом этапе
+// Добавить время начала и окончания процедуры по карте
+// Группировать по типам и по картам
+function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
     const cards = {}
     const types = {}
     Object.entries(obj).forEach(procedure => {
