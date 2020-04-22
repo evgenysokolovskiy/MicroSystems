@@ -43,3 +43,4 @@ export const scheme = [
 export const joinTechnologyFact = `${HOST}/api/jointechnologyfact`
 export const qualityProduction = `${HOST}/api/qualityProduction`
 export const interval = `${HOST}/api/interval`
+export const mtime = `${HOST}/api/mtime`

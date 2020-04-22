@@ -25,6 +25,15 @@ export const _TECH_INTERVAL = {
     }
 }
 
+export const _TECH_MTIME = {
+    types: {
+        TECH_MTIME: 'TECH_MTIME'
+    },
+    init: {
+        techMtime: 0
+    }
+}
+
 export const _TECH_TARGET_MENU = {
     types: {
         TECH_TARGET_MENU: 'TECH_TARGET_MENU'

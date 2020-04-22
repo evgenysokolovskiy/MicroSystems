@@ -67,6 +67,7 @@ export class Content extends PureComponent {
             techJoinTechnologyFact, // Данные технология и факт
             techQualityProduction: quality, // Данные качества выпускаемой продукции на основе факта (проверок)
             techInterval: interval, // Интервал между отсечками на шкале времени
+            techMtime: mtime, // Дата изменения файла фактических данных на сервере
             techTargetTimeStamp: target // Момент времени
         } = this.props
 
@@ -79,7 +80,7 @@ export class Content extends PureComponent {
         // Технология имеет свою длину и определенное положение каждой точки в рамкаках этой длины
         // Факт - фактические данные
         const joinData = clonedeep(techJoinTechnologyFact)
-        console.log(quality)
+
         /*
         let obj = {}      
         Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
@@ -124,6 +125,7 @@ export class Content extends PureComponent {
                 card={card}
                 target={target}
                 data={data}
+                mtime={mtime}
                 quality={quality}
                 nameTotalTab={this.nameTotalTab}
                 handleClickMenu={this.handleClickMenu}
@@ -142,6 +144,7 @@ function mapStateToProps(store) {
         ...store.techQualityProductionReducer,
         ...store.techJoinTechnologyFactReducer,
         ...store.techIntervalReducer,
+        ...store.techMtimeReducer,
         ...store.techTechnologyReducer,
         ...store.techShpFactReducer,
         ...store.techTypeReducer,

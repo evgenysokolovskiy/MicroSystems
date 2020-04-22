@@ -10,8 +10,9 @@ const convertStringToDateBatchLoadingTime = require('../helpers/calculateDates')
 // - Данные в реальном времени (не сохраняет данные по завершенным процедурам)
 module.exports = function({ joinTechnologyFact }) {
 
-    let realTimeObj = {} // Данные в реальном времени (не сохраняет завершенные процедуры)
-    let rememberObj = {} // Помнит данные по завершенным процедурам
+    let realTimeObj = {} // Только действующие процедуры
+    let rememberObj = {} // Только завершённые процедуры
+    let allObj = {} // Все процедуры за всё время
 
     Object.entries(clonedeep(joinTechnologyFact)).forEach(procedure => {
         if (
@@ -32,6 +33,16 @@ module.exports = function({ joinTechnologyFact }) {
         }
 
         const remember = {
+            quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
+            defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
+            notFact: {}, // Перечень карт без проверки (на момент последней проверки)
+            weight: 0, // Общий загруженный вес продукции
+            qualityWeight: 0, // Вес качественной продукции
+            defectWeight: 0, // Вес дефектной продукции
+            notFactWeight: 0 // Вес продукции, проверка качества которого не производилась
+        }
+
+        const all = {
             quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
             defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
             notFact: {}, // Перечень карт без проверки (на момент последней проверки)
@@ -155,6 +166,50 @@ module.exports = function({ joinTechnologyFact }) {
                         if (rememberDefect) remember['defectWeight'] += +rememberDefect['weight']
                         if (rememberNotFact) remember['notFactWeight'] += +rememberNotFact['weight']
                     }
+
+
+                    // *** Все партии за всё время
+                    let allQuality, allDefect, allNotFact
+                    const allHasFact = val['diameter']
+                        .reverse()
+                        .find(item => item['falseFact'] || item['trueFact'])
+
+                    if (allHasFact) {
+                        allQuality =
+                            allHasFact['trueFact'] && card[1].find(item => item['weight'])
+                        allDefect =
+                            allHasFact['falseFact'] && card[1].find(item => item['weight'])
+                    } else {
+                        allNotFact = card[1].find(item => item['weight'])
+                    }
+
+                    const allQualityItem = allQuality && {
+                        [type[0]]: {
+                            ...all['quality'][type[0]],
+                            [[card[0]]]: allQuality
+                        }
+                    }
+                    const allDefectItem = allDefect && {
+                        [type[0]]: {
+                            ...all['defect'][type[0]],
+                            [[card[0]]]: allDefect
+                        }
+                    }
+                    const allNotFactItem = allNotFact && {
+                        [type[0]]: {
+                            ...all['notFact'][type[0]],
+                            [[card[0]]]: allNotFact
+                        }
+                    }
+
+                    all['quality'] = { ...all['quality'], ...allQualityItem }
+                    all['defect'] = { ...all['defect'], ...allDefectItem }
+                    all['notFact'] = { ...all['notFact'], ...allNotFactItem }
+
+                    // Получить вес качественной и дефектной продукции
+                    if (allQuality) all['qualityWeight'] += +allQuality['weight']
+                    if (allDefect) all['defectWeight'] += +allDefect['weight']
+                    if (allNotFact) all['notFactWeight'] += +allNotFact['weight']
                 })
             })
 
@@ -162,11 +217,15 @@ module.exports = function({ joinTechnologyFact }) {
                 realTime['qualityWeight'] + realTime['defectWeight'] + realTime['notFactWeight'])()
 
             remember['weight'] = (() =>
-                remember['qualityWeight'] + remember['defectWeight'] + remember['notFactWeight'])()                
+                remember['qualityWeight'] + remember['defectWeight'] + remember['notFactWeight'])()
+
+            all['weight'] = (() =>
+                all['qualityWeight'] + all['defectWeight'] + all['notFactWeight'])()             
         })
 
         realTimeObj = { ...realTimeObj, [procedure[0]]: realTime }
         rememberObj = { ...rememberObj, [procedure[0]]: remember }
+        allObj = { ...allObj, [procedure[0]]: all }
     })
 
     // 2) По количеству карт
@@ -197,10 +256,24 @@ module.exports = function({ joinTechnologyFact }) {
         rememberObj[procedure[0]]['items'] = quality + defect + notFact
     })
 
+    // По всем процедурам
+    Object.entries(allObj).forEach(procedure => {
+        if (procedure[0] === 'total' || procedure[0] === 'cards') return
+        const quality = getAmountCards(procedure[1]['quality'])
+        const defect = getAmountCards(procedure[1]['defect'])
+        const notFact = getAmountCards(procedure[1]['notFact'])
+
+        allObj[procedure[0]]['qualityItems'] = quality
+        allObj[procedure[0]]['defectItems'] = defect
+        allObj[procedure[0]]['notFactItems'] = notFact
+        allObj[procedure[0]]['items'] = quality + defect + notFact
+    })    
+
     // 3) Добавить свойства группировки по типам и картам
     // Добавить время начала и предположительное время окончания процедуры (для realTime)
-    const [rememberTypes, rememberCards] = groupCardsQualityBatchLoadingUnLoadingTime(rememberObj, joinTechnologyFact)
     const [realTypes, realCards] = groupCardsQualityBatchLoadingUnLoadingTime(realTimeObj, joinTechnologyFact)
+    const [rememberTypes, rememberCards] = groupCardsQualityBatchLoadingUnLoadingTime(rememberObj, joinTechnologyFact)
+    const [allTypes, allCards] = groupCardsQualityBatchLoadingUnLoadingTime(allObj, joinTechnologyFact)
 
     const realTotal = {
         amountCards: (() => Object.keys(realCards).length)()
@@ -216,8 +289,17 @@ module.exports = function({ joinTechnologyFact }) {
     rememberObj['cards'] = rememberCards
     rememberObj['total'] = rememberTotal
 
-    //console.log(realTimeObj)
-    return realTimeObj
+    const allTotal = {
+        amountCards: (() => Object.keys(allCards).length)()
+    }
+    allObj['types'] = allTypes
+    allObj['cards'] = allCards
+    allObj['total'] = allTotal
+
+    //console.log(allObj['types']['9.525']['234-56-20'])
+    //console.log(realTimeObj['types']['9.525']['234-56-20'])
+    //console.log(rememberObj['types']['9.525']['234-56-20'])
+    return [realTimeObj, rememberObj, allObj]
 }
 
 /* HELPERS */

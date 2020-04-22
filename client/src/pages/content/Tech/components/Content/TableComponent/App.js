@@ -60,8 +60,8 @@ const now = (function() {
 })()
 
 export default function(props) {
-    const { quality } = props
-
+    const { quality: q, mtime } = props
+    const quality = q['realTime']
     //console.log(quality)
 
     const dataSourceWeight = [
@@ -222,7 +222,7 @@ export default function(props) {
                 <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
                     Осевой график запущенных процессов
                 </h4>
-                <AxisCardComponent />
+                <AxisCardComponent quality={q['all']} mtime={mtime} />
             </div>
         </>
     )

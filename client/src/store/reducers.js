@@ -11,6 +11,7 @@ import drawerReducer from './repair/reducers/drawerReducer'
 import techJoinTechnologyFactReducer from './tech/reducers/techJoinTechnologyFactReducer'
 import techQualityProductionReducer from './tech/reducers/techQualityProductionReducer'
 import techIntervalReducer from './tech/reducers/techIntervalReducer'
+import techMtimeReducer from './tech/reducers/techMtimeReducer'
 import techTargetMenuReducer from './tech/reducers/techTargetMenuReducer'
 import techTargetTimeStampReducer from './tech/reducers/techTargetTimeStampReducer'
 import techTargetTimeStampDataReducer from './tech/reducers/techTargetTimeStampDataReducer'
@@ -31,6 +32,7 @@ export default combineReducers({
     techJoinTechnologyFactReducer,
     techQualityProductionReducer,
     techIntervalReducer,
+    techMtimeReducer,
     techTargetMenuReducer,
     techTargetTimeStampReducer,
     techTargetTimeStampDataReducer,

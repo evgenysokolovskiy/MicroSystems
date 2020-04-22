@@ -14,12 +14,14 @@ const {
 
 const convertData = require('../../shp/convertFact/').convertData
 const convertTechnologyFact = require('../../shp/convertTechnologyFact/')
-const qualityProduction = require('../../shp/qualityProduction')
+const qualityProduction = require('../../shp/qualityProduction/')
 const joinTechnologyFactAPI = require('../../../api/joinTechnologyFactAPI')
 const qualityProductionAPI = require('../../../api/qualityProductionAPI')
 const intervalAPI = require('../../../api/intervalAPI')
+const mtimeAPI = require('../../../api/mtimeAPI')
 
 module.exports = function({ app, parseShpFact, technology }) {
+
     fs.readdir(parseShpFact, function(err, files) {
         const paths = files.map(item => `${parseShpFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -52,7 +54,7 @@ module.exports = function({ app, parseShpFact, technology }) {
 
                 if (technology && fact) {
                     const joinTechnologyFact = convertTechnologyFact({ technology, fact })
-                    const quality = qualityProduction({ joinTechnologyFact })
+                    const [realTime, remember, all] = qualityProduction({ joinTechnologyFact })
                     resolve(
                         (() => {
                             joinTechnologyFactAPI({
@@ -62,10 +64,18 @@ module.exports = function({ app, parseShpFact, technology }) {
 
                             qualityProductionAPI({
                                 app,
-                                qualityProduction: quality
+                                realTime,
+                                remember,
+                                all
                             })
 
+                            // Градация
                             intervalAPI({ app })
+
+                            // Дата последнего изменения файла
+                            fs.stat(parseShpFact, (err, stat) => {
+                                mtimeAPI({ app, mtime:stat['mtime'] })
+                            })
                         })()
                     )
                 } else {

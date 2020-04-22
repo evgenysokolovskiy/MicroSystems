@@ -58,7 +58,7 @@ export default class App extends PureComponent {
                 nameTotalTab, // Наименование сводной карты
                 handleClickMenu
             } = this.props
-
+console.log(date)
             const { diameter, inconstancyDimension, pressureSpeed } = data
 
             // Активные карты
@@ -157,7 +157,7 @@ export default class App extends PureComponent {
     }
 
     render() {
-        const { quality, menu, card, handleClickMenu } = this.props
+        const { quality, mtime, menu, card, handleClickMenu } = this.props
         const { component } = this.state
 
         return (
@@ -167,7 +167,7 @@ export default class App extends PureComponent {
                     <Content style={{ minHeight: '92vh' }}>
                         {menu && menu === 'table' && (
                             <Suspense fallback={<LoadingOutlined className="loading" />}>
-                                <TableComponent quality={quality} />
+                                <TableComponent quality={ quality } mtime={mtime} CustomizedAxisTick={CustomizedAxisTick} />
                             </Suspense>
                         )}
 
