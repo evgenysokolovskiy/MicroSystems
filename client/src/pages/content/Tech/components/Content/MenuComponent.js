@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
-import { TableOutlined, LineChartOutlined } from '@ant-design/icons'
+import { TableOutlined, AlignCenterOutlined, LineChartOutlined } from '@ant-design/icons'
 
 const { SubMenu } = Menu
 
@@ -26,6 +26,12 @@ export default class MenuComponent extends PureComponent {
                     <Menu.Item key="table">
                         <Link to="/tech/table">
                             <TableOutlined />
+                        </Link>
+                    </Menu.Item>
+
+                    <Menu.Item key="axis">
+                        <Link to="/tech/axis">
+                            <AlignCenterOutlined />
                         </Link>
                     </Menu.Item>
 

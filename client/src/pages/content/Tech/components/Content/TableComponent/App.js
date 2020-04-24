@@ -1,5 +1,4 @@
 import React from 'react'
-import AxisCardComponent from './AxisCardComponent'
 // Antd
 import { Table } from 'antd'
 
@@ -60,9 +59,8 @@ const now = (function() {
 })()
 
 export default function(props) {
-    const { quality: q, mtime } = props
+    const { quality: q, mtime: time } = props
     const quality = q['realTime']
-    //console.log(quality)
 
     const dataSourceWeight = [
         {
@@ -219,10 +217,6 @@ export default function(props) {
                     size="small"
                     pagination={false}
                 />
-                <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
-                    Осевой график запущенных процессов
-                </h4>
-                <AxisCardComponent quality={q['all']} mtime={mtime} />
             </div>
         </>
     )

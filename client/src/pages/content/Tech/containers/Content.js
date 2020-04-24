@@ -65,7 +65,7 @@ export class Content extends PureComponent {
             techType: type, // Тип подшипника
             techCardNumber: card, // Номер карты
             techJoinTechnologyFact, // Данные технология и факт
-            techQualityProduction: quality, // Данные качества выпускаемой продукции на основе факта (проверок)
+            techQualityProduction, // Данные качества выпускаемой продукции на основе факта (проверок)
             techInterval: interval, // Интервал между отсечками на шкале времени
             techMtime: mtime, // Дата изменения файла фактических данных на сервере
             techTargetTimeStamp: target // Момент времени
@@ -80,6 +80,7 @@ export class Content extends PureComponent {
         // Технология имеет свою длину и определенное положение каждой точки в рамкаках этой длины
         // Факт - фактические данные
         const joinData = clonedeep(techJoinTechnologyFact)
+        const quality = clonedeep(techQualityProduction)
 
         /*
         let obj = {}      
@@ -94,15 +95,24 @@ export class Content extends PureComponent {
         })
         console.log(obj)
         */
+        // Построить осевой график
+        if (quality && menu === 'axis') {
+            // Типы подшипника, определённые в технологии (для вывода в меню типов) для всех операций
+            types = Object.keys(clonedeep(quality)['all']['types']).sort((a, b) => a - b)
+        }
+
         // Построить графическую часть
-        if (joinData && menu && menu !== 'table' && type) {
+        if (joinData && menu && menu !== 'table' && menu !== 'axis' && type) {
             // Отсекаем технологию и факт в соответствии с выбором меню (процедура) и типом подшипника
             // Технология
-            const technology = joinData[menu][type]['technology']
+            const technology = clonedeep(joinData)[menu][type]['technology']
             // Факт
-            const fact = joinData[menu][type]['fact']
-            // Типы подшипника, определённые в технологии (для вывода в меню типов)
-            types = Object.keys(joinData[menu]).filter(item => +item)
+            const fact = clonedeep(joinData)[menu][type]['fact']
+
+            // Типы подшипника, определённые в технологии (для вывода в меню типов) для данной операции
+            types = Object.keys(clonedeep(joinData)[menu])
+                .filter(item => +item)
+                .sort((a, b) => a - b)
             // Номера карт для выбранного типа
             cards = getCards({ fact })
             // Совместить технологию с фактом

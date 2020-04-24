@@ -36,10 +36,8 @@ export function convertStringToDateBatchLoadingTime(str) {
     const yyyy = str.split('.')[2].split(' ')[0]
     let hours = str.split(' ')[1].split('.')[0]
     const minutes = str.split(' ')[1].split('.')[1]
-
     // Округлить время до получаса
     const m = minutes > 15 && minutes < 45 && minutes !== 0 ? 30 : '00'
     const h = minutes > 44 ? (hours === 23 ? '00' : ++hours) : hours
-
-    return new Date(yyyy, mm, dd, h, m).getTime()
+    return new Date(yyyy, mm, dd, h, m).getTime() /* - 86400000*/
 }

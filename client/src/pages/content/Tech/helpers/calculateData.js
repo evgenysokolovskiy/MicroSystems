@@ -135,6 +135,7 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
         convertFactJointDate.forEach(item => {
             if (item['batchLoadingTime']) batchLoadingTime = item['batchLoadingTime']
         })
+
     // 3) Преобразовать string в Date (в миллисекундах)
     let start = convertStringToDateBatchLoadingTime(batchLoadingTime)
 

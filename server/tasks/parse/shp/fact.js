@@ -21,7 +21,6 @@ const intervalAPI = require('../../../api/intervalAPI')
 const mtimeAPI = require('../../../api/mtimeAPI')
 
 module.exports = function({ app, parseShpFact, technology }) {
-
     fs.readdir(parseShpFact, function(err, files) {
         const paths = files.map(item => `${parseShpFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -74,7 +73,7 @@ module.exports = function({ app, parseShpFact, technology }) {
 
                             // Дата последнего изменения файла
                             fs.stat(parseShpFact, (err, stat) => {
-                                mtimeAPI({ app, mtime:stat['mtime'] })
+                                mtimeAPI({ app, mtime: stat['mtime'] })
                             })
                         })()
                     )

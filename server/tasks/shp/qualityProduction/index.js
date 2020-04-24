@@ -9,7 +9,6 @@ const convertStringToDateBatchLoadingTime = require('../helpers/calculateDates')
 // - Помнит все данные после завершения процедуры (для анализа, например, для осевого графика)
 // - Данные в реальном времени (не сохраняет данные по завершенным процедурам)
 module.exports = function({ joinTechnologyFact }) {
-
     let realTimeObj = {} // Только действующие процедуры
     let rememberObj = {} // Только завершённые процедуры
     let allObj = {} // Все процедуры за всё время
@@ -131,9 +130,11 @@ module.exports = function({ joinTechnologyFact }) {
                             .find(item => item['falseFact'] || item['trueFact'])
                         if (hasFact) {
                             rememberQuality =
-                                hasFact['trueFact'] && card[1].reverse().find(item => item['weight'])
+                                hasFact['trueFact'] &&
+                                card[1].reverse().find(item => item['weight'])
                             rememberDefect =
-                                hasFact['falseFact'] && card[1].reverse().find(item => item['weight'])
+                                hasFact['falseFact'] &&
+                                card[1].reverse().find(item => item['weight'])
                         } else {
                             rememberNotFact = card[1].reverse().find(item => item['weight'])
                         }
@@ -167,7 +168,6 @@ module.exports = function({ joinTechnologyFact }) {
                         if (rememberNotFact) remember['notFactWeight'] += +rememberNotFact['weight']
                     }
 
-
                     // *** Все партии за всё время
                     let allQuality, allDefect, allNotFact
                     const allHasFact = val['diameter']
@@ -175,10 +175,8 @@ module.exports = function({ joinTechnologyFact }) {
                         .find(item => item['falseFact'] || item['trueFact'])
 
                     if (allHasFact) {
-                        allQuality =
-                            allHasFact['trueFact'] && card[1].find(item => item['weight'])
-                        allDefect =
-                            allHasFact['falseFact'] && card[1].find(item => item['weight'])
+                        allQuality = allHasFact['trueFact'] && card[1].find(item => item['weight'])
+                        allDefect = allHasFact['falseFact'] && card[1].find(item => item['weight'])
                     } else {
                         allNotFact = card[1].find(item => item['weight'])
                     }
@@ -220,7 +218,7 @@ module.exports = function({ joinTechnologyFact }) {
                 remember['qualityWeight'] + remember['defectWeight'] + remember['notFactWeight'])()
 
             all['weight'] = (() =>
-                all['qualityWeight'] + all['defectWeight'] + all['notFactWeight'])()             
+                all['qualityWeight'] + all['defectWeight'] + all['notFactWeight'])()
         })
 
         realTimeObj = { ...realTimeObj, [procedure[0]]: realTime }
@@ -267,13 +265,22 @@ module.exports = function({ joinTechnologyFact }) {
         allObj[procedure[0]]['defectItems'] = defect
         allObj[procedure[0]]['notFactItems'] = notFact
         allObj[procedure[0]]['items'] = quality + defect + notFact
-    })    
+    })
 
     // 3) Добавить свойства группировки по типам и картам
     // Добавить время начала и предположительное время окончания процедуры (для realTime)
-    const [realTypes, realCards] = groupCardsQualityBatchLoadingUnLoadingTime(realTimeObj, joinTechnologyFact)
-    const [rememberTypes, rememberCards] = groupCardsQualityBatchLoadingUnLoadingTime(rememberObj, joinTechnologyFact)
-    const [allTypes, allCards] = groupCardsQualityBatchLoadingUnLoadingTime(allObj, joinTechnologyFact)
+    const [realTypes, realCards] = groupCardsQualityBatchLoadingUnLoadingTime(
+        realTimeObj,
+        joinTechnologyFact
+    )
+    const [rememberTypes, rememberCards] = groupCardsQualityBatchLoadingUnLoadingTime(
+        rememberObj,
+        joinTechnologyFact
+    )
+    const [allTypes, allCards] = groupCardsQualityBatchLoadingUnLoadingTime(
+        allObj,
+        joinTechnologyFact
+    )
 
     const realTotal = {
         amountCards: (() => Object.keys(realCards).length)()
@@ -392,5 +399,5 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
         })
     })
 
-    return [ types, cards ]
+    return [types, cards]
 }
