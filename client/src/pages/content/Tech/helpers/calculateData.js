@@ -198,6 +198,10 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
 
     // 6) Добавить факт к массивам с дополненной датой
     // Диаметр
+    // Определить среднее значение норматива для последней временной отметки технологии
+    const lastElemDiameterNorm = pointsDiameterDate[pointsDiameterDate.length - 1]['norm']
+    const factLastElemDiameter = lastElemDiameterNorm[0] + (lastElemDiameterNorm[1] - lastElemDiameterNorm[0]) / 2
+
     const diameter = [...pointsDiameterDate].map(technology => {
         convertFactJointDate &&
             [...convertFactJointDate].forEach(fact => {
@@ -214,6 +218,12 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
         technology['date'] = convertDateToString(technology['date'])
         return technology
     })
+
+
+    convertFactJointDate &&
+        [...convertFactJointDate].forEach(fact => {
+            if (fact['qualityProducts']) diameter[diameter.length - 1]['fact'] = factLastElemDiameter
+        })
 
     // Непостоянство, разноразмерность
     const inconstancyDimension = [...pointsInconstancyDimensionDate].map(technology => {
