@@ -23,26 +23,25 @@ module.exports = function({ technology: t, fact: f, card, interval }) {
     // 1) Получить дату факта: конкатенировать дату и время как строку
     // Конвертировать конкатенированную дату в миллисекунды
     // Записать свойство convertFactJointDate['jointDate'], которое будет отображать дату фактического действия в миллисекундах
+    // 2) Определить временную отметку начала построения технологии в миллисекундах
+    // Соответствует временной отметке загрузки
+    let batchLoadingDate, batchLoadingTime
     const convertFactJointDate =
         fact &&
         card &&
         fact[card].map(item => {
-            const date = convertStringToDate(item)
+            if (item['weight']) {
+                if (item['date']) batchLoadingDate = item['date']
+                if (item['batchLoadingTime']) batchLoadingTime = item['batchLoadingTime']
+            }
+
+            const date = convertStringToDateBatchLoadingTime(item['date'], item['batchLoadingTime'])
             item['jointDate'] = date
             return item
         })
-
-    // Определить временную отметку начала построения технологии в миллисекундах
-    // Соответствует временной отметке загрузки
-
-    // 2) Определить временную отметку загрузки (определена как string)
-    let batchLoadingTime
-    convertFactJointDate &&
-        convertFactJointDate.forEach(item => {
-            if (item['batchLoadingTime']) batchLoadingTime = item['batchLoadingTime']
-        })
+        
     // 3) Преобразовать string в Date (в миллисекундах)
-    let start = convertStringToDateBatchLoadingTime(batchLoadingTime)
+    let start = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
 
     // Количество часов по технологии
     const len = pointsDiameter.length

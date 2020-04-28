@@ -8,7 +8,7 @@ export function getCards({ fact: f }) {
     const hasBatchLoadingTime = {}
     Object.entries(fact).forEach(item => {
         item[1].forEach(arr => {
-            const batchLoadingTime = convertStringToDateBatchLoadingTime(arr['batchLoadingTime'])
+            const batchLoadingTime = convertStringToDateBatchLoadingTime(arr['date'], arr['batchLoadingTime'])
             if (batchLoadingTime) hasBatchLoadingTime[item[0]] = batchLoadingTime
         })
     })

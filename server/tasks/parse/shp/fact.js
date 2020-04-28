@@ -54,6 +54,7 @@ module.exports = function({ app, parseShpFact, technology }) {
                 if (technology && fact) {
                     const joinTechnologyFact = convertTechnologyFact({ technology, fact })
                     const [realTime, remember, all] = qualityProduction({ joinTechnologyFact })
+
                     resolve(
                         (() => {
                             joinTechnologyFactAPI({

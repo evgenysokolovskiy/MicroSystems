@@ -98,7 +98,7 @@ export class Content extends PureComponent {
         // Построить осевой график
         if (quality && menu === 'axis') {
             // Типы подшипника, определённые в технологии (для вывода в меню типов) для всех операций
-            types = Object.keys(clonedeep(quality)['all']['types']).sort((a, b) => a - b)
+            types = Object.keys(quality['all']['types']).sort((a, b) => a - b)
         }
 
         // Построить графическую часть
@@ -115,12 +115,15 @@ export class Content extends PureComponent {
                 .sort((a, b) => a - b)
             // Номера карт для выбранного типа
             cards = getCards({ fact })
+
             // Совместить технологию с фактом
             card === this.nameTotalTab
                 ? (data = clonedeep(
                       calculateDataFewCards({ technology, fact, card, cards, interval })
                   ))
                 : (data = clonedeep(calculateDataOneCard({ technology, fact, card, interval })))
+
+                
             // Данные по отметке времени
             const targetData = calculateTargetData(data, target)
             this.props.changeTechTargetTimeStampData(targetData)

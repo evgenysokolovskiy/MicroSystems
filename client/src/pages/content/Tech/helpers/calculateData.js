@@ -117,27 +117,26 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
     // 1) Получить дату факта: конкатенировать дату и время как строку
     // Конвертировать конкатенированную дату в миллисекунды
     // Записать свойство convertFactJointDate['jointDate'], которое будет отображать дату фактического действия в миллисекундах
+    // 2) Определить временную отметку начала построения технологии в миллисекундах
+    // Соответствует временной отметке загрузки
+    let batchLoadingDate, batchLoadingTime
     const convertFactJointDate =
         fact &&
         card &&
         fact[card].map(item => {
-            const date = convertStringToDate(item)
+            if (item['weight']) {
+                if (item['date']) batchLoadingDate = item['date']
+                if (item['batchLoadingTime']) batchLoadingTime = item['batchLoadingTime']
+            }
+
+            const date = convertStringToDateBatchLoadingTime(item['date'], item['batchLoadingTime'])
             item['jointDate'] = date
             return item
         })
 
-    // Определить временную отметку начала построения технологии в миллисекундах
-    // Соответствует временной отметке загрузки
-
-    // 2) Определить временную отметку загрузки (определена как string)
-    let batchLoadingTime
-    convertFactJointDate &&
-        convertFactJointDate.forEach(item => {
-            if (item['batchLoadingTime']) batchLoadingTime = item['batchLoadingTime']
-        })
-
     // 3) Преобразовать string в Date (в миллисекундах)
-    let start = convertStringToDateBatchLoadingTime(batchLoadingTime)
+    let start = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
+
 
     // Количество часов по технологии
     const len = pointsDiameter.length
@@ -199,13 +198,13 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
     // 6) Добавить факт к массивам с дополненной датой
     // Диаметр
     // Определить среднее значение норматива для последней временной отметки технологии
-    const lastElemDiameterNorm = pointsDiameterDate[pointsDiameterDate.length - 1]['norm']
-    const factLastElemDiameter = lastElemDiameterNorm[0] + (lastElemDiameterNorm[1] - lastElemDiameterNorm[0]) / 2
+    //const lastElemDiameterNorm = pointsDiameterDate[pointsDiameterDate.length - 1]['norm']
+    //const factLastElemDiameter = lastElemDiameterNorm[0] + (lastElemDiameterNorm[1] - lastElemDiameterNorm[0]) / 2
 
     const diameter = [...pointsDiameterDate].map(technology => {
         convertFactJointDate &&
             [...convertFactJointDate].forEach(fact => {
-                if (technology['date'] === fact['jointDate']) {
+                if (technology['date'] === fact['jointDate'] && !fact['weight']) {
                     const factDiameter = replaceToDot(fact['diameter'])
                     // 'fact' необходим для построения линейного графика, соединяющего точки
                     technology['fact'] = +factDiameter
@@ -219,12 +218,12 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
         return technology
     })
 
-
+/*
     convertFactJointDate &&
         [...convertFactJointDate].forEach(fact => {
             if (fact['qualityProducts']) diameter[diameter.length - 1]['fact'] = factLastElemDiameter
         })
-
+*/
     // Непостоянство, разноразмерность
     const inconstancyDimension = [...pointsInconstancyDimensionDate].map(technology => {
         convertFactJointDate &&

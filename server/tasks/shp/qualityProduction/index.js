@@ -14,12 +14,6 @@ module.exports = function({ joinTechnologyFact }) {
     let allObj = {} // Все процедуры за всё время
 
     Object.entries(clonedeep(joinTechnologyFact)).forEach(procedure => {
-        if (
-            procedure[0] !== 'running' &&
-            procedure[0] !== 'grinding' &&
-            procedure[0] !== 'stamping'
-        )
-            return
 
         const realTime = {
             quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
@@ -357,6 +351,7 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
                     }
 
                     // 2) Добавить свойство - 'batchLoadingTime'(время загрузки)
+                    const batchLoadingDate = card[1]['date']
                     const batchLoadingTime = card[1]['batchLoadingTime']
                     // 3) Добавить предположительное время выгрузки согласно технологии
                     // join[procedure[0]][type[0]]['technology']['len'] - количество отсечек по технологии
@@ -365,7 +360,7 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
                     // Если интервал равен 30 минутам, а длина 42 отсечки, то к времени загрузки необходимо прибавить
                     // 42 раза по 30 минут
                     // Длина тех.процесса в миллисекундах
-                    const msBatchLoadingTime = convertStringToDateBatchLoadingTime(batchLoadingTime)
+                    const msBatchLoadingTime = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
                     const msTechnology =
                         join[procedure[0]][type[0]]['technology']['len'] * interval * 60000
                     const msUnloadingTime = msBatchLoadingTime + msTechnology
@@ -375,7 +370,7 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
                         const value = {
                             [procedure[0]]: {
                                 ...cards[card[0]][procedure[0]],
-                                batchLoadingTime,
+                                batchLoadingTime: (() => convertDateToString(msBatchLoadingTime))(),
                                 unloadingTime,
                                 msBatchLoadingTime,
                                 msTechnology,
