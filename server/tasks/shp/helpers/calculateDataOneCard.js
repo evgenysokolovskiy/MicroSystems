@@ -3,7 +3,6 @@
 const clonedeep = require('lodash.clonedeep')
 const interval = require('../../../config/shp/interval')
 const convertDateToString = require('./calculateDates').convertDateToString
-const convertStringToDate = require('./calculateDates').convertStringToDate
 const convertStringToDateBatchLoadingTime = require('./calculateDates')
     .convertStringToDateBatchLoadingTime
 
@@ -39,7 +38,7 @@ module.exports = function({ technology: t, fact: f, card, interval }) {
             item['jointDate'] = date
             return item
         })
-        
+
     // 3) Преобразовать string в Date (в миллисекундах)
     let start = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
 

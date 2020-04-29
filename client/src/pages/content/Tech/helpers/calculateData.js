@@ -6,7 +6,7 @@ import {
 } from './calculateDates'
 
 // Совместить технологию с фактом по нескольким картам
-export function calculateDataFewCards({ technology, fact, card, cards, interval }) {
+export function calculateDataFewCards({ technology, fact, cards, interval }) {
     // Интервал (дробная часть от единицы как количество минут от часа)
     // Необходимо для построения дробной части на сводном по нескольким картам графике
     const int = interval && +interval / 60
@@ -137,7 +137,6 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
     // 3) Преобразовать string в Date (в миллисекундах)
     let start = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
 
-
     // Количество часов по технологии
     const len = pointsDiameter.length
 
@@ -218,7 +217,7 @@ export function calculateDataOneCard({ technology: t, fact: f, card, interval })
         return technology
     })
 
-/*
+    /*
     convertFactJointDate &&
         [...convertFactJointDate].forEach(fact => {
             if (fact['qualityProducts']) diameter[diameter.length - 1]['fact'] = factLastElemDiameter

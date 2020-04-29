@@ -45,7 +45,6 @@ module.exports.convertStringToDateBatchLoadingTime = function(date, str) {
     return new Date(yyyy, mm, dd, h, m).getTime()
 }
 
-
 /*
 // Конвертировать строку в дату (в миллисекундах) с округлением до получаса
 module.exports.convertStringToDateBatchLoadingTime = function(str) {
@@ -64,8 +63,6 @@ module.exports.convertStringToDateBatchLoadingTime = function(str) {
     return new Date(yyyy, mm, dd, h, m).getTime() // - 86400000
 }
 */
-
-
 
 // Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
 function ExcelDateToJSDate(serial) {

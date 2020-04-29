@@ -14,6 +14,7 @@ const {
 
 const convertData = require('../../shp/convertFact/').convertData
 const convertTechnologyFact = require('../../shp/convertTechnologyFact/')
+const convertTechnologyFactData = require('../../shp/convertTechnologyFactData/')
 const qualityProduction = require('../../shp/qualityProduction/')
 const joinTechnologyFactAPI = require('../../../api/joinTechnologyFactAPI')
 const qualityProductionAPI = require('../../../api/qualityProductionAPI')
@@ -36,7 +37,7 @@ module.exports = function({ app, parseShpFact, technology }) {
                         grinding = convertData(sheet['data'], INDEXES_GRINDING)
                     if (sheet['name'].toLowerCase() === 'доводка1')
                         rough = convertData(sheet['data'], INDEXES_ROUGH)
-                    if (sheet['name'].toLowerCase() === 'доводка2')
+                    if (sheet['name'].toLowerCase() === 'доводка3')
                         clean = convertData(sheet['data'], INDEXES_CLEAN)
                     if (sheet['name'].toLowerCase() === 'доводка4')
                         final = convertData(sheet['data'], INDEXES_FINAL)
@@ -52,14 +53,22 @@ module.exports = function({ app, parseShpFact, technology }) {
                 }
 
                 if (technology && fact) {
+                    // Совмещена технология и факт
                     const joinTechnologyFact = convertTechnologyFact({ technology, fact })
+                    // Добавлены данные для построения графиков
+                    const joinTechnologyFactData = convertTechnologyFactData({ joinTechnologyFact })
+                    // Сведения о состоянии производственных процессов:
+                    // realTime - только действующие
+                    // remember - только завершенные
+                    // all - все
+                    // Для построения осевого графика и итоговых таблиц
                     const [realTime, remember, all] = qualityProduction({ joinTechnologyFact })
 
                     resolve(
                         (() => {
                             joinTechnologyFactAPI({
                                 app,
-                                joinTechnologyFact
+                                joinTechnologyFact: joinTechnologyFactData
                             })
 
                             qualityProductionAPI({

@@ -2,7 +2,7 @@
 
 module.exports.convertFact = function({ fact }) {
     const { running, grinding, rough, clean, final } = fact
-console.log(rough)
+
     const obj = {
         running: (() => convertDataFinal(running))(),
         grinding: (() => convertDataFinal(grinding))(),

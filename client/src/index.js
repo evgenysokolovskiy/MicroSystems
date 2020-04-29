@@ -6,8 +6,6 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { Icon } from 'antd'
 // Обработчик ошибок
 import ErrorBoundary from './ErrorBoundary'
-// API
-import Api from './api/Api'
 // Стили
 import './styles/index.css'
 
@@ -19,7 +17,6 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <ErrorBoundary>
-                <Api />
                 <Suspense
                     fallback={
                         <Icon

@@ -14,7 +14,6 @@ module.exports = function({ joinTechnologyFact }) {
     let allObj = {} // Все процедуры за всё время
 
     Object.entries(clonedeep(joinTechnologyFact)).forEach(procedure => {
-
         const realTime = {
             quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
             defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
@@ -360,7 +359,10 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
                     // Если интервал равен 30 минутам, а длина 42 отсечки, то к времени загрузки необходимо прибавить
                     // 42 раза по 30 минут
                     // Длина тех.процесса в миллисекундах
-                    const msBatchLoadingTime = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
+                    const msBatchLoadingTime = convertStringToDateBatchLoadingTime(
+                        batchLoadingDate,
+                        batchLoadingTime
+                    )
                     const msTechnology =
                         join[procedure[0]][type[0]]['technology']['len'] * interval * 60000
                     const msUnloadingTime = msBatchLoadingTime + msTechnology

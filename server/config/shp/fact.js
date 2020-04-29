@@ -88,7 +88,7 @@ module.exports.INDEXES_FINAL = {
     type: 1, // Тип шара по диаметру, мм
     cardNumber: 2, // Номер карты
     //degree: 3, // Степень
-    batchLoadingTime:3, // Время загрузки партии
+    batchLoadingTime: 3, // Время загрузки партии
     weight: 4, // Вес партии, кг
     //measurementTime: 6, // Время измерения
     diameter: 5, // Текущий диаметр шара, мм

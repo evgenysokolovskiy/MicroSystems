@@ -30,7 +30,6 @@ export function convertStringToDate(obj) {
 }
 */
 
-
 // Конвертировать строку в дату (в миллисекундах) с округлением до получаса
 export function convertStringToDateBatchLoadingTime(date, str) {
     if (!str) return
@@ -48,7 +47,6 @@ export function convertStringToDateBatchLoadingTime(date, str) {
     return new Date(yyyy, mm, dd, h, m).getTime()
 }
 
-
 // Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
 function ExcelDateToJSDate(serial) {
     const fractional_day = serial - Math.floor(serial) + 0.0000001
@@ -59,9 +57,6 @@ function ExcelDateToJSDate(serial) {
     const minutes = Math.floor(total_seconds / 60) % 60
     return `${hours}:${minutes}`
 }
-
-
-
 
 /*
 // Конвертировать строку в дату (в миллисекундах) с округлением до получаса

@@ -22,7 +22,8 @@ export default class AxisCardComponent extends PureComponent {
 
         Object.entries(type).forEach(card => {
             Object.entries(card[1]).forEach(procedure => {
-                if (procedure[1]['msBatchLoadingTime']) startArr = [...startArr, procedure[1]['msBatchLoadingTime']]
+                if (procedure[1]['msBatchLoadingTime'])
+                    startArr = [...startArr, procedure[1]['msBatchLoadingTime']]
                 //endArr = [...endArr, procedure[1]['msUnloadingTime']]
             })
         })
@@ -37,9 +38,9 @@ export default class AxisCardComponent extends PureComponent {
         Object.entries(type).forEach((card, i) => {
             if (card[1]['running'] && !card[1]['running']['msBatchLoadingTime']) return
             if (card[1]['grinding'] && !card[1]['grinding']['msBatchLoadingTime']) return
-            if (card[1]['rough'] && !card[1]['rough']['msBatchLoadingTime']) return
-            if (card[1]['clean'] && !card[1]['clean']['msBatchLoadingTime']) return
-            if (card[1]['final'] && !card[1]['final']['msBatchLoadingTime']) return
+            //if (card[1]['rough'] && !card[1]['rough']['msBatchLoadingTime']) return
+            //if (card[1]['clean'] && !card[1]['clean']['msBatchLoadingTime']) return
+            //if (card[1]['final'] && !card[1]['final']['msBatchLoadingTime']) return
 
             data = [
                 ...data,
@@ -65,7 +66,8 @@ export default class AxisCardComponent extends PureComponent {
                         card[1]['grinding']
                             ? card[1]['grinding']['msUnloadingTime'] -
                               card[1]['grinding']['msBatchLoadingTime']
-                            : 0)(),
+                            : 0)()
+                    /*
                     spaceBeforeCleanClosed: (() =>
                         !card[1]['clean']
                             ? 0
@@ -81,14 +83,18 @@ export default class AxisCardComponent extends PureComponent {
                             ? card[1]['clean']['msUnloadingTime'] -
                               card[1]['clean']['msBatchLoadingTime']
                             : 0)(),
+                    */
                 }
             ]
 
             let lastClosed = 0
             if (data[i]) {
+                /*
                 if (data[i]['cleanClosed'] !== 0) {
                     lastClosed = card[1]['clean']['msUnloadingTime']
-                } else if (data[i]['grindingClosed'] !== 0) {
+                }
+                */
+                if (data[i]['grindingClosed'] !== 0) {
                     lastClosed = card[1]['grinding']['msUnloadingTime']
                 } else if (data[i]['runningClosed'] !== 0) {
                     lastClosed = card[1]['running']['msUnloadingTime']
@@ -139,7 +145,7 @@ export default class AxisCardComponent extends PureComponent {
                         fill="rgba(0,0,0,0)"
                         legendType="none"
                     />
-                    <Bar dataKey="cleanClosed" stackId="a" fill="lightcoral" name="Доводка №1,2" />
+                    <Bar dataKey="cleanClosed" stackId="a" fill="lightcoral" name="Доводка №3" />
                     <Bar
                         dataKey="spaceBeforeMtime"
                         stackId="a"

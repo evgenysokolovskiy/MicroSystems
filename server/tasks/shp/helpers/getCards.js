@@ -1,8 +1,9 @@
-import clonedeep from 'lodash.clonedeep'
-import { convertStringToDateBatchLoadingTime } from './calculateDates'
+const clonedeep = require('lodash.clonedeep')
+const convertStringToDateBatchLoadingTime = require('./calculateDates')
+    .convertStringToDateBatchLoadingTime
 
 // Определить номера карт для выбранного типа подшипника
-export function getCards({ fact: f }) {
+module.exports = function({ fact: f }) {
     const fact = clonedeep(f)
     // Карты, для которых из фактических данных определено время загрузки
     const hasBatchLoadingTime = {}

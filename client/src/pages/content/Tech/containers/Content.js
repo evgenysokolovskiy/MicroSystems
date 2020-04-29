@@ -13,22 +13,6 @@ import { calculateTargetData } from '../helpers/calculateTargetData'
 import { calculateDataOneCard, calculateDataFewCards } from '../helpers/calculateData'
 
 export class Content extends PureComponent {
-    /*
-    componentDidMount() {
-        const { techJoinTechnologyFact: joinData, techTargetMenu: menu, techType: type, changeCardNumber } = this.props
-        if (joinData && menu && type) {
-            // Присвоить techCardNumber номер первой карты для выбранного типа
-            changeCardNumber(
-                [...Object.keys(joinData[menu][type]['fact'])][0]
-            )
-        }
-    }
-    */
-    constructor(props) {
-        super(props)
-        this.nameTotalTab = this.props.techCardNumber
-    }
-
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
         this.props.changeTechTargetMenu(item)
@@ -103,6 +87,8 @@ export class Content extends PureComponent {
 
         // Построить графическую часть
         if (joinData && menu && menu !== 'table' && menu !== 'axis' && type) {
+
+            /*
             // Отсекаем технологию и факт в соответствии с выбором меню (процедура) и типом подшипника
             // Технология
             const technology = clonedeep(joinData)[menu][type]['technology']
@@ -115,15 +101,18 @@ export class Content extends PureComponent {
                 .sort((a, b) => a - b)
             // Номера карт для выбранного типа
             cards = getCards({ fact })
-
             // Совместить технологию с фактом
             card === this.nameTotalTab
-                ? (data = clonedeep(
-                      calculateDataFewCards({ technology, fact, card, cards, interval })
-                  ))
+                ? (data = clonedeep(calculateDataFewCards({ technology, fact, cards, interval })))
                 : (data = clonedeep(calculateDataOneCard({ technology, fact, card, interval })))
+            */
 
-                
+            // Номера карт для выбранного типа
+            cards = joinData[menu][type]['cards']
+            // Технология и факт
+            data = (card === this.nameTotalTab) ? joinData[menu][type]['dataFewCards'] : joinData[menu][type]['dataOneCard'][card]
+            // Типы подшипника, определённые в технологии (для вывода в меню типов) для данной операции
+            types = Object.keys(joinData[menu]).filter(item => +item).sort((a, b) => a - b)
             // Данные по отметке времени
             const targetData = calculateTargetData(data, target)
             this.props.changeTechTargetTimeStampData(targetData)
