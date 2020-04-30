@@ -1,3 +1,12 @@
+export const _TECH_TYPES = {
+    types: {
+        TECH_TYPES: 'TECH_TYPES'
+    },
+    init: {
+        techTypes: []
+    }
+}
+
 export const _TECH_JOIN_TECHNOLOGY_FACT = {
     types: {
         TECH_JOIN_TECHNOLOGY_FACT: 'TECH_JOIN_TECHNOLOGY_FACT'
@@ -39,7 +48,7 @@ export const _TECH_TARGET_MENU = {
         TECH_TARGET_MENU: 'TECH_TARGET_MENU'
     },
     init: {
-        techTargetMenu: ''
+        techTargetMenu: null
     }
 }
 

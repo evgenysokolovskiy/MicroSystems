@@ -2,6 +2,13 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import clonedeep from 'lodash.clonedeep'
 import App from '../components/Content/App'
+// fetch
+import { fetchTypesMiddleware } from '../../../../api/middlewares/fetchTypesMiddleware'
+import { fetchJoinTechnologyFactMiddleware } from '../../../../api/middlewares/fetchJoinTechnologyFactMiddleware'
+import { fetchQualityProductionMiddleware } from '../../../../api/middlewares/fetchQualityProductionMiddleware'
+import { fetchIntervalMiddleware } from '../../../../api/middlewares/fetchIntervalMiddleware'
+import { fetchMtimeMiddleware } from '../../../../api/middlewares/fetchMtimeMiddleware'
+// actions
 import { changeTechTargetMenu } from '../../../../store/tech/actions/techTargetMenuAction'
 import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
 import { changeTechTargetTimeStampData } from '../../../../store/tech/actions/techTargetTimeStampDataAction'
@@ -13,10 +20,64 @@ import { calculateTargetData } from '../helpers/calculateTargetData'
 import { calculateDataOneCard, calculateDataFewCards } from '../helpers/calculateData'
 
 export class Content extends PureComponent {
+    constructor(props) {
+        super(props)
+        this.nameTotalTab = 'Сводная'
+        this.state = {
+            isLoadedJoinTechnologyFact: false,
+            isLoadedTypes: false,
+            isLoadedQualityProduction: false,
+            isLoadedMtime: false
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { techTargetMenu } = this.props // Меню
+
+        if (prevProps.techTargetMenu !== techTargetMenu) {
+            // 1) Загрузить данные для вкладок меню: table, axis
+            if (techTargetMenu === 'table' || techTargetMenu === 'axis') {
+                const {
+                    fetchQualityProductionMiddleware,
+                    fetchIntervalMiddleware,
+                    fetchMtimeMiddleware
+                } = this.props
+                // Загрузить данные, записать в стейт информацию о состоянии загрузки
+                fetchQualityProductionMiddleware(this)
+                fetchIntervalMiddleware()
+                fetchMtimeMiddleware(this)
+            }
+
+            // 2) Загрузить данные для вкладок меню, отображающих графики
+            if (techTargetMenu !== 'table' && techTargetMenu !== 'axis') {
+                const {
+                    fetchTypesMiddleware,
+                    fetchJoinTechnologyFactMiddleware,
+                    techType: type, // Тип подшипника
+                    techCardNumber: card // Номер карты
+                } = this.props
+
+                const urlTypes = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/types`
+                const urlData = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}`
+
+                // Загрузить данные, записать в стейт информацию о состоянии загрузки
+                fetchTypesMiddleware(urlTypes, this)
+                fetchJoinTechnologyFactMiddleware(urlData, this)
+            }
+        }
+    }
+
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
         this.props.changeTechTargetMenu(item)
         this.props.changeCardNumber(this.nameTotalTab)
+        // Перевести в false состояние для новых загрузок
+        this.setState({
+            isLoadedJoinTechnologyFact: false,
+            isLoadedTypes: false,
+            isLoadedQualityProduction: false,
+            isLoadedMtime: false
+        })
     }
 
     // Событие по типу подшипника
@@ -24,11 +85,6 @@ export class Content extends PureComponent {
         // Изменить тип подшипника
         this.props.changeType(+e)
         this.props.changeCardNumber(this.nameTotalTab)
-        // При смене типа подшипника присвоить techCardNumber номер первой карты для выбранного типа
-        /*
-        const { techJoinTechnologyFact: joinData, techTargetMenu: menu, changeCardNumber } = this.props
-        changeCardNumber([...Object.keys(joinData[menu][+e]['fact'])][0])
-        */
     }
 
     // Событие по карте
@@ -45,6 +101,7 @@ export class Content extends PureComponent {
     render() {
         // Данные из store
         let {
+            techTypes: types, // Типы подшипника для данной операции
             techTargetMenu: menu, // Меню (процедура)
             techType: type, // Тип подшипника
             techCardNumber: card, // Номер карты
@@ -55,9 +112,15 @@ export class Content extends PureComponent {
             techTargetTimeStamp: target // Момент времени
         } = this.props
 
+        const {
+            isLoadedTypes,
+            isLoadedJoinTechnologyFact,
+            isLoadedQualityProduction,
+            isLoadedMtime
+        } = this.state
+
         // Искомые данные
-        let types, // Все типы подшипника
-            cards = {}, // Все номера карт
+        let cards = {}, // Все номера карт
             data = {} // Данные для построения графиков,
 
         // Технология - это расчитанные данные, в рамки которого должен укладываться факт
@@ -66,19 +129,6 @@ export class Content extends PureComponent {
         const joinData = clonedeep(techJoinTechnologyFact)
         const quality = clonedeep(techQualityProduction)
 
-        /*
-        let obj = {}      
-        Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
-            Object.values(procedure).forEach(item => {
-                if (typeof item !== 'object') return
-                Object.entries(item).forEach(type => {
-                    if (!+type[0]) return
-                    obj[type[0]] = {...obj[type[0]], ...{[procedure[0]]: type[1]}}
-                })
-            })
-        })
-        console.log(obj)
-        */
         // Построить осевой график
         if (quality && menu === 'axis') {
             // Типы подшипника, определённые в технологии (для вывода в меню типов) для всех операций
@@ -87,32 +137,13 @@ export class Content extends PureComponent {
 
         // Построить графическую часть
         if (joinData && menu && menu !== 'table' && menu !== 'axis' && type) {
-
-            /*
-            // Отсекаем технологию и факт в соответствии с выбором меню (процедура) и типом подшипника
-            // Технология
-            const technology = clonedeep(joinData)[menu][type]['technology']
-            // Факт
-            const fact = clonedeep(joinData)[menu][type]['fact']
-
-            // Типы подшипника, определённые в технологии (для вывода в меню типов) для данной операции
-            types = Object.keys(clonedeep(joinData)[menu])
-                .filter(item => +item)
-                .sort((a, b) => a - b)
             // Номера карт для выбранного типа
-            cards = getCards({ fact })
-            // Совместить технологию с фактом
-            card === this.nameTotalTab
-                ? (data = clonedeep(calculateDataFewCards({ technology, fact, cards, interval })))
-                : (data = clonedeep(calculateDataOneCard({ technology, fact, card, interval })))
-            */
-
-            // Номера карт для выбранного типа
-            cards = joinData[menu][type]['cards']
+            cards = joinData['cards']
             // Технология и факт
-            data = (card === this.nameTotalTab) ? joinData[menu][type]['dataFewCards'] : joinData[menu][type]['dataOneCard'][card]
-            // Типы подшипника, определённые в технологии (для вывода в меню типов) для данной операции
-            types = Object.keys(joinData[menu]).filter(item => +item).sort((a, b) => a - b)
+            data =
+                card === this.nameTotalTab
+                    ? joinData['dataFewCards']
+                    : joinData['dataOneCard'][card]
             // Данные по отметке времени
             const targetData = calculateTargetData(data, target)
             this.props.changeTechTargetTimeStampData(targetData)
@@ -120,6 +151,10 @@ export class Content extends PureComponent {
 
         return (
             <App
+                isLoadedTypes={isLoadedTypes}
+                isLoadedJoinTechnologyFact={isLoadedJoinTechnologyFact}
+                isLoadedQualityProduction={isLoadedQualityProduction}
+                isLoadedMtime={isLoadedMtime}
                 types={types}
                 cards={cards}
                 menu={menu}
@@ -141,6 +176,7 @@ export class Content extends PureComponent {
 
 function mapStateToProps(store) {
     return {
+        ...store.techTypesReducer,
         ...store.techTargetMenuReducer,
         ...store.techTargetTimeStampReducer,
         ...store.techQualityProductionReducer,
@@ -155,6 +191,11 @@ function mapStateToProps(store) {
 }
 
 const mapDispatchToProps = {
+    fetchTypesMiddleware,
+    fetchJoinTechnologyFactMiddleware,
+    fetchQualityProductionMiddleware,
+    fetchIntervalMiddleware,
+    fetchMtimeMiddleware,
     changeTechTargetMenu,
     changeTechTargetTimeStamp,
     changeTechTargetTimeStampData,
@@ -164,3 +205,17 @@ const mapDispatchToProps = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
+
+/*
+let obj = {}      
+Object.entries(clonedeep(techJoinTechnologyFact)).forEach(procedure => {
+    Object.values(procedure).forEach(item => {
+        if (typeof item !== 'object') return
+        Object.entries(item).forEach(type => {
+            if (!+type[0]) return
+            obj[type[0]] = {...obj[type[0]], ...{[procedure[0]]: type[1]}}
+        })
+    })
+})
+console.log(obj)
+*/

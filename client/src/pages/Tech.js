@@ -1,10 +1,6 @@
 import React, { lazy } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { fetchJoinTechnologyFactMiddleware } from '../api/middlewares/fetchJoinTechnologyFactMiddleware'
-import { fetchQualityProductionMiddleware } from '../api/middlewares/fetchQualityProductionMiddleware'
-import { fetchIntervalMiddleware } from '../api/middlewares/fetchIntervalMiddleware'
-import { fetchMtimeMiddleware } from '../api/middlewares/fetchMtimeMiddleware'
 // Antd
 import { Layout } from 'antd'
 import { HomeOutlined } from '@ant-design/icons'
@@ -15,20 +11,6 @@ const Footer = lazy(() => import('./utils/Footer/App'))
 const Content = lazy(() => import('./content/Tech/App'))
 
 export class App extends React.Component {
-    componentDidMount() {
-        const {
-            fetchJoinTechnologyFactMiddleware,
-            fetchQualityProductionMiddleware,
-            fetchIntervalMiddleware,
-            fetchMtimeMiddleware
-        } = this.props
-
-        fetchJoinTechnologyFactMiddleware()
-        fetchQualityProductionMiddleware()
-        fetchIntervalMiddleware()
-        fetchMtimeMiddleware()
-    }
-
     render() {
         return (
             <Layout>
@@ -55,11 +37,6 @@ export class App extends React.Component {
     }
 }
 
-const mapDispatchToProps = {
-    fetchJoinTechnologyFactMiddleware,
-    fetchQualityProductionMiddleware,
-    fetchIntervalMiddleware,
-    fetchMtimeMiddleware
-}
+const mapDispatchToProps = {}
 
 export default connect(null, mapDispatchToProps)(App)

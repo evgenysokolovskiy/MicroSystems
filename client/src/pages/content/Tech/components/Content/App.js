@@ -45,113 +45,160 @@ export default class App extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        if (
-            prevProps.menu !== this.props.menu ||
-            prevProps.type !== this.props.type ||
-            prevProps.card !== this.props.card ||
-            prevProps.target !== this.props.target
-        ) {
-            const {
-                types, // Все типы
-                type, // Текущий тип
-                cards, // Все номера карт
-                menu, // Текущая процедура
-                card, // Текущая карта
-                target: date, // Текущая временная отметка
-                data, // Данные для построения графиков
-                nameTotalTab, // Наименование сводной карты,
-                quality,
-                mtime,
-                handleClickMenu
-            } = this.props
+        // 1) Построение осевого графика
+        if (this.props.menu === 'axis') {
+            // Проверить загружены ли данные
+            if (!this.props.isLoadedQualityProduction || !this.props.isLoadedMtime) return
+            // Условие формирования графика
+            if (
+                prevProps.isLoadedMtime !== this.props.isLoadedMtime ||
+                prevProps.isLoadedQualityProduction !== this.props.isLoadedQualityProduction
+            ) {
+                const {
+                    types, // Все типы
+                    type, // Текущий тип
+                    menu, // Текущая процедура
+                    quality,
+                    mtime
+                } = this.props
 
-            const { diameter, inconstancyDimension, pressureSpeed } = clonedeep(data)
-
-            // Активные карты
-            const visibleCards =
-                cards &&
-                cards['hasBatchLoadingTime'] &&
-                cards['hasBatchLoadingTime'].map(card => <TabPane tab={card} key={card} />)
-
-            // Неактивные карты
-            const disabledCards =
-                cards &&
-                cards['notBatchLoadingTime'] &&
-                cards['notBatchLoadingTime'].map(card => <TabPane tab={card} key={card} disabled />)
-
-            // Осевой график (компонент)
-            const axis = types && menu === 'axis' && type && (
-                <Tabs defaultActiveKey={String(type)} type="card" onChange={this.handleChangeType}>
-                    {types.map(type => (
-                        <TabPane tab={type} key={type}>
-                            <AxisComponent type={type} quality={clonedeep(quality)} mtime={mtime} />
-                        </TabPane>
-                    ))}
-                </Tabs>
-            )
-
-            // Графики (компонент)
-            const charts = types && menu !== 'axis' && (
-                <Tabs defaultActiveKey={String(type)} type="card" onChange={this.handleChangeType}>
-                    {types.map(type => (
-                        <TabPane tab={type} key={type}>
-                            <Tabs
-                                defaultActiveKey={nameTotalTab}
-                                type="card"
-                                onChange={this.handleChangeCards}
-                            >
-                                {visibleCards && [...visibleCards, ...disabledCards]}
-                            </Tabs>
-                            <Collapse defaultActiveKey={['diameter']}>
-                                <Panel header="ДИАМЕТР, мм" key="diameter">
-                                    <DiameterComponent
-                                        date={date}
-                                        menu={menu}
+                // Осевой график (компонент)
+                const axis = types && type && (
+                    <>
+                        <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
+                            Осевой график запущенных процессов
+                        </h4>
+                        <Tabs
+                            defaultActiveKey={String(type)}
+                            type="card"
+                            onChange={this.handleChangeType}
+                        >
+                            {types.map(type => (
+                                <TabPane tab={type} key={type}>
+                                    <AxisComponent
                                         type={type}
-                                        card={card}
-                                        diameter={diameter}
-                                        len={visibleCards.length}
-                                        nameTotalTab={nameTotalTab}
-                                        CustomizedAxisTick={CustomizedAxisTick}
-                                        handleClick={this.handleClick}
-                                        getData={this.getData}
+                                        quality={clonedeep(quality)}
+                                        mtime={mtime}
                                     />
-                                </Panel>
-                                <Panel
-                                    header="НЕПОСТОЯНСТВО, мкм - РАЗНОРАЗМЕРНОСТЬ, мкм"
-                                    key="inconstancyDimension"
-                                >
-                                    <InconstancyComponent
-                                        date={date}
-                                        card={card}
-                                        inconstancyDimension={inconstancyDimension}
-                                        len={visibleCards.length}
-                                        nameTotalTab={nameTotalTab}
-                                        CustomizedAxisTick={CustomizedAxisTick}
-                                        handleClick={this.handleClick}
-                                        getData={this.getData}
-                                    />
-                                </Panel>
-                                <Panel
-                                    header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин"
-                                    key="pressureSpeed"
-                                >
-                                    <PressureComponent
-                                        date={date}
-                                        card={card}
-                                        pressureSpeed={pressureSpeed}
-                                        len={visibleCards.length}
-                                        nameTotalTab={nameTotalTab}
-                                        CustomizedAxisTick={CustomizedAxisTick}
-                                    />
-                                </Panel>
-                            </Collapse>
-                        </TabPane>
-                    ))}
-                </Tabs>
-            )
+                                </TabPane>
+                            ))}
+                        </Tabs>
+                    </>
+                )
 
-            this.setState({ axis, charts })
+                this.setState({ axis })
+            }
+        }
+
+        // 2) Построение графической части
+        if (this.props.menu !== 'table' && this.props.menu !== 'axis') {
+            // Проверить загружены ли данные
+            if (!this.props.isLoadedTypes || !this.props.isLoadedJoinTechnologyFact) return
+            // Условие формирования графиков
+            if (
+                prevProps.isLoadedTypes !== this.props.isLoadedTypes ||
+                prevProps.isLoadedJoinTechnologyFact !== this.props.isLoadedJoinTechnologyFact ||
+                prevProps.menu !== this.props.menu ||
+                prevProps.type !== this.props.type ||
+                prevProps.card !== this.props.card
+            ) {
+                const {
+                    types, // Все типы
+                    type, // Текущий тип
+                    cards, // Все номера карт
+                    menu, // Текущая процедура
+                    card, // Текущая карта
+                    target: date, // Текущая временная отметка
+                    data, // Данные для построения графиков
+                    nameTotalTab, // Наименование сводной карты,
+                    quality,
+                    mtime,
+                    handleClickMenu
+                } = this.props
+
+                const { diameter, inconstancyDimension, pressureSpeed } = clonedeep(data)
+
+                // Активные карты
+                const visibleCards =
+                    cards &&
+                    cards['hasBatchLoadingTime'] &&
+                    cards['hasBatchLoadingTime'].map(card => <TabPane tab={card} key={card} />)
+
+                // Неактивные карты
+                const disabledCards =
+                    cards &&
+                    cards['notBatchLoadingTime'] &&
+                    cards['notBatchLoadingTime'].map(card => (
+                        <TabPane tab={card} key={card} disabled />
+                    ))
+
+                // Графики (компонент)
+                const charts = types && (
+                    <Tabs
+                        defaultActiveKey={String(type)}
+                        type="card"
+                        onChange={this.handleChangeType}
+                    >
+                        {types.map(type => (
+                            <TabPane tab={type} key={type}>
+                                <Tabs
+                                    defaultActiveKey={nameTotalTab}
+                                    type="card"
+                                    onChange={this.handleChangeCards}
+                                >
+                                    {visibleCards && [...visibleCards, ...disabledCards]}
+                                </Tabs>
+                                <Collapse defaultActiveKey={['diameter']}>
+                                    <Panel header="ДИАМЕТР, мм" key="diameter">
+                                        <DiameterComponent
+                                            date={date}
+                                            menu={menu}
+                                            type={type}
+                                            card={card}
+                                            diameter={diameter}
+                                            len={visibleCards.length}
+                                            nameTotalTab={nameTotalTab}
+                                            CustomizedAxisTick={CustomizedAxisTick}
+                                            handleClick={this.handleClick}
+                                            getData={this.getData}
+                                        />
+                                    </Panel>
+                                    <Panel
+                                        header="НЕПОСТОЯНСТВО, мкм - РАЗНОРАЗМЕРНОСТЬ, мкм"
+                                        key="inconstancyDimension"
+                                    >
+                                        <InconstancyComponent
+                                            date={date}
+                                            card={card}
+                                            inconstancyDimension={inconstancyDimension}
+                                            len={visibleCards.length}
+                                            nameTotalTab={nameTotalTab}
+                                            CustomizedAxisTick={CustomizedAxisTick}
+                                            handleClick={this.handleClick}
+                                            getData={this.getData}
+                                        />
+                                    </Panel>
+                                    <Panel
+                                        header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин"
+                                        key="pressureSpeed"
+                                    >
+                                        <PressureComponent
+                                            date={date}
+                                            card={card}
+                                            pressureSpeed={pressureSpeed}
+                                            len={visibleCards.length}
+                                            nameTotalTab={nameTotalTab}
+                                            CustomizedAxisTick={CustomizedAxisTick}
+                                        />
+                                    </Panel>
+                                </Collapse>
+                            </TabPane>
+                        ))}
+                    </Tabs>
+                )
+
+                this.setState({ charts })
+            }
         }
     }
 
@@ -200,9 +247,6 @@ export default class App extends PureComponent {
 
                         {menu && menu === 'axis' && (
                             <Suspense fallback={<LoadingOutlined className="loading" />}>
-                                <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
-                                    Осевой график запущенных процессов
-                                </h4>
                                 {axis ? axis : <LoadingOutlined className="loading" />}
                             </Suspense>
                         )}
