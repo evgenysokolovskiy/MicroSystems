@@ -1,15 +1,4 @@
-// Отправить данные к '/api/joinTechnologyFact'
-
-/*
-module.exports = function({ app, joinTechnologyFact }) {
-    if (joinTechnologyFact) {
-        app.get('/api/joinTechnologyFact', function(req, res) {
-            res.json(joinTechnologyFact)
-            console.log('Данные отправлены на /api/joinTechnologyFact')
-        })
-    }
-}
-*/
+// Отправить данные к '/api/joinTechnologyFact/'
 
 module.exports = function({ app, joinTechnologyFact }) {
     if (joinTechnologyFact) {
@@ -24,13 +13,41 @@ module.exports = function({ app, joinTechnologyFact }) {
                 console.log(`Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/types`)
             })
 
-            // Отправить данные для каждой карты каждого типа каждой процедуры
             Object.entries(procedure[1]).forEach(type => {
                 if (!+type[0]) return
-                app.get(`/api/joinTechnologyFact/${procedure[0]}/${type[0]}`, function(req, res) {
-                    res.json(type[1])
+
+                // Отправить номера карт для данного типа
+                app.get(`/api/joinTechnologyFact/${procedure[0]}/${type[0]}/cards`, function(
+                    req,
+                    res
+                ) {
+                    res.json(type[1]['cards'])
                     console.log(
-                        `Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/${type[0]}`
+                        `Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/${type[0]}/cards`
+                    )
+                })
+
+                // Отправить данные для сводной карты каждого типа каждой процедуры
+                app.get(`/api/joinTechnologyFact/${procedure[0]}/${type[0]}/summary`, function(
+                    req,
+                    res
+                ) {
+                    res.json(type[1]['dataFewCards'])
+                    console.log(
+                        `Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/${type[0]}/summary`
+                    )
+                })
+
+                Object.entries(type[1]['dataOneCard']).forEach(card => {
+                    // Отправить данные для каждой карты каждого типа каждой процедуры
+                    app.get(
+                        `/api/joinTechnologyFact/${procedure[0]}/${type[0]}/${card[0]}`,
+                        function(req, res) {
+                            res.json(card[1])
+                            console.log(
+                                `Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/${type[0]}/${card[0]}`
+                            )
+                        }
                     )
                 })
             })

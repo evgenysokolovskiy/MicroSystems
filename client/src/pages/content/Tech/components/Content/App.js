@@ -7,6 +7,7 @@ import PressureComponent from './ChartComponents/PressureComponent'
 // Antd
 import { Layout, Collapse, Tabs } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
+import { Image1 } from '../../styles/'
 
 const { Content } = Layout
 const { Panel } = Collapse
@@ -47,23 +48,21 @@ export default class App extends PureComponent {
     componentDidUpdate(prevProps) {
         // 1) Построение осевого графика
         if (this.props.menu === 'axis') {
-            // Проверить загружены ли данные
-            if (!this.props.isLoadedQualityProduction || !this.props.isLoadedMtime) return
             // Условие формирования графика
             if (
                 prevProps.isLoadedMtime !== this.props.isLoadedMtime ||
-                prevProps.isLoadedQualityProduction !== this.props.isLoadedQualityProduction
+                prevProps.isLoadedQualityProduction !== this.props.isLoadedQualityProduction ||
+                prevProps.type !== this.props.type
             ) {
                 const {
                     types, // Все типы
                     type, // Текущий тип
-                    menu, // Текущая процедура
                     quality,
                     mtime
                 } = this.props
 
                 // Осевой график (компонент)
-                const axis = types && type && (
+                const axis = quality && mtime && types && type && (
                     <>
                         <h4 style={{ paddingLeft: 20, paddingTop: 20 }}>
                             Осевой график запущенных процессов
@@ -92,16 +91,8 @@ export default class App extends PureComponent {
 
         // 2) Построение графической части
         if (this.props.menu !== 'table' && this.props.menu !== 'axis') {
-            // Проверить загружены ли данные
-            if (!this.props.isLoadedTypes || !this.props.isLoadedJoinTechnologyFact) return
             // Условие формирования графиков
-            if (
-                prevProps.isLoadedTypes !== this.props.isLoadedTypes ||
-                prevProps.isLoadedJoinTechnologyFact !== this.props.isLoadedJoinTechnologyFact ||
-                prevProps.menu !== this.props.menu ||
-                prevProps.type !== this.props.type ||
-                prevProps.card !== this.props.card
-            ) {
+            if (prevProps.data !== this.props.data || prevProps.cards !== this.props.cards) {
                 const {
                     types, // Все типы
                     type, // Текущий тип
@@ -110,13 +101,12 @@ export default class App extends PureComponent {
                     card, // Текущая карта
                     target: date, // Текущая временная отметка
                     data, // Данные для построения графиков
-                    nameTotalTab, // Наименование сводной карты,
-                    quality,
-                    mtime,
-                    handleClickMenu
+                    nameTotalTab // Наименование сводной карты
                 } = this.props
 
-                const { diameter, inconstancyDimension, pressureSpeed } = clonedeep(data)
+                if (!data || !Object.keys(cards)[0]) return
+
+                const { diameter, inconstancyDimension, pressureSpeed } = data
 
                 // Активные карты
                 const visibleCards =
@@ -227,8 +217,24 @@ export default class App extends PureComponent {
     }
 
     render() {
-        const { quality, mtime, menu, card, handleClickMenu } = this.props
+        const {
+            quality,
+            mtime,
+            menu,
+            handleClickMenu,
+            isLoadedQualityProduction,
+            isLoadedMtime,
+            isLoadedJoinTechnologyFact
+        } = this.props
         const { axis, charts } = this.state
+
+        const table = quality && mtime && (
+            <TableComponent
+                quality={clonedeep(quality)}
+                mtime={mtime}
+                CustomizedAxisTick={CustomizedAxisTick}
+            />
+        )
 
         return (
             <Content>
@@ -236,24 +242,80 @@ export default class App extends PureComponent {
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
                         {menu && menu === 'table' && (
-                            <Suspense fallback={<LoadingOutlined className="loading" />}>
-                                <TableComponent
-                                    quality={clonedeep(quality)}
-                                    mtime={mtime}
-                                    CustomizedAxisTick={CustomizedAxisTick}
-                                />
+                            <Suspense
+                                fallback={
+                                    <div className="download">
+                                        <h2>
+                                            <LoadingOutlined className="circleBlue" />
+                                            МОНТИРУЕМ ТАБЛИЦУ...
+                                        </h2>
+                                        <h4>Может занять некоторое время!</h4>
+                                    </div>
+                                }
+                            >
+                                {table ? (
+                                    table
+                                ) : (
+                                    <div className="download">
+                                        <h2>
+                                            <LoadingOutlined className="circleRed" />
+                                            ЗАГРУЖАЕМ ДАННЫЕ...
+                                        </h2>
+                                        <h4>Может занять некоторое время!</h4>
+                                    </div>
+                                )}
                             </Suspense>
                         )}
 
                         {menu && menu === 'axis' && (
-                            <Suspense fallback={<LoadingOutlined className="loading" />}>
-                                {axis ? axis : <LoadingOutlined className="loading" />}
+                            <Suspense
+                                fallback={
+                                    <div className="download">
+                                        <h2>
+                                            <LoadingOutlined className="circleBlue" />
+                                            МОНТИРУЕМ ГРАФИК...
+                                        </h2>
+                                        <h4>Может занять некоторое время!</h4>
+                                    </div>
+                                }
+                            >
+                                {isLoadedQualityProduction && isLoadedMtime && axis ? (
+                                    axis
+                                ) : (
+                                    <div className="download">
+                                        <h2>
+                                            <LoadingOutlined className="circleRed" />
+                                            ЗАГРУЖАЕМ ДАННЫЕ...
+                                        </h2>
+                                        <h4>Может занять некоторое время!</h4>
+                                    </div>
+                                )}
                             </Suspense>
                         )}
 
                         {menu && menu !== 'table' && menu !== 'axis' && (
-                            <Suspense fallback={<LoadingOutlined className="loading" />}>
-                                {charts ? charts : <LoadingOutlined className="loading" />}
+                            <Suspense
+                                fallback={
+                                    <div className="download">
+                                        <h2>
+                                            <LoadingOutlined className="circleBlue" />
+                                            МОНТИРУЕМ ГРАФИК...
+                                        </h2>
+                                        <h4>Может занять некоторое время!</h4>
+                                    </div>
+                                }
+                            >
+                                {isLoadedJoinTechnologyFact && charts ? (
+                                    charts
+                                ) : (
+                                    <div className="download">
+                                        <h2>
+                                            <LoadingOutlined className="circleRed" />
+                                            ЗАГРУЖАЕМ ДАННЫЕ...
+                                        </h2>
+                                        <h4>Может занять некоторое время!</h4>
+                                    </div>
+                                )}
                             </Suspense>
                         )}
                     </Content>

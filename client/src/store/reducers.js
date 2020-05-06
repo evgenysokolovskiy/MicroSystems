@@ -9,9 +9,9 @@ import targetInnReducer from './repair/reducers/targetInnReducer'
 import drawerReducer from './repair/reducers/drawerReducer'
 // tech
 import techTypesReducer from './tech/reducers/techTypesReducer'
+import techCardsReducer from './tech/reducers/techCardsReducer'
 import techJoinTechnologyFactReducer from './tech/reducers/techJoinTechnologyFactReducer'
 import techQualityProductionReducer from './tech/reducers/techQualityProductionReducer'
-import techIntervalReducer from './tech/reducers/techIntervalReducer'
 import techMtimeReducer from './tech/reducers/techMtimeReducer'
 import techTargetMenuReducer from './tech/reducers/techTargetMenuReducer'
 import techTargetTimeStampReducer from './tech/reducers/techTargetTimeStampReducer'
@@ -31,9 +31,9 @@ export default combineReducers({
     drawerReducer,
     // tech
     techTypesReducer,
+    techCardsReducer,
     techJoinTechnologyFactReducer,
     techQualityProductionReducer,
-    techIntervalReducer,
     techMtimeReducer,
     techTargetMenuReducer,
     techTargetTimeStampReducer,

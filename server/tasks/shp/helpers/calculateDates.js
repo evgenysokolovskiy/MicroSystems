@@ -45,25 +45,6 @@ module.exports.convertStringToDateBatchLoadingTime = function(date, str) {
     return new Date(yyyy, mm, dd, h, m).getTime()
 }
 
-/*
-// Конвертировать строку в дату (в миллисекундах) с округлением до получаса
-module.exports.convertStringToDateBatchLoadingTime = function(str) {
-    if (!str) return
-
-    const dd = str.split('.')[0]
-    const mm = str.split('.')[1] - 1
-    const yyyy = str.split('.')[2].split(' ')[0]
-    let hours = str.split(' ')[1].split('.')[0]
-    const minutes = str.split(' ')[1].split('.')[1]
-
-    // Округлить время до получаса
-    const m = minutes > 15 && minutes < 45 && minutes !== 0 ? 30 : '00'
-    const h = minutes > 44 ? (hours === 23 ? '00' : ++hours) : hours
-
-    return new Date(yyyy, mm, dd, h, m).getTime() // - 86400000
-}
-*/
-
 // Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
 function ExcelDateToJSDate(serial) {
     const fractional_day = serial - Math.floor(serial) + 0.0000001

@@ -7,6 +7,15 @@ export const _TECH_TYPES = {
     }
 }
 
+export const _TECH_CARDS = {
+    types: {
+        TECH_CARDS: 'TECH_CARDS'
+    },
+    init: {
+        techCards: {}
+    }
+}
+
 export const _TECH_JOIN_TECHNOLOGY_FACT = {
     types: {
         TECH_JOIN_TECHNOLOGY_FACT: 'TECH_JOIN_TECHNOLOGY_FACT'
@@ -22,15 +31,6 @@ export const _TECH_QUALITY_PRODUCTION = {
     },
     init: {
         techQualityProduction: null
-    }
-}
-
-export const _TECH_INTERVAL = {
-    types: {
-        TECH_INTERVAL: 'TECH_INTERVAL'
-    },
-    init: {
-        techInterval: 0
     }
 }
 

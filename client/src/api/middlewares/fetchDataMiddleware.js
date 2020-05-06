@@ -1,6 +1,4 @@
-// Экшены
 import { fetchData } from '../../store/repair/actions/fetchAction'
-// URL
 import { data } from '../urls/data'
 
 // Получить с сервера данные из таблицы Excel

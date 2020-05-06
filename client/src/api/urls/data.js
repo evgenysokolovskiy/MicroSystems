@@ -1,3 +1,4 @@
+// Repair
 export const data = `http://localhost:3000/api/plan`
 export const checkForGeneralUse = [
     `http://localhost:3000/api/checkForGeneralUse/3`,
@@ -38,7 +39,7 @@ export const scheme = [
     `http://localhost:3000/api/scheme/562`
 ]
 
+// Tech
 export const joinTechnologyFact = `http://localhost:3000/api/joinTechnologyFact`
 export const qualityProduction = `http://localhost:3000/api/qualityProduction`
-export const interval = `http://localhost:3000/api/interval`
 export const mtime = `http://localhost:3000/api/mtime`

@@ -140,13 +140,6 @@ export default class AxisCardComponent extends PureComponent {
                     />
                     <Bar dataKey="grindingClosed" stackId="a" fill="#82ca9d" name="шлифовка" />
                     <Bar
-                        dataKey="spaceBeforeCleanClosed"
-                        stackId="a"
-                        fill="rgba(0,0,0,0)"
-                        legendType="none"
-                    />
-                    <Bar dataKey="cleanClosed" stackId="a" fill="lightcoral" name="Доводка №3" />
-                    <Bar
                         dataKey="spaceBeforeMtime"
                         stackId="a"
                         fill="rgba(0,0,0,0)"

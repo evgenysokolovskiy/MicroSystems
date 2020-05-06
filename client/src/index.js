@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { store } from './store/'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Icon } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 // Обработчик ошибок
 import ErrorBoundary from './ErrorBoundary'
 // Стили
@@ -17,15 +17,7 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <ErrorBoundary>
-                <Suspense
-                    fallback={
-                        <Icon
-                            type="loading"
-                            className="loading"
-                            style={{ fontSize: '20px', color: 'red' }}
-                        />
-                    }
-                >
+                <Suspense fallback={<LoadingOutlined className="loading" />}>
                     <Switch>
                         <Route exact path="/" component={Greet} />
                         <Route exact path="/repair/" component={Repair} />

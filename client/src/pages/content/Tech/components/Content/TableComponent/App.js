@@ -59,7 +59,7 @@ const now = (function() {
 })()
 
 export default function(props) {
-    const { quality: q, mtime: time } = props
+    const { quality: q } = props
     const quality = q['realTime']
 
     const dataSourceWeight = [
