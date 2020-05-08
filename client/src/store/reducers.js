@@ -11,6 +11,9 @@ import drawerReducer from './repair/reducers/drawerReducer'
 import techTypesReducer from './tech/reducers/techTypesReducer'
 import techCardsReducer from './tech/reducers/techCardsReducer'
 import techJoinTechnologyFactReducer from './tech/reducers/techJoinTechnologyFactReducer'
+import techDiameterReducer from './tech/reducers/techDiameterReducer'
+import techInconstancyDimensionReducer from './tech/reducers/techInconstancyDimensionReducer'
+import techPressureSpeedReducer from './tech/reducers/techPressureSpeedReducer'
 import techQualityProductionReducer from './tech/reducers/techQualityProductionReducer'
 import techMtimeReducer from './tech/reducers/techMtimeReducer'
 import techTargetMenuReducer from './tech/reducers/techTargetMenuReducer'
@@ -33,6 +36,9 @@ export default combineReducers({
     techTypesReducer,
     techCardsReducer,
     techJoinTechnologyFactReducer,
+    techDiameterReducer,
+    techInconstancyDimensionReducer,
+    techPressureSpeedReducer,
     techQualityProductionReducer,
     techMtimeReducer,
     techTargetMenuReducer,

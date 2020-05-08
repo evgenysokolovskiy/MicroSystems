@@ -25,6 +25,33 @@ export const _TECH_JOIN_TECHNOLOGY_FACT = {
     }
 }
 
+export const _TECH_DIAMETER = {
+    types: {
+        TECH_DIAMETER: 'TECH_DIAMETER'
+    },
+    init: {
+        techDiameter: null
+    }
+}
+
+export const _TECH_INCONSTANCY_DIMENSION = {
+    types: {
+        TECH_INCONSTANCY_DIMENSION: 'TECH_INCONSTANCY_DIMENSION'
+    },
+    init: {
+        techInconstancyDimension: null
+    }
+}
+
+export const _TECH_PRESSURE_SPEED = {
+    types: {
+        TECH_PRESSURE_SPEED: 'TECH_PRESSURE_SPEED'
+    },
+    init: {
+        techPressureSpeed: null
+    }
+}
+
 export const _TECH_QUALITY_PRODUCTION = {
     types: {
         TECH_QUALITY_PRODUCTION: 'TECH_QUALITY_PRODUCTION'

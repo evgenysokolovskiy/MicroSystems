@@ -38,7 +38,31 @@ module.exports = function({ app, joinTechnologyFact }) {
                     )
                 })
 
+                Object.entries(type[1]['dataFewCards']).forEach(param => {
+                    app.get(
+                        `/api/joinTechnologyFact/${procedure[0]}/${type[0]}/summary/${param[0]}`,
+                        function(req, res) {
+                            res.json(param[1])
+                            console.log(
+                                `Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/${type[0]}/summary/${param[0]}`
+                            )
+                        }
+                    )
+                })
+
                 Object.entries(type[1]['dataOneCard']).forEach(card => {
+                    Object.entries(card[1]).forEach(param => {
+                        app.get(
+                            `/api/joinTechnologyFact/${procedure[0]}/${type[0]}/${card[0]}/${param[0]}`,
+                            function(req, res) {
+                                res.json(param[1])
+                                console.log(
+                                    `Данные отправлены на /api/joinTechnologyFact/${procedure[0]}/${type[0]}/${card[0]}/${param[0]}`
+                                )
+                            }
+                        )
+                    })
+
                     // Отправить данные для каждой карты каждого типа каждой процедуры
                     app.get(
                         `/api/joinTechnologyFact/${procedure[0]}/${type[0]}/${card[0]}`,

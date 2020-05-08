@@ -5,13 +5,14 @@ import MenuComponent from './MenuComponent'
 import InconstancyComponent from './ChartComponents/InconstancyComponent'
 import PressureComponent from './ChartComponents/PressureComponent'
 // Antd
-import { Layout, Collapse, Tabs } from 'antd'
+import { Layout, Collapse, Tabs, Typography } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
-import { Image1 } from '../../styles/'
+import { Container, Message } from '../../styles/'
 
 const { Content } = Layout
 const { Panel } = Collapse
 const { TabPane } = Tabs
+const { Title, Text } = Typography
 
 const TableComponent = lazy(() => import('./TableComponent/App'))
 const AxisComponent = lazy(() => import('./AxisComponent/App'))
@@ -45,7 +46,7 @@ export default class App extends PureComponent {
         date: ''
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         // 1) Построение осевого графика
         if (this.props.menu === 'axis') {
             // Условие формирования графика
@@ -92,7 +93,16 @@ export default class App extends PureComponent {
         // 2) Построение графической части
         if (this.props.menu !== 'table' && this.props.menu !== 'axis') {
             // Условие формирования графиков
-            if (prevProps.data !== this.props.data || prevProps.cards !== this.props.cards) {
+            if (
+                prevProps.diameter !== this.props.diameter ||
+                prevProps.inconstancyDimension !== this.props.inconstancyDimension ||
+                prevProps.pressureSpeed !== this.props.pressureSpeed ||
+                prevProps.cards !== this.props.cards ||
+                prevProps.isLoadedInconstancyDimension !==
+                    this.props.isLoadedInconstancyDimension ||
+                prevProps.isLoadedPressureSpeed !== this.props.isLoadedPressureSpeed ||
+                prevProps.target !== this.props.target
+            ) {
                 const {
                     types, // Все типы
                     type, // Текущий тип
@@ -100,13 +110,13 @@ export default class App extends PureComponent {
                     menu, // Текущая процедура
                     card, // Текущая карта
                     target: date, // Текущая временная отметка
-                    data, // Данные для построения графиков
+                    diameter,
+                    inconstancyDimension,
+                    pressureSpeed,
                     nameTotalTab // Наименование сводной карты
                 } = this.props
 
-                if (!data || !Object.keys(cards)[0]) return
-
-                const { diameter, inconstancyDimension, pressureSpeed } = data
+                if (!Object.keys(cards)[0]) return
 
                 // Активные карты
                 const visibleCards =
@@ -123,7 +133,46 @@ export default class App extends PureComponent {
                     ))
 
                 // Графики (компонент)
-                const charts = types && (
+                const Diameter = diameter && (
+                    <DiameterComponent
+                        date={date}
+                        menu={menu}
+                        type={type}
+                        card={card}
+                        diameter={diameter}
+                        len={visibleCards.length}
+                        nameTotalTab={nameTotalTab}
+                        CustomizedAxisTick={CustomizedAxisTick}
+                        handleClick={this.handleClick}
+                        getData={this.getData}
+                    />
+                )
+
+                const InconstancyDimension = inconstancyDimension && (
+                    <InconstancyComponent
+                        date={date}
+                        card={card}
+                        inconstancyDimension={inconstancyDimension}
+                        len={visibleCards.length}
+                        nameTotalTab={nameTotalTab}
+                        CustomizedAxisTick={CustomizedAxisTick}
+                        handleClick={this.handleClick}
+                        getData={this.getData}
+                    />
+                )
+
+                const PressureSpeed = pressureSpeed && (
+                    <PressureComponent
+                        date={date}
+                        card={card}
+                        pressureSpeed={pressureSpeed}
+                        len={visibleCards.length}
+                        nameTotalTab={nameTotalTab}
+                        CustomizedAxisTick={CustomizedAxisTick}
+                    />
+                )
+
+                const charts = types && (diameter || inconstancyDimension || pressureSpeed) && (
                     <Tabs
                         defaultActiveKey={String(type)}
                         type="card"
@@ -132,54 +181,46 @@ export default class App extends PureComponent {
                         {types.map(type => (
                             <TabPane tab={type} key={type}>
                                 <Tabs
-                                    defaultActiveKey={nameTotalTab}
+                                    defaultActiveKey={card ? card : nameTotalTab}
                                     type="card"
                                     onChange={this.handleChangeCards}
                                 >
                                     {visibleCards && [...visibleCards, ...disabledCards]}
                                 </Tabs>
-                                <Collapse defaultActiveKey={['diameter']}>
+                                <Collapse
+                                    defaultActiveKey={['diameter']}
+                                    onChange={this.handleChangePanel}
+                                >
                                     <Panel header="ДИАМЕТР, мм" key="diameter">
-                                        <DiameterComponent
-                                            date={date}
-                                            menu={menu}
-                                            type={type}
-                                            card={card}
-                                            diameter={diameter}
-                                            len={visibleCards.length}
-                                            nameTotalTab={nameTotalTab}
-                                            CustomizedAxisTick={CustomizedAxisTick}
-                                            handleClick={this.handleClick}
-                                            getData={this.getData}
-                                        />
+                                        {Diameter}
                                     </Panel>
+
                                     <Panel
                                         header="НЕПОСТОЯНСТВО, мкм - РАЗНОРАЗМЕРНОСТЬ, мкм"
                                         key="inconstancyDimension"
                                     >
-                                        <InconstancyComponent
-                                            date={date}
-                                            card={card}
-                                            inconstancyDimension={inconstancyDimension}
-                                            len={visibleCards.length}
-                                            nameTotalTab={nameTotalTab}
-                                            CustomizedAxisTick={CustomizedAxisTick}
-                                            handleClick={this.handleClick}
-                                            getData={this.getData}
-                                        />
+                                        {this.props.isLoadedInconstancyDimension ? (
+                                            InconstancyDimension
+                                        ) : (
+                                            <Text>
+                                                <LoadingOutlined className="circleRed" />
+                                                ЗАГРУЖАЮТСЯ ДАННЫЕ
+                                            </Text>
+                                        )}
                                     </Panel>
+
                                     <Panel
                                         header="ДАВЛЕНИЕ, атм - СКОРОСТЬ, об/мин"
                                         key="pressureSpeed"
                                     >
-                                        <PressureComponent
-                                            date={date}
-                                            card={card}
-                                            pressureSpeed={pressureSpeed}
-                                            len={visibleCards.length}
-                                            nameTotalTab={nameTotalTab}
-                                            CustomizedAxisTick={CustomizedAxisTick}
-                                        />
+                                        {this.props.isLoadedPressureSpeed ? (
+                                            PressureSpeed
+                                        ) : (
+                                            <Text>
+                                                <LoadingOutlined className="circleRed" />
+                                                ЗАГРУЖАЮТСЯ ДАННЫЕ
+                                            </Text>
+                                        )}
                                     </Panel>
                                 </Collapse>
                             </TabPane>
@@ -216,15 +257,22 @@ export default class App extends PureComponent {
         this.props.handleClickChangeTechCards(e)
     }
 
+    // Открытые панели
+    handleChangePanel = key => {
+        // Передать key последней по времени открытой панели
+        this.props.handleLastOpenedPanel(key[key.length - 1])
+    }
+
     render() {
         const {
+            menu,
             quality,
             mtime,
-            menu,
-            handleClickMenu,
+            lastOpenedPanel,
             isLoadedQualityProduction,
             isLoadedMtime,
-            isLoadedJoinTechnologyFact
+            isLoadedDiameter,
+            handleClickMenu
         } = this.props
         const { axis, charts } = this.state
 
@@ -236,86 +284,50 @@ export default class App extends PureComponent {
             />
         )
 
+        const download = (
+            <Container>
+                <Message>
+                    <Title level={4}>
+                        <LoadingOutlined className="circleRed" />
+                        ЗАГРУЖАЮТСЯ ДАННЫЕ
+                    </Title>
+                    <Text style={{ paddingLeft: 35 }}>Может занять некоторое время!</Text>
+                </Message>
+            </Container>
+        )
+
+        const mount = (
+            <Container>
+                <Message>
+                    <Title level={4}>
+                        <LoadingOutlined className="circleBlue" />
+                        МОНТИРУЕТСЯ ГРАФИК
+                    </Title>
+                    <Text style={{ paddingLeft: 35 }}>Может занять некоторое время!</Text>
+                </Message>
+            </Container>
+        )
+
         return (
             <Content>
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
                         {menu && menu === 'table' && (
-                            <Suspense
-                                fallback={
-                                    <div className="download">
-                                        <h2>
-                                            <LoadingOutlined className="circleBlue" />
-                                            МОНТИРУЕМ ТАБЛИЦУ...
-                                        </h2>
-                                        <h4>Может занять некоторое время!</h4>
-                                    </div>
-                                }
-                            >
-                                {table ? (
-                                    table
-                                ) : (
-                                    <div className="download">
-                                        <h2>
-                                            <LoadingOutlined className="circleRed" />
-                                            ЗАГРУЖАЕМ ДАННЫЕ...
-                                        </h2>
-                                        <h4>Может занять некоторое время!</h4>
-                                    </div>
-                                )}
-                            </Suspense>
+                            <Suspense fallback={mount}>{table ? table : download}</Suspense>
                         )}
 
                         {menu && menu === 'axis' && (
-                            <Suspense
-                                fallback={
-                                    <div className="download">
-                                        <h2>
-                                            <LoadingOutlined className="circleBlue" />
-                                            МОНТИРУЕМ ГРАФИК...
-                                        </h2>
-                                        <h4>Может занять некоторое время!</h4>
-                                    </div>
-                                }
-                            >
-                                {isLoadedQualityProduction && isLoadedMtime && axis ? (
-                                    axis
-                                ) : (
-                                    <div className="download">
-                                        <h2>
-                                            <LoadingOutlined className="circleRed" />
-                                            ЗАГРУЖАЕМ ДАННЫЕ...
-                                        </h2>
-                                        <h4>Может занять некоторое время!</h4>
-                                    </div>
-                                )}
+                            <Suspense fallback={mount}>
+                                {isLoadedQualityProduction && isLoadedMtime && axis
+                                    ? axis
+                                    : download}
                             </Suspense>
                         )}
 
                         {menu && menu !== 'table' && menu !== 'axis' && (
-                            <Suspense
-                                fallback={
-                                    <div className="download">
-                                        <h2>
-                                            <LoadingOutlined className="circleBlue" />
-                                            МОНТИРУЕМ ГРАФИК...
-                                        </h2>
-                                        <h4>Может занять некоторое время!</h4>
-                                    </div>
-                                }
-                            >
-                                {isLoadedJoinTechnologyFact && charts ? (
-                                    charts
-                                ) : (
-                                    <div className="download">
-                                        <h2>
-                                            <LoadingOutlined className="circleRed" />
-                                            ЗАГРУЖАЕМ ДАННЫЕ...
-                                        </h2>
-                                        <h4>Может занять некоторое время!</h4>
-                                    </div>
-                                )}
+                            <Suspense fallback={mount}>
+                                {isLoadedDiameter && charts ? charts : download}
                             </Suspense>
                         )}
                     </Content>

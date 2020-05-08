@@ -5,7 +5,11 @@ import App from '../components/Content/App'
 // fetch
 import { fetchTypesMiddleware } from '../../../../api/middlewares/fetchTypesMiddleware'
 import { fetchCardsMiddleware } from '../../../../api/middlewares/fetchCardsMiddleware'
-import { fetchJoinTechnologyFactMiddleware } from '../../../../api/middlewares/fetchJoinTechnologyFactMiddleware'
+import {
+    fetchDiameterMiddleware,
+    fetchInconstancyDimensionMiddleware,
+    fetchPressureSpeedMiddleware
+} from '../../../../api/middlewares/fetchJoinTechnologyFactMiddleware'
 import { fetchQualityProductionMiddleware } from '../../../../api/middlewares/fetchQualityProductionMiddleware'
 import { fetchMtimeMiddleware } from '../../../../api/middlewares/fetchMtimeMiddleware'
 // actions
@@ -22,47 +26,25 @@ export class Content extends PureComponent {
         super(props)
         this.nameTotalTab = 'Сводная'
         this.state = {
-            data: null,
-            type: null,
-            card: null,
-            quality: null,
-            mtime: null,
-            isLoadedJoinTechnologyFact: false,
+            isLoadedDiameter: false,
+            isLoadedInconstancyDimension: false,
+            isLoadedPressureSpeed: false,
             isLoadedTypes: false,
             isLoadedCards: false,
             isLoadedQualityProduction: false,
-            isLoadedMtime: false
+            isLoadedMtime: false,
+            // Последняя открытая панель
+            lastOpenedPanel: 'diameter'
         }
     }
 
-    componentDidUpdate(prevProps) {
-        const { techJoinTechnologyFact, techTargetMenu, techType, techCardNumber } = this.props
-
-        // *** ЗАПИСАТЬ В СТЕЙТ
-        if (techTargetMenu === 'table' || techTargetMenu === 'axis') {
-            if (prevProps.techType !== techType) {
-                this.setState({ type: techType })
-            }
-        }
-
-        if (techTargetMenu !== 'table' && techTargetMenu !== 'axis') {
-            if (prevProps.techJoinTechnologyFact !== techJoinTechnologyFact) {
-                const data = clonedeep(techJoinTechnologyFact)
-                this.setState({ data })
-            }
-
-            if (prevProps.techType !== techType) {
-                this.setState({ type: techType })
-            }
-
-            if (prevProps.techCardNumber !== techCardNumber) {
-                this.setState({ card: techCardNumber })
-            }
-        }
+    componentDidUpdate(prevProps, prevState) {
+        const { techTargetMenu, techType, techCardNumber } = this.props
+        const { lastOpenedPanel, isLoadedInconstancyDimension, isLoadedPressureSpeed } = this.state
 
         // *** ПРИНЯТЬ ДАННЫЕ
 
-        // При изменении меню
+        // ПРИ СМЕНЕ МЕНЮ
         if (prevProps.techTargetMenu !== techTargetMenu) {
             // 1) Загрузить данные для вкладок меню: table, axis
             if (techTargetMenu === 'table' || techTargetMenu === 'axis') {
@@ -78,64 +60,93 @@ export class Content extends PureComponent {
                     techCardNumber: card, // Номер карты
                     fetchTypesMiddleware,
                     fetchCardsMiddleware,
-                    fetchJoinTechnologyFactMiddleware
+                    fetchDiameterMiddleware
                 } = this.props
 
                 const urlTypes = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/types`
                 const urlCards = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/cards`
-                const urlData =
+                const urlDiameter =
                     card === this.nameTotalTab
-                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary`
-                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}`
+                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
+                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
 
                 // Загрузить данные, записать в стейт информацию о состоянии загрузки
+                // Данные для inconstancyDimension и pressureSpeed по дефолту не загружаются
                 fetchTypesMiddleware(urlTypes, this)
                 fetchCardsMiddleware(urlCards, this)
-                fetchJoinTechnologyFactMiddleware(urlData, this)
+                fetchDiameterMiddleware(urlDiameter, this)
             }
         }
 
-        // При изменении типа
+        // ПРИ СМЕНЕ ТИПА
         if (prevProps.techType !== techType) {
             if (techTargetMenu !== 'table' && techTargetMenu !== 'axis') {
                 const {
-                    fetchCardsMiddleware,
-                    fetchJoinTechnologyFactMiddleware,
                     techType: type, // Тип подшипника
-                    techCardNumber: card // Номер карты
+                    techCardNumber: card, // Номер карты
+                    fetchCardsMiddleware,
+                    fetchDiameterMiddleware
                 } = this.props
 
                 const urlCards = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/cards`
-                const urlData =
+                const urlDiameter =
                     card === this.nameTotalTab
-                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary`
-                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}`
+                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
+                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
 
                 // Загрузить данные, записать в стейт информацию о состоянии загрузки
-                fetchJoinTechnologyFactMiddleware(urlData, this)
                 fetchCardsMiddleware(urlCards, this)
+                fetchDiameterMiddleware(urlDiameter, this)
             }
         }
 
-        // При изменении карты
+        // ПРИ СМЕНЕ КАРТЫ
         if (prevProps.techCardNumber !== techCardNumber) {
             if (techTargetMenu !== 'table' && techTargetMenu !== 'axis') {
                 const {
-                    fetchJoinTechnologyFactMiddleware,
                     techType: type, // Тип подшипника
-                    techCardNumber: card // Номер карты
+                    techCardNumber: card, // Номер карты
+                    fetchDiameterMiddleware
                 } = this.props
 
-                const urlData =
+                const urlDiameter =
                     card === this.nameTotalTab
-                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary`
-                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}`
+                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
+                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
 
                 // Загрузить данные, записать в стейт информацию о состоянии загрузки
-                fetchJoinTechnologyFactMiddleware(urlData, this)
+                fetchDiameterMiddleware(urlDiameter, this)
             }
         }
-    }
+
+        // ЗАГРУЗКА ПРИ ОТКРЫТИИ ПАНЕЛИ
+        if (prevState.lastOpenedPanel !== this.state.lastOpenedPanel) {
+            const {
+                techType: type, // Тип подшипника
+                techCardNumber: card, // Номер карты
+                fetchInconstancyDimensionMiddleware,
+                fetchPressureSpeedMiddleware
+            } = this.props
+
+            const urlInconstancyDimension =
+                card === this.nameTotalTab
+                    ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/inconstancyDimension`
+                    : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/inconstancyDimension`
+            const urlPressureSpeed =
+                card === this.nameTotalTab
+                    ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/pressureSpeed`
+                    : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/pressureSpeed`
+
+            // Загрузить данные, записать в стейт информацию о состоянии загрузки
+            // Данные для diameter загружаются при изменении menu (т.е. по дефолту уже загружены)
+            lastOpenedPanel === 'inconstancyDimension' &&
+                !isLoadedInconstancyDimension &&
+                fetchInconstancyDimensionMiddleware(urlInconstancyDimension, this)
+            lastOpenedPanel === 'pressureSpeed' &&
+                !isLoadedPressureSpeed &&
+                fetchPressureSpeedMiddleware(urlPressureSpeed, this)
+        }
+    } // end componentDidUpdate
 
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
@@ -143,11 +154,14 @@ export class Content extends PureComponent {
         this.props.changeCardNumber(this.nameTotalTab)
         // Перевести в false состояние для новых загрузок
         this.setState({
-            isLoadedJoinTechnologyFact: false,
+            isLoadedDiameter: false,
+            isLoadedInconstancyDimension: false,
+            isLoadedPressureSpeed: false,
             isLoadedTypes: false,
             isLoadedCards: false,
             isLoadedQualityProduction: false,
-            isLoadedMtime: false
+            isLoadedMtime: false,
+            lastOpenedPanel: 'diameter'
         })
     }
 
@@ -155,20 +169,27 @@ export class Content extends PureComponent {
     handleClickChangeTechType = e => {
         // Изменить тип подшипника
         this.props.changeType(+e)
+        // Изменить номер карты
         this.props.changeCardNumber(this.nameTotalTab)
-
         // Перевести в false состояние для новых загрузок
         this.setState({
-            isLoadedJoinTechnologyFact: false,
-            isLoadedCards: false
+            isLoadedDiameter: false,
+            isLoadedInconstancyDimension: false,
+            isLoadedPressureSpeed: false,
+            isLoadedCards: false,
+            lastOpenedPanel: 'diameter'
         })
     }
 
     // Событие по карте
     handleClickChangeTechCards = e => {
+        // Изменить номер карты
         this.props.changeCardNumber(e)
         this.setState({
-            isLoadedJoinTechnologyFact: false
+            isLoadedDiameter: false,
+            isLoadedInconstancyDimension: false,
+            isLoadedPressureSpeed: false,
+            lastOpenedPanel: 'diameter'
         })
     }
 
@@ -178,9 +199,16 @@ export class Content extends PureComponent {
         this.props.changeTechDrawerVisible(true)
     }
 
+    // Последяя открытая панель
+    handleLastOpenedPanel = key => {
+        this.setState({ lastOpenedPanel: key })
+    }
+
     render() {
-        // Данные из store
         let {
+            techDiameter: diameter,
+            techInconstancyDimension: inconstancyDimension,
+            techPressureSpeed: pressureSpeed,
             techTypes: types, // Типы подшипника для данной операции
             techCards: cards, // Номера карт для данного типа
             techTargetMenu: menu, // Меню (процедура)
@@ -192,12 +220,14 @@ export class Content extends PureComponent {
         } = this.props
 
         const {
-            data,
             isLoadedTypes,
             isLoadedCards,
-            isLoadedJoinTechnologyFact,
+            isLoadedDiameter,
+            isLoadedInconstancyDimension,
+            isLoadedPressureSpeed,
             isLoadedQualityProduction,
-            isLoadedMtime
+            isLoadedMtime,
+            lastOpenedPanel
         } = this.state
 
         // Типы подшипника, определённые в технологии (для вывода в меню типов) для всех операций
@@ -206,6 +236,7 @@ export class Content extends PureComponent {
             types = Object.keys(quality['all']['types']).sort((a, b) => a - b)
 
         // Данные по отметке времени
+        const data = { diameter, inconstancyDimension, pressureSpeed }
         data &&
             menu &&
             menu !== 'table' &&
@@ -215,25 +246,33 @@ export class Content extends PureComponent {
 
         return (
             <App
-                isLoadedTypes={isLoadedTypes}
-                isLoadedCards={isLoadedCards}
-                isLoadedJoinTechnologyFact={isLoadedJoinTechnologyFact}
-                isLoadedQualityProduction={isLoadedQualityProduction}
-                isLoadedMtime={isLoadedMtime}
                 menu={menu}
                 types={types}
                 cards={cards}
                 type={type}
                 card={card}
                 target={target}
-                data={data}
+                diameter={diameter}
+                inconstancyDimension={inconstancyDimension}
+                pressureSpeed={pressureSpeed}
                 mtime={mtime}
                 quality={quality}
                 nameTotalTab={this.nameTotalTab}
+                lastOpenedPanel={lastOpenedPanel}
+                // Состояние загрузки
+                isLoadedTypes={isLoadedTypes}
+                isLoadedCards={isLoadedCards}
+                isLoadedDiameter={isLoadedDiameter}
+                isLoadedInconstancyDimension={isLoadedInconstancyDimension}
+                isLoadedPressureSpeed={isLoadedPressureSpeed}
+                isLoadedQualityProduction={isLoadedQualityProduction}
+                isLoadedMtime={isLoadedMtime}
+                // Функции
                 handleClickMenu={this.handleClickMenu}
                 handleClickTimeStamp={this.handleClickTimeStamp}
                 handleClickChangeTechType={this.handleClickChangeTechType}
                 handleClickChangeTechCards={this.handleClickChangeTechCards}
+                handleLastOpenedPanel={this.handleLastOpenedPanel}
             />
         )
     }
@@ -247,6 +286,9 @@ function mapStateToProps(store) {
         ...store.techTargetTimeStampReducer,
         ...store.techQualityProductionReducer,
         ...store.techJoinTechnologyFactReducer,
+        ...store.techDiameterReducer,
+        ...store.techInconstancyDimensionReducer,
+        ...store.techPressureSpeedReducer,
         ...store.techIntervalReducer,
         ...store.techMtimeReducer,
         ...store.techTechnologyReducer,
@@ -259,7 +301,9 @@ function mapStateToProps(store) {
 const mapDispatchToProps = {
     fetchTypesMiddleware,
     fetchCardsMiddleware,
-    fetchJoinTechnologyFactMiddleware,
+    fetchDiameterMiddleware,
+    fetchInconstancyDimensionMiddleware,
+    fetchPressureSpeedMiddleware,
     fetchQualityProductionMiddleware,
     fetchMtimeMiddleware,
     changeTechTargetMenu,
