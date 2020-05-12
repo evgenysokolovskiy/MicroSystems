@@ -6,7 +6,7 @@ const convertDateToString = require('./calculateDates').convertDateToString
 const convertStringToDateBatchLoadingTime = require('./calculateDates')
     .convertStringToDateBatchLoadingTime
 
-module.exports = function({ technology: t, fact: f, card, interval }) {
+module.exports = function({ technology: t, fact: f, procedure, card, interval }) {
     if (card === 'Сводная') return
     const technology = clonedeep(t)
     const fact = clonedeep(f)
@@ -16,7 +16,7 @@ module.exports = function({ technology: t, fact: f, card, interval }) {
         pointsDimension,
         pointsPressure,
         pointsSpeed,
-        pointsSpeedElevator
+        pointsSpeedElevator 
     } = technology
 
     // 1) Получить дату факта: конкатенировать дату и время как строку
@@ -42,8 +42,15 @@ module.exports = function({ technology: t, fact: f, card, interval }) {
     // 3) Преобразовать string в Date (в миллисекундах)
     let start = convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
 
-    // Количество часов по технологии
+    // Количество временных отметок по технологии
     const len = pointsDiameter.length
+    const lastItem = fact[card][fact[card].length - 1]
+    const end = lastItem
+        ? convertStringToDateBatchLoadingTime(lastItem['date'], lastItem['batchLoadingTime'])
+        : 0
+    // Количество временных отметок в факте от даты загрузки до последних занесенных данных
+    // Дата выгрузки или дата проверки для незавершенной процедуры
+    const difference = (end - start) / 1800000
 
     // 4) Определить временные отметки от начальной отметки start до конечной на расстоянии длины len
 
@@ -55,17 +62,39 @@ module.exports = function({ technology: t, fact: f, card, interval }) {
     // 3600000 - час
     const intervalMilliseconds = interval && +interval * 60000
 
-    for (let i = 1; i < len; i++) {
+    for (let i = 1; i < Math.max(len, difference); i++) {
         start = start + intervalMilliseconds
         arr = [...arr, start]
     }
 
     // 5) Получить новые массивы, дополненные date в миллисекундах
     // Диаметр
-    const pointsDiameterDate = [...pointsDiameter].map((item, i) => {
+    let pointsDiameterDate = [...pointsDiameter].map((item, i) => {
         item['date'] = arr[i]
         return item
     })
+
+    const lastIndexTechnology = pointsDiameterDate.length - 1
+    const lastTechnologyDiameter = [...pointsDiameter][pointsDiameter.length - 1]
+    const rest = arr.slice(lastIndexTechnology)
+    rest.forEach(item => {
+        pointsDiameterDate = [...pointsDiameterDate, { date: item }]
+    })
+
+
+
+
+
+
+
+    if (procedure === 'grinding' && card === '94') {
+        console.log(convertFactJointDate)
+    }
+
+
+
+
+
 
     // Непостоянство, разноразмерность (предварительно объединить в один массив)
     let pointsInconstancyDimension = []
@@ -104,19 +133,94 @@ module.exports = function({ technology: t, fact: f, card, interval }) {
     const diameter = [...pointsDiameterDate].map(technology => {
         convertFactJointDate &&
             [...convertFactJointDate].forEach(fact => {
+                let factDiameter = replaceToDot(fact['diameter'])
                 if (technology['date'] === fact['jointDate']) {
-                    const factDiameter = replaceToDot(fact['diameter'])
                     // 'fact' необходим для построения линейного графика, соединяющего точки
-                    technology['fact'] = +factDiameter
+                    // При следующих процедурах указывается +- в микронах к норме
+                    if (
+                        (factDiameter && procedure === 'grinding') ||
+                        procedure === 'rough' ||
+                        procedure === 'clean' ||
+                        procedure === 'final'
+                    ) {
+                        if (technology['norm']) {
+                            if (+factDiameter > 0) {
+                                factDiameter = (
+                                    +technology['norm'][1] + +(factDiameter / 1000)
+                                ).toFixed(3)
+                            } else if (+factDiameter < 0) {
+                                factDiameter = (
+                                    +technology['norm'][0] - +(factDiameter / 1000)
+                                ).toFixed(3)
+                            } else {
+                                factDiameter = (
+                                    (+lastTechnologyDiameter['norm'][1] -
+                                        +lastTechnologyDiameter['norm'][0]) /
+                                    2
+                                ).toFixed(3)
+                            }
+                        } else {
+                            if (+factDiameter > 0) {
+                                factDiameter = (
+                                    +lastTechnologyDiameter['norm'][1] + +(factDiameter / 1000)
+                                ).toFixed(3)
+                            } else if (+factDiameter < 0) {
+                                factDiameter = (
+                                    +lastTechnologyDiameter['norm'][0] - +(factDiameter / 1000)
+                                ).toFixed(3)
+                            } else {
+                                factDiameter = (
+                                    (+lastTechnologyDiameter['norm'][1] -
+                                        +lastTechnologyDiameter['norm'][0]) /
+                                    2
+                                ).toFixed(3)
+                            }
+                            technology['falseFact'] = factDiameter
+                        }
+                    }
+
+                    // Для остальных процедур указываются фактические данные
+                    technology['fact'] = factDiameter
                     // 'trueFact' и 'falseFact' необходимы для построения точек
+                    technology['norm'] &&
                     factDiameter > technology['norm'][0] && factDiameter < technology['norm'][1]
                         ? (technology['trueFact'] = factDiameter)
                         : (technology['falseFact'] = factDiameter)
                 }
+
+
+
+
+/*
+    if (procedure === 'grinding' && card === '94') {
+
+                
+                if (fact['qualityProducts']) {
+                    console.log(fact)
+                    //factDiameter = ( (+lastTechnologyDiameter['norm'][1] - +lastTechnologyDiameter['norm'][0]) / 2 ).toFixed(3)
+                    //technology['fact'] = factDiameter
+                    //technology['trueFact'] = factDiameter
+                }
+    }
+*/
+
+
+
+
+
+
             })
         technology['date'] = convertDateToString(technology['date'])
         return technology
     })
+
+
+
+
+
+
+
+
 
     // Непостоянство, разноразмерность
     const inconstancyDimension = [...pointsInconstancyDimensionDate].map(technology => {

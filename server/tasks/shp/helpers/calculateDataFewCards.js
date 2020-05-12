@@ -5,7 +5,7 @@ const interval = require('../../../config/shp/interval')
 const calculateDataOneCard = require('./calculateDataOneCard')
 
 // Совместить технологию с фактом по нескольким картам
-module.exports = function({ technology: t, fact: f, cards, interval }) {
+module.exports = function({ technology: t, fact: f, procedure, cards, interval }) {
     const technology = clonedeep(t)
     const fact = clonedeep(f)
     // Интервал (дробная часть от единицы как количество минут от часа)
@@ -43,7 +43,9 @@ module.exports = function({ technology: t, fact: f, cards, interval }) {
 
     cards['hasBatchLoadingTime'].forEach((card, index) => {
         if (card === 'Сводная') return
-        const data = clonedeep(calculateDataOneCard({ technology, fact, card, interval }))
+        const data = clonedeep(
+            calculateDataOneCard({ technology, fact, procedure, card, interval })
+        )
 
         for (let i = 0; i < diameter.length; i++) {
             if (data['diameter'][i]['fact']) {

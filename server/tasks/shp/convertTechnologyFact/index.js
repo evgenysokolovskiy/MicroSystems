@@ -39,6 +39,32 @@ module.exports = function({ technology, fact }) {
             item[1][type[0]]['fact'] = cards
         })
     })
+/*
+    // Добавить факт при выгрузке. Равен среднему значению выходного норматива
+   Object.entries(joinTechnologyFact).forEach(item => {
+        Object.entries(item[1]).forEach(type => {
+            const min = type[1]['technology']['minDiameterEnd']
+            const max = type[1]['technology']['maxDiameterEnd']
+            const middle = (( max - min ) / 2).toFixed(3)
+
+            if (!type[1]['fact']) return
+            Object.entries(type[1]['fact']).forEach(card => {
+                card[1].forEach(val => {
+                    if (val['qualityProducts']) {
+                        if (!val['diameter']) {
+                            val['diameter'] = middle
+                        }
+                    }
+                })
+            })
+
+        })
+
+   })
+*/
+    //console.log(joinTechnologyFact['grinding']['5.953']['fact']['94'])
+    //console.log(joinTechnologyFact['grinding']['5.953']['technology']['minDiameterEnd'])
+    //console.log(joinTechnologyFact['grinding']['5.953']['technology']['maxDiameterEnd'])
 
     return joinTechnologyFact
 }

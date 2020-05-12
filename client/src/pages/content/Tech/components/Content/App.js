@@ -235,7 +235,7 @@ export default class App extends PureComponent {
 
     // Получить текущие показатели при наведении мыши
     getData = data => {
-        if (typeof data.payload[0] !== 'undefined') {
+        if (data.payload && typeof data.payload[0] !== 'undefined') {
             const { date } = data.payload[0].payload
             this.setState({ date })
         }
@@ -243,8 +243,9 @@ export default class App extends PureComponent {
 
     // Событие выбора временной отметки (при клике данные из стейта)
     handleClick = () => {
+        const { card, nameTotalTab } = this.props
         const { date } = this.state
-        this.props.handleClickTimeStamp(date)
+        card !== nameTotalTab && this.props.handleClickTimeStamp(date)
     }
 
     // Событие по типу подшипника

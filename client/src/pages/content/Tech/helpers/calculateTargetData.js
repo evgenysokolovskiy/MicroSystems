@@ -9,7 +9,7 @@ export function calculateTargetData(data, target) {
     // Данные по отсечке времени для графика "Диаметр"
     diameter &&
         diameter.forEach(item => {
-            if (item['date'] === target) {
+            if (item['norm'] && item['date'] === target) {
                 minDiameter = item['norm'][0]
                 maxDiameter = item['norm'][1]
                 factDiameter = item['fact']

@@ -28,6 +28,7 @@ module.exports = function({ joinTechnologyFact: joint }) {
                 type[1]['dataFewCards'] = calculateDataFewCards({
                     technology,
                     fact,
+                    procedure: procedure[0],
                     cards,
                     interval
                 })
@@ -38,6 +39,7 @@ module.exports = function({ joinTechnologyFact: joint }) {
                         [card[0]]: calculateDataOneCard({
                             technology,
                             fact,
+                            procedure: procedure[0],
                             card: card[0],
                             interval
                         })
