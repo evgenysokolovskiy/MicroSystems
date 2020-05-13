@@ -67,6 +67,7 @@ export default class DiameterComponent extends PureComponent {
                         key={`falseFact${i}`}
                         stroke="lightcoral"
                         strokeWidth={2}
+                        line
                         fill="lightcoral"
                         isAnimationActive={false}
                     >

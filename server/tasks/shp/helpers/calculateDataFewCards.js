@@ -22,6 +22,11 @@ module.exports = function({ technology: t, fact: f, procedure, cards, interval }
         diameter[i]['date'] = date
     }
 
+    /*
+    if (procedure === 'grinding' && card === '94') {
+        console.log(fact)
+    }
+*/
     for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + int) {
         const item = {
             inconstancy: technology['pointsInconstancy'][i],

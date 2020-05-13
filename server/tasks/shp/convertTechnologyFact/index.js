@@ -39,7 +39,7 @@ module.exports = function({ technology, fact }) {
             item[1][type[0]]['fact'] = cards
         })
     })
-/*
+    /*
     // Добавить факт при выгрузке. Равен среднему значению выходного норматива
    Object.entries(joinTechnologyFact).forEach(item => {
         Object.entries(item[1]).forEach(type => {
@@ -52,7 +52,7 @@ module.exports = function({ technology, fact }) {
                 card[1].forEach(val => {
                     if (val['qualityProducts']) {
                         if (!val['diameter']) {
-                            val['diameter'] = middle
+                            val['diameter'] = 0
                         }
                     }
                 })
