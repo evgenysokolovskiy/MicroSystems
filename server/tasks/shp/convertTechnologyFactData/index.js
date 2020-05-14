@@ -29,6 +29,7 @@ module.exports = function({ joinTechnologyFact: joint }) {
                     technology,
                     fact,
                     procedure: procedure[0],
+                    type: type[0],
                     cards,
                     interval
                 })
@@ -40,6 +41,7 @@ module.exports = function({ joinTechnologyFact: joint }) {
                             technology,
                             fact,
                             procedure: procedure[0],
+                            type: type[0],
                             card: card[0],
                             interval
                         })

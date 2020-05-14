@@ -6,7 +6,7 @@ const convertDateToString = require('./calculateDates').convertDateToString
 const convertStringToDateBatchLoadingTime = require('./calculateDates')
     .convertStringToDateBatchLoadingTime
 
-module.exports = function({ technology: t, fact: f, procedure, card, interval }) {
+module.exports = function({ technology: t, fact: f, procedure, type, card, interval }) {
     if (card === 'Сводная') return
 
     const technology = clonedeep(t)
@@ -82,6 +82,21 @@ module.exports = function({ technology: t, fact: f, procedure, card, interval })
         pointsDiameterDate = [...pointsDiameterDate, { date: item }]
     })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // Непостоянство, разноразмерность (предварительно объединить в один массив)
     let pointsInconstancyDimension = []
     for (let i = 0; i < pointsInconstancy.length; i++) {
@@ -130,40 +145,23 @@ module.exports = function({ technology: t, fact: f, procedure, card, interval })
                         procedure === 'clean' ||
                         procedure === 'final'
                     ) {
-                        if (technology['norm']) {
-                            if (+factDiameter > 0) {
-                                factDiameter = (
-                                    +technology['norm'][1] + +(factDiameter / 1000)
-                                ).toFixed(3)
-                            } else if (+factDiameter < 0) {
-                                factDiameter = (
-                                    +technology['norm'][0] - +(factDiameter / 1000)
-                                ).toFixed(3)
-                            } else {
-                                factDiameter = (
-                                    (+lastTechnologyDiameter['norm'][1] -
-                                        +lastTechnologyDiameter['norm'][0]) /
+                        // 1) Рассчитать показатель фактического диаметра
+                        if (factDiameter) {
+                            factDiameter = (
+                                +type + +(factDiameter / 1000)
+                            ).toFixed(3)                            
+                        } 
+
+                        if (!factDiameter && fact['qualityProducts']) {
+                            factDiameter = (
+                                +lastTechnologyDiameter['norm'][0] +
+                                (+lastTechnologyDiameter['norm'][1] -
+                                    +lastTechnologyDiameter['norm'][0]) /
                                     2
-                                ).toFixed(3)
-                            }
-                        } else {
-                            if (+factDiameter > 0) {
-                                factDiameter = (
-                                    +lastTechnologyDiameter['norm'][1] + +(factDiameter / 1000)
-                                ).toFixed(3)
-                            } else if (+factDiameter < 0) {
-                                factDiameter = (
-                                    +lastTechnologyDiameter['norm'][0] - +(factDiameter / 1000)
-                                ).toFixed(3)
-                            } else {
-                                factDiameter = (
-                                    (+lastTechnologyDiameter['norm'][1] -
-                                        +lastTechnologyDiameter['norm'][0]) /
-                                    2
-                                ).toFixed(3)
-                            }
+                            ).toFixed(3)                            
                         }
 
+                        // 2) Определить trueFact / falseFact
                         if (technology['norm']) {
                             factDiameter > technology['norm'][0] &&
                             factDiameter < technology['norm'][1]
@@ -207,25 +205,29 @@ module.exports = function({ technology: t, fact: f, procedure, card, interval })
                                 ? (technology['trueFact'] = factDiameter)
                                 : (technology['falseFact'] = factDiameter)
                         } else {
-                            if (!factDiameter) factDiameter = 0
-                            if (+factDiameter > 0) {
-                                factDiameter = (
-                                    +lastTechnologyDiameter['norm'][1] + +(factDiameter / 1000)
-                                ).toFixed(3)
-                                technology['falseFact'] = factDiameter
-                            } else if (+factDiameter < 0) {
-                                factDiameter = (
-                                    +lastTechnologyDiameter['norm'][0] - +(factDiameter / 1000)
-                                ).toFixed(3)
-                                technology['falseFact'] = factDiameter
-                            } else {
+
+                            // Если имеет вес выгрузки, но нет фактического замера
+                            if (!factDiameter && fact['qualityProducts']) {
                                 factDiameter = (
                                     +lastTechnologyDiameter['norm'][0] +
                                     (+lastTechnologyDiameter['norm'][1] -
                                         +lastTechnologyDiameter['norm'][0]) /
                                         2
                                 ).toFixed(3)
-                                technology['trueFact'] = factDiameter
+                                technology['trueFact'] = factDiameter                             
+                            }
+
+                            // Если имеет вес выгрузки и имеет фактический замер
+                            if (factDiameter && fact['qualityProducts']) {
+                                factDiameter > lastTechnologyDiameter['norm'][0] &&
+                                factDiameter < lastTechnologyDiameter['norm'][1]
+                                    ? (technology['trueFact'] = factDiameter)
+                                    : (technology['falseFact'] = factDiameter)
+                            }
+
+                            // Любая точка 
+                            if (factDiameter && !fact['qualityProducts']) {
+                                technology['falseFact'] = factDiameter
                             }
                         }
 

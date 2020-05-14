@@ -5,7 +5,7 @@ const interval = require('../../../config/shp/interval')
 const calculateDataOneCard = require('./calculateDataOneCard')
 
 // Совместить технологию с фактом по нескольким картам
-module.exports = function({ technology: t, fact: f, procedure, cards, interval }) {
+module.exports = function({ technology: t, fact: f, procedure, type, cards, interval }) {
     const technology = clonedeep(t)
     const fact = clonedeep(f)
     // Интервал (дробная часть от единицы как количество минут от часа)
@@ -18,15 +18,17 @@ module.exports = function({ technology: t, fact: f, procedure, cards, interval }
 
     diameter = technology['pointsDiameter']
 
+
     for (let i = 0, date = 0; i < diameter.length; i++, date = date + int) {
         diameter[i]['date'] = date
     }
 
-    /*
-    if (procedure === 'grinding' && card === '94') {
-        console.log(fact)
-    }
-*/
+
+
+
+
+
+
     for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + int) {
         const item = {
             inconstancy: technology['pointsInconstancy'][i],
@@ -46,14 +48,30 @@ module.exports = function({ technology: t, fact: f, procedure, cards, interval }
         pressureSpeed[i] = item
     }
 
-    cards['hasBatchLoadingTime'].forEach((card, index) => {
+
+
+
+
+    const [total, ...rest] = cards['hasBatchLoadingTime']
+    
+    const lengths = rest.map(card => +calculateDataOneCard({ technology, fact, procedure, type, card, interval })['diameter'].length)
+    const max = lengths.length && Math.max(...lengths)
+
+    for (let i = 0, date = 0; i < Math.max(diameter.length, max); i++, date = date + int) {
+        if (diameter[i]) {
+            diameter[i]['date'] = date
+        } else {
+            diameter = [...diameter, { date }]
+        }
+    }
+   
+
+    rest.forEach((card, index) => {
         if (card === 'Сводная') return
-        const data = clonedeep(
-            calculateDataOneCard({ technology, fact, procedure, card, interval })
-        )
+        const data = clonedeep( calculateDataOneCard({ technology, fact, procedure, type, card, interval }) )
 
         for (let i = 0; i < diameter.length; i++) {
-            if (data['diameter'][i]['fact']) {
+            if (data['diameter'][i] && data['diameter'][i]['fact']) {
                 diameter[i][`fact${index}`] = replaceToDot(data['diameter'][i]['fact'])
 
                 if (data['diameter'][i]['falseFact']) {
@@ -67,6 +85,16 @@ module.exports = function({ technology: t, fact: f, procedure, cards, interval }
                 }
             }
         }
+
+
+
+
+
+
+
+
+
+
 
         for (let i = 0; i < inconstancyDimension.length; i++) {
             if (data['inconstancyDimension'][i]['factInconstancy']) {
