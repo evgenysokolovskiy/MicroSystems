@@ -57,12 +57,6 @@ module.exports = function({ app, parseShpFact, technology }) {
                     const joinTechnologyFact = convertTechnologyFact({ technology, fact })
                     // Добавлены данные для построения графиков
                     const joinTechnologyFactData = convertTechnologyFactData({ joinTechnologyFact })
-                    // Сведения о состоянии производственных процессов:
-                    // realTime - только действующие
-                    // remember - только завершенные
-                    // all - все
-                    // Для построения осевого графика и итоговых таблиц
-                    const [realTime, remember, all] = qualityProduction({ joinTechnologyFact })
 
                     resolve(
                         (() => {
@@ -71,19 +65,28 @@ module.exports = function({ app, parseShpFact, technology }) {
                                 joinTechnologyFact: joinTechnologyFactData
                             })
 
-                            qualityProductionAPI({
-                                app,
-                                realTime,
-                                remember,
-                                all
-                            })
-
                             // Градация
                             intervalAPI({ app })
 
                             // Дата последнего изменения файла
                             fs.stat(parseShpFact, (err, stat) => {
-                                mtimeAPI({ app, mtime: stat['mtime'] })
+                                const mtime = stat['mtime']
+                                mtimeAPI({ app, mtime })
+                                // Сведения о состоянии производственных процессов:
+                                // realTime - только действующие
+                                // remember - только завершенные
+                                // all - все
+                                // Для построения осевого графика и итоговых таблиц
+                                const [realTime, remember, all] = qualityProduction({
+                                    joinTechnologyFact,
+                                    mtime
+                                })
+                                qualityProductionAPI({
+                                    app,
+                                    realTime,
+                                    remember,
+                                    all
+                                })
                             })
                         })()
                     )

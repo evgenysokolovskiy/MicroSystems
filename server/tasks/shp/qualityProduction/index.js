@@ -8,7 +8,7 @@ const convertStringToDateBatchLoadingTime = require('../helpers/calculateDates')
 // На выходе необходимо получить 2 объекта:
 // - Помнит все данные после завершения процедуры (для анализа, например, для осевого графика)
 // - Данные в реальном времени (не сохраняет данные по завершенным процедурам)
-module.exports = function({ joinTechnologyFact }) {
+module.exports = function({ joinTechnologyFact, mtime }) {
     let realTimeObj = {} // Только действующие процедуры
     let rememberObj = {} // Только завершённые процедуры
     let allObj = {} // Все процедуры за всё время
@@ -56,7 +56,14 @@ module.exports = function({ joinTechnologyFact }) {
 
                 Object.entries(type[1]['fact']).forEach(card => {
                     let val = clonedeep(
-                        calculateDataOneCard({ technology, fact, card: card[0], interval })
+                        calculateDataOneCard({
+                            technology,
+                            fact,
+                            procedure: procedure[0],
+                            type: type[0],
+                            card: card[0],
+                            interval
+                        })
                     )
 
                     // Начальный вес партии
@@ -68,11 +75,62 @@ module.exports = function({ joinTechnologyFact }) {
                     // Вес дефектной продукции
                     const defectiveWeight = weight && qualityWeight && +weight - +qualityWeight
 
-                    // Исходя из наличия qualityWeight (вес качественной продукции при сдаче партии) можно сделать вывод:
+                    // Исходя из наличия hasQualityWeight (вес качественной продукции при сдаче партии) можно сделать вывод:
                     // Если есть - партия сдана, в настоящий момент перешла на следующую процедуру или ожидает её
                     // Если нет - процедура выполняется в данный момент
 
-                    if (!qualityWeight) {
+                    // *** ПАРТИЯ СДАНА
+                    if (hasQualityWeight) {
+                        // *** Партия сдана на данной процедуры (процедура закрыта)
+                        let rememberQuality, rememberDefect, rememberNotFact
+                        const hasFact = val['diameter']
+                            .reverse()
+                            .find(item => item['falseFact'] || item['trueFact'])
+
+                        if (hasFact) {
+                            rememberQuality =
+                                hasFact['trueFact'] &&
+                                card[1].reverse().find(item => item['qualityProducts'])
+                            rememberDefect =
+                                hasFact['falseFact'] &&
+                                card[1].reverse().find(item => item['qualityProducts'])
+                        } else {
+                            rememberNotFact = card[1]
+                                .reverse()
+                                .find(item => item['qualityProducts'])
+                        }
+
+                        const qualityItem = rememberQuality && {
+                            [type[0]]: {
+                                ...remember['quality'][type[0]],
+                                [[card[0]]]: rememberQuality
+                            }
+                        }
+                        const defectItem = rememberDefect && {
+                            [type[0]]: {
+                                ...remember['defect'][type[0]],
+                                [[card[0]]]: rememberDefect
+                            }
+                        }
+                        const notFactItem = rememberNotFact && {
+                            [type[0]]: {
+                                ...remember['notFact'][type[0]],
+                                [[card[0]]]: rememberNotFact
+                            }
+                        }
+
+                        remember['quality'] = { ...remember['quality'], ...qualityItem }
+                        remember['defect'] = { ...remember['defect'], ...defectItem }
+                        remember['notFact'] = { ...remember['notFact'], ...notFactItem }
+
+                        // Получить вес качественной и дефектной продукции
+                        if (rememberQuality) remember['qualityWeight'] += +rememberQuality['weight']
+                        if (rememberDefect) remember['defectWeight'] += +rememberDefect['weight']
+                        if (rememberNotFact) remember['notFactWeight'] += +rememberNotFact['weight']
+                    }
+
+                    // *** ПАРТИЯ НАХОДИТСЯ НА ДАННОЙ ПРОЦЕДУРЕ
+                    if (!hasQualityWeight) {
                         // *** Партия выполняется на данной процедуре
                         let realQuality, realDefect, realNotFact
                         const realHasFact = val['diameter']
@@ -115,53 +173,9 @@ module.exports = function({ joinTechnologyFact }) {
                         if (realQuality) realTime['qualityWeight'] += +realQuality['weight']
                         if (realDefect) realTime['defectWeight'] += +realDefect['weight']
                         if (realNotFact) realTime['notFactWeight'] += +realNotFact['weight']
-                    } else {
-                        // *** Партия сдана на данной процедуры (процедура закрыта)
-                        let rememberQuality, rememberDefect, rememberNotFact
-                        const hasFact = val['diameter']
-                            .reverse()
-                            .find(item => item['falseFact'] || item['trueFact'])
-                        if (hasFact) {
-                            rememberQuality =
-                                hasFact['trueFact'] &&
-                                card[1].reverse().find(item => item['weight'])
-                            rememberDefect =
-                                hasFact['falseFact'] &&
-                                card[1].reverse().find(item => item['weight'])
-                        } else {
-                            rememberNotFact = card[1].reverse().find(item => item['weight'])
-                        }
-
-                        const qualityItem = rememberQuality && {
-                            [type[0]]: {
-                                ...remember['quality'][type[0]],
-                                [[card[0]]]: rememberQuality
-                            }
-                        }
-                        const defectItem = rememberDefect && {
-                            [type[0]]: {
-                                ...remember['defect'][type[0]],
-                                [[card[0]]]: rememberDefect
-                            }
-                        }
-                        const notFactItem = rememberNotFact && {
-                            [type[0]]: {
-                                ...remember['notFact'][type[0]],
-                                [[card[0]]]: rememberNotFact
-                            }
-                        }
-
-                        remember['quality'] = { ...remember['quality'], ...qualityItem }
-                        remember['defect'] = { ...remember['defect'], ...defectItem }
-                        remember['notFact'] = { ...remember['notFact'], ...notFactItem }
-
-                        // Получить вес качественной и дефектной продукции
-                        if (rememberQuality) remember['qualityWeight'] += +rememberQuality['weight']
-                        if (rememberDefect) remember['defectWeight'] += +rememberDefect['weight']
-                        if (rememberNotFact) remember['notFactWeight'] += +rememberNotFact['weight']
                     }
 
-                    // *** Все партии за всё время
+                    // *** ВСЕ ПАРТИИ
                     let allQuality, allDefect, allNotFact
                     const allHasFact = val['diameter']
                         .reverse()
@@ -264,15 +278,18 @@ module.exports = function({ joinTechnologyFact }) {
     // Добавить время начала и предположительное время окончания процедуры (для realTime)
     const [realTypes, realCards] = groupCardsQualityBatchLoadingUnLoadingTime(
         realTimeObj,
-        joinTechnologyFact
+        joinTechnologyFact,
+        mtime
     )
     const [rememberTypes, rememberCards] = groupCardsQualityBatchLoadingUnLoadingTime(
         rememberObj,
-        joinTechnologyFact
+        joinTechnologyFact,
+        mtime
     )
     const [allTypes, allCards] = groupCardsQualityBatchLoadingUnLoadingTime(
         allObj,
-        joinTechnologyFact
+        joinTechnologyFact,
+        mtime
     )
 
     const realTotal = {
@@ -296,7 +313,7 @@ module.exports = function({ joinTechnologyFact }) {
     allObj['cards'] = allCards
     allObj['total'] = allTotal
 
-    //console.log(allObj['types']['9.525']['234-56-20'])
+    //console.log(allObj['types']['9.525']['234'])
     //console.log(realTimeObj['types']['9.525']['234-56-20'])
     //console.log(rememberObj['types']['9.525']['234-56-20'])
     return [realTimeObj, rememberObj, allObj]
@@ -316,9 +333,10 @@ function getAmountCards(obj) {
 // Определить все уникальные карты и состояние продукции на каждом этапе
 // Добавить время начала и окончания процедуры по карте
 // Группировать по типам и по картам
-function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
+function groupCardsQualityBatchLoadingUnLoadingTime(obj, join, mtime) {
     const cards = {}
     const types = {}
+
     Object.entries(obj).forEach(procedure => {
         Object.entries(procedure[1]).forEach(quality => {
             Object.entries(quality[1]).forEach(type => {
@@ -349,34 +367,64 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join) {
                         cards[card[0]] = { ...cards[card[0]], ...value }
                     }
 
-                    // 2) Добавить свойство - 'batchLoadingTime'(время загрузки)
-                    const batchLoadingDate = card[1]['date']
-                    const batchLoadingTime = card[1]['batchLoadingTime']
-                    // 3) Добавить предположительное время выгрузки согласно технологии
+                    // 2) Определить: время загрузки, время выгрузки
+                    let batchLoadingDate, // Дата загрузки
+                        batchLoadingTime, // Время загрузки
+                        unLoadingDate, // Дата выгрузки
+                        unloadingTime // Время выгрузки
+
+                    // Получить фактические данные о времени загрузки и выгрузки
+                    const d = join[procedure[0]][type[0]]['fact'][card[0]]
+                    d.forEach(c => {
+                        // Если имеет weight, то загрузка партии
+                        if (c['weight']) batchLoadingDate = c['date']
+                        if (c['weight']) batchLoadingTime = c['batchLoadingTime']
+                        // Если имеет qualityProducts, то выгрузка партии
+                        if (c['qualityProducts']) unLoadingDate = c['date']
+                        if (c['qualityProducts']) unloadingTime = c['batchLoadingTime']
+                    })
+
+                    // Время загрузки партии в мииллисекундах
+                    const msBatchLoadingTime =
+                        batchLoadingDate &&
+                        batchLoadingTime &&
+                        convertStringToDateBatchLoadingTime(batchLoadingDate, batchLoadingTime)
+                    // Время выгрузки партии в мииллисекундах
+                    let msUnloadingTime =
+                        unLoadingDate &&
+                        unloadingTime &&
+                        convertStringToDateBatchLoadingTime(unLoadingDate, unloadingTime)
+                    // Время по технологии в миллисекундах
+                    // Предположительное время выгрузки согласно технологии
                     // join[procedure[0]][type[0]]['technology']['len'] - количество отсечек по технологии
                     // interval - столько минут составляет каждый интервал между отсечками
                     // Т.е. чтобы получить дату окончания тех.процесса по технологии необходимо:
                     // Если интервал равен 30 минутам, а длина 42 отсечки, то к времени загрузки необходимо прибавить
                     // 42 раза по 30 минут
-                    // Длина тех.процесса в миллисекундах
-                    const msBatchLoadingTime = convertStringToDateBatchLoadingTime(
-                        batchLoadingDate,
-                        batchLoadingTime
-                    )
                     const msTechnology =
                         join[procedure[0]][type[0]]['technology']['len'] * interval * 60000
-                    const msUnloadingTime = msBatchLoadingTime + msTechnology
-                    const unloadingTime = convertDateToString(msUnloadingTime)
+                    const msUnloadingTechnologyTime = msBatchLoadingTime + msTechnology
+                    const unloadingTechnologyTime = convertDateToString(msUnloadingTime)
 
-                    if (batchLoadingTime) {
+                    if (msBatchLoadingTime /* && msUnloadingTime*/) {
+                        if (!msUnloadingTime) msUnloadingTime = mtime.getTime()
+
                         const value = {
                             [procedure[0]]: {
                                 ...cards[card[0]][procedure[0]],
-                                batchLoadingTime: (() => convertDateToString(msBatchLoadingTime))(),
-                                unloadingTime,
-                                msBatchLoadingTime,
-                                msTechnology,
-                                msUnloadingTime
+
+                                // Загрузка (факт)
+                                msBatchLoadingTime, // миллисекунды
+                                batchLoadingTime: (() => convertDateToString(msBatchLoadingTime))(), // Строка
+
+                                // Выгрузка (факт)
+                                msUnloadingTime, // миллисекунды
+                                unloadingTime: (() => convertDateToString(msUnloadingTime))(), // Строка
+
+                                // Выгрузка (технология)
+                                msUnloadingTechnologyTime, // миллисекунды
+                                unloadingTechnologyTime: (() =>
+                                    convertDateToString(msUnloadingTime))() // Строка
                             }
                         }
 

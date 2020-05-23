@@ -45,16 +45,58 @@ export default class AxisCardComponent extends PureComponent {
             data = [
                 ...data,
                 {
+                    // Наименование карты
                     name: card[0],
+
+                    // *** ОБКАТКА
+
+                    // 1) Промежуток до
                     spaceBeforeRunningClosed: (() =>
                         card[1]['running']
                             ? card[1]['running']['msBatchLoadingTime'] - minDate
                             : 0)(),
-                    runningClosed: (() =>
-                        card[1]['running']
-                            ? card[1]['running']['msUnloadingTime'] -
-                              card[1]['running']['msBatchLoadingTime']
-                            : 0)(),
+                    // 2) Технология
+                    runningTechnology: (() => {
+                        let val
+                        if (card[1]['running']) {
+                            if (
+                                card[1]['running']['msUnloadingTime'] >
+                                card[1]['running']['msUnloadingTechnologyTime']
+                            ) {
+                                val =
+                                    card[1]['running']['msUnloadingTechnologyTime'] -
+                                    card[1]['running']['msBatchLoadingTime']
+                            } else {
+                                val =
+                                    card[1]['running']['msUnloadingTime'] -
+                                    card[1]['running']['msBatchLoadingTime']
+                            }
+                        } else {
+                            val = 0
+                        }
+                        return val
+                    })(),
+                    // 3) Остаток (факт - технология)
+                    runningClosed: (() => {
+                        let val
+                        if (card[1]['running']) {
+                            if (
+                                card[1]['running']['msUnloadingTime'] >
+                                card[1]['running']['msUnloadingTechnologyTime']
+                            ) {
+                                val =
+                                    card[1]['running']['msUnloadingTime'] -
+                                    card[1]['running']['msUnloadingTechnologyTime']
+                            }
+                        } else {
+                            val = 0
+                        }
+                        return val
+                    })(),
+
+                    // *** ШЛИФОВКА
+
+                    // 1) Промежуток между обкаткой и шлифовкой
                     spaceBeforeGrindingClosed: (() =>
                         !card[1]['grinding']
                             ? 0
@@ -62,11 +104,47 @@ export default class AxisCardComponent extends PureComponent {
                             ? card[1]['grinding']['msBatchLoadingTime'] -
                               card[1]['running']['msUnloadingTime']
                             : card[1]['grinding']['msBatchLoadingTime'] - minDate)(),
-                    grindingClosed: (() =>
-                        card[1]['grinding']
-                            ? card[1]['grinding']['msUnloadingTime'] -
-                              card[1]['grinding']['msBatchLoadingTime']
-                            : 0)()
+
+                    // 2) Технология
+                    grindingTechnology: (() => {
+                        let val
+                        if (card[1]['grinding']) {
+                            if (
+                                card[1]['grinding']['msUnloadingTime'] >
+                                card[1]['grinding']['msUnloadingTechnologyTime']
+                            ) {
+                                val =
+                                    card[1]['grinding']['msUnloadingTechnologyTime'] -
+                                    card[1]['grinding']['msBatchLoadingTime']
+                            } else {
+                                val =
+                                    card[1]['grinding']['msUnloadingTime'] -
+                                    card[1]['grinding']['msBatchLoadingTime']
+                            }
+                        } else {
+                            val = 0
+                        }
+                        return val
+                    })(),
+
+                    // 3) Остаток (факт - технология)
+                    grindingClosed: (() => {
+                        let val
+                        if (card[1]['grinding']) {
+                            if (
+                                card[1]['grinding']['msUnloadingTime'] >
+                                card[1]['grinding']['msUnloadingTechnologyTime']
+                            ) {
+                                val =
+                                    card[1]['grinding']['msUnloadingTime'] -
+                                    card[1]['grinding']['msUnloadingTechnologyTime']
+                            }
+                        } else {
+                            val = 0
+                        }
+                        return val
+                    })()
+
                     /*
                     spaceBeforeCleanClosed: (() =>
                         !card[1]['clean']
@@ -94,10 +172,16 @@ export default class AxisCardComponent extends PureComponent {
                     lastClosed = card[1]['clean']['msUnloadingTime']
                 }
                 */
-                if (data[i]['grindingClosed'] !== 0) {
-                    lastClosed = card[1]['grinding']['msUnloadingTime']
-                } else if (data[i]['runningClosed'] !== 0) {
-                    lastClosed = card[1]['running']['msUnloadingTime']
+                if (data[i]['grindingClosed'] !== 0 || data[i]['grindingTechnology'] !== 0) {
+                    lastClosed = Math.max(
+                        card[1]['grinding']['msUnloadingTime'],
+                        card[1]['grinding']['msUnloadingTechnologyTime']
+                    )
+                } else if (data[i]['runningClosed'] !== 0 || data[i]['runningTechnology'] !== 0) {
+                    lastClosed = Math.max(
+                        card[1]['running']['msUnloadingTime'],
+                        card[1]['running']['msUnloadingTechnologyTime']
+                    )
                 } else {
                     lastClosed = 0
                 }
@@ -131,14 +215,16 @@ export default class AxisCardComponent extends PureComponent {
                         fill="rgba(0,0,0,0)"
                         legendType="none"
                     />
-                    <Bar dataKey="runningClosed" stackId="a" fill="#8884d8" name="обкатка" />
+                    <Bar dataKey="runningTechnology" stackId="a" fill="#82ca9d" name="обкатка" />
+                    <Bar dataKey="runningClosed" stackId="a" fill="#ccc" legendType="none" />
                     <Bar
                         dataKey="spaceBeforeGrindingClosed"
                         stackId="a"
                         fill="rgba(0,0,0,0)"
                         legendType="none"
                     />
-                    <Bar dataKey="grindingClosed" stackId="a" fill="#82ca9d" name="шлифовка" />
+                    <Bar dataKey="grindingTechnology" stackId="a" fill="#8884d8" name="шлифовка" />
+                    <Bar dataKey="grindingClosed" stackId="a" fill="#ccc" legendType="none" />
                     <Bar
                         dataKey="spaceBeforeMtime"
                         stackId="a"

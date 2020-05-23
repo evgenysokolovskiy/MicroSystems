@@ -45,7 +45,7 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
 
     // Количество временных отметок по технологии
     const len = pointsDiameter.length
-    const lastItem = fact[card][fact[card].length - 1]
+    const [lastItem] = fact[card].reverse()
     const end = lastItem
         ? convertStringToDateBatchLoadingTime(lastItem['date'], lastItem['batchLoadingTime'])
         : 0
@@ -75,28 +75,6 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
         return item
     })
 
-    const lastIndexTechnology = pointsDiameterDate.length - 1
-    const lastTechnologyDiameter = [...pointsDiameter][lastIndexTechnology]
-    const rest = arr.slice(lastIndexTechnology)
-    rest.forEach(item => {
-        pointsDiameterDate = [...pointsDiameterDate, { date: item }]
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Непостоянство, разноразмерность (предварительно объединить в один массив)
     let pointsInconstancyDimension = []
     for (let i = 0; i < pointsInconstancy.length; i++) {
@@ -108,7 +86,7 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
         pointsInconstancyDimension = [...pointsInconstancyDimension, item]
     }
 
-    const pointsInconstancyDimensionDate = [...pointsInconstancyDimension].map((item, i) => {
+    let pointsInconstancyDimensionDate = [...pointsInconstancyDimension].map((item, i) => {
         item['date'] = arr[i]
         return item
     })
@@ -124,9 +102,38 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
         pointsPressureSpeed = [...pointsPressureSpeed, itemPressureSpeed]
     }
 
-    const pointsPressureSpeedDate = [...pointsPressureSpeed].map((item, i) => {
+    let pointsPressureSpeedDate = [...pointsPressureSpeed].map((item, i) => {
         item['date'] = arr[i]
         return item
+    })
+
+    // Последний индекс значения по технологии
+    const lastIndexTechnologyDiameter = pointsDiameterDate.length - 1
+    const lastIndexTechnologyInconstancyDimension = pointsInconstancyDimensionDate.length - 1
+    const lastIndexTechnologyPressureSpeed = pointsPressureSpeedDate.length - 1
+
+    // Последний член технологии
+    const lastTechnologyDiameter = [...pointsDiameter][lastIndexTechnologyDiameter]
+    const lastTechnologyInconstancyDimension = [...pointsInconstancyDimension][
+        lastIndexTechnologyInconstancyDimension
+    ]
+    const lastTechnologyPressureSpeed = [...pointsPressureSpeed][lastIndexTechnologyPressureSpeed]
+
+    // Остаток (Факт минус технология)
+    const restDiameter = arr.slice(lastIndexTechnologyDiameter)
+    const restInconstancyDimension = arr.slice(lastIndexTechnologyInconstancyDimension)
+    const restPressureSpeed = arr.slice(lastIndexTechnologyPressureSpeed)
+
+    restDiameter.forEach(item => {
+        pointsDiameterDate = [...pointsDiameterDate, { date: item }]
+    })
+
+    restInconstancyDimension.forEach(item => {
+        pointsInconstancyDimensionDate = [...pointsInconstancyDimensionDate, { date: item }]
+    })
+
+    restPressureSpeed.forEach(item => {
+        pointsPressureSpeedDate = [...pointsPressureSpeedDate, { date: item }]
     })
 
     // 6) Добавить факт к массивам с дополненной датой
@@ -147,10 +154,8 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
                     ) {
                         // 1) Рассчитать показатель фактического диаметра
                         if (factDiameter) {
-                            factDiameter = (
-                                +type + +(factDiameter / 1000)
-                            ).toFixed(3)                            
-                        } 
+                            factDiameter = (+type + +(factDiameter / 1000)).toFixed(3)
+                        }
 
                         if (!factDiameter && fact['qualityProducts']) {
                             factDiameter = (
@@ -158,7 +163,7 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
                                 (+lastTechnologyDiameter['norm'][1] -
                                     +lastTechnologyDiameter['norm'][0]) /
                                     2
-                            ).toFixed(3)                            
+                            ).toFixed(3)
                         }
 
                         // 2) Определить trueFact / falseFact
@@ -205,7 +210,6 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
                                 ? (technology['trueFact'] = factDiameter)
                                 : (technology['falseFact'] = factDiameter)
                         } else {
-
                             // Если имеет вес выгрузки, но нет фактического замера
                             if (!factDiameter && fact['qualityProducts']) {
                                 factDiameter = (
@@ -214,7 +218,7 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
                                         +lastTechnologyDiameter['norm'][0]) /
                                         2
                                 ).toFixed(3)
-                                technology['trueFact'] = factDiameter                             
+                                technology['trueFact'] = factDiameter
                             }
 
                             // Если имеет вес выгрузки и имеет фактический замер
@@ -225,7 +229,7 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
                                     : (technology['falseFact'] = factDiameter)
                             }
 
-                            // Любая точка 
+                            // Любая точка
                             if (factDiameter && !fact['qualityProducts']) {
                                 technology['falseFact'] = factDiameter
                             }
@@ -243,20 +247,19 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
     const inconstancyDimension = [...pointsInconstancyDimensionDate].map(technology => {
         convertFactJointDate &&
             [...convertFactJointDate].forEach(fact => {
+                const factInconstancy = fact['inconstancy']
+                const factDimension = fact['dimension']
                 if (technology['date'] === fact['jointDate']) {
-                    // Непостоянство
-                    const factInconstancy = fact['inconstancy']
-                    technology['factInconstancy'] = factInconstancy
                     factInconstancy > technology['inconstancy']
                         ? (technology['factInconstancyFalse'] = factInconstancy)
                         : (technology['factInconstancyTrue'] = factInconstancy)
 
-                    // Разноразмерность
-                    const factDimension = fact['dimension']
-                    technology['factDimension'] = factDimension
                     factDimension > technology['dimension']
                         ? (technology['factDimensionFalse'] = factDimension)
                         : (technology['factDimensionTrue'] = factDimension)
+
+                    technology['factInconstancy'] = factInconstancy
+                    technology['factDimension'] = factDimension
                 }
             })
 
@@ -268,27 +271,25 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
     const pressureSpeed = [...pointsPressureSpeedDate].map(technology => {
         convertFactJointDate &&
             [...convertFactJointDate].forEach(fact => {
+                const factPressure = fact['pressure']
+                const factSpeed = fact['speed']
+                const factSpeedElevator = fact['speedElevator']
                 if (technology['date'] === fact['jointDate']) {
-                    // Давление
-                    const factPressure = fact['pressure']
-                    technology['factPressure'] = factPressure
                     factPressure > technology['pressure']
                         ? (technology['factPressureFalse'] = factPressure)
                         : (technology['factPressureTrue'] = factPressure)
 
-                    // Скорость
-                    const factSpeed = fact['speed']
-                    technology['factSpeed'] = factSpeed
                     factSpeed > technology['speed']
                         ? (technology['factSpeedFalse'] = factSpeed)
                         : (technology['factSpeedTrue'] = factSpeed)
 
-                    // Скорость элеватора
-                    const factSpeedElevator = fact['speedElevator']
-                    technology['factSpeedElevator'] = factSpeedElevator
                     factSpeedElevator > technology['speedElevator']
                         ? (technology['factSpeedElevatorFalse'] = factSpeedElevator)
                         : (technology['factSpeedElevatorTrue'] = factSpeedElevator)
+
+                    technology['factPressure'] = factPressure
+                    technology['factSpeed'] = factSpeed
+                    technology['factSpeedElevator'] = factSpeedElevator
                 }
             })
 

@@ -21,6 +21,8 @@ import { changeType } from '../../../../store/tech/actions/techTypeAction'
 import { changeCardNumber } from '../../../../store/tech/actions/techCardNumberAction'
 import { calculateTargetData } from '../helpers/calculateTargetData'
 
+const origin = window.location.origin
+
 export class Content extends PureComponent {
     constructor(props) {
         super(props)
@@ -63,12 +65,12 @@ export class Content extends PureComponent {
                     fetchDiameterMiddleware
                 } = this.props
 
-                const urlTypes = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/types`
-                const urlCards = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/cards`
+                const urlTypes = `${origin}/api/joinTechnologyFact/${techTargetMenu}/types`
+                const urlCards = `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/cards`
                 const urlDiameter =
                     card === this.nameTotalTab
-                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
-                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
+                        ? `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
+                        : `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
 
                 // Загрузить данные, записать в стейт информацию о состоянии загрузки
                 // Данные для inconstancyDimension и pressureSpeed по дефолту не загружаются
@@ -88,11 +90,11 @@ export class Content extends PureComponent {
                     fetchDiameterMiddleware
                 } = this.props
 
-                const urlCards = `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/cards`
+                const urlCards = `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/cards`
                 const urlDiameter =
                     card === this.nameTotalTab
-                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
-                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
+                        ? `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
+                        : `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
 
                 // Загрузить данные, записать в стейт информацию о состоянии загрузки
                 fetchCardsMiddleware(urlCards, this)
@@ -111,8 +113,8 @@ export class Content extends PureComponent {
 
                 const urlDiameter =
                     card === this.nameTotalTab
-                        ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
-                        : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
+                        ? `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/diameter`
+                        : `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/diameter`
 
                 // Загрузить данные, записать в стейт информацию о состоянии загрузки
                 fetchDiameterMiddleware(urlDiameter, this)
@@ -130,12 +132,12 @@ export class Content extends PureComponent {
 
             const urlInconstancyDimension =
                 card === this.nameTotalTab
-                    ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/inconstancyDimension`
-                    : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/inconstancyDimension`
+                    ? `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/inconstancyDimension`
+                    : `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/inconstancyDimension`
             const urlPressureSpeed =
                 card === this.nameTotalTab
-                    ? `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/pressureSpeed`
-                    : `http://localhost:3000/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/pressureSpeed`
+                    ? `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/summary/pressureSpeed`
+                    : `${origin}/api/joinTechnologyFact/${techTargetMenu}/${type}/${card}/pressureSpeed`
 
             // Загрузить данные, записать в стейт информацию о состоянии загрузки
             // Данные для diameter загружаются при изменении menu (т.е. по дефолту уже загружены)

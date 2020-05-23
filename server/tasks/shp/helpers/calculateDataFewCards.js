@@ -16,18 +16,11 @@ module.exports = function({ technology: t, fact: f, procedure, type, cards, inte
         inconstancyDimension = [],
         pressureSpeed = []
 
+    // *** ДОБАВИТЬ ТЕХНОЛОГИЮ
     diameter = technology['pointsDiameter']
-
-
     for (let i = 0, date = 0; i < diameter.length; i++, date = date + int) {
         diameter[i]['date'] = date
     }
-
-
-
-
-
-
 
     for (let i = 0, date = 0; i < technology['pointsInconstancy'].length; i++, date = date + int) {
         const item = {
@@ -48,82 +41,116 @@ module.exports = function({ technology: t, fact: f, procedure, type, cards, inte
         pressureSpeed[i] = item
     }
 
+    // *** ДОБАВИТЬ ФАКТИЧЕСКИЕ ДАННЫЕ
 
-
-
-
+    // rest - все карты, исключая сводную
     const [total, ...rest] = cards['hasBatchLoadingTime']
-    
-    const lengths = rest.map(card => +calculateDataOneCard({ technology, fact, procedure, type, card, interval })['diameter'].length)
-    const max = lengths.length && Math.max(...lengths)
+    // Данные по всем картам данного типа
+    const data = rest.map(card =>
+        calculateDataOneCard({ technology, fact, procedure, type, card, interval })
+    )
 
-    for (let i = 0, date = 0; i < Math.max(diameter.length, max); i++, date = date + int) {
+    // Максимальная продолжительность тех.процесса для всех карт данного типа
+    const maxFactDiameter = Math.max(...Object.values(data).map(card => +card['diameter'].length))
+    const maxFactInconstancyDimension = Math.max(
+        ...Object.values(data).map(card => +card['inconstancyDimension'].length)
+    )
+    const maxFactPressureSpeed = Math.max(
+        ...Object.values(data).map(card => +card['pressureSpeed'].length)
+    )
+
+    // Дополнить массив diameter до количества членов (объектов), равного max
+    for (
+        let i = 0, date = 0;
+        i < Math.max(diameter.length, maxFactDiameter);
+        i++, date = date + int
+    ) {
         if (diameter[i]) {
             diameter[i]['date'] = date
         } else {
             diameter = [...diameter, { date }]
         }
     }
-   
 
-    rest.forEach((card, index) => {
-        if (card === 'Сводная') return
-        const data = clonedeep( calculateDataOneCard({ technology, fact, procedure, type, card, interval }) )
+    // Дополнить массив inconstancyDimension до количества членов (объектов), равного max
+    for (
+        let i = 0, date = 0;
+        i < Math.max(inconstancyDimension.length, maxFactInconstancyDimension);
+        i++, date = date + int
+    ) {
+        if (inconstancyDimension[i]) {
+            inconstancyDimension[i]['date'] = date
+        } else {
+            inconstancyDimension = [...inconstancyDimension, { date }]
+        }
+    }
 
+    // Дополнить массив pressureSpeed до количества членов (объектов), равного max
+    for (
+        let i = 0, date = 0;
+        i < Math.max(pressureSpeed.length, maxFactPressureSpeed);
+        i++, date = date + int
+    ) {
+        if (pressureSpeed[i]) {
+            pressureSpeed[i]['date'] = date
+        } else {
+            pressureSpeed = [...pressureSpeed, { date }]
+        }
+    }
+
+    data.forEach((item, index) => {
+        // diameter
         for (let i = 0; i < diameter.length; i++) {
-            if (data['diameter'][i] && data['diameter'][i]['fact']) {
-                diameter[i][`fact${index}`] = replaceToDot(data['diameter'][i]['fact'])
+            if (item['diameter'][i] && item['diameter'][i]['fact']) {
+                diameter[i][`fact${index}`] = replaceToDot(item['diameter'][i]['fact'])
 
-                if (data['diameter'][i]['falseFact']) {
+                if (item['diameter'][i]['falseFact']) {
                     diameter[i][`falseFact${index}`] = replaceToDot(
-                        data['diameter'][i]['falseFact']
+                        item['diameter'][i]['falseFact']
                     )
                 }
 
-                if (data['diameter'][i]['trueFact']) {
-                    diameter[i][`trueFact${index}`] = replaceToDot(data['diameter'][i]['trueFact'])
+                if (item['diameter'][i]['trueFact']) {
+                    diameter[i][`trueFact${index}`] = replaceToDot(item['diameter'][i]['trueFact'])
                 }
             }
         }
 
-
-
-
-
-
-
-
-
-
-
+        // inconstansyDimension
         for (let i = 0; i < inconstancyDimension.length; i++) {
-            if (data['inconstancyDimension'][i]['factInconstancy']) {
+            if (
+                item['inconstancyDimension'][i] &&
+                item['inconstancyDimension'][i]['factInconstancy']
+            ) {
                 inconstancyDimension[i][`factInconstancy${index}`] =
-                    data['inconstancyDimension'][i]['factInconstancy']
+                    item['inconstancyDimension'][i]['factInconstancy']
 
-                if (data['inconstancyDimension'][i]['factInconstancyFalse']) {
+                if (item['inconstancyDimension'][i]['factInconstancyFalse']) {
                     inconstancyDimension[i][`factInconstancyFalse${index}`] =
-                        data['inconstancyDimension'][i]['factInconstancyFalse']
+                        item['inconstancyDimension'][i]['factInconstancyFalse']
                 }
 
-                if (data['inconstancyDimension'][i]['factInconstancyTrue']) {
+                if (item['inconstancyDimension'][i]['factInconstancyTrue']) {
                     inconstancyDimension[i][`factInconstancyTrue${index}`] =
-                        data['inconstancyDimension'][i]['factInconstancyTrue']
+                        item['inconstancyDimension'][i]['factInconstancyTrue']
                 }
             }
 
-            if (data['inconstancyDimension'][i]['factDimension']) {
+            if (
+                item['inconstancyDimension'][i] &&
+                item['inconstancyDimension'][i]['factDimension']
+            ) {
                 inconstancyDimension[i][`factDimension${index}`] =
-                    data['inconstancyDimension'][i]['factDimension']
+                    item['inconstancyDimension'][i]['factDimension']
 
-                if (data['inconstancyDimension'][i]['factDimensionFalse']) {
+                if (item['inconstancyDimension'][i]['factDimensionFalse']) {
                     inconstancyDimension[i][`factDimensionFalse${index}`] =
-                        data['inconstancyDimension'][i]['factDimensionFalse']
+                        item['inconstancyDimension'][i]['factDimensionFalse']
                 }
 
-                if (data['inconstancyDimension'][i]['factDimensionTrue']) {
+                if (item['inconstancyDimension'][i]['factDimensionTrue']) {
                     inconstancyDimension[i][`factDimensionTrue${index}`] =
-                        data['inconstancyDimension'][i]['factDimensionTrue']
+                        item['inconstancyDimension'][i]['factDimensionTrue']
                 }
             }
         }

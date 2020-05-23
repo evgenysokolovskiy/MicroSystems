@@ -1,45 +1,47 @@
+const origin = window.location.origin
+
 // Repair
-export const data = `http://localhost:3000/api/plan`
+export const data = `${origin}/api/plan`
 export const checkForGeneralUse = [
-    `http://localhost:3000/api/checkForGeneralUse/3`,
-    `http://localhost:3000/api/checkForGeneralUse/4`
+    `${origin}/api/checkForGeneralUse/3`,
+    `${origin}/api/checkForGeneralUse/4`
 ]
 
 export const checkForAntd = [
     /*
-    `http://localhost:3000/api/check/1',
-    `http://localhost:3000/api/check/2`,
+    `${origin}/api/check/1',
+    `${origin}/api/check/2`,
 */
-    `http://localhost:3000/api/check/3`
+    `${origin}/api/check/3`
     /*
-    `http://localhost:3000/api/check/4`,
-    `http://localhost:3000/api/check/5`,
-    `http://localhost:3000/api/check/6`,
-    `http://localhost:3000/api/check/7`,
-    `http://localhost:3000/api/check/10`,
-    `http://localhost:3000/api/check/50`,
-    `http://localhost:3000/api/check/93`,
-    `http://localhost:3000/api/check/561`,
-    `http://localhost:3000/api/check/562`
+    `${origin}/api/check/4`,
+    `${origin}/api/check/5`,
+    `${origin}/api/check/6`,
+    `${origin}/api/check/7`,
+    `${origin}/api/check/10`,
+    `${origin}/api/check/50`,
+    `${origin}/api/check/93`,
+    `${origin}/api/check/561`,
+    `${origin}/api/check/562`
 */
 ]
 
 export const scheme = [
-    `http://localhost:3000/api/scheme/1`,
-    `http://localhost:3000/api/scheme/2`,
-    `http://localhost:3000/api/scheme/3`,
-    `http://localhost:3000/api/scheme/4`,
-    `http://localhost:3000/api/scheme/5`,
-    `http://localhost:3000/api/scheme/6`,
-    `http://localhost:3000/api/scheme/7`,
-    `http://localhost:3000/api/scheme/10`,
-    `http://localhost:3000/api/scheme/50`,
-    `http://localhost:3000/api/scheme/93`,
-    `http://localhost:3000/api/scheme/561`,
-    `http://localhost:3000/api/scheme/562`
+    `${origin}/api/scheme/1`,
+    `${origin}/api/scheme/2`,
+    `${origin}/api/scheme/3`,
+    `${origin}/api/scheme/4`,
+    `${origin}/api/scheme/5`,
+    `${origin}/api/scheme/6`,
+    `${origin}/api/scheme/7`,
+    `${origin}/api/scheme/10`,
+    `${origin}/api/scheme/50`,
+    `${origin}/api/scheme/93`,
+    `${origin}/api/scheme/561`,
+    `${origin}/api/scheme/562`
 ]
 
 // Tech
-export const joinTechnologyFact = `http://localhost:3000/api/joinTechnologyFact`
-export const qualityProduction = `http://localhost:3000/api/qualityProduction`
-export const mtime = `http://localhost:3000/api/mtime`
+export const joinTechnologyFact = `${origin}/api/joinTechnologyFact`
+export const qualityProduction = `${origin}/api/qualityProduction`
+export const mtime = `${origin}/api/mtime`
