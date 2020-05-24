@@ -406,8 +406,19 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join, mtime) {
                     const msUnloadingTechnologyTime = msBatchLoadingTime + msTechnology
                     const unloadingTechnologyTime = convertDateToString(msUnloadingTime)
 
-                    if (msBatchLoadingTime /* && msUnloadingTime*/) {
-                        if (!msUnloadingTime) msUnloadingTime = mtime.getTime()
+                    if (msBatchLoadingTime) {
+                        // Если процедура не закончена
+                        if (!msUnloadingTime) {
+                            // Если время загрузки находится на расстояние от оси меньше, чем время по технологии, то
+                            // Предположительное время окончания процедуры будет выходить за ось (время сохранения файла excel)
+                            // И равняться времени по технологии
+                            const m = mtime.getTime()
+                            if ( (m - msBatchLoadingTime) > msTechnology) {
+                                msUnloadingTime = m
+                            } else {
+                                msUnloadingTime = msBatchLoadingTime + msTechnology
+                            }
+                        }
 
                         const value = {
                             [procedure[0]]: {
@@ -424,7 +435,10 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join, mtime) {
                                 // Выгрузка (технология)
                                 msUnloadingTechnologyTime, // миллисекунды
                                 unloadingTechnologyTime: (() =>
-                                    convertDateToString(msUnloadingTime))() // Строка
+                                    convertDateToString(msUnloadingTime))(), // Строка
+
+                                // Продолжительность мс по технологии
+                                msTechnology
                             }
                         }
 

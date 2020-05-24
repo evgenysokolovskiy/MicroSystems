@@ -143,7 +143,23 @@ export default class AxisCardComponent extends PureComponent {
                             val = 0
                         }
                         return val
-                    })()
+                    })(),
+
+                    spaceAfterMtimeBeforeGrindingFuture: (() => {
+                        let val
+                        if (!card[1]['grinding'] && card[1]['running']) {
+                            val = 86400000
+                        }
+                        return val
+                    })(),
+
+                    grindingFuture: (() => {
+                        let val
+                        if (!card[1]['grinding'] && card[1]['running']) {
+                            val = 86400000
+                        }
+                        return val
+                    })(),
 
                     /*
                     spaceBeforeCleanClosed: (() =>
@@ -237,6 +253,20 @@ export default class AxisCardComponent extends PureComponent {
                         strokeWidth={60}
                     />
                     <ReferenceLine x={mtime - minDate} stroke="red" />
+
+
+
+                    <Bar
+                        dataKey="spaceAfterMtimeBeforeGrindingFuture"
+                        stackId="a"
+                        fill="red"
+                        legendType="none"
+                    />
+                    <Bar dataKey="grindingFuture" stackId="a" fill="#8884d8" name="шлифовка" />
+
+
+
+
                 </BarChart>
             </ResponsiveContainer>
         )
