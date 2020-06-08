@@ -1,0 +1,46 @@
+@import '~antd/dist/antd.css';
+
+.labTable table thead tr th span,
+.labTable table tbody td {
+	font-size: 12px !important; 
+	line-height: 1 !important;
+	cursor: pointer;
+}
+
+
+.labTable table thead th {
+	padding: 4px 2px !important;
+	cursor: pointer;
+}
+
+.ant-tabs-bar {
+	margin-bottom: 0;
+}
+
+.download {
+	position: absolute;
+	vertical-align: center;
+	left: 50%;
+	top: 45vh;
+  	z-index: 100;
+}
+
+.circleRed {
+	color: red;
+	padding-right: 10px;
+	font-size: 25px;
+}
+
+.circleBlue {
+	color: blue;
+	padding-right: 10px;
+	font-size: 25px;
+}
+
+.selected {
+	background-color: #e6f7ff;
+}
+
+.includes {
+	background-color: orange;
+}

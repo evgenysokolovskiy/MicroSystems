@@ -26,22 +26,24 @@ module.exports.INDEXES = {
 
 // Предельное количество аварийных остановок для производств
 module.exports.LIMIT_NUMBER_EMERGENCY_STOPS = {
-    '50': 12,
-    '56': 10,
-    '57': 10,
-    '61': 10,
-    '63': 10
+    '50': 10,
+    '56': 5,
+    '57': 4,
+    '61': 5,
+    '63': 5
 }
 
 // Период планирования (число частей)
-module.exports.PLANNING_PERIOD = 12
+module.exports.PLANNING_PERIOD = 6
 module.exports.NAMES_PLANNING_PERIOD = [
+    /*
     'Январь',
     'Февраль',
     'Март',
     'Апрель',
     'Май',
     'Июнь',
+*/
     'Июль',
     'Август',
     'Сентябрь',
@@ -56,5 +58,5 @@ module.exports.NAMES_PLANNING_PERIOD = [
 
     Для оборудования, не выполняющего данные условия, планируется узловой ремонт
 */
-module.exports.LENGTH_MEDIUM_REPAIR_NODES = 5
+module.exports.LENGTH_MEDIUM_REPAIR_NODES = 4
 module.exports.MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = 3

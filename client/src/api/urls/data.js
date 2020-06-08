@@ -45,3 +45,8 @@ export const scheme = [
 export const joinTechnologyFact = `${origin}/api/joinTechnologyFact`
 export const qualityProduction = `${origin}/api/qualityProduction`
 export const mtime = `${origin}/api/mtime`
+
+// Laboratory
+export const laboratoryPercent = `${origin}/api/laboratory/percent`
+export const laboratoryAmount = `${origin}/api/laboratory/amount`
+export const laboratorySource = `${origin}/api/laboratory/source`

@@ -159,7 +159,7 @@ export default class AxisCardComponent extends PureComponent {
                             val = 86400000
                         }
                         return val
-                    })(),
+                    })()
 
                     /*
                     spaceBeforeCleanClosed: (() =>
@@ -254,8 +254,6 @@ export default class AxisCardComponent extends PureComponent {
                     />
                     <ReferenceLine x={mtime - minDate} stroke="red" />
 
-
-
                     <Bar
                         dataKey="spaceAfterMtimeBeforeGrindingFuture"
                         stackId="a"
@@ -263,10 +261,6 @@ export default class AxisCardComponent extends PureComponent {
                         legendType="none"
                     />
                     <Bar dataKey="grindingFuture" stackId="a" fill="#8884d8" name="шлифовка" />
-
-
-
-
                 </BarChart>
             </ResponsiveContainer>
         )

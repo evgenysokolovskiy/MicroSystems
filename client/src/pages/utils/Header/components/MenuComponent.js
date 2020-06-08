@@ -19,6 +19,9 @@ export default class MenuComponent extends React.Component {
                 <Menu.Item key="/tech/">
                     <Link to="/tech/">ПРИКАЗ №17</Link>
                 </Menu.Item>
+                <Menu.Item key="/laboratory/">
+                    <Link to="/laboratory/">ЛАБОРАТОРИЯ</Link>
+                </Menu.Item>
                 <Menu.Item key="/vbf21/">
                     <Link to="/vbf21/">VBF-21</Link>
                 </Menu.Item>

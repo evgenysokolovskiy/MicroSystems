@@ -29,6 +29,8 @@ const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
 const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
 const parseShpFact = path.join(__dirname, 'xlsx', 'shp', 'fact')
 const parseShpTechnology = path.join(__dirname, 'xlsx', 'shp', 'technology')
+const parseLaboratoryFact = path.join(__dirname, 'xlsx', 'laboratory', 'shp', 'fact')
+const parseLaboratoryTechnology = path.join(__dirname, 'xlsx', 'laboratory', 'shp', 'technology')
 const parsePathDetail = path.join(__dirname, 'xlsx', 'detail')
 
 const repairCompleted = require('./server/tasks/parse/repairCompleted/')
@@ -42,6 +44,11 @@ require('./server/tasks/parse/main/')({
 require('./server/tasks/parse/check/')({ app, parsePathCheck, buildPath })
 require('./server/tasks/parse/scheme/')({ app, parsePathScheme, buildPath })
 require('./server/tasks/parse/shp/joinTechnologyFact')({ app, parseShpTechnology, parseShpFact })
+require('./server/tasks/parse/laboratory/joinTechnologyFact')({
+    app,
+    parseLaboratoryTechnology,
+    parseLaboratoryFact
+})
 //require('./server/tasks/parse/detail/')({ app, parsePathDetail, buildPathDetail })
 
 /*

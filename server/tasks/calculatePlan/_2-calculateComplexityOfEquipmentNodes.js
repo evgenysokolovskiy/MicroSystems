@@ -28,8 +28,8 @@ module.exports = function(data) {
 
             if (!model[item.model]) obj[item.model] = true
             // Добавить свойства - (полная) ремонтная сложность среднего ремонта по механике и электрике
-            item['mechanicRepairComplexity'] = model[item.model].mechanic
-            item['electricRepairComplexity'] = model[item.model].electric
+            if (model[item.model]) item['mechanicRepairComplexity'] = model[item.model].mechanic
+            if (model[item.model]) item['electricRepairComplexity'] = model[item.model].electric
             Object.keys(item.nodes).forEach(node => {
                 if (node[0] === '1') {
                     const percentMechanic =

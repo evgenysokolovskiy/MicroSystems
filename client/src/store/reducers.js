@@ -22,6 +22,13 @@ import techTargetTimeStampDataReducer from './tech/reducers/techTargetTimeStampD
 import techDrawerReducer from './tech/reducers/techDrawerReducer'
 import techTypeReducer from './tech/reducers/techTypeReducer'
 import techCardNumberReducer from './tech/reducers/techCardNumberReducer'
+// laboratory
+import labPercentReducer from './laboratory/reducers/labPercentReducer'
+import labAmountReducer from './laboratory/reducers/labAmountReducer'
+import labSourceReducer from './laboratory/reducers/labSourceReducer'
+import labTargetMenuReducer from './laboratory/reducers/labTargetMenuReducer'
+import labParamReducer from './laboratory/reducers/labParamReducer'
+import labPropReducer from './laboratory/reducers/labPropReducer'
 
 export default combineReducers({
     // repair
@@ -46,5 +53,12 @@ export default combineReducers({
     techTargetTimeStampDataReducer,
     techDrawerReducer,
     techTypeReducer,
-    techCardNumberReducer
+    techCardNumberReducer,
+    //laboratory
+    labPercentReducer,
+    labAmountReducer,
+    labSourceReducer,
+    labTargetMenuReducer,
+    labParamReducer,
+    labPropReducer
 })

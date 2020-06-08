@@ -43,8 +43,8 @@ export default class DiameterComponent extends PureComponent {
                         type="linear"
                         key={`fact${i}`}
                         dataKey={`fact${i}`}
-                        stroke={color}
-                        strokeWidth={2}
+                        stroke={'#444'}
+                        strokeWidth={1}
                         connectNulls={true}
                         isAnimationActive={false}
                     />
@@ -54,7 +54,7 @@ export default class DiameterComponent extends PureComponent {
                         dataKey={`trueFact${i}`}
                         key={`trueFact${i}`}
                         stroke="lightgreen"
-                        strokeWidth={2}
+                        strokeWidth={1}
                         fill="lightgreen"
                         isAnimationActive={false}
                     >
@@ -66,7 +66,7 @@ export default class DiameterComponent extends PureComponent {
                         dataKey={`falseFact${i}`}
                         key={`falseFact${i}`}
                         stroke="lightcoral"
-                        strokeWidth={2}
+                        strokeWidth={1}
                         line
                         fill="lightcoral"
                         isAnimationActive={false}
@@ -86,8 +86,8 @@ export default class DiameterComponent extends PureComponent {
                     type="linear"
                     dataKey="fact"
                     key="fact"
-                    stroke="lightcoral"
-                    strokeWidth={2}
+                    stroke="#444"
+                    strokeWidth={1}
                     connectNulls={true}
                     isAnimationActive={false}
                 />,
@@ -96,7 +96,7 @@ export default class DiameterComponent extends PureComponent {
                     key="trueFact"
                     name="Факт (норма)"
                     stroke="lightgreen"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fill="lightgreen"
                     isAnimationActive={false}
                 >
@@ -107,7 +107,7 @@ export default class DiameterComponent extends PureComponent {
                     key="falseFact"
                     name="Факт (не норма)"
                     stroke="lightcoral"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fill="lightcoral"
                     isAnimationActive={false}
                 >

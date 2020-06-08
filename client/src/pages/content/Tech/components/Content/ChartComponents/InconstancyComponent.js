@@ -41,7 +41,7 @@ export default class InconstancyComponent extends PureComponent {
                 dataKey="inconstancy"
                 key="inconstancy"
                 stroke="#8884d8"
-                strokeWidth={2}
+                strokeWidth={1}
                 name="Непостоянство"
                 isAnimationActive={false}
             >
@@ -52,7 +52,7 @@ export default class InconstancyComponent extends PureComponent {
                 dataKey="dimension"
                 key="dimension"
                 stroke="#82ca9d"
-                strokeWidth={2}
+                strokeWidth={1}
                 name="Разноразмерность"
                 isAnimationActive={false}
             >
@@ -67,8 +67,8 @@ export default class InconstancyComponent extends PureComponent {
                 dataKey="factInconstancy"
                 key="factInconstancy"
                 legendType="none"
-                stroke="lightcoral"
-                strokeWidth={2}
+                stroke="#444"
+                strokeWidth={1}
                 connectNulls={true}
             />,
             <Scatter
@@ -76,7 +76,7 @@ export default class InconstancyComponent extends PureComponent {
                 key="factInconstancyTrue"
                 name="Факт (норма)"
                 stroke="#8884d8"
-                strokeWidth={2}
+                strokeWidth={1}
                 fill="lightgreen"
                 isAnimationActive={false}
             >
@@ -87,7 +87,7 @@ export default class InconstancyComponent extends PureComponent {
                 key="factInconstancyFalse"
                 name="Факт (не норма)"
                 stroke="#8884d8"
-                strokeWidth={2}
+                strokeWidth={1}
                 fill="lightcoral"
                 isAnimationActive={false}
             >
@@ -98,8 +98,8 @@ export default class InconstancyComponent extends PureComponent {
                 dataKey="factDimension"
                 key="factDimension"
                 legendType="none"
-                stroke="lightcoral"
-                strokeWidth={2}
+                stroke="#444"
+                strokeWidth={1}
                 connectNulls={true}
                 isAnimationActive={false}
             />,
@@ -108,7 +108,7 @@ export default class InconstancyComponent extends PureComponent {
                 key="factDimensionTrue"
                 legendType="none"
                 stroke="#82ca9d"
-                strokeWidth={2}
+                strokeWidth={1}
                 fill="lightgreen"
                 isAnimationActive={false}
             >
@@ -119,7 +119,7 @@ export default class InconstancyComponent extends PureComponent {
                 key="factDimensionFalse"
                 legendType="none"
                 stroke="#82ca9d"
-                strokeWidth={2}
+                strokeWidth={1}
                 fill="lightcoral"
                 isAnimationActive={false}
             >
@@ -135,8 +135,8 @@ export default class InconstancyComponent extends PureComponent {
                     dataKey={`factInconstancy${i}`}
                     key={`factInconstancy${i}`}
                     legendType="none"
-                    stroke="lightcoral"
-                    strokeWidth={2}
+                    stroke="#444"
+                    strokeWidth={1}
                     connectNulls={true}
                     isAnimationActive={false}
                 />
@@ -147,7 +147,7 @@ export default class InconstancyComponent extends PureComponent {
                     key={`factInconstancyTrue${i}`}
                     legendType="none"
                     stroke="#8884d8"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fill="lightgreen"
                     isAnimationActive={false}
                 >
@@ -160,7 +160,7 @@ export default class InconstancyComponent extends PureComponent {
                     key={`factInconstancyFalse${i}`}
                     legendType="none"
                     stroke="#8884d8"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fill="lightcoral"
                     isAnimationActive={false}
                 >
@@ -177,8 +177,8 @@ export default class InconstancyComponent extends PureComponent {
                     dataKey={`factDimension${i}`}
                     key={`factDimension${i}`}
                     legendType="none"
-                    stroke="lightcoral"
-                    strokeWidth={2}
+                    stroke="#444"
+                    strokeWidth={1}
                     connectNulls={true}
                     isAnimationActive={false}
                 />
@@ -189,7 +189,7 @@ export default class InconstancyComponent extends PureComponent {
                     key={`factDimensionTrue${i}`}
                     legendType="none"
                     stroke="#82ca9d"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fill="lightgreen"
                     isAnimationActive={false}
                 >
@@ -202,7 +202,7 @@ export default class InconstancyComponent extends PureComponent {
                     key={`factDimensionFalse${i}`}
                     legendType="none"
                     stroke="#82ca9d"
-                    strokeWidth={2}
+                    strokeWidth={1}
                     fill="lightcoral"
                     isAnimationActive={false}
                 >

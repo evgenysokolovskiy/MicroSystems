@@ -94,11 +94,7 @@ export default function(props) {
                     return {
                         onClick: event => {
                             //console.log(event.currentTarget, rowIndex)
-                        }, // click row
-                        onDoubleClick: event => {}, // double click row
-                        onContextMenu: event => {}, // right button click row
-                        onMouseEnter: event => {}, // mouse enter row
-                        onMouseLeave: event => {} // mouse leave row
+                        }
                     }
                 }
             }
@@ -160,11 +156,7 @@ export default function(props) {
                                             item.hasAttribute('inn') &&
                                             handleClickRow(item.getAttribute('inn'))
                                     )
-                                }, // click row
-                                onDoubleClick: event => {}, // double click row
-                                onContextMenu: event => {}, // right button click row
-                                onMouseEnter: event => {}, // mouse enter row
-                                onMouseLeave: event => {} // mouse leave row
+                                }
                             }
                         }}
                     />

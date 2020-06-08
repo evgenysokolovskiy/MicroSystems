@@ -12,6 +12,7 @@ import './styles/index.css'
 const Greet = lazy(() => import('./pages/Greet'))
 const Repair = lazy(() => import('./pages/Repair'))
 const Tech = lazy(() => import('./pages/Tech'))
+const Laboratory = lazy(() => import('./pages/Laboratory'))
 
 ReactDOM.render(
     <Provider store={store}>
@@ -27,6 +28,9 @@ ReactDOM.render(
 
                         <Route exact path="/tech/" component={Tech} />
                         <Route path="/tech/:id" component={Tech} />
+
+                        <Route exact path="/laboratory/" component={Laboratory} />
+                        <Route path="/laboratory/:id" component={Laboratory} />
 
                         <Route path="*" component={Greet} />
                     </Switch>

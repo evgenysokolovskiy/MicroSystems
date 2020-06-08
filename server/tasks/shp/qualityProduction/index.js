@@ -413,7 +413,7 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join, mtime) {
                             // Предположительное время окончания процедуры будет выходить за ось (время сохранения файла excel)
                             // И равняться времени по технологии
                             const m = mtime.getTime()
-                            if ( (m - msBatchLoadingTime) > msTechnology) {
+                            if (m - msBatchLoadingTime > msTechnology) {
                                 msUnloadingTime = m
                             } else {
                                 msUnloadingTime = msBatchLoadingTime + msTechnology
