@@ -9,7 +9,7 @@ const server = require('http')
         console.log(`listening on port ${port}`)
     })
 
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use('/*', express.static(path.join(__dirname, 'client/build')))
 app.use(express.json({ limit: '50mb' }))
 app.use(
     express.urlencoded({
@@ -29,9 +29,10 @@ const parsePathCheck = path.join(__dirname, 'xlsx', 'check')
 const parsePathScheme = path.join(__dirname, 'xlsx', 'scheme')
 const parseShpFact = path.join(__dirname, 'xlsx', 'shp', 'fact')
 const parseShpTechnology = path.join(__dirname, 'xlsx', 'shp', 'technology')
+const parsePathDetail = path.join(__dirname, 'xlsx', 'detail')
+
 const parseLaboratoryFact = path.join(__dirname, 'xlsx', 'laboratory', 'shp', 'fact')
 const parseLaboratoryTechnology = path.join(__dirname, 'xlsx', 'laboratory', 'shp', 'technology')
-const parsePathDetail = path.join(__dirname, 'xlsx', 'detail')
 
 const repairCompleted = require('./server/tasks/parse/repairCompleted/')
 require('./server/tasks/parse/main/')({

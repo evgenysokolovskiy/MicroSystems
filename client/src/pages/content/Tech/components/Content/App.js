@@ -204,7 +204,7 @@ export default class App extends PureComponent {
                                         ) : (
                                             <Text>
                                                 <LoadingOutlined className="circleRed" />
-                                                ЗАГРУЖАЮТСЯ ДАННЫЕ
+                                                ПОСТРОЕНИЕ ДАННЫХ
                                             </Text>
                                         )}
                                     </Panel>
@@ -218,7 +218,7 @@ export default class App extends PureComponent {
                                         ) : (
                                             <Text>
                                                 <LoadingOutlined className="circleRed" />
-                                                ЗАГРУЖАЮТСЯ ДАННЫЕ
+                                                ПОСТРОЕНИЕ ДАННЫХ
                                             </Text>
                                         )}
                                     </Panel>
@@ -290,9 +290,9 @@ export default class App extends PureComponent {
                 <Message>
                     <Title level={4}>
                         <LoadingOutlined className="circleRed" />
-                        ЗАГРУЖАЮТСЯ ДАННЫЕ
+                        ПОСТРОЕНИЕ ДАННЫХ
                     </Title>
-                    <Text style={{ paddingLeft: 35 }}>Может занять некоторое время!</Text>
+                    <Text style={{ paddingLeft: 35 }}>Может потребоваться несколько минут!</Text>
                 </Message>
             </Container>
         )
@@ -302,9 +302,9 @@ export default class App extends PureComponent {
                 <Message>
                     <Title level={4}>
                         <LoadingOutlined className="circleBlue" />
-                        МОНТИРУЕТСЯ ГРАФИК
+                        ПОСТРОЕНИЕ ДАННЫХ
                     </Title>
-                    <Text style={{ paddingLeft: 35 }}>Может занять некоторое время!</Text>
+                    <Text style={{ paddingLeft: 35 }}>Может потребоваться несколько минут!</Text>
                 </Message>
             </Container>
         )

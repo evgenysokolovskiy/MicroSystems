@@ -2,9 +2,15 @@ import React, { PureComponent, Suspense, lazy } from 'react'
 import clonedeep from 'lodash.clonedeep'
 
 import MenuComponent from './MenuComponent'
+import PrintComponent from '../print/PrintComponent'
 // Antd
 import { Layout, Typography, Tabs } from 'antd'
-import { LoadingOutlined, PercentageOutlined, FieldBinaryOutlined } from '@ant-design/icons'
+import {
+    LoadingOutlined,
+    PercentageOutlined,
+    FieldBinaryOutlined,
+    PrinterOutlined
+} from '@ant-design/icons'
 // Styled-components
 import { Container, Message } from '../../styles/'
 
@@ -79,9 +85,8 @@ export default class App extends PureComponent {
                 <Message>
                     <Title level={4}>
                         <LoadingOutlined className="circleRed" />
-                        ЗАГРУЖАЮТСЯ ДАННЫЕ
+                        ПОСТРОЕНИЕ ДАННЫХ
                     </Title>
-                    <Text style={{ paddingLeft: 35 }}>Может занять некоторое время!</Text>
                 </Message>
             </Container>
         )
@@ -91,25 +96,10 @@ export default class App extends PureComponent {
                 <Message>
                     <Title level={4}>
                         <LoadingOutlined className="circleBlue" />
-                        МОНТИРУЕТСЯ ГРАФИК
+                        ПОСТРОЕНИЕ ДАННЫХ
                     </Title>
-                    <Text style={{ paddingLeft: 35 }}>Может занять некоторое время!</Text>
                 </Message>
             </Container>
-        )
-
-        const tabs = (
-            <Tabs type="card" defaultActiveKey={activeTab} onChange={this.handleChange}>
-                <TabPane
-                    tab=<PercentageOutlined style={{ fontSize: '14px', color: '#08c' }} />
-                    key={'percent'}
-                />
-
-                <TabPane
-                    tab=<FieldBinaryOutlined style={{ fontSize: '14px', color: '#08c' }} />
-                    key={'amount'}
-                />
-            </Tabs>
         )
 
         if (!param) {
@@ -124,13 +114,39 @@ export default class App extends PureComponent {
             this.props.handleClickProp(Object.keys(source[param])[0])
         }
 
+        const tabs = (
+            <Tabs type="card" defaultActiveKey={activeTab} onChange={this.handleChange}>
+                <TabPane
+                    tab=<PercentageOutlined style={{ fontSize: '16px', color: '#08c' }} />
+                    key={'percent'}
+                />
+
+                <TabPane
+                    tab=<FieldBinaryOutlined style={{ fontSize: '16px', color: '#08c' }} />
+                    key={'amount'}
+                />
+            </Tabs>
+        )
+
         const chart = source && param && prop && (
             <ChartComponent source={source[param][prop]} CustomizedAxisTick={CustomizedAxisTick} />
         )
 
         const percentTable = (
             <>
-                {tabs}
+                <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
+                    <div className="labHeader">
+                        {tabs}
+                        <PrinterOutlined
+                            style={{
+                                fontSize: '20px',
+                                paddingLeft: '10px',
+                                color: '#999',
+                                cursor: 'pointer'
+                            }}
+                        />
+                    </div>
+                </Layout>
                 <TablePercentComponent
                     percent={percent}
                     param={param}
@@ -144,9 +160,23 @@ export default class App extends PureComponent {
 
         const amountTable = (
             <>
-                {tabs}
+                <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
+                    <div className="labHeader">
+                        {tabs}
+                        <PrinterOutlined
+                            style={{
+                                fontSize: '20px',
+                                paddingLeft: '10px',
+                                color: '#999',
+                                cursor: 'pointer'
+                            }}
+                        />
+                    </div>
+                </Layout>
                 <TableAmountComponent
                     amount={amount}
+                    param={param}
+                    prop={prop}
                     handleClickParam={handleClickParam}
                     handleClickProp={handleClickProp}
                 />
@@ -159,14 +189,20 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
-                        {isLoadedPercent && (
+                        {menu &&
+                            menu === 'shp' &&
+                            activeTab === 'percent' &&
+                            source &&
+                            param &&
+                            prop && (
+                                <Suspense fallback={mount}>
+                                    {isLoadedPercent ? percentTable : download}
+                                </Suspense>
+                            )}
+
+                        {menu && menu === 'shp' && activeTab === 'amount' && (
                             <Suspense fallback={mount}>
-                                {percentTable ? percentTable : download}
-                            </Suspense>
-                        )}
-                        {isLoadedAmount && (
-                            <Suspense fallback={mount}>
-                                {amountTable ? amountTable : download}
+                                {isLoadedAmount ? amountTable : download}
                             </Suspense>
                         )}
                     </Content>

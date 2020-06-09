@@ -1,5 +1,12 @@
 @import '~antd/dist/antd.css';
 
+.labHeader {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: left;
+  align-items: center;
+}
+
 .labTable table thead tr th span,
 .labTable table tbody td {
 	font-size: 12px !important; 
@@ -41,6 +48,10 @@
 	background-color: #e6f7ff;
 }
 
-.includes {
-	background-color: orange;
+.true {
+	background-color: lightgreen;
+}
+
+.false {
+	background-color: lightcoral;
 }

@@ -5,14 +5,9 @@ import { CaretDownOutlined } from '@ant-design/icons'
 
 const { Column, ColumnGroup } = Table
 
-export default class TableComponent extends PureComponent {
-    state = {
-        rowIndex: 0
-    }
-
+export default class TablePercentComponent extends PureComponent {
     handleChangeParam = record => {
-        this.props.handleClickParam(record.name)
-        this.setState({ rowIndex: --record.key })
+        this.props.handleClickParam(record['name'])
     }
 
     handleChangeProp = column => {
@@ -21,7 +16,6 @@ export default class TableComponent extends PureComponent {
 
     render() {
         const { percent, param, prop } = this.props
-        const { rowIndex } = this.state
 
         let dataSource = []
         Object.keys(percent).forEach((param, i) => {
@@ -41,8 +35,6 @@ export default class TableComponent extends PureComponent {
             dataSource = [...dataSource, item]
         })
 
-        //console.log(percent[param])
-
         return (
             <>
                 <h4 style={{ paddingTop: 20, paddingLeft: 20 }}>
@@ -55,12 +47,11 @@ export default class TableComponent extends PureComponent {
                     pagination={false}
                     scroll={{ x: 'max-content' }}
                     className="labTable"
-                    headerClassName="includes"
-                    rowClassName={(record, index) => index === rowIndex && 'selected'}
+                    rowClassName={(record, index) => record['name'] === param && 'selected'}
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: event => {
-                                this.handleChangeParam(record, rowIndex)
+                                this.handleChangeParam(record)
                             }
                         }
                     }}
