@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { TableOutlined, AlignCenterOutlined, LineChartOutlined } from '@ant-design/icons'
 
@@ -24,21 +23,15 @@ export default class MenuComponent extends PureComponent {
                     onClick={this.handleClick}
                 >
                     <Menu.Item key="shp">
-                        <span>
-                            <Link to="/laboratory/shp">ШП</Link>
-                        </span>
+                        <span>ШП</span>
                     </Menu.Item>
 
                     <Menu.Item key="shsp">
-                        <span>
-                            <Link to="/laboratory/shsp">ШСП</Link>
-                        </span>
+                        <span>ШСП</span>
                     </Menu.Item>
 
                     <Menu.Item key="sog">
-                        <span>
-                            <Link to="/laboratory/sog">СОЖ</Link>
-                        </span>
+                        <span>СОЖ</span>
                     </Menu.Item>
                 </Menu>
             </div>

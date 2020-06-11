@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { TableOutlined, AlignCenterOutlined, LineChartOutlined } from '@ant-design/icons'
 
@@ -24,17 +23,11 @@ export default class MenuComponent extends PureComponent {
                     onClick={this.handleClick}
                 >
                     <Menu.Item key="table">
-                        <Link to="/tech/table">
-                            <TableOutlined />
-                        </Link>
+                        <TableOutlined />
                     </Menu.Item>
-
                     <Menu.Item key="axis">
-                        <Link to="/tech/axis">
-                            <AlignCenterOutlined />
-                        </Link>
+                        <AlignCenterOutlined />
                     </Menu.Item>
-
                     <SubMenu
                         key="graph"
                         title={
@@ -43,33 +36,13 @@ export default class MenuComponent extends PureComponent {
                             </span>
                         }
                     >
-                        <Menu.Item key="running">
-                            <span>
-                                <Link to="/tech/running">ОБКАТКА</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="grinding">
-                            <span>
-                                <Link to="/tech/grinding">ШЛИФОВКА</Link>
-                            </span>
-                        </Menu.Item>
+                        <Menu.Item key="running">ОБКАТКА</Menu.Item>
+                        <Menu.Item key="grinding">ШЛИФОВКА</Menu.Item>
 
                         <SubMenu key="tweaking" title="ДОВОДКА">
-                            <Menu.Item key="rough">
-                                <span>
-                                    <Link to="/tech/rough">ЧЕРНОВАЯ</Link>
-                                </span>
-                            </Menu.Item>
-                            <Menu.Item key="clean">
-                                <span>
-                                    <Link to="/tech/clean">ЧИСТОВАЯ</Link>
-                                </span>
-                            </Menu.Item>
-                            <Menu.Item key="final">
-                                <span>
-                                    <Link to="/tech/final">ОКОНЧАТЕЛЬНАЯ</Link>
-                                </span>
-                            </Menu.Item>
+                            <Menu.Item key="rough">ЧЕРНОВАЯ</Menu.Item>
+                            <Menu.Item key="clean">ЧИСТОВАЯ</Menu.Item>
+                            <Menu.Item key="final">ОКОНЧАТЕЛЬНАЯ</Menu.Item>
                         </SubMenu>
                     </SubMenu>
                 </Menu>
@@ -77,18 +50,3 @@ export default class MenuComponent extends PureComponent {
         )
     }
 }
-
-/*
-<Menu.Item key="stamping">
-    <span>
-        <Link to="/tech/stamping">ШТАМПОВКА</Link>
-    </span>
-</Menu.Item>
-
-<Menu.Item key="term">
-    <span>
-        <Link to="/tech/term">ТЕРМООБРАБОТКА</Link>
-    </span>
-</Menu.Item>
-
-*/

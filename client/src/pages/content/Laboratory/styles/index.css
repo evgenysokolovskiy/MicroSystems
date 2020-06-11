@@ -1,5 +1,9 @@
 @import '~antd/dist/antd.css';
 
+.ant-tabs-bar {
+	margin-bottom: 0;
+}
+
 .labHeader {
   display: flex;
   flex-flow: row wrap;
@@ -18,10 +22,6 @@
 .labTable table thead th {
 	padding: 4px 2px !important;
 	cursor: pointer;
-}
-
-.ant-tabs-bar {
-	margin-bottom: 0;
 }
 
 .download {

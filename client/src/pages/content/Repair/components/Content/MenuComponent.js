@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 import { SolutionOutlined, TableOutlined, ToolOutlined } from '@ant-design/icons'
 
@@ -31,31 +30,11 @@ export default class MenuComponent extends PureComponent {
                             </span>
                         }
                     >
-                        <Menu.Item key="plan50">
-                            <span>
-                                <Link to="/repair/plan/50">50</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="plan56">
-                            <span>
-                                <Link to="/repair/plan/56">56</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="plan57">
-                            <span>
-                                <Link to="/repair/plan/57">57</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="plan61">
-                            <span>
-                                <Link to="/repair/plan/61">61</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="plan63">
-                            <span>
-                                <Link to="/repair/plan/63">63</Link>
-                            </span>
-                        </Menu.Item>
+                        <Menu.Item key="plan50">50</Menu.Item>
+                        <Menu.Item key="plan56">56</Menu.Item>
+                        <Menu.Item key="plan57">57</Menu.Item>
+                        <Menu.Item key="plan61">61</Menu.Item>
+                        <Menu.Item key="plan63">63</Menu.Item>
                     </SubMenu>
 
                     <SubMenu
@@ -66,66 +45,18 @@ export default class MenuComponent extends PureComponent {
                             </span>
                         }
                     >
-                        <Menu.Item key="scheme1">
-                            <span>
-                                <Link to="/repair/scheme/1">ШСЦ1</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme2">
-                            <span>
-                                <Link to="/repair/scheme/2">ШСЦ2</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme3">
-                            <span>
-                                <Link to="/repair/scheme/3">ШСЦ3</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme4">
-                            <span>
-                                <Link to="/repair/scheme/4">ШСЦ4</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme5">
-                            <span>
-                                <Link to="/repair/scheme/5">ШСЦ5</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme6">
-                            <span>
-                                <Link to="/repair/scheme/6">ШСЦ6</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme7">
-                            <span>
-                                <Link to="/repair/scheme/7">ШСЦ7</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme10">
-                            <span>
-                                <Link to="/repair/scheme/10">ШСЦ10</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme50">
-                            <span>
-                                <Link to="/repair/scheme/50">50</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme93">
-                            <span>
-                                <Link to="/repair/scheme/93">АТЦ</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme561">
-                            <span>
-                                <Link to="/repair/scheme/561">56(1)</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="scheme562">
-                            <span>
-                                <Link to="/repair/scheme/562">56(2)</Link>
-                            </span>
-                        </Menu.Item>
+                        <Menu.Item key="scheme1">ШСЦ1</Menu.Item>
+                        <Menu.Item key="scheme2">ШСЦ2</Menu.Item>
+                        <Menu.Item key="scheme3">ШСЦ3</Menu.Item>
+                        <Menu.Item key="scheme4">ШСЦ4</Menu.Item>
+                        <Menu.Item key="scheme5">ШСЦ5</Menu.Item>
+                        <Menu.Item key="scheme6">ШСЦ6</Menu.Item>
+                        <Menu.Item key="scheme7">ШСЦ7</Menu.Item>
+                        <Menu.Item key="scheme10">ШСЦ10</Menu.Item>
+                        <Menu.Item key="scheme50">50</Menu.Item>
+                        <Menu.Item key="scheme93">АТЦ</Menu.Item>
+                        <Menu.Item key="scheme561">56(1)</Menu.Item>
+                        <Menu.Item key="scheme562">56(2)</Menu.Item>
                     </SubMenu>
 
                     <SubMenu
@@ -136,66 +67,18 @@ export default class MenuComponent extends PureComponent {
                             </span>
                         }
                     >
-                        <Menu.Item key="check1">
-                            <span>
-                                <Link to="/repair/check/1">ШСЦ1</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check2">
-                            <span>
-                                <Link to="/repair/check/2">ШСЦ2</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check3">
-                            <span>
-                                <Link to="/repair/check/3">ШСЦ3</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check4">
-                            <span>
-                                <Link to="/repair/check/4">ШСЦ4</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check5">
-                            <span>
-                                <Link to="/repair/check/5">ШСЦ5</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check6">
-                            <span>
-                                <Link to="/repair/check/6">ШСЦ6</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check7">
-                            <span>
-                                <Link to="/repair/check/7">ШСЦ7</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check10">
-                            <span>
-                                <Link to="/repair/check/10">ШСЦ10</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check50">
-                            <span>
-                                <Link to="/repair/check/50">50</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check93">
-                            <span>
-                                <Link to="/repair/check/93">АТЦ</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check561">
-                            <span>
-                                <Link to="/repair/check/561">56(1)</Link>
-                            </span>
-                        </Menu.Item>
-                        <Menu.Item key="check562">
-                            <span>
-                                <Link to="/repair/check/562">56(2)</Link>
-                            </span>
-                        </Menu.Item>
+                        <Menu.Item key="check1">ШСЦ1</Menu.Item>
+                        <Menu.Item key="check2">ШСЦ2</Menu.Item>
+                        <Menu.Item key="check3">ШСЦ3</Menu.Item>
+                        <Menu.Item key="check4">ШСЦ4</Menu.Item>
+                        <Menu.Item key="check5">ШСЦ5</Menu.Item>
+                        <Menu.Item key="check6">ШСЦ6</Menu.Item>
+                        <Menu.Item key="check7">ШСЦ7</Menu.Item>
+                        <Menu.Item key="check10">ШСЦ10</Menu.Item>
+                        <Menu.Item key="check50">50</Menu.Item>
+                        <Menu.Item key="check93">АТЦ</Menu.Item>
+                        <Menu.Item key="check561">56(1)</Menu.Item>
+                        <Menu.Item key="check562">56(2)</Menu.Item>
                     </SubMenu>
                 </Menu>
             </div>

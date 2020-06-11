@@ -24,16 +24,19 @@ export class Content extends PureComponent {
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
         const {
+            fetchLabAmountMiddleware,
             fetchLabPercentMiddleware,
             fetchLabSourceMiddleware,
             changeLabTargetMenu
         } = this.props
+        fetchLabAmountMiddleware(laboratoryAmount, this)
         fetchLabPercentMiddleware(laboratoryPercent, this)
         fetchLabSourceMiddleware(laboratorySource, this)
         changeLabTargetMenu(item)
 
         // Перевести в false состояние для новых загрузок
         this.setState({
+            isLoadedAmount: false,
             isLoadedPercent: false,
             isLoadedAmount: false,
             isLoadedSource: false
@@ -71,6 +74,38 @@ export class Content extends PureComponent {
         } = this.props
         const { isLoadedPercent, isLoadedAmount, isLoadedSource } = this.state
 
+        const rowTotal = {}
+        amount &&
+            Object.entries(amount).forEach(item => {
+                let t = 0
+                let f = 0
+                rowTotal[item[0]] = {}
+
+                Object.values(item[1]).forEach(val => {
+                    t += val['true']
+                    f += val['false']
+                })
+
+                rowTotal[item[0]]['true'] = t
+                rowTotal[item[0]]['false'] = f
+                rowTotal[item[0]]['percentTrue'] = ((t / (t + f)) * 100).toFixed()
+            })
+
+        const columnTotal = {}
+        amount &&
+            Object.values(amount).forEach(item => {
+                Object.entries(item).forEach(val => {
+                    if (!columnTotal[val[0]]) columnTotal[val[0]] = { true: 0, false: 0 }
+                    columnTotal[val[0]]['true'] += val[1]['true']
+                    columnTotal[val[0]]['false'] += val[1]['false']
+                    columnTotal[val[0]]['percentTrue'] = (
+                        (columnTotal[val[0]]['true'] /
+                            (columnTotal[val[0]]['true'] + columnTotal[val[0]]['false'])) *
+                        100
+                    ).toFixed()
+                })
+            })
+
         return (
             <App
                 menu={menu}
@@ -79,6 +114,8 @@ export class Content extends PureComponent {
                 percent={percent}
                 amount={amount}
                 source={source}
+                rowTotal={rowTotal}
+                columnTotal={columnTotal}
                 isLoadedPercent={isLoadedPercent}
                 isLoadedAmount={isLoadedAmount}
                 isLoadedSource={isLoadedSource}

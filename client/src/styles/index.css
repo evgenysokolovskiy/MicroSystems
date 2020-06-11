@@ -15,6 +15,21 @@ code {
     monospace;
 }
 
+.ant-menu,
+.ant-tabs,
+.ant-collapse > .ant-collapse-item 
+.ant-collapse-header {
+  color: #000 !important;
+}
+
+.ant-table {
+  color: #000;
+}
+
+.ant-table-thead > tr > th {
+  color: #000;
+}
+
 .loading {
 	position: absolute;
 	top: 50vh;
@@ -25,9 +40,16 @@ code {
   color: red;
 }
 
-.ant-menu,
-.ant-tabs,
-.ant-collapse > .ant-collapse-item 
-.ant-collapse-header {
-  color: #000 !important;
+table {
+  border: 1px solid #000;
+  width: 80vw;
+}
+
+.test h4 {
+  font-size: 22px;
+}
+
+.test .labTable table {
+  border: 1px solid #000;
+  width: 80vw;  
 }

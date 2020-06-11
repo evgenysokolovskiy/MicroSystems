@@ -61,6 +61,48 @@ export default class App extends PureComponent {
         this.props.handleClickProp(e)
     }
 
+    onPrint = () => {
+        const content = document.querySelector('.labTable')
+        const root = document.getElementById('root')
+        //root.style.display = 'none'
+
+        //const printWrapper = document.createElement('div')
+        //printWrapper.innerHTML = content.innerHTML
+        //document.documentElement.appendChild(printWrapper)
+
+        //document.getElementById('root').innerHTML = content.innerHTML
+
+        //print.appendChild(content)
+
+        //root.style.display = 'none'
+
+        //window.print()
+
+        //root.style.display = 'block'
+
+        //print.removeChild(content)
+        //print.style.display = 'none'
+
+        /*
+        let content1 = document.querySelector('.test')
+        let pri = document.getElementById('ifmcontentstoprint').contentWindow
+        //const cssLink = document.createElement('link')
+        //cssLink.href = '../src/styles/index.css'
+        //cssLink.rel = 'stylesheet'
+        //cssLink.type = 'text/css'
+
+        //pri.document.head.appendChild(`<style type='text/css'>table{border: 2px solid #444;}</style>`)
+
+        pri.document.open()
+        pri.document.write(content1.innerHTML)
+        //pri.document.head.appendChild(`<style type='text/css'>table{border: 2px solid #444;}</style>`)
+        //pri.document.head.appendChild(cssLink)
+        pri.document.close()
+        pri.focus()
+        pri.print()
+*/
+    }
+
     render() {
         let {
             menu,
@@ -69,6 +111,8 @@ export default class App extends PureComponent {
             percent,
             amount,
             source,
+            rowTotal,
+            columnTotal,
             isLoadedPercent,
             isLoadedAmount,
             isLoadedSource,
@@ -141,14 +185,17 @@ export default class App extends PureComponent {
                             style={{
                                 fontSize: '20px',
                                 paddingLeft: '10px',
-                                color: '#999',
+                                color: '#222',
                                 cursor: 'pointer'
                             }}
+                            onClick={this.onPrint}
                         />
                     </div>
                 </Layout>
                 <TablePercentComponent
                     percent={percent}
+                    rowTotal={rowTotal}
+                    columnTotal={columnTotal}
                     param={param}
                     prop={prop}
                     handleClickParam={handleClickParam}
@@ -167,14 +214,17 @@ export default class App extends PureComponent {
                             style={{
                                 fontSize: '20px',
                                 paddingLeft: '10px',
-                                color: '#999',
+                                color: '#222',
                                 cursor: 'pointer'
                             }}
+                            onClick={this.onPrint}
                         />
                     </div>
                 </Layout>
                 <TableAmountComponent
                     amount={amount}
+                    rowTotal={rowTotal}
+                    columnTotal={columnTotal}
                     param={param}
                     prop={prop}
                     handleClickParam={handleClickParam}

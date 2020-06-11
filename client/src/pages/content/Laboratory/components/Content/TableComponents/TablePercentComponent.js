@@ -15,7 +15,7 @@ export default class TablePercentComponent extends PureComponent {
     }
 
     render() {
-        const { percent, param, prop } = this.props
+        const { percent, rowTotal, columnTotal, param, prop } = this.props
 
         let dataSource = []
         Object.keys(percent).forEach((param, i) => {
@@ -30,10 +30,47 @@ export default class TablePercentComponent extends PureComponent {
                 mechanicalAdmixture: (() => percent[param]['Механические примеси, %'])(),
                 metalInclusions: (() => percent[param]['Металлические включения'])(),
                 flashPoint: (() => percent[param]['t вспышки, не менее град С'])(),
-                acidNumber: (() => percent[param]['Кислотное число, мг.кон'])()
+                acidNumber: (() => percent[param]['Кислотное число, мг.кон'])(),
+                rowTotal: (() => rowTotal[param] && rowTotal[param]['percentTrue'])()
             }
             dataSource = [...dataSource, item]
         })
+
+        let t = 0,
+            f = 0
+        Object.values(rowTotal).forEach(item => {
+            t += item['true']
+            f += item['false']
+        })
+
+        const p = ((t / (t + f)) * 100).toFixed()
+
+        const total = {
+            key: 1000,
+            fabric: 'ИТОГО',
+            name: '',
+            inhibitor: (() =>
+                columnTotal['Ингибитор, %'] && columnTotal['Ингибитор, %']['percentTrue'])(),
+            viscosity: (() =>
+                columnTotal['Вязкость, мм2/сек'] &&
+                columnTotal['Вязкость, мм2/сек']['percentTrue'])(),
+            H2O: (() => columnTotal['H2O, %'] && columnTotal['H2O, %']['percentTrue'])(),
+            mechanicalAdmixture: (() =>
+                columnTotal['Механические примеси, %'] &&
+                columnTotal['Механические примеси, %']['percentTrue'])(),
+            metalInclusions: (() =>
+                columnTotal['Металлические включения'] &&
+                columnTotal['Металлические включения']['percentTrue'])(),
+            flashPoint: (() =>
+                columnTotal['t вспышки, не менее град С'] &&
+                columnTotal['t вспышки, не менее град С']['percentTrue'])(),
+            acidNumber: (() =>
+                columnTotal['Кислотное число, мг.кон'] &&
+                columnTotal['Кислотное число, мг.кон']['percentTrue'])(),
+            rowTotal: p
+        }
+
+        dataSource = [...dataSource, total]
 
         return (
             <>
@@ -293,6 +330,13 @@ export default class TablePercentComponent extends PureComponent {
                             }}
                         />
                     </ColumnGroup>
+                    <Column
+                        title="ИТОГО"
+                        dataIndex="rowTotal"
+                        key="rowTotal"
+                        width={80}
+                        align="center"
+                    />
                 </Table>
             </>
         )

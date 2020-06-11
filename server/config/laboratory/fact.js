@@ -14,6 +14,6 @@ module.exports = {
     mechanicalAdmixture: 10, // Механические примеси
     metalInclusions: 11, // Металлические включения
     flashPoint: 12, // t вспышки
-    oleicAcid: 13, // Олеиновая кислота
-    acidNumber: 14 // Кислотное число
+    //oleicAcid: 13, // Олеиновая кислота
+    acidNumber: 13 // Кислотное число
 }

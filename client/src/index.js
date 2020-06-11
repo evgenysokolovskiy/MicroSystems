@@ -21,17 +21,9 @@ ReactDOM.render(
                 <Suspense fallback={<LoadingOutlined className="loading" />}>
                     <Switch>
                         <Route exact path="/" component={Greet} />
-                        <Route exact path="/repair/" component={Repair} />
-                        <Route path="/repair/plan/:id" component={Repair} />
-                        <Route path="/repair/check/:id" component={Repair} />
-                        <Route path="/repair/scheme/:id" component={Repair} />
-
-                        <Route exact path="/tech/" component={Tech} />
-                        <Route path="/tech/:id" component={Tech} />
-
-                        <Route exact path="/laboratory/" component={Laboratory} />
-                        <Route path="/laboratory/:id" component={Laboratory} />
-
+                        <Route path="/repair/*" component={Repair} />
+                        <Route path="/tech/*" component={Tech} />
+                        <Route path="/laboratory/*" component={Laboratory} />
                         <Route path="*" component={Greet} />
                     </Switch>
                 </Suspense>
@@ -40,3 +32,27 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('root')
 )
+
+/*
+
+<Route exact path="/" component={Greet} />
+<Route exact path="/repair/" component={Repair} />
+<Route path="/repair/plan/:id" component={Repair} />
+<Route path="/repair/check/:id" component={Repair} />
+<Route path="/repair/scheme/:id" component={Repair} />
+
+<Route exact path="/tech/" component={Tech} />
+<Route path="/tech/table/:id" component={Tech} />
+<Route path="/tech/axis/:id" component={Tech} />
+<Route path="/tech/running/:id" component={Tech} />
+<Route path="/tech/grinding/:id" component={Tech} />
+<Route path="/tech/rough/:id" component={Tech} />
+<Route path="/tech/clean/:id" component={Tech} />
+<Route path="/tech/final/:id" component={Tech} />
+
+<Route path="/laboratory/" component={Laboratory} />
+<Route path="/laboratory/shp/:id" component={Laboratory} />
+<Route path="/laboratory/shsp/:id" component={Laboratory} />
+<Route path="/laboratory/sog/:id" component={Laboratory} />
+
+*/
