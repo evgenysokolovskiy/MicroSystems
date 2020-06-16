@@ -5,6 +5,7 @@ export function fetchLabSourceMiddleware(url, self) {
         fetch(url)
             .then(res => res.json())
             .then(data => {
+                console.log(data)
                 dispatch(changeSource(data))
             })
             .then(() => self.setState({ isLoadedSource: true }))

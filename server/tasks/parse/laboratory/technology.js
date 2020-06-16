@@ -9,14 +9,20 @@ module.exports = function({ app, parseLaboratoryTechnology, parseLaboratoryFact,
         for (let i = 0; i < paths.length; i++) {
             new Promise(function(resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
-                const technology = xlsx.parse(`${paths[i]}`)[0].data
-                if (technology) {
+                const technologyShp = xlsx.parse(`${paths[i]}`)[0]['data']
+                const technologyShsp = xlsx.parse(`${paths[i]}`)[1]['data']
+                const technologySog = xlsx.parse(`${paths[i]}`)[2]['data']
+                if (technologyShp && technologyShsp && technologySog) {
                     resolve(
                         (() => {
                             fact({
                                 app,
                                 parseLaboratoryFact,
-                                technology
+                                technology: {
+                                    technologyShp,
+                                    technologyShsp,
+                                    technologySog
+                                }
                             })
                         })()
                     )

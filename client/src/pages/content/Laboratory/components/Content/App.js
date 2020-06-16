@@ -62,9 +62,11 @@ export default class App extends PureComponent {
     }
 
     onPrint = () => {
-        const content = document.querySelector('.labTable')
-        const root = document.getElementById('root')
+        //const content = document.querySelector('.labTable')
+        //const root = document.getElementById('root')
         //root.style.display = 'none'
+
+        window.print()
 
         //const printWrapper = document.createElement('div')
         //printWrapper.innerHTML = content.innerHTML
@@ -185,7 +187,7 @@ export default class App extends PureComponent {
                             style={{
                                 fontSize: '20px',
                                 paddingLeft: '10px',
-                                color: '#222',
+                                color: '#999',
                                 cursor: 'pointer'
                             }}
                             onClick={this.onPrint}
@@ -214,7 +216,7 @@ export default class App extends PureComponent {
                             style={{
                                 fontSize: '20px',
                                 paddingLeft: '10px',
-                                color: '#222',
+                                color: '#999',
                                 cursor: 'pointer'
                             }}
                             onClick={this.onPrint}

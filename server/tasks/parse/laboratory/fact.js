@@ -3,31 +3,45 @@
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 const laboratoryAPI = require('../../../api/laboratoryAPI')
-const calculateData = require('../../laboratory/helpers/')
+const calculateDataShp = require('../../laboratory/helpers/shp/')
+const calculateDataShsp = require('../../laboratory/helpers/shsp/')
+const calculateDataSog = require('../../laboratory/helpers/sog/')
 
 module.exports = function({ app, parseLaboratoryFact, technology }) {
+    const { technologyShp, technologyShsp, technologySog } = technology
+
     fs.readdir(parseLaboratoryFact, function(err, files) {
         const paths = files.map(item => `${parseLaboratoryFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
             new Promise(function(resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
-                /*
-                let fact
-                xlsx.parse(`${paths[i]}`).forEach(item => {
-                    if (item['name'] === 'ШП') {
-                        fact = item['data']
-                    }
-                })
-                */
-
                 if (!xlsx.parse(`${paths[i]}`)[2]) return
-                const fact = xlsx.parse(`${paths[i]}`)[2]['data']
-                if (technology && fact) {
-                    const data = calculateData({ fact, technology })
+                const factShp = xlsx.parse(`${paths[i]}`)[0]['data']
+                const factShsp = xlsx.parse(`${paths[i]}`)[1]['data']
+                const factSog = xlsx.parse(`${paths[i]}`)[2]['data']
+
+                if (
+                    technologyShp &&
+                    technologyShsp &&
+                    technologySog &&
+                    factShp &&
+                    factShsp &&
+                    factSog
+                ) {
+                    const shp = calculateDataShp({ fact: factShp, technology: technologyShp })
+                    const shsp = calculateDataShsp({ fact: factShsp, technology: technologyShsp })
+                    //const sog = calculateDataSog({ fact: factSog, technology: technologySog })
 
                     resolve(
                         (() => {
-                            laboratoryAPI({ app, data })
+                            laboratoryAPI({
+                                app,
+                                data: {
+                                    shp,
+                                    shsp
+                                    //sog
+                                }
+                            })
                         })()
                     )
                 } else {

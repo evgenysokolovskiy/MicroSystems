@@ -23,6 +23,7 @@ export default class DiameterComponent extends PureComponent {
                 obj[item['date']] && obj[item['date']]['fact']
                     ? [...obj[item['date']]['fact'], item['fact']]
                     : [item['fact']]
+
             const technology = item['technology']
             const date = item['date']
             obj[item['date']] = { date, technology, fact }
@@ -31,8 +32,17 @@ export default class DiameterComponent extends PureComponent {
         const arr = Object.values(obj)
 
         arr.forEach(item => {
+            const min = +item['technology'][0]
+            const max = +item['technology'][1]
+
             item['fact'].forEach((fact, i) => {
                 item[`fact${i}`] = fact
+
+                if (fact >= min && fact <= max) {
+                    item[`trueFact${i}`] = fact
+                } else {
+                    item[`falseFact${i}`] = fact
+                }
             })
             return item
         })
@@ -43,25 +53,57 @@ export default class DiameterComponent extends PureComponent {
             return maxLenFact
         })
 
-        let components
+        let components = [],
+            scattersTrue = [],
+            scattersFalse = [],
+            lines = []
         arr.forEach(item => {
-            components = []
-            for (let i = 0; i < item['fact'] + 1; i++) {
-                components = [
-                    ...components,
-                    <Scatter
-                        dataKey={`fact${i}`}
+            const min = +item['technology'][0]
+            const max = +item['technology'][1]
+
+            for (let i = 0; i < item['fact'].length - 1; i++) {
+                lines = [
+                    ...lines,
+                    <Line
+                        type="linear"
                         key={`fact${i}`}
-                        name="Факт"
-                        stroke="#444"
+                        dataKey={`fact${i}`}
+                        stroke={'#444'}
+                        strokeWidth={0.5}
+                        connectNulls={true}
+                        isAnimationActive={false}
+                    />
+                ]
+
+                scattersTrue = [
+                    ...scattersTrue,
+                    <Scatter
+                        dataKey={`trueFact${i}`}
+                        key={`trueFact${i}`}
+                        stroke="lightgreen"
                         strokeWidth={1}
-                        line
-                        fill="#444"
+                        fill="lightgreen"
                         isAnimationActive={false}
                     >
-                        <LabelList dataKey={`fact${i}`} position="bottom" />
+                        <LabelList dataKey={`trueFact${i}`} position="bottom" />
                     </Scatter>
                 ]
+
+                scattersFalse = [
+                    ...scattersFalse,
+                    <Scatter
+                        dataKey={`falseFact${i}`}
+                        key={`falseFact${i}`}
+                        stroke="lightcoral"
+                        strokeWidth={1}
+                        fill="lightcoral"
+                        isAnimationActive={false}
+                    >
+                        <LabelList dataKey={`falseFact${i}`} position="bottom" />
+                    </Scatter>
+                ]
+
+                components = [...lines, ...scattersTrue, ...scattersFalse]
             }
         })
 

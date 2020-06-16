@@ -1,4 +1,4 @@
-/* Номера колонок в таблице Excel */
+// Нефтепродукты
 
 module.exports = {
     index: 0, // Номер отчёта
@@ -14,6 +14,5 @@ module.exports = {
     mechanicalAdmixture: 10, // Механические примеси
     metalInclusions: 11, // Металлические включения
     flashPoint: 12, // t вспышки
-    //oleicAcid: 13, // Олеиновая кислота
     acidNumber: 13 // Кислотное число
 }

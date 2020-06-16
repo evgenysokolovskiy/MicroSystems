@@ -1,6 +1,6 @@
 const clonedeep = require('lodash.clonedeep')
-const INDEXES_TECHNOLOGY = require('../../../config/laboratory/technology')
-const INDEXES_FACT = require('../../../config/laboratory/fact')
+const INDEXES_TECHNOLOGY = require('../../../../config/laboratory/shsp/technology')
+const INDEXES_FACT = require('../../../../config/laboratory/shsp/fact')
 
 // indexes technology
 const indexTechnologyName = INDEXES_TECHNOLOGY['name']
@@ -63,11 +63,13 @@ module.exports = function({ fact: f, technology: t }) {
     fact.forEach(f => {
         if (!f[indexFactName]) return
         const name = f[indexFactName].trim()
+
         if (!amount[name]) amount[name] = {}
         if (!source[name]) source[name] = {}
 
         // Ингибитор
         if (
+            objTechnology[name] &&
             typeof objTechnology[name]['inhibitorMin'] === 'number' &&
             typeof objTechnology[name]['inhibitorMax'] === 'number'
         ) {
@@ -100,6 +102,7 @@ module.exports = function({ fact: f, technology: t }) {
 
         // Вязкость
         if (
+            objTechnology[name] &&
             typeof objTechnology[name]['viscosityMin'] === 'number' &&
             typeof objTechnology[name]['viscosityMax'] === 'number'
         ) {
@@ -132,7 +135,7 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // H2O
-        if (typeof objTechnology[name]['h2o'] === 'number') {
+        if (objTechnology[name] && typeof objTechnology[name]['h2o'] === 'number') {
             if (!amount[name]['H2O, %']) amount[name]['H2O, %'] = { true: 0, false: 0 }
             if (!source[name]['H2O, %']) source[name]['H2O, %'] = []
             if (typeof f[indexFactH2O] === 'number') {
@@ -154,7 +157,7 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // Механические примеси
-        if (typeof objTechnology[name]['mechanicalAdmixture'] === 'number') {
+        if (objTechnology[name] && typeof objTechnology[name]['mechanicalAdmixture'] === 'number') {
             if (!amount[name]['Механические примеси, %'])
                 amount[name]['Механические примеси, %'] = { true: 0, false: 0 }
             if (!source[name]['Механические примеси, %'])
@@ -179,7 +182,7 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // Механические включения
-        if (typeof objTechnology[name]['metalInclusions'] === 'number') {
+        if (objTechnology[name] && typeof objTechnology[name]['metalInclusions'] === 'number') {
             if (!amount[name]['Металлические включения'])
                 amount[name]['Металлические включения'] = { true: 0, false: 0 }
             if (!source[name]['Металлические включения'])
@@ -204,7 +207,7 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // t вспышки
-        if (typeof objTechnology[name]['flashPoint'] === 'number') {
+        if (objTechnology[name] && typeof objTechnology[name]['flashPoint'] === 'number') {
             if (!amount[name]['t вспышки, не менее град С'])
                 amount[name]['t вспышки, не менее град С'] = { true: 0, false: 0 }
             if (!source[name]['t вспышки, не менее град С'])
@@ -229,7 +232,7 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // Кислотное число
-        if (typeof objTechnology[name]['acidNumber'] === 'number') {
+        if (objTechnology[name] && typeof objTechnology[name]['acidNumber'] === 'number') {
             if (!amount[name]['Кислотное число, мг.кон'])
                 amount[name]['Кислотное число, мг.кон'] = { true: 0, false: 0 }
             if (!source[name]['Кислотное число, мг.кон'])

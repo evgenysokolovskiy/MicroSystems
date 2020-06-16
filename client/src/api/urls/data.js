@@ -47,6 +47,10 @@ export const qualityProduction = `${origin}/api/qualityProduction`
 export const mtime = `${origin}/api/mtime`
 
 // Laboratory
-export const laboratoryPercent = `${origin}/api/laboratory/percent`
-export const laboratoryAmount = `${origin}/api/laboratory/amount`
-export const laboratorySource = `${origin}/api/laboratory/source`
+export const laboratoryPercentShp = `${origin}/api/laboratory/percentShp`
+export const laboratoryAmountShp = `${origin}/api/laboratory/amountShp`
+export const laboratorySourceShp = `${origin}/api/laboratory/sourceShp`
+
+export const laboratoryPercentShsp = `${origin}/api/laboratory/percentShsp`
+export const laboratoryAmountShsp = `${origin}/api/laboratory/amountShsp`
+export const laboratorySourceShsp = `${origin}/api/laboratory/sourceShsp`

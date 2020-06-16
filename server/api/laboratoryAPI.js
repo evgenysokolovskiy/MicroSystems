@@ -1,20 +1,57 @@
 // Отправить информацию об интервале между отсечками на шкале времени к '/api/laboratory/percent'
 
 module.exports = function({ app, data }) {
-    if (data) {
-        app.get('/api/laboratory/percent', function(req, res) {
-            res.json(data['percent'])
-            console.log('Данные отправлены на /api/laboratory/percent')
+    const { shp, shsp, sog } = data
+    if (shp) {
+        app.get('/api/laboratory/percentShp', function(req, res) {
+            res.json(shp['percent'])
+            console.log('Данные отправлены на /api/laboratory/percentShp')
         })
 
-        app.get('/api/laboratory/amount', function(req, res) {
-            res.json(data['amount'])
-            console.log('Данные отправлены на /api/laboratory/amount')
+        app.get('/api/laboratory/amountShp', function(req, res) {
+            res.json(shp['amount'])
+            console.log('Данные отправлены на /api/laboratory/amountShp')
         })
 
-        app.get('/api/laboratory/source', function(req, res) {
-            res.json(data['source'])
-            console.log('Данные отправлены на /api/laboratory/source')
+        app.get('/api/laboratory/sourceShp', function(req, res) {
+            console.log(shp['source']['диз.топливо МД'])
+            res.json(shp['source']['диз.топливо МД'])
+            console.log('Данные отправлены на /api/laboratory/sourceShp')
         })
     }
+
+    if (shsp) {
+        app.get('/api/laboratory/percentShsp', function(req, res) {
+            res.json(shsp['percent'])
+            console.log('Данные отправлены на /api/laboratory/percentShsp')
+        })
+
+        app.get('/api/laboratory/amountShsp', function(req, res) {
+            res.json(shsp['amount'])
+            console.log('Данные отправлены на /api/laboratory/amountShsp')
+        })
+
+        app.get('/api/laboratory/sourceShsp', function(req, res) {
+            res.json(shsp['source'])
+            console.log('Данные отправлены на /api/laboratory/sourceShsp')
+        })
+    }
+    /*
+    if (sog) {
+        app.get('/api/laboratory/percentSog', function(req, res) {
+            res.json(shsp['percent'])
+            console.log('Данные отправлены на /api/laboratory/percentSog')
+        })
+
+        app.get('/api/laboratory/amountSog', function(req, res) {
+            res.json(shsp['amount'])
+            console.log('Данные отправлены на /api/laboratory/amountSog')
+        })
+
+        app.get('/api/laboratory/sourceSog', function(req, res) {
+            res.json(shsp['source'])
+            console.log('Данные отправлены на /api/laboratory/sourceSog')
+        })
+    }
+*/
 }

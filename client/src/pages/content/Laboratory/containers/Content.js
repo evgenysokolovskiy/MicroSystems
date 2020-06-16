@@ -12,7 +12,14 @@ import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTar
 import { changeParam } from '../../../../store/laboratory/actions/labParamAction'
 import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
 // URLs
-import { laboratoryPercent, laboratoryAmount, laboratorySource } from '../../../../api/urls/data'
+import {
+    laboratoryPercentShp,
+    laboratoryAmountShp,
+    laboratorySourceShp,
+    laboratoryPercentShsp,
+    laboratoryAmountShsp,
+    laboratorySourceShsp
+} from '../../../../api/urls/data'
 
 export class Content extends PureComponent {
     state = {
@@ -29,9 +36,19 @@ export class Content extends PureComponent {
             fetchLabSourceMiddleware,
             changeLabTargetMenu
         } = this.props
-        fetchLabAmountMiddleware(laboratoryAmount, this)
-        fetchLabPercentMiddleware(laboratoryPercent, this)
-        fetchLabSourceMiddleware(laboratorySource, this)
+
+        if (item === 'shp') {
+            fetchLabAmountMiddleware(laboratoryAmountShp, this)
+            fetchLabPercentMiddleware(laboratoryPercentShp, this)
+            fetchLabSourceMiddleware(laboratorySourceShp, this)
+        }
+
+        if (item === 'shsp') {
+            fetchLabAmountMiddleware(laboratoryAmountShsp, this)
+            fetchLabPercentMiddleware(laboratoryPercentShsp, this)
+            fetchLabSourceMiddleware(laboratorySourceShsp, this)
+        }
+
         changeLabTargetMenu(item)
 
         // Перевести в false состояние для новых загрузок
@@ -44,9 +61,21 @@ export class Content extends PureComponent {
     }
 
     handleClickAmount = e => {
-        const { labAmount, fetchLabAmountMiddleware, fetchLabPercentMiddleware } = this.props
-        if (e === 'amount') fetchLabAmountMiddleware(laboratoryAmount, this)
-        if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercent, this)
+        const {
+            labTargetMenu: menu,
+            labAmount,
+            fetchLabAmountMiddleware,
+            fetchLabPercentMiddleware
+        } = this.props
+        if (menu && menu === 'shp') {
+            if (e === 'amount') fetchLabAmountMiddleware(laboratoryAmountShp, this)
+            if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercentShp, this)
+        }
+
+        if (menu && menu === 'shsp') {
+            if (e === 'amount') fetchLabAmountMiddleware(laboratoryAmountShsp, this)
+            if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercentShsp, this)
+        }
 
         // Перевести в false состояние для новых загрузок
         this.setState({
