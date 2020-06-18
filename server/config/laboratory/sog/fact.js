@@ -10,7 +10,7 @@ module.exports = {
     soda: 6, // Сода
     bicarbonate: 7, // Бикарбонат натрия
     nitrite: 8, // Нитрит натрия
-    degree: 9, // Степень биопоражения
+    degree : 9, // Степень биопоражения
     corrosion: 10, // Коррозия
     additives: 11 // Добавки
 }

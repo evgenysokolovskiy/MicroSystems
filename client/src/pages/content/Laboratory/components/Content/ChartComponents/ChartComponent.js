@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import clonedeep from 'lodash.clonedeep'
 import { Icon } from 'antd'
 import {
     ResponsiveContainer,
@@ -17,94 +18,96 @@ export default class DiameterComponent extends PureComponent {
     render() {
         const { source, CustomizedAxisTick } = this.props
 
+        let total = []
+        Object.values(source).forEach((item, i) => {
+            if (item[0]['technology'][0]) {
+                item.forEach(val => {
+                    const min = +val['technology'][0]
+                    const max = +val['technology'][1]
+                    const fact = +val['fact']
+
+                    if (fact >= min && fact <= max) {
+                        val[`trueFact${i}`] = fact
+                    } else {
+                        val[`falseFact${i}`] = fact
+                    }
+                    val[`fact${i}`] = fact
+
+                    total = [...total, val]          
+                })
+            } else {
+                item.forEach(val => {
+                    const fact = +val['fact']
+                    
+                    if (fact > +val['technology']) {
+                        val[`falseFact${i}`] = fact
+                    } else {
+                        val[`trueFact${i}`] = fact
+                    }
+                    val[`fact${i}`] = fact
+
+                    total = [...total, val] 
+                })                 
+            }
+        })
+
+        // Группировать объекты по дате. Свойства объекта - дата
         const obj = {}
-        source.forEach(item => {
+        total.forEach(item => {
             const fact =
                 obj[item['date']] && obj[item['date']]['fact']
                     ? [...obj[item['date']]['fact'], item['fact']]
                     : [item['fact']]
 
-            const technology = item['technology']
-            const date = item['date']
-            obj[item['date']] = { date, technology, fact }
+            obj[item['date']] = {...obj[item['date']], ...item, fact}
         })
 
-        const arr = Object.values(obj)
+        // Отсортировать массив по увеличению даты
+        const arr = clonedeep(Object.values(obj)).sort((a, b) => new Date(a['msDate']) - new Date(b['msDate']))
 
-        arr.forEach(item => {
-            const min = +item['technology'][0]
-            const max = +item['technology'][1]
+        // Создать все возможные варианты для точек и линий
+        // Отрисовать при совпадении с данными
+        let components = [], scattersTrue = [], scattersFalse = [], lines = []
+        Object.values(source).forEach((item, i) => {
+            lines = [...lines,
+                <Line
+                    type="linear"
+                    key={`fact${i}`}
+                    dataKey={`fact${i}`}
+                    stroke={'#444'}
+                    strokeWidth={0.5}
+                    connectNulls={true}
+                    isAnimationActive={false}
+                />
+            ]
 
-            item['fact'].forEach((fact, i) => {
-                item[`fact${i}`] = fact
+            scattersTrue = [...scattersTrue, 
+                <Scatter
+                    dataKey={`trueFact${i}`}
+                    key={`trueFact${i}`}
+                    stroke="lightgreen"
+                    strokeWidth={1}
+                    fill="lightgreen"
+                    isAnimationActive={false}
+                >
+                    <LabelList dataKey={`trueFact${i}`} position="bottom" />
+                </Scatter>
+            ]
 
-                if (fact >= min && fact <= max) {
-                    item[`trueFact${i}`] = fact
-                } else {
-                    item[`falseFact${i}`] = fact
-                }
-            })
-            return item
-        })
+            scattersFalse = [...scattersFalse, 
+                <Scatter
+                    dataKey={`falseFact${i}`}
+                    key={`falseFact${i}`}
+                    stroke="lightcoral"
+                    strokeWidth={1}
+                    fill="lightcoral"
+                    isAnimationActive={false}
+                >
+                    <LabelList dataKey={`falseFact${i}`} position="bottom" />
+                </Scatter>
+            ]                 
 
-        let maxLenFact = 0
-        arr.forEach(item => {
-            if (item['fact'].length > maxLenFact) maxLenFact = item['fact'].length
-            return maxLenFact
-        })
-
-        let components = [],
-            scattersTrue = [],
-            scattersFalse = [],
-            lines = []
-        arr.forEach(item => {
-            const min = +item['technology'][0]
-            const max = +item['technology'][1]
-
-            for (let i = 0; i < item['fact'].length - 1; i++) {
-                lines = [
-                    ...lines,
-                    <Line
-                        type="linear"
-                        key={`fact${i}`}
-                        dataKey={`fact${i}`}
-                        stroke={'#444'}
-                        strokeWidth={0.5}
-                        connectNulls={true}
-                        isAnimationActive={false}
-                    />
-                ]
-
-                scattersTrue = [
-                    ...scattersTrue,
-                    <Scatter
-                        dataKey={`trueFact${i}`}
-                        key={`trueFact${i}`}
-                        stroke="lightgreen"
-                        strokeWidth={1}
-                        fill="lightgreen"
-                        isAnimationActive={false}
-                    >
-                        <LabelList dataKey={`trueFact${i}`} position="bottom" />
-                    </Scatter>
-                ]
-
-                scattersFalse = [
-                    ...scattersFalse,
-                    <Scatter
-                        dataKey={`falseFact${i}`}
-                        key={`falseFact${i}`}
-                        stroke="lightcoral"
-                        strokeWidth={1}
-                        fill="lightcoral"
-                        isAnimationActive={false}
-                    >
-                        <LabelList dataKey={`falseFact${i}`} position="bottom" />
-                    </Scatter>
-                ]
-
-                components = [...lines, ...scattersTrue, ...scattersFalse]
-            }
+            components = [...lines, ...scattersTrue, ...scattersFalse]
         })
 
         return (
@@ -127,7 +130,7 @@ export default class DiameterComponent extends PureComponent {
                     <YAxis
                         type="number"
                         domain={['dataMin', 'dataMax']}
-                        scale="linear"
+                        scale="sqrt"
                         fill="#000"
                         fontSize={12}
                     />

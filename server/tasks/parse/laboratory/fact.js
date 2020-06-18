@@ -8,6 +8,7 @@ const calculateDataShsp = require('../../laboratory/helpers/shsp/')
 const calculateDataSog = require('../../laboratory/helpers/sog/')
 
 module.exports = function({ app, parseLaboratoryFact, technology }) {
+
     const { technologyShp, technologyShsp, technologySog } = technology
 
     fs.readdir(parseLaboratoryFact, function(err, files) {
@@ -20,27 +21,20 @@ module.exports = function({ app, parseLaboratoryFact, technology }) {
                 const factShsp = xlsx.parse(`${paths[i]}`)[1]['data']
                 const factSog = xlsx.parse(`${paths[i]}`)[2]['data']
 
-                if (
-                    technologyShp &&
-                    technologyShsp &&
-                    technologySog &&
-                    factShp &&
-                    factShsp &&
-                    factSog
-                ) {
+                if (technologyShp && technologyShsp && technologySog && factShp && factShsp && factSog) {
                     const shp = calculateDataShp({ fact: factShp, technology: technologyShp })
                     const shsp = calculateDataShsp({ fact: factShsp, technology: technologyShsp })
                     //const sog = calculateDataSog({ fact: factSog, technology: technologySog })
 
                     resolve(
                         (() => {
-                            laboratoryAPI({
-                                app,
+                            laboratoryAPI({ 
+                                app, 
                                 data: {
                                     shp,
-                                    shsp
+                                    shsp,
                                     //sog
-                                }
+                                } 
                             })
                         })()
                     )

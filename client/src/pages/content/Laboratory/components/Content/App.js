@@ -1,5 +1,4 @@
 import React, { PureComponent, Suspense, lazy } from 'react'
-import clonedeep from 'lodash.clonedeep'
 
 import MenuComponent from './MenuComponent'
 import PrintComponent from '../print/PrintComponent'
@@ -62,6 +61,7 @@ export default class App extends PureComponent {
     }
 
     onPrint = () => {
+
         //const content = document.querySelector('.labTable')
         //const root = document.getElementById('root')
         //root.style.display = 'none'
@@ -72,9 +72,11 @@ export default class App extends PureComponent {
         //printWrapper.innerHTML = content.innerHTML
         //document.documentElement.appendChild(printWrapper)
 
+
         //document.getElementById('root').innerHTML = content.innerHTML
 
         //print.appendChild(content)
+
 
         //root.style.display = 'none'
 
@@ -85,7 +87,8 @@ export default class App extends PureComponent {
         //print.removeChild(content)
         //print.style.display = 'none'
 
-        /*
+
+/*
         let content1 = document.querySelector('.test')
         let pri = document.getElementById('ifmcontentstoprint').contentWindow
         //const cssLink = document.createElement('link')
@@ -250,13 +253,15 @@ export default class App extends PureComponent {
                                 <Suspense fallback={mount}>
                                     {isLoadedPercent ? percentTable : download}
                                 </Suspense>
-                            )}
+                            )
+                        }
 
                         {menu && menu === 'shp' && activeTab === 'amount' && (
                             <Suspense fallback={mount}>
                                 {isLoadedAmount ? amountTable : download}
                             </Suspense>
-                        )}
+                            )
+                        }
                     </Content>
                 </Layout>
             </Content>

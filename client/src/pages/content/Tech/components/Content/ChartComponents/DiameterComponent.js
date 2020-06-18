@@ -44,7 +44,7 @@ export default class DiameterComponent extends PureComponent {
                         key={`fact${i}`}
                         dataKey={`fact${i}`}
                         stroke={'#444'}
-                        strokeWidth={1}
+                        strokeWidth={0.5}
                         connectNulls={true}
                         isAnimationActive={false}
                     />

@@ -14,8 +14,7 @@ module.exports = function({ app, data }) {
         })
 
         app.get('/api/laboratory/sourceShp', function(req, res) {
-            console.log(shp['source']['диз.топливо МД'])
-            res.json(shp['source']['диз.топливо МД'])
+            res.json(shp['source'])
             console.log('Данные отправлены на /api/laboratory/sourceShp')
         })
     }
@@ -36,7 +35,7 @@ module.exports = function({ app, data }) {
             console.log('Данные отправлены на /api/laboratory/sourceShsp')
         })
     }
-    /*
+/*
     if (sog) {
         app.get('/api/laboratory/percentSog', function(req, res) {
             res.json(shsp['percent'])

@@ -48,6 +48,6 @@ export const _LAB_PROP = {
         LAB_PROP: 'LAB_PROP'
     },
     init: {
-        labProp: ''
+        labProp: 'Вязкость, мм2/сек'
     }
 }

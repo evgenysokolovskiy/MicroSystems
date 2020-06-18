@@ -74,8 +74,6 @@ module.exports = function({ fact: f, technology: t }) {
             typeof objTechnology[name]['inhibitorMax'] === 'number'
         ) {
             if (!amount[name]['Ингибитор, %']) amount[name]['Ингибитор, %'] = { true: 0, false: 0 }
-            if (!source[name]['Ингибитор, %']) source[name]['Ингибитор, %'] = []
-
             if (typeof f[indexFactInhibitor] === 'number') {
                 if (
                     f[indexFactInhibitor] >= objTechnology[name]['inhibitorMin'] &&
@@ -86,8 +84,9 @@ module.exports = function({ fact: f, technology: t }) {
                     amount[name]['Ингибитор, %']['false']++
                 }
 
+
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Ингибитор, %']) source[name]['Ингибитор, %'] = []
+                if (!source[name]['Ингибитор, %']) source[name]['Ингибитор, %'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Ингибитор, %'][inn]
                 if (!data) data = []
@@ -95,6 +94,7 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactInhibitor],
                         technology: [
                             objTechnology[name]['inhibitorMin'],
@@ -102,19 +102,6 @@ module.exports = function({ fact: f, technology: t }) {
                         ]
                     }
                 ]
-                /*
-                source[name]['Ингибитор, %'] = [
-                    ...source[name]['Ингибитор, %'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactInhibitor],
-                        technology: [
-                            objTechnology[name]['inhibitorMin'],
-                            objTechnology[name]['inhibitorMax']
-                        ]
-                    }
-                ]
-*/
             }
         }
 
@@ -126,7 +113,6 @@ module.exports = function({ fact: f, technology: t }) {
         ) {
             if (!amount[name]['Вязкость, мм2/сек'])
                 amount[name]['Вязкость, мм2/сек'] = { true: 0, false: 0 }
-            if (!source[name]['Вязкость, мм2/сек']) source[name]['Вязкость, мм2/сек'] = []
 
             if (typeof f[indexFactViscosity] === 'number') {
                 if (
@@ -139,7 +125,7 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Вязкость, мм2/сек']) source[name]['Вязкость, мм2/сек'] = []
+                if (!source[name]['Вязкость, мм2/сек']) source[name]['Вязкость, мм2/сек'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Вязкость, мм2/сек'][inn]
                 if (!data) data = []
@@ -147,6 +133,7 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactViscosity],
                         technology: [
                             objTechnology[name]['viscosityMin'],
@@ -154,26 +141,12 @@ module.exports = function({ fact: f, technology: t }) {
                         ]
                     }
                 ]
-                /*
-                source[name]['Вязкость, мм2/сек'] = [
-                    ...source[name]['Вязкость, мм2/сек'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactViscosity],
-                        technology: [
-                            objTechnology[name]['viscosityMin'],
-                            objTechnology[name]['viscosityMax']
-                        ]
-                    }
-                ]
-*/
             }
         }
 
         // H2O
         if (objTechnology[name] && typeof objTechnology[name]['h2o'] === 'number') {
             if (!amount[name]['H2O, %']) amount[name]['H2O, %'] = { true: 0, false: 0 }
-            if (!source[name]['H2O, %']) source[name]['H2O, %'] = []
             if (typeof f[indexFactH2O] === 'number') {
                 if (f[indexFactH2O] === objTechnology[name]['h2o']) {
                     amount[name]['H2O, %']['true']++
@@ -182,7 +155,7 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['H2O, %']) source[name]['H2O, %'] = []
+                if (!source[name]['H2O, %']) source[name]['H2O, %'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['H2O, %'][inn]
                 if (!data) data = []
@@ -190,20 +163,11 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactH2O],
                         technology: objTechnology[name]['h2o']
                     }
                 ]
-                /*
-                source[name]['H2O, %'] = [
-                    ...source[name]['H2O, %'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactH2O],
-                        technology: objTechnology[name]['h2o']
-                    }
-                ]
-*/
             }
         }
 
@@ -211,8 +175,6 @@ module.exports = function({ fact: f, technology: t }) {
         if (objTechnology[name] && typeof objTechnology[name]['mechanicalAdmixture'] === 'number') {
             if (!amount[name]['Механические примеси, %'])
                 amount[name]['Механические примеси, %'] = { true: 0, false: 0 }
-            if (!source[name]['Механические примеси, %'])
-                source[name]['Механические примеси, %'] = []
 
             if (typeof f[indexFactMechanicalAdmixture] === 'number') {
                 if (f[indexFactMechanicalAdmixture] <= objTechnology[name]['mechanicalAdmixture']) {
@@ -222,8 +184,7 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Механические примеси, %'])
-                    source[name]['Механические примеси, %'] = []
+                if (!source[name]['Механические примеси, %']) source[name]['Механические примеси, %'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Механические примеси, %'][inn]
                 if (!data) data = []
@@ -231,20 +192,11 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactMechanicalAdmixture],
                         technology: objTechnology[name]['mechanicalAdmixture']
                     }
                 ]
-                /*
-                source[name]['Механические примеси, %'] = [
-                    ...source[name]['Механические примеси, %'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactMechanicalAdmixture],
-                        technology: objTechnology[name]['mechanicalAdmixture']
-                    }
-                ]
-*/
             }
         }
 
@@ -252,8 +204,6 @@ module.exports = function({ fact: f, technology: t }) {
         if (objTechnology[name] && typeof objTechnology[name]['metalInclusions'] === 'number') {
             if (!amount[name]['Металлические включения'])
                 amount[name]['Металлические включения'] = { true: 0, false: 0 }
-            if (!source[name]['Металлические включения'])
-                source[name]['Металлические включения'] = []
 
             if (typeof f[indexFactMetalInclusions] === 'number') {
                 if (f[indexFactMetalInclusions] <= objTechnology[name]['metalInclusions']) {
@@ -263,8 +213,7 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Металлические включения'])
-                    source[name]['Металлические включения'] = []
+                if (!source[name]['Металлические включения']) source[name]['Металлические включения'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Металлические включения'][inn]
                 if (!data) data = []
@@ -272,20 +221,11 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactMetalInclusions],
                         technology: objTechnology[name]['metalInclusions']
                     }
                 ]
-                /*
-                source[name]['Металлические включения'] = [
-                    ...source[name]['Металлические включения'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactMetalInclusions],
-                        technology: objTechnology[name]['metalInclusions']
-                    }
-                ]
-*/
             }
         }
 
@@ -293,8 +233,6 @@ module.exports = function({ fact: f, technology: t }) {
         if (objTechnology[name] && typeof objTechnology[name]['flashPoint'] === 'number') {
             if (!amount[name]['t вспышки, не менее град С'])
                 amount[name]['t вспышки, не менее град С'] = { true: 0, false: 0 }
-            if (!source[name]['t вспышки, не менее град С'])
-                source[name]['t вспышки, не менее град С'] = []
 
             if (typeof f[indexFactFlashPoint] === 'number') {
                 if (f[indexFactFlashPoint] >= objTechnology[name]['flashPoint']) {
@@ -304,8 +242,7 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['t вспышки, не менее град С'])
-                    source[name]['t вспышки, не менее град С'] = []
+                if (!source[name]['t вспышки, не менее град С']) source[name]['t вспышки, не менее град С'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['t вспышки, не менее град С'][inn]
                 if (!data) data = []
@@ -313,20 +250,11 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactFlashPoint],
                         technology: objTechnology[name]['flashPoint']
                     }
                 ]
-                /*
-                source[name]['t вспышки, не менее град С'] = [
-                    ...source[name]['t вспышки, не менее град С'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactFlashPoint],
-                        technology: objTechnology[name]['flashPoint']
-                    }
-                ]
-*/
             }
         }
 
@@ -334,8 +262,6 @@ module.exports = function({ fact: f, technology: t }) {
         if (objTechnology[name] && typeof objTechnology[name]['acidNumber'] === 'number') {
             if (!amount[name]['Кислотное число, мг.кон'])
                 amount[name]['Кислотное число, мг.кон'] = { true: 0, false: 0 }
-            if (!source[name]['Кислотное число, мг.кон'])
-                source[name]['Кислотное число, мг.кон'] = []
 
             if (typeof f[indexFactAcidNumber] === 'number') {
                 if (f[indexFactAcidNumber] === objTechnology[name]['acidNumber']) {
@@ -345,8 +271,7 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Кислотное число, мг.кон'])
-                    source[name]['Кислотное число, мг.кон'] = []
+                if (!source[name]['Кислотное число, мг.кон']) source[name]['Кислотное число, мг.кон'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Кислотное число, мг.кон'][inn]
                 if (!data) data = []
@@ -354,20 +279,11 @@ module.exports = function({ fact: f, technology: t }) {
                     ...data,
                     {
                         date: ExcelDateToJSDate(f[indexFactDate]),
+                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
                         fact: f[indexFactAcidNumber],
                         technology: objTechnology[name]['acidNumber']
                     }
                 ]
-                /*
-                source[name]['Кислотное число, мг.кон'] = [
-                    ...source[name]['Кислотное число, мг.кон'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        fact: f[indexFactAcidNumber],
-                        technology: objTechnology[name]['acidNumber']
-                    }
-                ]
-*/
             }
         }
     })
@@ -385,7 +301,7 @@ module.exports = function({ fact: f, technology: t }) {
     })
 
     if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
-
+        
     return {
         amount,
         source,
@@ -407,5 +323,12 @@ function ExcelDateToJSDate(serial) {
     const minutes = Math.floor(total_seconds / 60) % 60
     return `${String(date_info.getDate()).padStart(2, '0')}.${String(
         date_info.getMonth() + 1
-    ).padStart(2, '0')}.${String(date_info.getFullYear()).slice(2)}`
+    ).padStart(2, '0')}.${String(date_info.getFullYear())/*.slice(2)*/}`
+}
+
+// Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
+function ExcelDateToJSMsDate(serial) {
+    const utc_days = Math.floor(serial - 25569)
+    const utc_value = utc_days * 86400
+    return new Date(utc_value * 1000).getTime()
 }

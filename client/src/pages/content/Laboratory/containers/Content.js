@@ -12,13 +12,13 @@ import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTar
 import { changeParam } from '../../../../store/laboratory/actions/labParamAction'
 import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
 // URLs
-import {
-    laboratoryPercentShp,
-    laboratoryAmountShp,
+import { 
+    laboratoryPercentShp, 
+    laboratoryAmountShp, 
     laboratorySourceShp,
-    laboratoryPercentShsp,
-    laboratoryAmountShsp,
-    laboratorySourceShsp
+    laboratoryPercentShsp, 
+    laboratoryAmountShsp, 
+    laboratorySourceShsp 
 } from '../../../../api/urls/data'
 
 export class Content extends PureComponent {
@@ -61,12 +61,7 @@ export class Content extends PureComponent {
     }
 
     handleClickAmount = e => {
-        const {
-            labTargetMenu: menu,
-            labAmount,
-            fetchLabAmountMiddleware,
-            fetchLabPercentMiddleware
-        } = this.props
+        const { labTargetMenu: menu, labAmount, fetchLabAmountMiddleware, fetchLabPercentMiddleware } = this.props
         if (menu && menu === 'shp') {
             if (e === 'amount') fetchLabAmountMiddleware(laboratoryAmountShp, this)
             if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercentShp, this)
