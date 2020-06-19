@@ -1,7 +1,7 @@
 import React, { PureComponent, Suspense, lazy } from 'react'
 
 import MenuComponent from './MenuComponent'
-import PrintComponent from '../print/PrintComponent'
+import RangePickerComponent from './RangePickerComponent'
 // Antd
 import { Layout, Typography, Tabs } from 'antd'
 import {
@@ -61,7 +61,6 @@ export default class App extends PureComponent {
     }
 
     onPrint = () => {
-
         //const content = document.querySelector('.labTable')
         //const root = document.getElementById('root')
         //root.style.display = 'none'
@@ -72,11 +71,9 @@ export default class App extends PureComponent {
         //printWrapper.innerHTML = content.innerHTML
         //document.documentElement.appendChild(printWrapper)
 
-
         //document.getElementById('root').innerHTML = content.innerHTML
 
         //print.appendChild(content)
-
 
         //root.style.display = 'none'
 
@@ -87,8 +84,7 @@ export default class App extends PureComponent {
         //print.removeChild(content)
         //print.style.display = 'none'
 
-
-/*
+        /*
         let content1 = document.querySelector('.test')
         let pri = document.getElementById('ifmcontentstoprint').contentWindow
         //const cssLink = document.createElement('link')
@@ -113,6 +109,7 @@ export default class App extends PureComponent {
             menu,
             param,
             prop,
+            equipment,
             percent,
             amount,
             source,
@@ -124,7 +121,8 @@ export default class App extends PureComponent {
             handleClickMenu,
             handleClickAmount,
             handleClickParam,
-            handleClickProp
+            handleClickProp,
+            handleClickEquipment
         } = this.props
 
         const { activeTab } = this.state
@@ -178,7 +176,13 @@ export default class App extends PureComponent {
         )
 
         const chart = source && param && prop && (
-            <ChartComponent source={source[param][prop]} CustomizedAxisTick={CustomizedAxisTick} />
+            <ChartComponent
+                source={source[param][prop]}
+                prop={prop}
+                equipment={equipment}
+                CustomizedAxisTick={CustomizedAxisTick}
+                handleClickEquipment={handleClickEquipment}
+            />
         )
 
         const percentTable = (
@@ -186,6 +190,7 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <div className="labHeader">
                         {tabs}
+                        <RangePickerComponent />
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',
@@ -215,6 +220,7 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <div className="labHeader">
                         {tabs}
+                        <RangePickerComponent />
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',
@@ -244,6 +250,7 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
+                        {!source && menu === 'shp' && download}
                         {menu &&
                             menu === 'shp' &&
                             activeTab === 'percent' &&
@@ -253,15 +260,13 @@ export default class App extends PureComponent {
                                 <Suspense fallback={mount}>
                                     {isLoadedPercent ? percentTable : download}
                                 </Suspense>
-                            )
-                        }
+                            )}
 
                         {menu && menu === 'shp' && activeTab === 'amount' && (
                             <Suspense fallback={mount}>
                                 {isLoadedAmount ? amountTable : download}
                             </Suspense>
-                            )
-                        }
+                        )}
                     </Content>
                 </Layout>
             </Content>

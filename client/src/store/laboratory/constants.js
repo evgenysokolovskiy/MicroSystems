@@ -51,3 +51,12 @@ export const _LAB_PROP = {
         labProp: 'Вязкость, мм2/сек'
     }
 }
+
+export const _LAB_EQUIPMENT_NUMBER = {
+    types: {
+        LAB_EQUIPMENT_NUMBER: 'LAB_EQUIPMENT_NUMBER'
+    },
+    init: {
+        labEquipmentNumber: 'Сводная'
+    }
+}

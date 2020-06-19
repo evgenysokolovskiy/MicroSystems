@@ -2,8 +2,6 @@ import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
 import { TableOutlined, AlignCenterOutlined, LineChartOutlined } from '@ant-design/icons'
 
-const { SubMenu } = Menu
-
 export default class MenuComponent extends PureComponent {
     state = {
         collapsed: false
@@ -15,7 +13,7 @@ export default class MenuComponent extends PureComponent {
 
     render() {
         return (
-            <div>
+            <div style={{ height: '20vh' }}>
                 <Menu
                     mode="inline"
                     theme="light"
@@ -25,7 +23,7 @@ export default class MenuComponent extends PureComponent {
                     <Menu.Item key="shp">
                         <span>ШП</span>
                     </Menu.Item>
-
+                    {/*
                     <Menu.Item key="shsp">
                         <span>ШСП</span>
                     </Menu.Item>
@@ -33,6 +31,7 @@ export default class MenuComponent extends PureComponent {
                     <Menu.Item key="sog">
                         <span>СОЖ</span>
                     </Menu.Item>
+*/}
                 </Menu>
             </div>
         )

@@ -30,6 +30,10 @@ code {
   color: #000;
 }
 
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+    background: transparent;
+}
+
 .loading {
 	position: absolute;
 	top: 50vh;

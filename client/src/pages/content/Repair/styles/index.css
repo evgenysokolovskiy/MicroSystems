@@ -8,18 +8,6 @@ th {
   font-size: 12px;
 }
 
-.true {
-  background-color: lightgreen;
-}
-
-.info {
-  background-color: #909295;
-}
-
-.false {
-  background-color: lightcoral;
-}
-
 .ant-table-scroll {
   font-size: 16px;
 }
@@ -27,6 +15,19 @@ th {
 .ant-table-fixed-left {
   font-size: 12px;
 }
+
+.true {
+  background-color: lightgreen !important;
+}
+
+.info {
+  background-color: #909295 !important;
+}
+
+.false {
+  background-color: lightcoral !important;
+}
+
 /*
 .ant-menu, 
 .ant-menu-sub,

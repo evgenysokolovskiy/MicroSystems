@@ -29,6 +29,7 @@ import labSourceReducer from './laboratory/reducers/labSourceReducer'
 import labTargetMenuReducer from './laboratory/reducers/labTargetMenuReducer'
 import labParamReducer from './laboratory/reducers/labParamReducer'
 import labPropReducer from './laboratory/reducers/labPropReducer'
+import labEquipmentNumberReducer from './laboratory/reducers/labEquipmentNumberReducer'
 
 export default combineReducers({
     // repair
@@ -60,5 +61,6 @@ export default combineReducers({
     labSourceReducer,
     labTargetMenuReducer,
     labParamReducer,
-    labPropReducer
+    labPropReducer,
+    labEquipmentNumberReducer
 })

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import clonedeep from 'lodash.clonedeep'
-import { Icon } from 'antd'
+import { Layout, Menu } from 'antd'
 import {
     ResponsiveContainer,
     ComposedChart,
@@ -13,42 +13,53 @@ import {
     CartesianGrid,
     Tooltip
 } from 'recharts'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export default class DiameterComponent extends PureComponent {
+    handleClick = e => {
+        this.props.handleClickEquipment(e.key)
+    }
+
     render() {
-        const { source, CustomizedAxisTick } = this.props
+        const { source, prop, equipment, CustomizedAxisTick } = this.props
+
+        const data =
+            equipment === 'Сводная'
+                ? clonedeep(Object.values(source))
+                : clonedeep([source[equipment]])
 
         let total = []
-        Object.values(source).forEach((item, i) => {
-            if (item[0]['technology'][0]) {
-                item.forEach(val => {
+        data.forEach((item, i) => {
+            item.forEach(val => {
+                const fact = +val['fact']
+
+                if (item[0]['technology'][0]) {
                     const min = +val['technology'][0]
                     const max = +val['technology'][1]
-                    const fact = +val['fact']
-
                     if (fact >= min && fact <= max) {
                         val[`trueFact${i}`] = fact
                     } else {
                         val[`falseFact${i}`] = fact
                     }
-                    val[`fact${i}`] = fact
-
-                    total = [...total, val]          
-                })
-            } else {
-                item.forEach(val => {
-                    const fact = +val['fact']
-                    
-                    if (fact > +val['technology']) {
-                        val[`falseFact${i}`] = fact
+                } else {
+                    if (prop === 't вспышки, не менее град С') {
+                        if (fact > +val['technology']) {
+                            val[`trueFact${i}`] = fact
+                        } else {
+                            val[`falseFact${i}`] = fact
+                        }
                     } else {
-                        val[`trueFact${i}`] = fact
+                        if (fact > +val['technology']) {
+                            val[`falseFact${i}`] = fact
+                        } else {
+                            val[`trueFact${i}`] = fact
+                        }
                     }
-                    val[`fact${i}`] = fact
+                }
 
-                    total = [...total, val] 
-                })                 
-            }
+                val[`fact${i}`] = fact
+                total = [...total, val]
+            })
         })
 
         // Группировать объекты по дате. Свойства объекта - дата
@@ -59,17 +70,53 @@ export default class DiameterComponent extends PureComponent {
                     ? [...obj[item['date']]['fact'], item['fact']]
                     : [item['fact']]
 
-            obj[item['date']] = {...obj[item['date']], ...item, fact}
+            obj[item['date']] = { ...obj[item['date']], ...item, fact }
         })
 
         // Отсортировать массив по увеличению даты
-        const arr = clonedeep(Object.values(obj)).sort((a, b) => new Date(a['msDate']) - new Date(b['msDate']))
+        const arr = clonedeep(Object.values(obj)).sort(
+            (a, b) => new Date(a['msDate']) - new Date(b['msDate'])
+        )
+
+        // * КОМПОНЕНТЫ
+
+        // Меню (оборудование)
+        let items = []
+        clonedeep(Object.keys(source)).forEach(item => {
+            items = [
+                ...items,
+                <Menu.Item key={item}>
+                    <span>{item}</span>
+                </Menu.Item>
+            ]
+        })
+
+        const MenuComponent = (
+            <div className="laboratoryMenu">
+                <Menu
+                    mode="inline"
+                    theme="light"
+                    selectedKeys={[equipment]}
+                    onClick={this.handleClick}
+                >
+                    <Menu.Item key="Сводная">
+                        <span>Сводная</span>
+                    </Menu.Item>
+                    {items}
+                </Menu>
+            </div>
+        )
 
         // Создать все возможные варианты для точек и линий
         // Отрисовать при совпадении с данными
-        let components = [], scattersTrue = [], scattersFalse = [], lines = []
-        Object.values(source).forEach((item, i) => {
-            lines = [...lines,
+        // Фактические компоненты
+        let factComponents = [],
+            scattersTrue = [],
+            scattersFalse = [],
+            lines = []
+        data.forEach((item, i) => {
+            lines = [
+                ...lines,
                 <Line
                     type="linear"
                     key={`fact${i}`}
@@ -81,7 +128,8 @@ export default class DiameterComponent extends PureComponent {
                 />
             ]
 
-            scattersTrue = [...scattersTrue, 
+            scattersTrue = [
+                ...scattersTrue,
                 <Scatter
                     dataKey={`trueFact${i}`}
                     key={`trueFact${i}`}
@@ -94,7 +142,8 @@ export default class DiameterComponent extends PureComponent {
                 </Scatter>
             ]
 
-            scattersFalse = [...scattersFalse, 
+            scattersFalse = [
+                ...scattersFalse,
                 <Scatter
                     dataKey={`falseFact${i}`}
                     key={`falseFact${i}`}
@@ -105,53 +154,72 @@ export default class DiameterComponent extends PureComponent {
                 >
                     <LabelList dataKey={`falseFact${i}`} position="bottom" />
                 </Scatter>
-            ]                 
+            ]
 
-            components = [...lines, ...scattersTrue, ...scattersFalse]
+            factComponents = [...lines, ...scattersTrue, ...scattersFalse]
         })
 
+        // Компоненты технология
+        const technologyComponent = data[0][0]['technology'][0] ? (
+            <Area
+                type="monotone"
+                dataKey="technology"
+                stroke="#000"
+                fill="lightblue"
+                isAnimationActive={false}
+            />
+        ) : (
+            <Line
+                type="linear"
+                dataKey="technology"
+                stroke="#000"
+                strokeWidth={1.5}
+                dot={false}
+                isAnimationActive={false}
+            />
+        )
+
         return (
-            <ResponsiveContainer width="100%" height="auto" aspect={2.7 / 1.0}>
-                <ComposedChart
-                    data={arr}
-                    margin={{
-                        top: 0,
-                        right: 20,
-                        left: 10,
-                        bottom: 40
-                    }}
-                >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                        dataKey="date"
-                        tick={<CustomizedAxisTick />}
-                        allowDuplicatedCategory={false}
-                    />
-                    <YAxis
-                        type="number"
-                        domain={['dataMin', 'dataMax']}
-                        scale="sqrt"
-                        fill="#000"
-                        fontSize={12}
-                    />
-                    <Area
-                        type="monotone"
-                        dataKey="technology"
-                        stroke="lightblue"
-                        fill="lightblue"
-                        isAnimationActive={false}
-                    />
-                    {components ? (
-                        components
-                    ) : (
-                        <Icon
-                            type="loading"
-                            className="loading"
-                            style={{ fontSize: '20px', color: 'red' }}
+            <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
+                {MenuComponent}
+                <ResponsiveContainer width="100%" height="auto" aspect={2.7 / 0.9}>
+                    <ComposedChart
+                        data={arr}
+                        margin={{
+                            top: 0,
+                            right: 20,
+                            left: 10,
+                            bottom: 40
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            dataKey="date"
+                            tick={<CustomizedAxisTick />}
+                            allowDuplicatedCategory={false}
                         />
-                    )}
-                </ComposedChart>
-            </ResponsiveContainer>
+                        <YAxis
+                            type="number"
+                            domain={['dataMin', 'dataMax']}
+                            scale="sqrt"
+                            fill="#000"
+                            fontSize={12}
+                        />
+
+                        {technologyComponent ? (
+                            technologyComponent
+                        ) : (
+                            <LoadingOutlined className="circleRed" />
+                        )}
+
+                        {factComponents ? (
+                            factComponents
+                        ) : (
+                            <LoadingOutlined className="circleRed" />
+                        )}
+                    </ComposedChart>
+                </ResponsiveContainer>
+            </Layout>
         )
     }
 }

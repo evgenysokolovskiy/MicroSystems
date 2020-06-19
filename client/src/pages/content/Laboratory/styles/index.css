@@ -45,13 +45,19 @@
 }
 
 .selected {
-	background-color: #e6f7ff;
+	background-color: #e6f7ff !important;
 }
 
 .true {
-	background-color: lightgreen;
+	background-color: lightgreen !important;
 }
 
 .false {
-	background-color: lightcoral;
+	background-color: lightcoral !important;
+}
+
+.laboratoryMenu {
+	width: 300px;
+	height: 300px;
+	overflow: auto;
 }

@@ -35,7 +35,7 @@ module.exports = function({ app, data }) {
             console.log('Данные отправлены на /api/laboratory/sourceShsp')
         })
     }
-/*
+    /*
     if (sog) {
         app.get('/api/laboratory/percentSog', function(req, res) {
             res.json(shsp['percent'])

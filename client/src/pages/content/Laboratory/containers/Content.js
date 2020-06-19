@@ -11,14 +11,15 @@ import { fetchLabSourceMiddleware } from '../../../../api/middlewares/fetchLabSo
 import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTargetMenuAction'
 import { changeParam } from '../../../../store/laboratory/actions/labParamAction'
 import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
+import { changeEquipmentNumber } from '../../../../store/laboratory/actions/labEquipmentNumberAction'
 // URLs
-import { 
-    laboratoryPercentShp, 
-    laboratoryAmountShp, 
+import {
+    laboratoryPercentShp,
+    laboratoryAmountShp,
     laboratorySourceShp,
-    laboratoryPercentShsp, 
-    laboratoryAmountShsp, 
-    laboratorySourceShsp 
+    laboratoryPercentShsp,
+    laboratoryAmountShsp,
+    laboratorySourceShsp
 } from '../../../../api/urls/data'
 
 export class Content extends PureComponent {
@@ -61,7 +62,12 @@ export class Content extends PureComponent {
     }
 
     handleClickAmount = e => {
-        const { labTargetMenu: menu, labAmount, fetchLabAmountMiddleware, fetchLabPercentMiddleware } = this.props
+        const {
+            labTargetMenu: menu,
+            labAmount,
+            fetchLabAmountMiddleware,
+            fetchLabPercentMiddleware
+        } = this.props
         if (menu && menu === 'shp') {
             if (e === 'amount') fetchLabAmountMiddleware(laboratoryAmountShp, this)
             if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercentShp, this)
@@ -81,10 +87,16 @@ export class Content extends PureComponent {
 
     handleClickParam = item => {
         this.props.changeParam(item)
+        this.props.changeEquipmentNumber('Сводная')
     }
 
     handleClickProp = item => {
         this.props.changeProp(item)
+        this.props.changeEquipmentNumber('Сводная')
+    }
+
+    handleClickEquipment = item => {
+        this.props.changeEquipmentNumber(item)
     }
 
     render() {
@@ -94,10 +106,11 @@ export class Content extends PureComponent {
             labSource: source,
             labTargetMenu: menu,
             labParam: param,
-            labProp: prop
+            labProp: prop,
+            labEquipmentNumber: equipment
         } = this.props
         const { isLoadedPercent, isLoadedAmount, isLoadedSource } = this.state
-
+        console.log(source)
         const rowTotal = {}
         amount &&
             Object.entries(amount).forEach(item => {
@@ -135,6 +148,7 @@ export class Content extends PureComponent {
                 menu={menu}
                 param={param}
                 prop={prop}
+                equipment={equipment}
                 percent={percent}
                 amount={amount}
                 source={source}
@@ -147,6 +161,7 @@ export class Content extends PureComponent {
                 handleClickAmount={this.handleClickAmount}
                 handleClickParam={this.handleClickParam}
                 handleClickProp={this.handleClickProp}
+                handleClickEquipment={this.handleClickEquipment}
             />
         )
     }
@@ -159,7 +174,8 @@ function mapStateToProps(store) {
         ...store.labSourceReducer,
         ...store.labTargetMenuReducer,
         ...store.labParamReducer,
-        ...store.labPropReducer
+        ...store.labPropReducer,
+        ...store.labEquipmentNumberReducer
     }
 }
 
@@ -169,7 +185,8 @@ const mapDispatchToProps = {
     fetchLabSourceMiddleware,
     changeLabTargetMenu,
     changeParam,
-    changeProp
+    changeProp,
+    changeEquipmentNumber
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

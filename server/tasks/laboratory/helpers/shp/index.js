@@ -84,7 +84,6 @@ module.exports = function({ fact: f, technology: t }) {
                     amount[name]['Ингибитор, %']['false']++
                 }
 
-
                 // Группировать по инвентарным номерам (машинам)
                 if (!source[name]['Ингибитор, %']) source[name]['Ингибитор, %'] = {}
                 const inn = f[indexFactInn]
@@ -184,7 +183,8 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Механические примеси, %']) source[name]['Механические примеси, %'] = {}
+                if (!source[name]['Механические примеси, %'])
+                    source[name]['Механические примеси, %'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Механические примеси, %'][inn]
                 if (!data) data = []
@@ -213,7 +213,8 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Металлические включения']) source[name]['Металлические включения'] = {}
+                if (!source[name]['Металлические включения'])
+                    source[name]['Металлические включения'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Металлические включения'][inn]
                 if (!data) data = []
@@ -242,7 +243,8 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['t вспышки, не менее град С']) source[name]['t вспышки, не менее град С'] = {}
+                if (!source[name]['t вспышки, не менее град С'])
+                    source[name]['t вспышки, не менее град С'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['t вспышки, не менее град С'][inn]
                 if (!data) data = []
@@ -271,7 +273,8 @@ module.exports = function({ fact: f, technology: t }) {
                 }
 
                 // Группировать по инвентарным номерам (машинам)
-                if (!source[name]['Кислотное число, мг.кон']) source[name]['Кислотное число, мг.кон'] = {}
+                if (!source[name]['Кислотное число, мг.кон'])
+                    source[name]['Кислотное число, мг.кон'] = {}
                 const inn = f[indexFactInn]
                 let data = source[name]['Кислотное число, мг.кон'][inn]
                 if (!data) data = []
@@ -301,7 +304,7 @@ module.exports = function({ fact: f, technology: t }) {
     })
 
     if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
-        
+
     return {
         amount,
         source,
@@ -323,7 +326,7 @@ function ExcelDateToJSDate(serial) {
     const minutes = Math.floor(total_seconds / 60) % 60
     return `${String(date_info.getDate()).padStart(2, '0')}.${String(
         date_info.getMonth() + 1
-    ).padStart(2, '0')}.${String(date_info.getFullYear())/*.slice(2)*/}`
+    ).padStart(2, '0')}.${String(date_info.getFullYear()) /*.slice(2)*/}`
 }
 
 // Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
