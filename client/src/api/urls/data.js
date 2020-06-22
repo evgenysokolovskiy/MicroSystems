@@ -50,6 +50,7 @@ export const mtime = `${origin}/api/mtime`
 export const laboratoryPercentShp = `${origin}/api/laboratory/percentShp`
 export const laboratoryAmountShp = `${origin}/api/laboratory/amountShp`
 export const laboratorySourceShp = `${origin}/api/laboratory/sourceShp`
+export const laboratoryAllShp = `${origin}/api/laboratory/allShp`
 
 export const laboratoryPercentShsp = `${origin}/api/laboratory/percentShsp`
 export const laboratoryAmountShsp = `${origin}/api/laboratory/amountShsp`

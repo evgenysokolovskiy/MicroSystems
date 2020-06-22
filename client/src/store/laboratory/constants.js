@@ -1,3 +1,12 @@
+export const _LAB_ALL = {
+    types: {
+        LAB_ALL: 'LAB_ALL'
+    },
+    init: {
+        labAll: null
+    }
+}
+
 export const _LAB_PERCENT = {
     types: {
         LAB_PERCENT: 'LAB_PERCENT'
@@ -58,5 +67,14 @@ export const _LAB_EQUIPMENT_NUMBER = {
     },
     init: {
         labEquipmentNumber: 'Сводная'
+    }
+}
+
+export const _LAB_CHANGED_RANGEDATE = {
+    types: {
+        LAB_CHANGED_RANGEDATE: 'LAB_CHANGED_RANGEDATE'
+    },
+    init: {
+        labChangedRangeDate: ''
     }
 }

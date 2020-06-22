@@ -23,6 +23,7 @@ import techDrawerReducer from './tech/reducers/techDrawerReducer'
 import techTypeReducer from './tech/reducers/techTypeReducer'
 import techCardNumberReducer from './tech/reducers/techCardNumberReducer'
 // laboratory
+import labAllReducer from './laboratory/reducers/labAllReducer'
 import labPercentReducer from './laboratory/reducers/labPercentReducer'
 import labAmountReducer from './laboratory/reducers/labAmountReducer'
 import labSourceReducer from './laboratory/reducers/labSourceReducer'
@@ -30,6 +31,7 @@ import labTargetMenuReducer from './laboratory/reducers/labTargetMenuReducer'
 import labParamReducer from './laboratory/reducers/labParamReducer'
 import labPropReducer from './laboratory/reducers/labPropReducer'
 import labEquipmentNumberReducer from './laboratory/reducers/labEquipmentNumberReducer'
+import labChangedRangeDateReducer from './laboratory/reducers/labChangedRangeDateReducer'
 
 export default combineReducers({
     // repair
@@ -56,11 +58,13 @@ export default combineReducers({
     techTypeReducer,
     techCardNumberReducer,
     //laboratory
+    labAllReducer,
     labPercentReducer,
     labAmountReducer,
     labSourceReducer,
     labTargetMenuReducer,
     labParamReducer,
     labPropReducer,
-    labEquipmentNumberReducer
+    labEquipmentNumberReducer,
+    labChangedRangeDateReducer
 })

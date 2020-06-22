@@ -4,6 +4,7 @@ import clonedeep from 'lodash.clonedeep'
 import App from '../components/Content/App'
 
 // fetch
+import { fetchLabAllMiddleware } from '../../../../api/middlewares/fetchLabAllMiddleware'
 import { fetchLabPercentMiddleware } from '../../../../api/middlewares/fetchLabPercentMiddleware'
 import { fetchLabAmountMiddleware } from '../../../../api/middlewares/fetchLabAmountMiddleware'
 import { fetchLabSourceMiddleware } from '../../../../api/middlewares/fetchLabSourceMiddleware'
@@ -12,8 +13,10 @@ import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTar
 import { changeParam } from '../../../../store/laboratory/actions/labParamAction'
 import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
 import { changeEquipmentNumber } from '../../../../store/laboratory/actions/labEquipmentNumberAction'
+import { changeRangeDate } from '../../../../store/laboratory/actions/labChangedRangeDateAction'
 // URLs
 import {
+    laboratoryAllShp,
     laboratoryPercentShp,
     laboratoryAmountShp,
     laboratorySourceShp,
@@ -24,6 +27,7 @@ import {
 
 export class Content extends PureComponent {
     state = {
+        isLoadedAll: false,
         isLoadedPercent: false,
         isLoadedAmount: false,
         isLoadedSource: false
@@ -35,6 +39,7 @@ export class Content extends PureComponent {
             fetchLabAmountMiddleware,
             fetchLabPercentMiddleware,
             fetchLabSourceMiddleware,
+            fetchLabAllMiddleware,
             changeLabTargetMenu
         } = this.props
 
@@ -42,6 +47,7 @@ export class Content extends PureComponent {
             fetchLabAmountMiddleware(laboratoryAmountShp, this)
             fetchLabPercentMiddleware(laboratoryPercentShp, this)
             fetchLabSourceMiddleware(laboratorySourceShp, this)
+            fetchLabAllMiddleware(laboratoryAllShp, this)
         }
 
         if (item === 'shsp') {
@@ -54,7 +60,7 @@ export class Content extends PureComponent {
 
         // Перевести в false состояние для новых загрузок
         this.setState({
-            isLoadedAmount: false,
+            isLoadedAll: false,
             isLoadedPercent: false,
             isLoadedAmount: false,
             isLoadedSource: false
@@ -80,6 +86,7 @@ export class Content extends PureComponent {
 
         // Перевести в false состояние для новых загрузок
         this.setState({
+            isLoadedAll: false,
             isLoadedPercent: false,
             isLoadedAmount: false
         })
@@ -99,18 +106,27 @@ export class Content extends PureComponent {
         this.props.changeEquipmentNumber(item)
     }
 
+    handleClickRangeDate = range => {
+        this.props.changeRangeDate(range)
+    }
+
     render() {
         const {
+            labAll: all,
             labPercent: percent,
             labAmount: amount,
             labSource: source,
             labTargetMenu: menu,
             labParam: param,
             labProp: prop,
-            labEquipmentNumber: equipment
+            labEquipmentNumber: equipment,
+            labChangedRangeDate: range
         } = this.props
-        const { isLoadedPercent, isLoadedAmount, isLoadedSource } = this.state
-        console.log(source)
+        const { isLoadedAll, isLoadedPercent, isLoadedAmount, isLoadedSource } = this.state
+
+        //console.log(range)
+        console.log(all)
+
         const rowTotal = {}
         amount &&
             Object.entries(amount).forEach(item => {
@@ -154,6 +170,7 @@ export class Content extends PureComponent {
                 source={source}
                 rowTotal={rowTotal}
                 columnTotal={columnTotal}
+                isLoadedAll={isLoadedAll}
                 isLoadedPercent={isLoadedPercent}
                 isLoadedAmount={isLoadedAmount}
                 isLoadedSource={isLoadedSource}
@@ -162,6 +179,7 @@ export class Content extends PureComponent {
                 handleClickParam={this.handleClickParam}
                 handleClickProp={this.handleClickProp}
                 handleClickEquipment={this.handleClickEquipment}
+                handleClickRangeDate={this.handleClickRangeDate}
             />
         )
     }
@@ -169,24 +187,28 @@ export class Content extends PureComponent {
 
 function mapStateToProps(store) {
     return {
+        ...store.labAllReducer,
         ...store.labPercentReducer,
         ...store.labAmountReducer,
         ...store.labSourceReducer,
         ...store.labTargetMenuReducer,
         ...store.labParamReducer,
         ...store.labPropReducer,
-        ...store.labEquipmentNumberReducer
+        ...store.labEquipmentNumberReducer,
+        ...store.labChangedRangeDateReducer
     }
 }
 
 const mapDispatchToProps = {
+    fetchLabAllMiddleware,
     fetchLabPercentMiddleware,
     fetchLabAmountMiddleware,
     fetchLabSourceMiddleware,
     changeLabTargetMenu,
     changeParam,
     changeProp,
-    changeEquipmentNumber
+    changeEquipmentNumber,
+    changeRangeDate
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

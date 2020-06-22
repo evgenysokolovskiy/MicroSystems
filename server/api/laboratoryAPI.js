@@ -1,4 +1,5 @@
 // Отправить информацию об интервале между отсечками на шкале времени к '/api/laboratory/percent'
+const INDEXES_FACT_DATE = require('../config/laboratory/shp/fact')['date']
 
 module.exports = function({ app, data }) {
     const { shp, shsp, sog } = data
@@ -16,6 +17,14 @@ module.exports = function({ app, data }) {
         app.get('/api/laboratory/sourceShp', function(req, res) {
             res.json(shp['source'])
             console.log('Данные отправлены на /api/laboratory/sourceShp')
+        })
+
+        app.get('/api/laboratory/allShp', function(req, res) {
+            res.json({
+                dateIndex: INDEXES_FACT_DATE,
+                data: shp['all']
+            })
+            console.log('Данные отправлены на /api/laboratory/allShp')
         })
     }
 

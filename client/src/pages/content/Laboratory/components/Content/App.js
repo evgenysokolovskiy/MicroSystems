@@ -122,7 +122,8 @@ export default class App extends PureComponent {
             handleClickAmount,
             handleClickParam,
             handleClickProp,
-            handleClickEquipment
+            handleClickEquipment,
+            handleClickRangeDate
         } = this.props
 
         const { activeTab } = this.state
@@ -190,7 +191,7 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <div className="labHeader">
                         {tabs}
-                        <RangePickerComponent />
+                        <RangePickerComponent handleClickRangeDate={handleClickRangeDate} />
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',
@@ -220,7 +221,7 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <div className="labHeader">
                         {tabs}
-                        <RangePickerComponent />
+                        <RangePickerComponent handleClickRangeDate={handleClickRangeDate} />
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',

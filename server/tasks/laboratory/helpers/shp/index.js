@@ -24,10 +24,25 @@ const indexFactMechanicalAdmixture = INDEXES_FACT['mechanicalAdmixture']
 const indexFactMetalInclusions = INDEXES_FACT['metalInclusions']
 const indexFactFlashPoint = INDEXES_FACT['flashPoint']
 const indexFactAcidNumber = INDEXES_FACT['acidNumber']
+// Столько дней назад от текущей даты учитываются данные
+// Данные к API отправляются только за период с началом (текущая дата минус указанное число дней)
+// При изменении интервала времени на клиенте, перерасчёт будет производится на клиенте
+// Так же на клиент будут отправлены сырые данные за весь период на другой адрес API
+const BEFORE_DAYS_RANGE = 365
 
 module.exports = function({ fact: f, technology: t }) {
-    const fact = clonedeep(f).slice(4)
+    const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
+
+    // Оставить данные за нужный период времени
+    let fact = []
+    const startDate = getDateBefore30DaysFromNow(BEFORE_DAYS_RANGE)
+    const all = allFact.map(item => {
+        const currentDate = ExcelDateToJSMsDate(item[indexFactDate])
+        //item[indexFactDate] = currentDate
+        if (currentDate > startDate) fact = [...fact, item]
+        //return item
+    })
 
     // 1) Преобразовать технологию
     let objTechnology = {}
@@ -62,13 +77,14 @@ module.exports = function({ fact: f, technology: t }) {
     let amount = {}
     let source = {}
     fact.forEach(f => {
-        if (!f[indexFactName]) return
+        if (!f[indexFactName] || !ExcelDateToJSMsDate(f[indexFactDate])) return
         const name = f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
         if (!source[name]) source[name] = {}
 
         // Ингибитор
         if (
+            f[indexFactInhibitor] &&
             objTechnology[name] &&
             typeof objTechnology[name]['inhibitorMin'] === 'number' &&
             typeof objTechnology[name]['inhibitorMax'] === 'number'
@@ -106,6 +122,7 @@ module.exports = function({ fact: f, technology: t }) {
 
         // Вязкость
         if (
+            f[indexFactViscosity] &&
             objTechnology[name] &&
             typeof objTechnology[name]['viscosityMin'] === 'number' &&
             typeof objTechnology[name]['viscosityMax'] === 'number'
@@ -144,7 +161,11 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // H2O
-        if (objTechnology[name] && typeof objTechnology[name]['h2o'] === 'number') {
+        if (
+            f[indexFactH2O] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['h2o'] === 'number'
+        ) {
             if (!amount[name]['H2O, %']) amount[name]['H2O, %'] = { true: 0, false: 0 }
             if (typeof f[indexFactH2O] === 'number') {
                 if (f[indexFactH2O] === objTechnology[name]['h2o']) {
@@ -171,7 +192,11 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // Механические примеси
-        if (objTechnology[name] && typeof objTechnology[name]['mechanicalAdmixture'] === 'number') {
+        if (
+            f[indexFactMechanicalAdmixture] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['mechanicalAdmixture'] === 'number'
+        ) {
             if (!amount[name]['Механические примеси, %'])
                 amount[name]['Механические примеси, %'] = { true: 0, false: 0 }
 
@@ -201,7 +226,11 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // Механические включения
-        if (objTechnology[name] && typeof objTechnology[name]['metalInclusions'] === 'number') {
+        if (
+            f[indexFactMetalInclusions] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['metalInclusions'] === 'number'
+        ) {
             if (!amount[name]['Металлические включения'])
                 amount[name]['Металлические включения'] = { true: 0, false: 0 }
 
@@ -231,7 +260,11 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // t вспышки
-        if (objTechnology[name] && typeof objTechnology[name]['flashPoint'] === 'number') {
+        if (
+            f[indexFactFlashPoint] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['flashPoint'] === 'number'
+        ) {
             if (!amount[name]['t вспышки, не менее град С'])
                 amount[name]['t вспышки, не менее град С'] = { true: 0, false: 0 }
 
@@ -261,7 +294,11 @@ module.exports = function({ fact: f, technology: t }) {
         }
 
         // Кислотное число
-        if (objTechnology[name] && typeof objTechnology[name]['acidNumber'] === 'number') {
+        if (
+            f[indexFactAcidNumber] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['acidNumber'] === 'number'
+        ) {
             if (!amount[name]['Кислотное число, мг.кон'])
                 amount[name]['Кислотное число, мг.кон'] = { true: 0, false: 0 }
 
@@ -308,7 +345,8 @@ module.exports = function({ fact: f, technology: t }) {
     return {
         amount,
         source,
-        percent
+        percent,
+        all
     }
 }
 
@@ -329,9 +367,20 @@ function ExcelDateToJSDate(serial) {
     ).padStart(2, '0')}.${String(date_info.getFullYear()) /*.slice(2)*/}`
 }
 
-// Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
+// Преобразовать дату (в виде дробного числа из excel)
 function ExcelDateToJSMsDate(serial) {
     const utc_days = Math.floor(serial - 25569)
     const utc_value = utc_days * 86400
-    return new Date(utc_value * 1000).getTime()
+    const currentDate = new Date(utc_value * 1000).getTime()
+    return currentDate
+}
+
+// Получить дату назад от текущей даты указанное кол-во дней
+function getDateBefore30DaysFromNow(range) {
+    // 86400000 - миллисекунд в сутках
+    const daysBefore = range * 86400000
+    // Текущая дата
+    const now = Date.now()
+    const dateBeforeDays = now - daysBefore
+    return dateBeforeDays
 }
