@@ -47,6 +47,32 @@ export default class App extends PureComponent {
         activeTab: 'percent'
     }
 
+    componentDidUpdate(prevProps) {
+        let { source, param, prop, handleClickParam, handleClickProp } = this.props
+
+        if (/*!prevProps.source && */ prevProps.source !== source) {
+            handleClickParam(Object.keys(source)[0])
+        }
+
+        if (
+            (source && param && !prop && prevProps.source !== source) ||
+            prevProps.param !== param
+        ) {
+            const val = Object.values(source).find(item => Object.keys(item).length)
+            handleClickProp(Object.keys(val)[0])
+        }
+
+        if (
+            source &&
+            param &&
+            prop &&
+            source[param] &&
+            !Object.keys(source[param]).includes(prop)
+        ) {
+            handleClickProp(Object.keys(source[param])[0])
+        }
+    }
+
     handleChange = e => {
         this.props.handleClickAmount(e)
         this.setState({ activeTab: e })
@@ -107,6 +133,7 @@ export default class App extends PureComponent {
     render() {
         let {
             menu,
+            range,
             param,
             prop,
             equipment,
@@ -150,18 +177,6 @@ export default class App extends PureComponent {
             </Container>
         )
 
-        if (!param) {
-            param = source && Object.keys(source)[0]
-        }
-        if (!prop && source && param) {
-            prop = Object.keys(source[param])[0]
-            this.props.handleClickProp(Object.keys(source[param])[0])
-        }
-        if (source && param && prop && !Object.keys(source[param]).includes(prop)) {
-            prop = Object.keys(source[param])[0]
-            this.props.handleClickProp(Object.keys(source[param])[0])
-        }
-
         const tabs = (
             <Tabs type="card" defaultActiveKey={activeTab} onChange={this.handleChange}>
                 <TabPane
@@ -176,7 +191,7 @@ export default class App extends PureComponent {
             </Tabs>
         )
 
-        const chart = source && param && prop && (
+        const chart = source && param && prop && source[param] && source[param][prop] && (
             <ChartComponent
                 source={source[param][prop]}
                 prop={prop}
@@ -191,7 +206,10 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <div className="labHeader">
                         {tabs}
-                        <RangePickerComponent handleClickRangeDate={handleClickRangeDate} />
+                        <RangePickerComponent
+                            range={range}
+                            handleClickRangeDate={handleClickRangeDate}
+                        />
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',
@@ -207,6 +225,7 @@ export default class App extends PureComponent {
                     percent={percent}
                     rowTotal={rowTotal}
                     columnTotal={columnTotal}
+                    menu={menu}
                     param={param}
                     prop={prop}
                     handleClickParam={handleClickParam}
@@ -221,7 +240,10 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <div className="labHeader">
                         {tabs}
-                        <RangePickerComponent handleClickRangeDate={handleClickRangeDate} />
+                        <RangePickerComponent
+                            range={range}
+                            handleClickRangeDate={handleClickRangeDate}
+                        />
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',
@@ -237,6 +259,7 @@ export default class App extends PureComponent {
                     amount={amount}
                     rowTotal={rowTotal}
                     columnTotal={columnTotal}
+                    menu={menu}
                     param={param}
                     prop={prop}
                     handleClickParam={handleClickParam}
@@ -251,19 +274,14 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
-                        {!source && menu === 'shp' && download}
-                        {menu &&
-                            menu === 'shp' &&
-                            activeTab === 'percent' &&
-                            source &&
-                            param &&
-                            prop && (
-                                <Suspense fallback={mount}>
-                                    {isLoadedPercent ? percentTable : download}
-                                </Suspense>
-                            )}
+                        {!source && menu && download}
+                        {menu && activeTab === 'percent' && source && param && prop && (
+                            <Suspense fallback={mount}>
+                                {isLoadedPercent ? percentTable : download}
+                            </Suspense>
+                        )}
 
-                        {menu && menu === 'shp' && activeTab === 'amount' && (
+                        {menu && menu && activeTab === 'amount' && (
                             <Suspense fallback={mount}>
                                 {isLoadedAmount ? amountTable : download}
                             </Suspense>

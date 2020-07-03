@@ -42,16 +42,22 @@ export const scheme = [
 ]
 
 // Tech
-export const joinTechnologyFact = `${origin}/api/joinTechnologyFact`
-export const qualityProduction = `${origin}/api/qualityProduction`
+export const joinTechnologyFact = `${origin}/api/jointechnologyfact`
+export const qualityProduction = `${origin}/api/qualityproduction`
 export const mtime = `${origin}/api/mtime`
 
 // Laboratory
-export const laboratoryPercentShp = `${origin}/api/laboratory/percentShp`
-export const laboratoryAmountShp = `${origin}/api/laboratory/amountShp`
-export const laboratorySourceShp = `${origin}/api/laboratory/sourceShp`
-export const laboratoryAllShp = `${origin}/api/laboratory/allShp`
+export const laboratoryPercentShp = `${origin}/api/laboratory/percentshp`
+export const laboratoryAmountShp = `${origin}/api/laboratory/amountshp`
+export const laboratorySourceShp = `${origin}/api/laboratory/sourceshp`
+export const laboratoryAllShp = `${origin}/api/laboratory/allshp`
 
-export const laboratoryPercentShsp = `${origin}/api/laboratory/percentShsp`
-export const laboratoryAmountShsp = `${origin}/api/laboratory/amountShsp`
-export const laboratorySourceShsp = `${origin}/api/laboratory/sourceShsp`
+export const laboratoryPercentShsp = `${origin}/api/laboratory/percentshsp`
+export const laboratoryAmountShsp = `${origin}/api/laboratory/amountshsp`
+export const laboratorySourceShsp = `${origin}/api/laboratory/sourceshsp`
+export const laboratoryAllShsp = `${origin}/api/laboratory/allshsp`
+
+export const laboratoryPercentSog = `${origin}/api/laboratory/percentsog`
+export const laboratoryAmountSog = `${origin}/api/laboratory/amountsog`
+export const laboratorySourceSog = `${origin}/api/laboratory/sourcesog`
+export const laboratoryAllSog = `${origin}/api/laboratory/allsog`

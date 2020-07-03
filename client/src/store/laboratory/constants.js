@@ -57,7 +57,7 @@ export const _LAB_PROP = {
         LAB_PROP: 'LAB_PROP'
     },
     init: {
-        labProp: 'Вязкость, мм2/сек'
+        labProp: ''
     }
 }
 
@@ -75,6 +75,6 @@ export const _LAB_CHANGED_RANGEDATE = {
         LAB_CHANGED_RANGEDATE: 'LAB_CHANGED_RANGEDATE'
     },
     init: {
-        labChangedRangeDate: ''
+        labChangedRangeDate: []
     }
 }

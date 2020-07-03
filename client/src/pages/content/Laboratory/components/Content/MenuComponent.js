@@ -23,7 +23,7 @@ export default class MenuComponent extends PureComponent {
                     <Menu.Item key="shp">
                         <span>ШП</span>
                     </Menu.Item>
-                    {/*
+
                     <Menu.Item key="shsp">
                         <span>ШСП</span>
                     </Menu.Item>
@@ -31,7 +31,6 @@ export default class MenuComponent extends PureComponent {
                     <Menu.Item key="sog">
                         <span>СОЖ</span>
                     </Menu.Item>
-*/}
                 </Menu>
             </div>
         )

@@ -1,57 +1,93 @@
 const clonedeep = require('lodash.clonedeep')
-const INDEXES_TECHNOLOGY = require('../../../../config/laboratory/shp/technology')
-const INDEXES_FACT = require('../../../../config/laboratory/shp/fact')
+const INDEXES_TECHNOLOGY = require('../../../../config/laboratory/sog/technology')
+const INDEXES_FACT = require('../../../../config/laboratory/sog/fact')
 
 // indexes technology
 const indexTechnologyName = INDEXES_TECHNOLOGY['name']
-const indexTechnologyInhibitorMin = INDEXES_TECHNOLOGY['inhibitorMin']
-const indexTechnologyInhibitorMax = INDEXES_TECHNOLOGY['inhibitorMax']
-const indexTechnologyViscosityMin = INDEXES_TECHNOLOGY['viscosityMin']
-const indexTechnologyViscosityMax = INDEXES_TECHNOLOGY['viscosityMax']
-const indexTechnologyH2O = INDEXES_TECHNOLOGY['H2O']
+const indexTechnologyPhMin = INDEXES_TECHNOLOGY['phMin']
+const indexTechnologyPhMax = INDEXES_TECHNOLOGY['phMax']
+const indexTechnologyDensityMin = INDEXES_TECHNOLOGY['densityMin']
+const indexTechnologyDensityMax = INDEXES_TECHNOLOGY['densityMax']
+const indexTechnologySodaMin = INDEXES_TECHNOLOGY['sodaMin']
+const indexTechnologySodaMax = INDEXES_TECHNOLOGY['sodaMax']
+const indexTechnologyBicarbonate = INDEXES_TECHNOLOGY['bicarbonate']
+const indexTechnologyNitriteMin = INDEXES_TECHNOLOGY['nitriteMin']
+const indexTechnologyNitriteMax = INDEXES_TECHNOLOGY['nitriteMax']
+const indexTechnologyDegree = INDEXES_TECHNOLOGY['degree']
+const indexTechnologyCorrosion = INDEXES_TECHNOLOGY['corrosion']
 const indexTechnologyMechanicalAdmixture = INDEXES_TECHNOLOGY['mechanicalAdmixture']
-const indexTechnologyMetalInclusions = INDEXES_TECHNOLOGY['metalInclusions']
-const indexTechnologyFlashPoint = INDEXES_TECHNOLOGY['flashPoint']
-const indexTechnologyAcidNumber = INDEXES_TECHNOLOGY['acidNumber']
+const indexTechnologySoapMin = INDEXES_TECHNOLOGY['soapMin']
+const indexTechnologySoapMax = INDEXES_TECHNOLOGY['soapMax']
+
 // indexes fact
-const indexFacDate = INDEXES_FACT['date']
+const indexFactDate = INDEXES_FACT['date']
 const indexFactName = INDEXES_FACT['name']
-const indexFactInhibitor = INDEXES_FACT['inhibitor']
-const indexFactViscosity = INDEXES_FACT['viscosity']
-const indexFactH2O = INDEXES_FACT['H2O']
+const indexFactInn = INDEXES_FACT['inn']
+const indexFactPh = INDEXES_FACT['ph']
+const indexFactDensity = INDEXES_FACT['density']
+const indexFactSoda = INDEXES_FACT['soda']
+const indexFactBicarbonate = INDEXES_FACT['bicarbonate']
+const indexFactNitrite = INDEXES_FACT['nitrite']
+const indexFactDegree = INDEXES_FACT['degree']
+const indexFactCorrosion = INDEXES_FACT['corrosion']
 const indexFactMechanicalAdmixture = INDEXES_FACT['mechanicalAdmixture']
-const indexFactMetalInclusions = INDEXES_FACT['metalInclusions']
-const indexFactFlashPoint = INDEXES_FACT['flashPoint']
-const indexFactAcidNumber = INDEXES_FACT['acidNumber']
+
+// Столько дней назад от текущей даты учитываются данные
+// Данные к API отправляются только за период с началом (текущая дата минус указанное число дней)
+// При изменении интервала времени на клиенте, перерасчёт будет производится на клиенте
+// Так же на клиент будут отправлены сырые данные за весь период на другой адрес API
+const BEFORE_DAYS_RANGE = 365
 
 module.exports = function({ fact: f, technology: t }) {
-    const fact = clonedeep(f).slice(4)
+    const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
+
+    // Начальная дата в миллисекундах в соответствии с BEFORE_DAYS_RANGE
+    const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
+
+    // Получить массив с датой в миллисекундах
+    const all = clonedeep(allFact).map(item => {
+        item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
+        return item
+    })
+
+    // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
+    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
     technology.forEach(t => {
         const obj = {}
-        if (typeof t[indexTechnologyInhibitorMin] === 'number') {
-            obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
-            obj['inhibitorMax'] = t[indexTechnologyInhibitorMax]
+        if (typeof t[indexTechnologyPhMin] === 'number') {
+            obj['phMin'] = t[indexTechnologyPhMin]
+            obj['phMax'] = t[indexTechnologyPhMax]
         }
-        if (typeof t[indexTechnologyViscosityMin] === 'number') {
-            obj['viscosityMin'] = t[indexTechnologyViscosityMin]
-            obj['viscosityMax'] = t[indexTechnologyViscosityMax]
+        if (typeof t[indexTechnologyDensityMin] === 'number') {
+            obj['densityMin'] = t[indexTechnologyDensityMin]
+            obj['densityMax'] = t[indexTechnologyDensityMax]
         }
-        if (typeof t[indexTechnologyH2O] === 'number') obj['h2o'] = t[indexTechnologyH2O]
+        if (typeof t[indexTechnologySodaMin] === 'number') {
+            obj['sodaMin'] = t[indexTechnologySodaMin]
+            obj['sodaMax'] = t[indexTechnologySodaMax]
+        }
+        if (typeof t[indexTechnologyBicarbonate] === 'number')
+            obj['bicarbonate'] = t[indexTechnologyBicarbonate]
+        if (typeof t[indexTechnologyNitriteMin] === 'number') {
+            obj['nitriteMin'] = t[indexTechnologyNitriteMin]
+            obj['nitriteMax'] = t[indexTechnologyNitriteMax]
+        }
+        if (typeof t[indexTechnologyDegree] === 'number') {
+            obj['degree'] = t[indexTechnologyDegree]
+        }
+        if (typeof t[indexTechnologyCorrosion] === 'number') {
+            obj['corrosion'] = t[indexTechnologyCorrosion]
+        }
         if (typeof t[indexTechnologyMechanicalAdmixture] === 'number') {
             obj['mechanicalAdmixture'] = t[indexTechnologyMechanicalAdmixture]
         }
-        if (typeof t[indexTechnologyMetalInclusions] === 'number') {
-            obj['metalInclusions'] = t[indexTechnologyMetalInclusions]
-        }
-        if (typeof t[indexTechnologyFlashPoint] === 'number') {
-            obj['flashPoint'] = t[indexTechnologyFlashPoint]
-        }
-        if (typeof t[indexTechnologyAcidNumber] === 'number') {
-            obj['acidNumber'] = t[indexTechnologyAcidNumber]
+        if (typeof t[indexTechnologySoapMin] === 'number') {
+            obj['soapMin'] = t[indexTechnologySoapMin]
+            obj['soapMax'] = t[indexTechnologySoapMax]
         }
 
         objTechnology[t[indexTechnologyName]] = obj
@@ -60,194 +96,291 @@ module.exports = function({ fact: f, technology: t }) {
     // 2) На основании технологии и факта просчитать количество true/false для каждого свойства и значения
     let amount = {}
     let source = {}
+
     fact.forEach(f => {
-        if (!f[indexFactName]) return
+        if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
         if (!source[name]) source[name] = {}
 
-        // Ингибитор
+        // Водородный показатель-pH
         if (
-            typeof objTechnology[name]['inhibitorMin'] === 'number' &&
-            typeof objTechnology[name]['inhibitorMax'] === 'number'
+            f[indexFactPh] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['phMin'] === 'number' &&
+            typeof objTechnology[name]['phMax'] === 'number'
         ) {
-            if (!amount[name]['Ингибитор, %']) amount[name]['Ингибитор, %'] = { true: 0, false: 0 }
-            if (!source[name]['Ингибитор, %']) source[name]['Ингибитор, %'] = []
+            if (!amount[name]['pH, %']) amount[name]['pH, %'] = { true: 0, false: 0 }
 
-            if (typeof f[indexFactInhibitor] === 'number') {
+            if (typeof f[indexFactPh] === 'number') {
                 if (
-                    f[indexFactInhibitor] > objTechnology[name]['inhibitorMin'] &&
-                    f[indexFactInhibitor] < objTechnology[name]['inhibitorMax']
+                    f[indexFactPh] >= objTechnology[name]['phMin'] &&
+                    f[indexFactPh] <= objTechnology[name]['phMax']
                 ) {
-                    amount[name]['Ингибитор, %']['true']++
+                    amount[name]['pH, %']['true']++
                 } else {
-                    amount[name]['Ингибитор, %']['false']++
+                    amount[name]['pH, %']['false']++
                 }
 
-                source[name]['Ингибитор, %'] = [
-                    ...source[name]['Ингибитор, %'],
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['pH, %']) source[name]['pH, %'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['pH, %'][inn]
+                if (!data) data = []
+                source[name]['pH, %'][inn] = [
+                    ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
-                        fact: f[indexFactInhibitor],
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactPh],
+                        technology: [objTechnology[name]['phMin'], objTechnology[name]['phMax']]
+                    }
+                ]
+            }
+        }
+
+        // Концентрация
+        if (
+            f[indexFactDensity] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['densityMin'] === 'number' &&
+            typeof objTechnology[name]['densityMax'] === 'number'
+        ) {
+            if (!amount[name]['Концентрация, %'])
+                amount[name]['Концентрация, %'] = { true: 0, false: 0 }
+
+            if (typeof f[indexFactDensity] === 'number') {
+                if (
+                    f[indexFactDensity] >= objTechnology[name]['densityMin'] &&
+                    f[indexFactDensity] <= objTechnology[name]['densityMax']
+                ) {
+                    amount[name]['Концентрация, %']['true']++
+                } else {
+                    amount[name]['Концентрация, %']['false']++
+                }
+
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Концентрация, %']) source[name]['Концентрация, %'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Концентрация, %'][inn]
+                if (!data) data = []
+                source[name]['Концентрация, %'][inn] = [
+                    ...data,
+                    {
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactDensity],
                         technology: [
-                            objTechnology[name]['inhibitorMin'],
-                            objTechnology[name]['inhibitorMax']
+                            objTechnology[name]['densityMin'],
+                            objTechnology[name]['densityMax']
                         ]
                     }
                 ]
             }
         }
 
-        // Вязкость
+        // Сода
         if (
-            typeof objTechnology[name]['viscosityMin'] === 'number' &&
-            typeof objTechnology[name]['viscosityMax'] === 'number'
+            f[indexFactSoda] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['sodaMin'] === 'number' &&
+            typeof objTechnology[name]['sodaMax'] === 'number'
         ) {
-            if (!amount[name]['Вязкость, мм2/сек'])
-                amount[name]['Вязкость, мм2/сек'] = { true: 0, false: 0 }
-            if (!source[name]['Вязкость, мм2/сек']) source[name]['Вязкость, мм2/сек'] = []
+            if (!amount[name]['Сода, г/л']) amount[name]['Сода, г/л'] = { true: 0, false: 0 }
 
-            if (typeof f[indexFactViscosity] === 'number') {
+            if (typeof f[indexFactSoda] === 'number') {
                 if (
-                    f[indexFactViscosity] > objTechnology[name]['viscosityMin'] &&
-                    f[indexFactViscosity] < objTechnology[name]['viscosityMax']
+                    f[indexFactSoda] >= objTechnology[name]['sodaMin'] &&
+                    f[indexFactSoda] <= objTechnology[name]['sodaMax']
                 ) {
-                    amount[name]['Вязкость, мм2/сек']['true']++
+                    amount[name]['Сода, г/л']['true']++
                 } else {
-                    amount[name]['Вязкость, мм2/сек']['false']++
+                    amount[name]['Сода, г/л']['false']++
                 }
 
-                source[name]['Вязкость, мм2/сек'] = [
-                    ...source[name]['Вязкость, мм2/сек'],
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Сода, г/л']) source[name]['Сода, г/л'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Сода, г/л'][inn]
+                if (!data) data = []
+                source[name]['Сода, г/л'][inn] = [
+                    ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
-                        fact: f[indexFactViscosity],
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactSoda],
+                        technology: [objTechnology[name]['sodaMin'], objTechnology[name]['sodaMax']]
+                    }
+                ]
+            }
+        }
+
+        // Бикарбонат натрия
+        if (
+            f[indexFactBicarbonate] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['bicarbonate'] === 'number'
+        ) {
+            if (!amount[name]['Бикарбонат натрия, %'])
+                amount[name]['Бикарбонат натрия, %'] = { true: 0, false: 0 }
+            if (typeof f[indexFactBicarbonate] === 'number') {
+                if (f[indexFactBicarbonate] <= objTechnology[name]['bicarbonate']) {
+                    amount[name]['Бикарбонат натрия, %']['true']++
+                } else {
+                    amount[name]['Бикарбонат натрия, %']['false']++
+                }
+
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Бикарбонат натрия, %']) source[name]['Бикарбонат натрия, %'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Бикарбонат натрия, %'][inn]
+                if (!data) data = []
+                source[name]['Бикарбонат натрия, %'][inn] = [
+                    ...data,
+                    {
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactBicarbonate],
+                        technology: objTechnology[name]['bicarbonate']
+                    }
+                ]
+            }
+        }
+
+        // Нитрит натрия
+        if (
+            f[indexFactNitrite] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['nitriteMin'] === 'number' &&
+            typeof objTechnology[name]['nitriteMax'] === 'number'
+        ) {
+            if (!amount[name]['Нитрит натрия, %'])
+                amount[name]['Нитрит натрия, %'] = { true: 0, false: 0 }
+
+            if (typeof f[indexFactNitrite] === 'number') {
+                if (
+                    f[indexFactNitrite] >= objTechnology[name]['nitriteMin'] &&
+                    f[indexFactNitrite] <= objTechnology[name]['nitriteMax']
+                ) {
+                    amount[name]['Нитрит натрия, %']['true']++
+                } else {
+                    amount[name]['Нитрит натрия, %']['false']++
+                }
+
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Нитрит натрия, %']) source[name]['Нитрит натрия, %'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Нитрит натрия, %'][inn]
+                if (!data) data = []
+                source[name]['Нитрит натрия, %'][inn] = [
+                    ...data,
+                    {
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactNitrite],
                         technology: [
-                            objTechnology[name]['viscosityMin'],
-                            objTechnology[name]['viscosityMax']
+                            objTechnology[name]['nitriteMin'],
+                            objTechnology[name]['nitriteMax']
                         ]
                     }
                 ]
             }
         }
 
-        // H2O
-        if (typeof objTechnology[name]['h2o'] === 'number') {
-            if (!amount[name]['H2O, %']) amount[name]['H2O, %'] = { true: 0, false: 0 }
-            if (!source[name]['H2O, %']) source[name]['H2O, %'] = []
-            if (typeof f[indexFactH2O] === 'number') {
-                if (f[indexFactH2O] > objTechnology[name]['h2o']) {
-                    amount[name]['H2O, %']['false']++
+        // Степень биопоражения
+        if (
+            f[indexFactDegree] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['degree'] === 'number'
+        ) {
+            if (!amount[name]['Степень биопоражения'])
+                amount[name]['Степень биопоражения'] = { true: 0, false: 0 }
+
+            if (typeof f[indexFactDegree] === 'number') {
+                if (f[indexFactDegree] <= objTechnology[name]['degree']) {
+                    amount[name]['Степень биопоражения']['true']++
                 } else {
-                    amount[name]['H2O, %']['true']++
+                    amount[name]['Степень биопоражения']['false']++
                 }
 
-                source[name]['H2O, %'] = [
-                    ...source[name]['H2O, %'],
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Степень биопоражения']) source[name]['Степень биопоражения'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Степень биопоражения'][inn]
+                if (!data) data = []
+                source[name]['Степень биопоражения'][inn] = [
+                    ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
-                        fact: f[indexFactH2O],
-                        technology: objTechnology[name]['h2o']
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactDegree],
+                        technology: objTechnology[name]['degree']
+                    }
+                ]
+            }
+        }
+
+        // Коррозия
+        if (
+            f[indexFactCorrosion] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['corrosion'] === 'number'
+        ) {
+            if (!amount[name]['Коррозия']) amount[name]['Коррозия'] = { true: 0, false: 0 }
+
+            if (typeof f[indexFactCorrosion] === 'number') {
+                if (f[indexFactCorrosion] <= objTechnology[name]['corrosion']) {
+                    amount[name]['Коррозия']['true']++
+                } else {
+                    amount[name]['Коррозия']['false']++
+                }
+
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Коррозия']) source[name]['Коррозия'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Коррозия'][inn]
+                if (!data) data = []
+                source[name]['Коррозия'][inn] = [
+                    ...data,
+                    {
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactCorrosion],
+                        technology: objTechnology[name]['corrosion']
                     }
                 ]
             }
         }
 
         // Механические примеси
-        if (typeof objTechnology[name]['mechanicalAdmixture'] === 'number') {
+        if (
+            f[indexFactMechanicalAdmixture] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['mechanicalAdmixture'] === 'number'
+        ) {
             if (!amount[name]['Механические примеси, %'])
                 amount[name]['Механические примеси, %'] = { true: 0, false: 0 }
-            if (!source[name]['Механические примеси, %'])
-                source[name]['Механические примеси, %'] = []
 
             if (typeof f[indexFactMechanicalAdmixture] === 'number') {
-                if (f[indexFactMechanicalAdmixture] > objTechnology[name]['mechanicalAdmixture']) {
-                    amount[name]['Механические примеси, %']['false']++
-                } else {
+                if (f[indexFactMechanicalAdmixture] <= objTechnology[name]['mechanicalAdmixture']) {
                     amount[name]['Механические примеси, %']['true']++
+                } else {
+                    amount[name]['Механические примеси, %']['false']++
                 }
 
-                source[name]['Механические примеси, %'] = [
-                    ...source[name]['Механические примеси, %'],
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Механические примеси, %'])
+                    source[name]['Механические примеси, %'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Механические примеси, %'][inn]
+                if (!data) data = []
+                source[name]['Механические примеси, %'][inn] = [
+                    ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactMechanicalAdmixture],
                         technology: objTechnology[name]['mechanicalAdmixture']
-                    }
-                ]
-            }
-        }
-
-        // Механические включения
-        if (typeof objTechnology[name]['metalInclusions'] === 'number') {
-            if (!amount[name]['Металлические включения'])
-                amount[name]['Металлические включения'] = { true: 0, false: 0 }
-            if (!source[name]['Металлические включения'])
-                source[name]['Металлические включения'] = []
-
-            if (typeof f[indexFactMetalInclusions] === 'number') {
-                if (f[indexFactMetalInclusions] > objTechnology[name]['metalInclusions']) {
-                    amount[name]['Металлические включения']['false']++
-                } else {
-                    amount[name]['Металлические включения']['true']++
-                }
-
-                source[name]['Металлические включения'] = [
-                    ...source[name]['Металлические включения'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
-                        fact: f[indexFactMetalInclusions],
-                        technology: objTechnology[name]['metalInclusions']
-                    }
-                ]
-            }
-        }
-
-        // t вспышки
-        if (typeof objTechnology[name]['flashPoint'] === 'number') {
-            if (!amount[name]['t вспышки, не менее град С'])
-                amount[name]['t вспышки, не менее град С'] = { true: 0, false: 0 }
-            if (!source[name]['t вспышки, не менее град С'])
-                source[name]['t вспышки, не менее град С'] = []
-
-            if (typeof f[indexFactFlashPoint] === 'number') {
-                if (f[indexFactFlashPoint] > objTechnology[name]['flashPoint']) {
-                    amount[name]['t вспышки, не менее град С']['false']++
-                } else {
-                    amount[name]['t вспышки, не менее град С']['true']++
-                }
-
-                source[name]['t вспышки, не менее град С'] = [
-                    ...source[name]['t вспышки, не менее град С'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
-                        fact: f[indexFactFlashPoint],
-                        technology: objTechnology[name]['flashPoint']
-                    }
-                ]
-            }
-        }
-
-        // Кислотное число
-        if (typeof objTechnology[name]['acidNumber'] === 'number') {
-            if (!amount[name]['Кислотное число, мг.кон'])
-                amount[name]['Кислотное число, мг.кон'] = { true: 0, false: 0 }
-            if (!source[name]['Кислотное число, мг.кон'])
-                source[name]['Кислотное число, мг.кон'] = []
-
-            if (typeof f[indexFactAcidNumber] === 'number') {
-                if (f[indexFactAcidNumber] > objTechnology[name]['acidNumber']) {
-                    amount[name]['Кислотное число, мг.кон']['false']++
-                } else {
-                    amount[name]['Кислотное число, мг.кон']['true']++
-                }
-
-                source[name]['Кислотное число, мг.кон'] = [
-                    ...source[name]['Кислотное число, мг.кон'],
-                    {
-                        date: ExcelDateToJSDate(f[indexFacDate]),
-                        fact: f[indexFactAcidNumber],
-                        technology: objTechnology[name]['acidNumber']
                     }
                 ]
             }
@@ -266,28 +399,66 @@ module.exports = function({ fact: f, technology: t }) {
         })
     })
 
-    if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
+    if (Object.keys(percent).length === 0 || Object.keys(amount).length === 0) return
+
+    source = deleteEmptyProps(source)
+    percent = deleteEmptyProps(percent)
+    amount = deleteEmptyProps(amount)
 
     return {
         amount,
         source,
-        percent
+        percent,
+        all,
+        technology,
+        startDate
     }
 }
 
-// Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
-function ExcelDateToJSDate(serial) {
-    const utc_days = Math.floor(serial - 25569)
-    const utc_value = utc_days * 86400
-    const date_info = new Date(utc_value * 1000)
+// Преобразовать дату (в виде дробного числа из excel)
+function ExcelDateToJSMsDate(serial) {
+    let currentDate
+    if (typeof serial === 'number') {
+        const utc_days = Math.floor(serial - 25569)
+        const utc_value = utc_days * 86400
+        currentDate = new Date(utc_value * 1000).getTime()
+    } else if (typeof serial === 'string') {
+        currentDate = new Date()
+        const y = serial.split('.')[2]
+        const yyyy = y.length === 2 ? `20${y}` : y
+        const mm = serial.split('.')[1] - 1
+        const dd = serial.split('.')[0]
+        currentDate = new Date(yyyy, mm, dd).getTime()
+    }
+    return currentDate
+}
 
-    const fractional_day = serial - Math.floor(serial) + 0.0000001
-    let total_seconds = Math.floor(86400 * fractional_day)
-    const seconds = total_seconds % 60
-    total_seconds -= seconds
-    const hours = Math.floor(total_seconds / (60 * 60))
-    const minutes = Math.floor(total_seconds / 60) % 60
-    return `${String(date_info.getDate()).padStart(2, '0')}.${String(
-        date_info.getMonth() + 1
-    ).padStart(2, '0')}.${String(date_info.getFullYear()).slice(2)}`
+// Преобразовать миллисекунды в строку
+function msDateToString(ms) {
+    const date = new Date(ms)
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    return `${String(day).padStart(2, '0')}.${String(month).padStart(2, '0')}.${String(year)}`
+}
+
+// Получить дату назад от текущей даты указанное кол-во дней
+function getDateBeforeDaysFromNow(range) {
+    // 86400000 - миллисекунд в сутках
+    const daysBefore = range * 86400000
+    // Текущая дата
+    const now = Date.now()
+    const dateBeforeDays = now - daysBefore
+    return dateBeforeDays
+}
+
+// Удалить свойства, равные {}, т.е., когда нет фактических данных
+function deleteEmptyProps(data) {
+    let obj = {}
+    Object.entries(data).forEach(item => {
+        if (Object.values(item[1])[0]) {
+            obj[item[0]] = item[1]
+        }
+    })
+    return obj
 }

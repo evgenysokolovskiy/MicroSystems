@@ -5,7 +5,12 @@ export function fetchLabAllMiddleware(url, self) {
         fetch(url)
             .then(res => res.json())
             .then(data => {
-                dispatch(changeAll(data))
+                dispatch(
+                    changeAll({
+                        default: data,
+                        current: null
+                    })
+                )
             })
             .then(() => self.setState({ isLoadedAll: true }))
             .catch(error => console.log(error))

@@ -34,15 +34,15 @@ module.exports = function({ fact: f, technology: t }) {
     const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
 
-    // Оставить данные за нужный период времени
-    let fact = []
-    const startDate = getDateBefore30DaysFromNow(BEFORE_DAYS_RANGE)
-    const all = allFact.map(item => {
-        const currentDate = ExcelDateToJSMsDate(item[indexFactDate])
-        //item[indexFactDate] = currentDate
-        if (currentDate > startDate) fact = [...fact, item]
-        //return item
+    // Начальная дата в миллисекундах в соответствии с BEFORE_DAYS_RANGE
+    const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
+    // Получить массив с датой в миллисекундах
+    const all = clonedeep(allFact).map(item => {
+        item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
+        return item
     })
+    // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
+    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
@@ -77,7 +77,7 @@ module.exports = function({ fact: f, technology: t }) {
     let amount = {}
     let source = {}
     fact.forEach(f => {
-        if (!f[indexFactName] || !ExcelDateToJSMsDate(f[indexFactDate])) return
+        if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
         if (!source[name]) source[name] = {}
@@ -108,8 +108,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['Ингибитор, %'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactInhibitor],
                         technology: [
                             objTechnology[name]['inhibitorMin'],
@@ -148,8 +148,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['Вязкость, мм2/сек'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactViscosity],
                         technology: [
                             objTechnology[name]['viscosityMin'],
@@ -182,8 +182,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['H2O, %'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactH2O],
                         technology: objTechnology[name]['h2o']
                     }
@@ -216,8 +216,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['Механические примеси, %'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactMechanicalAdmixture],
                         technology: objTechnology[name]['mechanicalAdmixture']
                     }
@@ -250,8 +250,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['Металлические включения'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactMetalInclusions],
                         technology: objTechnology[name]['metalInclusions']
                     }
@@ -284,8 +284,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['t вспышки, не менее град С'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactFlashPoint],
                         technology: objTechnology[name]['flashPoint']
                     }
@@ -318,8 +318,8 @@ module.exports = function({ fact: f, technology: t }) {
                 source[name]['Кислотное число, мг.кон'][inn] = [
                     ...data,
                     {
-                        date: ExcelDateToJSDate(f[indexFactDate]),
-                        msDate: ExcelDateToJSMsDate(f[indexFactDate]),
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
                         fact: f[indexFactAcidNumber],
                         technology: objTechnology[name]['acidNumber']
                     }
@@ -340,16 +340,71 @@ module.exports = function({ fact: f, technology: t }) {
         })
     })
 
-    if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
+    if (Object.keys(percent).length === 0 || Object.keys(amount).length === 0) return
+
+    source = deleteEmptyProps(source)
+    percent = deleteEmptyProps(percent)
+    amount = deleteEmptyProps(amount)
 
     return {
         amount,
         source,
         percent,
-        all
+        all,
+        technology,
+        startDate
     }
 }
 
+// Преобразовать дату (в виде дробного числа из excel)
+function ExcelDateToJSMsDate(serial) {
+    let currentDate
+    if (typeof serial === 'number') {
+        const utc_days = Math.floor(serial - 25569)
+        const utc_value = utc_days * 86400
+        currentDate = new Date(utc_value * 1000).getTime()
+    } else if (typeof serial === 'string') {
+        currentDate = new Date()
+        const y = serial.split('.')[2]
+        const yyyy = y.length === 2 ? `20${y}` : y
+        const mm = serial.split('.')[1] - 1
+        const dd = serial.split('.')[0] + 1
+        currentDate = new Date(yyyy, mm, dd).getTime()
+    }
+    return currentDate
+}
+
+// Преобразовать миллисекунды в строку
+function msDateToString(ms) {
+    const date = new Date(ms)
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    return `${String(day).padStart(2, '0')}.${String(month).padStart(2, '0')}.${String(year)}`
+}
+
+// Получить дату назад от текущей даты указанное кол-во дней
+function getDateBeforeDaysFromNow(range) {
+    // 86400000 - миллисекунд в сутках
+    const daysBefore = range * 86400000
+    // Текущая дата
+    const now = Date.now()
+    const dateBeforeDays = now - daysBefore
+    return dateBeforeDays
+}
+
+// Удалить свойства, равные {}, т.е., когда нет фактических данных
+function deleteEmptyProps(data) {
+    let obj = {}
+    Object.entries(data).forEach(item => {
+        if (Object.values(item[1])[0]) {
+            obj[item[0]] = item[1]
+        }
+    })
+    return obj
+}
+
+/*
 // Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
 function ExcelDateToJSDate(serial) {
     const utc_days = Math.floor(serial - 25569)
@@ -364,23 +419,6 @@ function ExcelDateToJSDate(serial) {
     const minutes = Math.floor(total_seconds / 60) % 60
     return `${String(date_info.getDate()).padStart(2, '0')}.${String(
         date_info.getMonth() + 1
-    ).padStart(2, '0')}.${String(date_info.getFullYear()) /*.slice(2)*/}`
+    ).padStart(2, '0')}.${String(date_info.getFullYear()).slice(2)}`
 }
-
-// Преобразовать дату (в виде дробного числа из excel)
-function ExcelDateToJSMsDate(serial) {
-    const utc_days = Math.floor(serial - 25569)
-    const utc_value = utc_days * 86400
-    const currentDate = new Date(utc_value * 1000).getTime()
-    return currentDate
-}
-
-// Получить дату назад от текущей даты указанное кол-во дней
-function getDateBefore30DaysFromNow(range) {
-    // 86400000 - миллисекунд в сутках
-    const daysBefore = range * 86400000
-    // Текущая дата
-    const now = Date.now()
-    const dateBeforeDays = now - daysBefore
-    return dateBeforeDays
-}
+*/

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import clonedeep from 'lodash.clonedeep'
 import App from '../components/Content/App'
+import calculateDataShp from '../helpers/shp/'
 
 // fetch
 import { fetchLabAllMiddleware } from '../../../../api/middlewares/fetchLabAllMiddleware'
@@ -10,6 +11,10 @@ import { fetchLabAmountMiddleware } from '../../../../api/middlewares/fetchLabAm
 import { fetchLabSourceMiddleware } from '../../../../api/middlewares/fetchLabSourceMiddleware'
 // actions
 import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTargetMenuAction'
+import { changeAll } from '../../../../store/laboratory/actions/labAllAction'
+import { changePercent } from '../../../../store/laboratory/actions/labPercentAction'
+import { changeAmount } from '../../../../store/laboratory/actions/labAmountAction'
+import { changeSource } from '../../../../store/laboratory/actions/labSourceAction'
 import { changeParam } from '../../../../store/laboratory/actions/labParamAction'
 import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
 import { changeEquipmentNumber } from '../../../../store/laboratory/actions/labEquipmentNumberAction'
@@ -20,9 +25,14 @@ import {
     laboratoryPercentShp,
     laboratoryAmountShp,
     laboratorySourceShp,
+    laboratoryAllShsp,
     laboratoryPercentShsp,
     laboratoryAmountShsp,
-    laboratorySourceShsp
+    laboratorySourceShsp,
+    laboratoryAllSog,
+    laboratoryPercentSog,
+    laboratoryAmountSog,
+    laboratorySourceSog
 } from '../../../../api/urls/data'
 
 export class Content extends PureComponent {
@@ -32,6 +42,16 @@ export class Content extends PureComponent {
         isLoadedAmount: false,
         isLoadedSource: false
     }
+    /*
+    componentDidUpdate(prevProps) {
+        const { labMenu: menu, labSource: source, labParam: param, labProp: prop, changeParam, changeProp } = this.props
+        if (source && prevProps.source !== source) {
+            const par = Object.keys(source)[0]
+            changeParam(par)
+            changeProp(Object.keys(source[par])[0])
+        }
+    }
+*/
 
     // Событие по меню (выбора процедуры)
     handleClickMenu = item => {
@@ -54,6 +74,14 @@ export class Content extends PureComponent {
             fetchLabAmountMiddleware(laboratoryAmountShsp, this)
             fetchLabPercentMiddleware(laboratoryPercentShsp, this)
             fetchLabSourceMiddleware(laboratorySourceShsp, this)
+            fetchLabAllMiddleware(laboratoryAllShsp, this)
+        }
+
+        if (item === 'sog') {
+            fetchLabAmountMiddleware(laboratoryAmountSog, this)
+            fetchLabPercentMiddleware(laboratoryPercentSog, this)
+            fetchLabSourceMiddleware(laboratorySourceSog, this)
+            fetchLabAllMiddleware(laboratoryAllSog, this)
         }
 
         changeLabTargetMenu(item)
@@ -84,6 +112,11 @@ export class Content extends PureComponent {
             if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercentShsp, this)
         }
 
+        if (menu && menu === 'sog') {
+            if (e === 'amount') fetchLabAmountMiddleware(laboratoryAmountSog, this)
+            if (e === 'percent') fetchLabPercentMiddleware(laboratoryPercentSog, this)
+        }
+
         // Перевести в false состояние для новых загрузок
         this.setState({
             isLoadedAll: false,
@@ -107,7 +140,35 @@ export class Content extends PureComponent {
     }
 
     handleClickRangeDate = range => {
-        this.props.changeRangeDate(range)
+        const {
+            labAll,
+            changeAll,
+            changePercent,
+            changeAmount,
+            changeSource,
+            changeRangeDate
+        } = this.props
+
+        const defaultData = clonedeep(labAll['default'])
+        const technology = defaultData['technology']
+        const startDate = labAll['default']['defaultStart']
+        const dateIndex = defaultData['dateIndex']
+        const data =
+            defaultData['data'] && defaultData['data'].filter(item => item[dateIndex] > range[0])
+        const current = calculateDataShp({ fact: data, technology, startDate: range[0] })
+
+        changePercent(current['percent'])
+        changeAmount(current['amount'])
+        changeSource(current['source'])
+        changeAll({ default: defaultData, current })
+        changeRangeDate(range)
+
+        Object.entries(current['source']).forEach(item => {
+            if (Object.keys(item[1])[0]) {
+                this.props.changeParam(item[0])
+                this.props.changeProp(Object.keys(item[1])[0])
+            }
+        })
     }
 
     render() {
@@ -123,9 +184,6 @@ export class Content extends PureComponent {
             labChangedRangeDate: range
         } = this.props
         const { isLoadedAll, isLoadedPercent, isLoadedAmount, isLoadedSource } = this.state
-
-        //console.log(range)
-        console.log(all)
 
         const rowTotal = {}
         amount &&
@@ -162,6 +220,7 @@ export class Content extends PureComponent {
         return (
             <App
                 menu={menu}
+                range={range}
                 param={param}
                 prop={prop}
                 equipment={equipment}
@@ -205,6 +264,10 @@ const mapDispatchToProps = {
     fetchLabAmountMiddleware,
     fetchLabSourceMiddleware,
     changeLabTargetMenu,
+    changeAll,
+    changePercent,
+    changeAmount,
+    changeSource,
     changeParam,
     changeProp,
     changeEquipmentNumber,

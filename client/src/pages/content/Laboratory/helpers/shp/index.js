@@ -1,6 +1,6 @@
 const clonedeep = require('lodash.clonedeep')
-const INDEXES_TECHNOLOGY = require('../../../../config/laboratory/shsp/technology')
-const INDEXES_FACT = require('../../../../config/laboratory/shsp/fact')
+const INDEXES_TECHNOLOGY = require('./config/shp/technology')
+const INDEXES_FACT = require('./config/shp/fact')
 
 // indexes technology
 const indexTechnologyName = INDEXES_TECHNOLOGY['name']
@@ -24,25 +24,10 @@ const indexFactMechanicalAdmixture = INDEXES_FACT['mechanicalAdmixture']
 const indexFactMetalInclusions = INDEXES_FACT['metalInclusions']
 const indexFactFlashPoint = INDEXES_FACT['flashPoint']
 const indexFactAcidNumber = INDEXES_FACT['acidNumber']
-// Столько дней назад от текущей даты учитываются данные
-// Данные к API отправляются только за период с началом (текущая дата минус указанное число дней)
-// При изменении интервала времени на клиенте, перерасчёт будет производится на клиенте
-// Так же на клиент будут отправлены сырые данные за весь период на другой адрес API
-const BEFORE_DAYS_RANGE = 365
 
-module.exports = function({ fact: f, technology: t }) {
-    const allFact = clonedeep(f).slice(4)
+export default function calculateDataShp({ fact: f, technology: t, startDate }) {
+    const fact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
-
-    // Начальная дата в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
-    // Получить массив с датой в миллисекундах
-    const all = clonedeep(allFact).map(item => {
-        item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
-        return item
-    })
-    // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
@@ -340,37 +325,20 @@ module.exports = function({ fact: f, technology: t }) {
         })
     })
 
-    if (Object.keys(percent).length === 0 || Object.keys(amount).length === 0) return
-
-    source = deleteEmptyProps(source)
-    percent = deleteEmptyProps(percent)
-    amount = deleteEmptyProps(amount)
+    if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
 
     return {
         amount,
         source,
-        percent,
-        all,
-        technology,
-        startDate
+        percent
     }
 }
 
 // Преобразовать дату (в виде дробного числа из excel)
 function ExcelDateToJSMsDate(serial) {
-    let currentDate
-    if (typeof serial === 'number') {
-        const utc_days = Math.floor(serial - 25569)
-        const utc_value = utc_days * 86400
-        currentDate = new Date(utc_value * 1000).getTime()
-    } else if (typeof serial === 'string') {
-        currentDate = new Date()
-        const y = serial.split('.')[2]
-        const yyyy = y.length === 2 ? `20${y}` : y
-        const mm = serial.split('.')[1] - 1
-        const dd = serial.split('.')[0] + 1
-        currentDate = new Date(yyyy, mm, dd).getTime()
-    }
+    const utc_days = Math.floor(serial - 25569)
+    const utc_value = utc_days * 86400
+    const currentDate = new Date(utc_value * 1000).getTime()
     return currentDate
 }
 
@@ -393,13 +361,21 @@ function getDateBeforeDaysFromNow(range) {
     return dateBeforeDays
 }
 
-// Удалить свойства, равные {}, т.е., когда нет фактических данных
-function deleteEmptyProps(data) {
-    let obj = {}
-    Object.entries(data).forEach(item => {
-        if (Object.values(item[1])[0]) {
-            obj[item[0]] = item[1]
-        }
-    })
-    return obj
+/*
+// Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
+function ExcelDateToJSDate(serial) {
+    const utc_days = Math.floor(serial - 25569)
+    const utc_value = utc_days * 86400
+    const date_info = new Date(utc_value * 1000)
+
+    const fractional_day = serial - Math.floor(serial) + 0.0000001
+    let total_seconds = Math.floor(86400 * fractional_day)
+    const seconds = total_seconds % 60
+    total_seconds -= seconds
+    const hours = Math.floor(total_seconds / (60 * 60))
+    const minutes = Math.floor(total_seconds / 60) % 60
+    return `${String(date_info.getDate()).padStart(2, '0')}.${String(
+        date_info.getMonth() + 1
+    ).padStart(2, '0')}.${String(date_info.getFullYear()).slice(2)}`
 }
+*/

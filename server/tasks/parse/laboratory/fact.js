@@ -30,7 +30,7 @@ module.exports = function({ app, parseLaboratoryFact, technology }) {
                 ) {
                     const shp = calculateDataShp({ fact: factShp, technology: technologyShp })
                     const shsp = calculateDataShsp({ fact: factShsp, technology: technologyShsp })
-                    //const sog = calculateDataSog({ fact: factSog, technology: technologySog })
+                    const sog = calculateDataSog({ fact: factSog, technology: technologySog })
 
                     resolve(
                         (() => {
@@ -38,8 +38,8 @@ module.exports = function({ app, parseLaboratoryFact, technology }) {
                                 app,
                                 data: {
                                     shp,
-                                    shsp
-                                    //sog
+                                    shsp,
+                                    sog
                                 }
                             })
                         })()

@@ -23,44 +23,50 @@ export default class DiameterComponent extends PureComponent {
     render() {
         const { source, prop, equipment, CustomizedAxisTick } = this.props
 
-        const data =
-            equipment === 'Сводная'
-                ? clonedeep(Object.values(source))
-                : clonedeep([source[equipment]])
+        let d
+        if (equipment === 'Сводная') {
+            d = source ? clonedeep(Object.values(source)) : null
+        } else {
+            d = source && source[equipment] ? clonedeep([source[equipment]]) : null
+        }
+
+        const data = d && d.filter(item => item !== null)
 
         let total = []
-        data.forEach((item, i) => {
-            item.forEach(val => {
-                const fact = +val['fact']
+        data &&
+            data.forEach((item, i) => {
+                item &&
+                    item.forEach(val => {
+                        const fact = +val['fact']
 
-                if (item[0]['technology'][0]) {
-                    const min = +val['technology'][0]
-                    const max = +val['technology'][1]
-                    if (fact >= min && fact <= max) {
-                        val[`trueFact${i}`] = fact
-                    } else {
-                        val[`falseFact${i}`] = fact
-                    }
-                } else {
-                    if (prop === 't вспышки, не менее град С') {
-                        if (fact > +val['technology']) {
-                            val[`trueFact${i}`] = fact
+                        if (item[0]['technology'][0]) {
+                            const min = +val['technology'][0]
+                            const max = +val['technology'][1]
+                            if (fact >= min && fact <= max) {
+                                val[`trueFact${i}`] = fact
+                            } else {
+                                val[`falseFact${i}`] = fact
+                            }
                         } else {
-                            val[`falseFact${i}`] = fact
+                            if (prop === 't вспышки, не менее град С') {
+                                if (fact > +val['technology']) {
+                                    val[`trueFact${i}`] = fact
+                                } else {
+                                    val[`falseFact${i}`] = fact
+                                }
+                            } else {
+                                if (fact > +val['technology']) {
+                                    val[`falseFact${i}`] = fact
+                                } else {
+                                    val[`trueFact${i}`] = fact
+                                }
+                            }
                         }
-                    } else {
-                        if (fact > +val['technology']) {
-                            val[`falseFact${i}`] = fact
-                        } else {
-                            val[`trueFact${i}`] = fact
-                        }
-                    }
-                }
 
-                val[`fact${i}`] = fact
-                total = [...total, val]
+                        val[`fact${i}`] = fact
+                        total = [...total, val]
+                    })
             })
-        })
 
         // Группировать объекты по дате. Свойства объекта - дата
         const obj = {}
@@ -82,14 +88,15 @@ export default class DiameterComponent extends PureComponent {
 
         // Меню (оборудование)
         let items = []
-        clonedeep(Object.keys(source)).forEach(item => {
-            items = [
-                ...items,
-                <Menu.Item key={item}>
-                    <span>{item}</span>
-                </Menu.Item>
-            ]
-        })
+        source &&
+            clonedeep(Object.keys(source)).forEach(item => {
+                items = [
+                    ...items,
+                    <Menu.Item key={item}>
+                        <span>{item}</span>
+                    </Menu.Item>
+                ]
+            })
 
         const MenuComponent = (
             <div className="laboratoryMenu">
@@ -114,70 +121,76 @@ export default class DiameterComponent extends PureComponent {
             scattersTrue = [],
             scattersFalse = [],
             lines = []
-        data.forEach((item, i) => {
-            lines = [
-                ...lines,
-                <Line
-                    type="linear"
-                    key={`fact${i}`}
-                    dataKey={`fact${i}`}
-                    stroke={'#444'}
-                    strokeWidth={0.5}
-                    connectNulls={true}
-                    isAnimationActive={false}
-                />
-            ]
+        data &&
+            data.forEach((item, i) => {
+                lines = [
+                    ...lines,
+                    <Line
+                        type="linear"
+                        key={`fact${i}`}
+                        dataKey={`fact${i}`}
+                        stroke={'#444'}
+                        strokeWidth={0.5}
+                        connectNulls={true}
+                        isAnimationActive={false}
+                    />
+                ]
 
-            scattersTrue = [
-                ...scattersTrue,
-                <Scatter
-                    dataKey={`trueFact${i}`}
-                    key={`trueFact${i}`}
-                    stroke="lightgreen"
-                    strokeWidth={1}
-                    fill="lightgreen"
-                    isAnimationActive={false}
-                >
-                    <LabelList dataKey={`trueFact${i}`} position="bottom" />
-                </Scatter>
-            ]
+                scattersTrue = [
+                    ...scattersTrue,
+                    <Scatter
+                        dataKey={`trueFact${i}`}
+                        key={`trueFact${i}`}
+                        stroke="lightgreen"
+                        strokeWidth={1}
+                        fill="lightgreen"
+                        isAnimationActive={false}
+                    >
+                        <LabelList dataKey={`trueFact${i}`} position="bottom" />
+                    </Scatter>
+                ]
 
-            scattersFalse = [
-                ...scattersFalse,
-                <Scatter
-                    dataKey={`falseFact${i}`}
-                    key={`falseFact${i}`}
-                    stroke="lightcoral"
-                    strokeWidth={1}
-                    fill="lightcoral"
-                    isAnimationActive={false}
-                >
-                    <LabelList dataKey={`falseFact${i}`} position="bottom" />
-                </Scatter>
-            ]
+                scattersFalse = [
+                    ...scattersFalse,
+                    <Scatter
+                        dataKey={`falseFact${i}`}
+                        key={`falseFact${i}`}
+                        stroke="lightcoral"
+                        strokeWidth={1}
+                        fill="lightcoral"
+                        isAnimationActive={false}
+                    >
+                        <LabelList dataKey={`falseFact${i}`} position="bottom" />
+                    </Scatter>
+                ]
 
-            factComponents = [...lines, ...scattersTrue, ...scattersFalse]
-        })
+                factComponents = [...lines, ...scattersTrue, ...scattersFalse]
+            })
 
         // Компоненты технология
-        const technologyComponent = data[0][0]['technology'][0] ? (
-            <Area
-                type="monotone"
-                dataKey="technology"
-                stroke="#000"
-                fill="lightblue"
-                isAnimationActive={false}
-            />
-        ) : (
-            <Line
-                type="linear"
-                dataKey="technology"
-                stroke="#000"
-                strokeWidth={1.5}
-                dot={false}
-                isAnimationActive={false}
-            />
-        )
+        const technologyComponent =
+            data &&
+            data[0] &&
+            data[0][0] &&
+            data[0][0]['technology'] &&
+            data[0][0]['technology'][0] ? (
+                <Area
+                    type="monotone"
+                    dataKey="technology"
+                    stroke="#000"
+                    fill="lightblue"
+                    isAnimationActive={false}
+                />
+            ) : (
+                <Line
+                    type="linear"
+                    dataKey="technology"
+                    stroke="#000"
+                    strokeWidth={1.5}
+                    dot={false}
+                    isAnimationActive={false}
+                />
+            )
 
         return (
             <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
