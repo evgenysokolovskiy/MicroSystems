@@ -1,9 +1,10 @@
 // 4) Расчитать план ремонтов по производствам
 
 const NAMES_PLANNING_PERIOD = require('../../config/repaire/').NAMES_PLANNING_PERIOD
-const calculateRepairComplexityInPlanningPeriod = require('./_3-calculateRepairComplexityInPlanningPeriod')
+const calculateRepairComplexityInPlanningPeriod = require(appRoot +
+    '/server/tasks/calculatePlan/_3-calculateRepairComplexityInPlanningPeriod')
 
-module.exports = function(data) {
+module.exports = function (data) {
     // Рассчитано месячное значение трудоемкости
     const d = { ...calculateRepairComplexityInPlanningPeriod(data) }
     // Необходимо разбить всё оборудование на равные по ремонтной сложности группы
@@ -11,7 +12,7 @@ module.exports = function(data) {
     // За основу взята механическая часть
     const plan = {}
     let arr = []
-    Object.keys(d).forEach(key => {
+    Object.keys(d).forEach((key) => {
         // Сортировать массивы объекта по значению свойства sumAmount от максимального значения
         sortBySumAmount(d[key]['data'])
 
@@ -35,7 +36,7 @@ module.exports = function(data) {
         // Выгрузить оставшиеся данные после завершения цикла
         // }
 
-        d[key]['data'].forEach(item => {
+        d[key]['data'].forEach((item) => {
             if (rest > 0) {
                 if (item['typeOfRepair'] === 'medium') {
                     accumulator = [...accumulator, item]

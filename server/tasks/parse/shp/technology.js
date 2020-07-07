@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const INDEXES = require('../../../config/shp/technology')
+const INDEXES = require(appRoot + '/server/config/shp/technology')
 const {
     INDEXES_STAMPING,
     INDEXES_RUNNING,
@@ -11,13 +11,13 @@ const {
     INDEXES_CLEAN,
     INDEXES_FINAL
 } = INDEXES
-const convertTechnology = require('../../shp/convertTechnology/')
+const convertTechnology = require(appRoot + '/server/tasks/shp/convertTechnology/')
 
-module.exports = function({ app, parseShpTechnology, parseShpFact, fact }) {
-    fs.readdir(parseShpTechnology, function(err, files) {
-        const paths = files.map(item => `${parseShpTechnology}/${item}`)
+module.exports = function ({ app, parseShpTechnology, parseShpFact, fact }) {
+    fs.readdir(parseShpTechnology, function (err, files) {
+        const paths = files.map((item) => `${parseShpTechnology}/${item}`)
         for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
+            new Promise(function (resolve, reject) {
                 let stamping, running, grinding, rough, clean, final
 
                 const data = xlsx.parse(`${paths[i]}`)[0].data
@@ -52,7 +52,7 @@ module.exports = function({ app, parseShpTechnology, parseShpFact, fact }) {
                 } else {
                     reject(new Error('Err'))
                 }
-            }).catch(err => console.log(err))
+            }).catch((err) => console.log(err))
         }
     })
 }
@@ -61,10 +61,10 @@ function convertData(data, INDEXES) {
     let arr = []
     // Преобразовать объект в массив
     const indexes = [...Object.entries(INDEXES)]
-    data.forEach(item => {
+    data.forEach((item) => {
         if (!item[0]) return
         const obj = {}
-        indexes.forEach(i => {
+        indexes.forEach((i) => {
             const indexDate = i[0] === 'date' ? i[1] : null
             obj[i[0]] =
                 typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]

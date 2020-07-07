@@ -15,11 +15,22 @@ code {
     monospace;
 }
 
+/* Antd */
+
 .ant-menu,
 .ant-tabs,
 .ant-collapse > .ant-collapse-item 
 .ant-collapse-header {
   color: #000 !important;
+  font-size: 14px !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item a {
+  color: #FFF;
+}
+
+.ant-tabs-nav {
+  margin-bottom: 0 !important;
 }
 
 .ant-table {
@@ -34,6 +45,8 @@ code {
     background: transparent;
 }
 
+/* Other */
+
 .loading {
 	position: absolute;
 	top: 50vh;
@@ -44,8 +57,10 @@ code {
   color: red;
 }
 
+.mainMenuLink {
+  font-weight: 300;
+}
 table {
-  border: 1px solid #000;
   width: 80vw;
 }
 

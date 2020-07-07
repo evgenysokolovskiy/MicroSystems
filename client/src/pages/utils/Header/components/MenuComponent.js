@@ -13,18 +13,26 @@ export default class MenuComponent extends React.Component {
                 selectedKeys={[currentPath]}
                 style={{ lineHeight: '15vh', marginRight: 'auto' }}
             >
-                <Menu.Item key="/repair/">
-                    <Link to="/repair/">УПРАВЛЕНИЕ РЕМОНТОВ</Link>
+                <Menu.Item key="/repair">
+                    <h1 className="mainMenuLink">
+                        <Link to="/repair">УПРАВЛЕНИЕ РЕМОНТОВ</Link>
+                    </h1>
                 </Menu.Item>
-                <Menu.Item key="/tech/">
-                    <Link to="/tech/">ПРИКАЗ №17</Link>
+                <Menu.Item key="/tech">
+                    <h1 className="mainMenuLink">
+                        <Link to="/tech">ПРИКАЗ №17</Link>
+                    </h1>
                 </Menu.Item>
-                <Menu.Item key="/laboratory/">
-                    <Link to="/laboratory/">ЛАБОРАТОРИЯ</Link>
+                <Menu.Item key="/laboratory">
+                    <h1 className="mainMenuLink">
+                        <Link to="/laboratory">ЛАБОРАТОРИЯ</Link>
+                    </h1>
                 </Menu.Item>
+                {/*
                 <Menu.Item key="/vbf21/">
                     <Link to="/vbf21/">VBF-21</Link>
                 </Menu.Item>
+                */}
             </Menu>
         )
     }

@@ -3,8 +3,8 @@ const origin = window.location.origin
 // Repair
 export const data = `${origin}/api/plan`
 export const checkForGeneralUse = [
-    `${origin}/api/checkForGeneralUse/3`,
-    `${origin}/api/checkForGeneralUse/4`
+    `${origin}/api/checkforgeneraluse/3`,
+    `${origin}/api/checkforgeneraluse/4`
 ]
 
 export const checkForAntd = [

@@ -20,8 +20,8 @@ export default class AxisCardComponent extends PureComponent {
 
         let startArr = [] //, endArr = []
 
-        Object.entries(type).forEach(card => {
-            Object.entries(card[1]).forEach(procedure => {
+        Object.entries(type).forEach((card) => {
+            Object.entries(card[1]).forEach((procedure) => {
                 if (procedure[1]['msBatchLoadingTime'])
                     startArr = [...startArr, procedure[1]['msBatchLoadingTime']]
                 //endArr = [...endArr, procedure[1]['msUnloadingTime']]

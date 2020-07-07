@@ -13,8 +13,7 @@ import {
     LabelList
 } from 'recharts'
 
-import { Icon } from 'antd'
-const color = 'lightcoral'
+import { LoadingOutlined } from '@ant-design/icons'
 
 export default class DiameterComponent extends PureComponent {
     render() {
@@ -141,8 +140,7 @@ export default class DiameterComponent extends PureComponent {
                     {component ? (
                         component
                     ) : (
-                        <Icon
-                            type="loading"
+                        <LoadingOutlined
                             className="loading"
                             style={{ fontSize: '20px', color: 'red' }}
                         />

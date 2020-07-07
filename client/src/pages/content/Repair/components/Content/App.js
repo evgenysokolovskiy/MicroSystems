@@ -10,7 +10,7 @@ const TableComponent = lazy(() => import('./TableComponent'))
 const CheckComponent = lazy(() => import('./CheckComponent'))
 const SchemeComponent = lazy(() => import('./SchemeComponent'))
 
-export const App = props => {
+export const App = (props) => {
     const {
         data,
         checkForGeneralUse,

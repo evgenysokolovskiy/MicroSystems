@@ -19,10 +19,10 @@ const ChartComponent = lazy(() => import('./ChartComponents/ChartComponent'))
 
 const { Content } = Layout
 const { TabPane } = Tabs
-const { Title, Text } = Typography
+const { Title } = Typography
 
 // Функция правильного отображения числовых значений для отсечек на XAxis
-const CustomizedAxisTick = props => {
+const CustomizedAxisTick = (props) => {
     const { x, y, payload } = props
 
     return (
@@ -58,8 +58,8 @@ export default class App extends PureComponent {
             (source && param && !prop && prevProps.source !== source) ||
             prevProps.param !== param
         ) {
-            const val = Object.values(source).find(item => Object.keys(item).length)
-            handleClickProp(Object.keys(val)[0])
+            const val = Object.values(source).find((item) => Object.keys(item).length)
+            val && handleClickProp(Object.keys(val)[0])
         }
 
         if (
@@ -73,16 +73,16 @@ export default class App extends PureComponent {
         }
     }
 
-    handleChange = e => {
+    handleChange = (e) => {
         this.props.handleClickAmount(e)
         this.setState({ activeTab: e })
     }
 
-    handleChangeParam = e => {
+    handleChangeParam = (e) => {
         this.props.handleClickParam(e)
     }
 
-    handleChangeProp = e => {
+    handleChangeProp = (e) => {
         this.props.handleClickProp(e)
     }
 
@@ -144,9 +144,7 @@ export default class App extends PureComponent {
             columnTotal,
             isLoadedPercent,
             isLoadedAmount,
-            isLoadedSource,
             handleClickMenu,
-            handleClickAmount,
             handleClickParam,
             handleClickProp,
             handleClickEquipment,

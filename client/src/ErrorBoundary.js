@@ -1,5 +1,4 @@
 import React from 'react'
-import { Result } from 'antd'
 
 export default class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -19,11 +18,19 @@ export default class ErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <Result
-                    status="404"
-                    title="404"
-                    subTitle="Ошибка... Попробуйте перезагрузить приложение!"
-                />
+                <div>
+                    <p>В некоторых браузерах возможна ошибка роутинга!</p>
+                    <p>
+                        Возможно, конфигурация Webpack имеет особенности для размещения на Heroku.
+                    </p>
+                    <p>В любом случае, версия на Heroku используется только для разработки.</p>
+                    <p>
+                        Пожалуйста, перезагрузите приложение! Можно использовать кнопку >>>
+                        <button>
+                            <a href="http://indust.herokuapp.com/">Перезагрузить!</a>
+                        </button>
+                    </p>
+                </div>
             )
         }
 

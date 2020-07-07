@@ -24,13 +24,13 @@ const indexFactMetalInclusions = INDEXES_FACT['metalInclusions']
 const indexFactFlashPoint = INDEXES_FACT['flashPoint']
 const indexFactAcidNumber = INDEXES_FACT['acidNumber']
 
-module.exports = function({ fact: f, technology: t }) {
+module.exports = function ({ fact: f, technology: t }) {
     const fact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach(t => {
+    technology.forEach((t) => {
         const obj = {}
         if (typeof t[indexTechnologyInhibitorMin] === 'number') {
             obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
@@ -60,7 +60,7 @@ module.exports = function({ fact: f, technology: t }) {
     // 2) На основании технологии и факта просчитать количество true/false для каждого свойства и значения
     let amount = {}
     let source = {}
-    fact.forEach(f => {
+    fact.forEach((f) => {
         if (!f[indexFactName]) return
         const name = f[indexFactName].trim()
 
@@ -259,9 +259,9 @@ module.exports = function({ fact: f, technology: t }) {
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach(item => {
+    Object.entries(amount).forEach((item) => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach(prop => {
+        Object.entries(item[1]).forEach((prop) => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
@@ -270,6 +270,10 @@ module.exports = function({ fact: f, technology: t }) {
     })
 
     if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
+
+    source = deleteEmptyProps(source)
+    percent = deleteEmptyProps(percent)
+    amount = deleteEmptyProps(amount)
 
     return {
         amount,
@@ -293,4 +297,15 @@ function ExcelDateToJSDate(serial) {
     return `${String(date_info.getDate()).padStart(2, '0')}.${String(
         date_info.getMonth() + 1
     ).padStart(2, '0')}.${String(date_info.getFullYear()).slice(2)}`
+}
+
+// Удалить свойства, равные {}, т.е., когда нет фактических данных
+function deleteEmptyProps(data) {
+    let obj = {}
+    Object.entries(data).forEach((item) => {
+        if (Object.values(item[1])[0]) {
+            obj[item[0]] = item[1]
+        }
+    })
+    return obj
 }

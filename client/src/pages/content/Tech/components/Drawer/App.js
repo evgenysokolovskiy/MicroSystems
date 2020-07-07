@@ -1,5 +1,6 @@
 import React, { PureComponent, Suspense, lazy } from 'react'
-import { Drawer, Icon, Typography } from 'antd'
+import { Drawer, Typography } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const TableComponent = lazy(() => import('./TableComponent'))
 const StatisticComponent = lazy(() => import('./StatisticComponent'))
@@ -13,7 +14,7 @@ export default class App extends PureComponent {
         differencePressure: null,
         differenceSpeed: null
     }
-    onGetData = data => {
+    onGetData = (data) => {
         const {
             differenceDiameter,
             differenceInconstancy,
@@ -59,8 +60,7 @@ export default class App extends PureComponent {
                     {visible && (
                         <Suspense
                             fallback={
-                                <Icon
-                                    type="loading"
+                                <LoadingOutlined
                                     className="loading"
                                     style={{ fontSize: '20px', color: 'red' }}
                                 />

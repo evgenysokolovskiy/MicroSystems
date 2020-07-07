@@ -1,6 +1,6 @@
 const clonedeep = require('lodash.clonedeep')
-const INDEXES_TECHNOLOGY = require('../../../../config/laboratory/sog/technology')
-const INDEXES_FACT = require('../../../../config/laboratory/sog/fact')
+const INDEXES_TECHNOLOGY = require(appRoot + '/server/config/laboratory/sog/technology')
+const INDEXES_FACT = require(appRoot + '/server/config/laboratory/sog/fact')
 
 // indexes technology
 const indexTechnologyName = INDEXES_TECHNOLOGY['name']
@@ -31,6 +31,7 @@ const indexFactNitrite = INDEXES_FACT['nitrite']
 const indexFactDegree = INDEXES_FACT['degree']
 const indexFactCorrosion = INDEXES_FACT['corrosion']
 const indexFactMechanicalAdmixture = INDEXES_FACT['mechanicalAdmixture']
+const indexFactSoap = INDEXES_FACT['soap']
 
 // Столько дней назад от текущей даты учитываются данные
 // Данные к API отправляются только за период с началом (текущая дата минус указанное число дней)
@@ -38,7 +39,7 @@ const indexFactMechanicalAdmixture = INDEXES_FACT['mechanicalAdmixture']
 // Так же на клиент будут отправлены сырые данные за весь период на другой адрес API
 const BEFORE_DAYS_RANGE = 365
 
-module.exports = function({ fact: f, technology: t }) {
+module.exports = function ({ fact: f, technology: t }) {
     const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
 
@@ -46,17 +47,17 @@ module.exports = function({ fact: f, technology: t }) {
     const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
 
     // Получить массив с датой в миллисекундах
-    const all = clonedeep(allFact).map(item => {
+    const all = clonedeep(allFact).map((item) => {
         item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
         return item
     })
 
     // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
+    const fact = clonedeep(all).filter((item) => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach(t => {
+    technology.forEach((t) => {
         const obj = {}
         if (typeof t[indexTechnologyPhMin] === 'number') {
             obj['phMin'] = t[indexTechnologyPhMin]
@@ -97,7 +98,7 @@ module.exports = function({ fact: f, technology: t }) {
     let amount = {}
     let source = {}
 
-    fact.forEach(f => {
+    fact.forEach((f) => {
         if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
@@ -385,13 +386,49 @@ module.exports = function({ fact: f, technology: t }) {
                 ]
             }
         }
+
+        // Концентрация
+        if (
+            f[indexFactSoap] &&
+            objTechnology[name] &&
+            typeof objTechnology[name]['soapMin'] === 'number' &&
+            typeof objTechnology[name]['soapMax'] === 'number'
+        ) {
+            if (!amount[name]['Мыло, г/л']) amount[name]['Мыло, г/л'] = { true: 0, false: 0 }
+
+            if (typeof f[indexFactSoap] === 'number') {
+                if (
+                    f[indexFactSoap] >= objTechnology[name]['soapMin'] &&
+                    f[indexFactSoap] <= objTechnology[name]['soapMax']
+                ) {
+                    amount[name]['Мыло, г/л']['true']++
+                } else {
+                    amount[name]['Мыло, г/л']['false']++
+                }
+
+                // Группировать по инвентарным номерам (машинам)
+                if (!source[name]['Мыло, г/л']) source[name]['Мыло, г/л'] = {}
+                const inn = f[indexFactInn]
+                let data = source[name]['Мыло, г/л'][inn]
+                if (!data) data = []
+                source[name]['Мыло, г/л'][inn] = [
+                    ...data,
+                    {
+                        date: msDateToString(f[indexFactDate]),
+                        msDate: f[indexFactDate],
+                        fact: f[indexFactSoap],
+                        technology: [objTechnology[name]['soapMin'], objTechnology[name]['soapMax']]
+                    }
+                ]
+            }
+        }
     })
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach(item => {
+    Object.entries(amount).forEach((item) => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach(prop => {
+        Object.entries(item[1]).forEach((prop) => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
@@ -455,7 +492,7 @@ function getDateBeforeDaysFromNow(range) {
 // Удалить свойства, равные {}, т.е., когда нет фактических данных
 function deleteEmptyProps(data) {
     let obj = {}
-    Object.entries(data).forEach(item => {
+    Object.entries(data).forEach((item) => {
         if (Object.values(item[1])[0]) {
             obj[item[0]] = item[1]
         }

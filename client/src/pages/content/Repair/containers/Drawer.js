@@ -14,7 +14,7 @@ export class Drawer extends PureComponent {
         const d = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
         d &&
             d['data'].forEach((item, i) =>
-                item.forEach(it => {
+                item.forEach((it) => {
                     if (+it['inn'] === +targetInn) {
                         dataInn = it
                         period = d['period'][i]

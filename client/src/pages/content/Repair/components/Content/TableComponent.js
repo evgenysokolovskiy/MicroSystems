@@ -4,7 +4,7 @@ import { Table, Tabs } from 'antd'
 
 const { TabPane } = Tabs
 
-export default function(props) {
+export default function (props) {
     const { data, handleClickRow, handleClickOpenDrawer } = props
     // Найти 'column'
     // Исходный вид
@@ -35,7 +35,7 @@ export default function(props) {
         {
             title: 'Инв. №',
             dataIndex: 'inn',
-            render: text => {
+            render: (text) => {
                 return {
                     children: text,
                     props: {
@@ -63,7 +63,7 @@ export default function(props) {
     let nodes = []
     let allNodes = {}
     if (data) {
-        Object.keys(data['nodes']).forEach(node => {
+        Object.keys(data['nodes']).forEach((node) => {
             allNodes[node] = ''
             const obj = {
                 title: node,
@@ -92,7 +92,7 @@ export default function(props) {
                 // Событие на ячейке
                 onCell: (record, rowIndex) => {
                     return {
-                        onClick: event => {
+                        onClick: (event) => {
                             //console.log(event.currentTarget, rowIndex)
                         }
                     }
@@ -111,7 +111,7 @@ export default function(props) {
         // Для каждого периода времени строится своя таблица
         // Далее соотносится с Tabs
         let tables = []
-        data['data'].forEach(period => {
+        data['data'].forEach((period) => {
             // Найти 'dataSource'
             let dataSource = []
             period.forEach((item, i) => {
@@ -126,7 +126,7 @@ export default function(props) {
                     ...allNodes
                 }
 
-                Object.keys(item['nodes']).forEach(node => {
+                Object.keys(item['nodes']).forEach((node) => {
                     obj[node] = ' '
                 })
 
@@ -147,12 +147,12 @@ export default function(props) {
                         // Событие на строке
                         onRow={(record, rowIndex) => {
                             return {
-                                onClick: event => {
+                                onClick: (event) => {
                                     handleClickOpenDrawer()
                                     //console.log(event.currentTarget, rowIndex)
                                     const arr = [...event.currentTarget.children]
                                     arr.forEach(
-                                        item =>
+                                        (item) =>
                                             item.hasAttribute('inn') &&
                                             handleClickRow(item.getAttribute('inn'))
                                     )

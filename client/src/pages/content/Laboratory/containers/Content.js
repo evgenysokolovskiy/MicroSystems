@@ -42,19 +42,9 @@ export class Content extends PureComponent {
         isLoadedAmount: false,
         isLoadedSource: false
     }
-    /*
-    componentDidUpdate(prevProps) {
-        const { labMenu: menu, labSource: source, labParam: param, labProp: prop, changeParam, changeProp } = this.props
-        if (source && prevProps.source !== source) {
-            const par = Object.keys(source)[0]
-            changeParam(par)
-            changeProp(Object.keys(source[par])[0])
-        }
-    }
-*/
 
     // Событие по меню (выбора процедуры)
-    handleClickMenu = item => {
+    handleClickMenu = (item) => {
         const {
             fetchLabAmountMiddleware,
             fetchLabPercentMiddleware,
@@ -95,10 +85,9 @@ export class Content extends PureComponent {
         })
     }
 
-    handleClickAmount = e => {
+    handleClickAmount = (e) => {
         const {
             labTargetMenu: menu,
-            labAmount,
             fetchLabAmountMiddleware,
             fetchLabPercentMiddleware
         } = this.props
@@ -125,55 +114,61 @@ export class Content extends PureComponent {
         })
     }
 
-    handleClickParam = item => {
-        this.props.changeParam(item)
-        this.props.changeEquipmentNumber('Сводная')
+    handleClickParam = (item) => {
+        const { changeParam, changeEquipmentNumber } = this.props
+        changeParam(item)
+        changeEquipmentNumber('Сводная')
     }
 
-    handleClickProp = item => {
-        this.props.changeProp(item)
-        this.props.changeEquipmentNumber('Сводная')
+    handleClickProp = (item) => {
+        const { changeProp, changeEquipmentNumber } = this.props
+        changeProp(item)
+        changeEquipmentNumber('Сводная')
     }
 
-    handleClickEquipment = item => {
+    handleClickEquipment = (item) => {
         this.props.changeEquipmentNumber(item)
     }
 
-    handleClickRangeDate = range => {
+    handleClickRangeDate = (range) => {
         const {
             labAll,
             changeAll,
             changePercent,
             changeAmount,
             changeSource,
+            changeParam,
+            changeProp,
             changeRangeDate
         } = this.props
 
         const defaultData = clonedeep(labAll['default'])
         const technology = defaultData['technology']
-        const startDate = labAll['default']['defaultStart']
         const dateIndex = defaultData['dateIndex']
         const data =
-            defaultData['data'] && defaultData['data'].filter(item => item[dateIndex] > range[0])
+            defaultData['data'] &&
+            defaultData['data'].filter(
+                (item) => item[dateIndex] > range[0] && item[dateIndex] < range[1]
+            )
         const current = calculateDataShp({ fact: data, technology, startDate: range[0] })
 
-        changePercent(current['percent'])
-        changeAmount(current['amount'])
-        changeSource(current['source'])
-        changeAll({ default: defaultData, current })
         changeRangeDate(range)
 
-        Object.entries(current['source']).forEach(item => {
+        Object.entries(current['source']).forEach((item) => {
             if (Object.keys(item[1])[0]) {
-                this.props.changeParam(item[0])
-                this.props.changeProp(Object.keys(item[1])[0])
+                changeParam(item[0])
+                changeProp(Object.keys(item[1])[0])
+
+                changePercent(current['percent'])
+                changeAmount(current['amount'])
+                changeSource(current['source'])
+                changeAll({ default: defaultData, current })
             }
         })
     }
 
     render() {
         const {
-            labAll: all,
             labPercent: percent,
             labAmount: amount,
             labSource: source,
@@ -187,12 +182,12 @@ export class Content extends PureComponent {
 
         const rowTotal = {}
         amount &&
-            Object.entries(amount).forEach(item => {
+            Object.entries(amount).forEach((item) => {
                 let t = 0
                 let f = 0
                 rowTotal[item[0]] = {}
 
-                Object.values(item[1]).forEach(val => {
+                Object.values(item[1]).forEach((val) => {
                     t += val['true']
                     f += val['false']
                 })
@@ -204,8 +199,8 @@ export class Content extends PureComponent {
 
         const columnTotal = {}
         amount &&
-            Object.values(amount).forEach(item => {
-                Object.entries(item).forEach(val => {
+            Object.values(amount).forEach((item) => {
+                Object.entries(item).forEach((val) => {
                     if (!columnTotal[val[0]]) columnTotal[val[0]] = { true: 0, false: 0 }
                     columnTotal[val[0]]['true'] += val[1]['true']
                     columnTotal[val[0]]['false'] += val[1]['false']

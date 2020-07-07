@@ -31,7 +31,7 @@ export default function calculateDataShp({ fact: f, technology: t, startDate }) 
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach(t => {
+    technology.forEach((t) => {
         const obj = {}
         if (typeof t[indexTechnologyInhibitorMin] === 'number') {
             obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
@@ -61,9 +61,9 @@ export default function calculateDataShp({ fact: f, technology: t, startDate }) 
     // 2) На основании технологии и факта просчитать количество true/false для каждого свойства и значения
     let amount = {}
     let source = {}
-    fact.forEach(f => {
+    fact.forEach((f) => {
         if (!f[indexFactName] || !f[indexFactDate]) return
-        const name = f[indexFactName].trim()
+        const name = f[indexFactName] || f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
         if (!source[name]) source[name] = {}
 
@@ -315,9 +315,9 @@ export default function calculateDataShp({ fact: f, technology: t, startDate }) 
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach(item => {
+    Object.entries(amount).forEach((item) => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach(prop => {
+        Object.entries(item[1]).forEach((prop) => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
@@ -327,19 +327,15 @@ export default function calculateDataShp({ fact: f, technology: t, startDate }) 
 
     if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
 
+    source = deleteEmptyProps(source)
+    percent = deleteEmptyProps(percent)
+    amount = deleteEmptyProps(amount)
+
     return {
         amount,
         source,
         percent
     }
-}
-
-// Преобразовать дату (в виде дробного числа из excel)
-function ExcelDateToJSMsDate(serial) {
-    const utc_days = Math.floor(serial - 25569)
-    const utc_value = utc_days * 86400
-    const currentDate = new Date(utc_value * 1000).getTime()
-    return currentDate
 }
 
 // Преобразовать миллисекунды в строку
@@ -351,31 +347,13 @@ function msDateToString(ms) {
     return `${String(day).padStart(2, '0')}.${String(month).padStart(2, '0')}.${String(year)}`
 }
 
-// Получить дату назад от текущей даты указанное кол-во дней
-function getDateBeforeDaysFromNow(range) {
-    // 86400000 - миллисекунд в сутках
-    const daysBefore = range * 86400000
-    // Текущая дата
-    const now = Date.now()
-    const dateBeforeDays = now - daysBefore
-    return dateBeforeDays
+// Удалить свойства, равные {}, т.е., когда нет фактических данных
+function deleteEmptyProps(data) {
+    let obj = {}
+    Object.entries(data).forEach((item) => {
+        if (Object.values(item[1])[0]) {
+            obj[item[0]] = item[1]
+        }
+    })
+    return obj
 }
-
-/*
-// Преобразовать дату (в виде дробного числа из excel) в формат времени 13:00
-function ExcelDateToJSDate(serial) {
-    const utc_days = Math.floor(serial - 25569)
-    const utc_value = utc_days * 86400
-    const date_info = new Date(utc_value * 1000)
-
-    const fractional_day = serial - Math.floor(serial) + 0.0000001
-    let total_seconds = Math.floor(86400 * fractional_day)
-    const seconds = total_seconds % 60
-    total_seconds -= seconds
-    const hours = Math.floor(total_seconds / (60 * 60))
-    const minutes = Math.floor(total_seconds / 60) % 60
-    return `${String(date_info.getDate()).padStart(2, '0')}.${String(
-        date_info.getMonth() + 1
-    ).padStart(2, '0')}.${String(date_info.getFullYear()).slice(2)}`
-}
-*/

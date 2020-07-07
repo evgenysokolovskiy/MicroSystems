@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 // Antd
 import { Table } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 const { Column, ColumnGroup } = Table
 
-export default function({
+export default function ({
     percent,
     param,
     prop,
@@ -18,7 +18,7 @@ export default function({
         const count = ++i
         const item = {
             key: count,
-            fabric: 'СПиТК',
+            fabric: '',
             name: param,
             inhibitor: (() => percent[param]['Ингибитор, %'])(),
             viscosity: (() => percent[param]['Вязкость, мм2/сек'])(),
@@ -34,7 +34,7 @@ export default function({
 
     let t = 0,
         f = 0
-    Object.values(rowTotal).forEach(item => {
+    Object.values(rowTotal).forEach((item) => {
         t += item['true']
         f += item['false']
     })
@@ -43,8 +43,8 @@ export default function({
 
     const total = {
         key: 1000,
-        fabric: 'ИТОГО',
-        name: '',
+        fabric: '',
+        name: 'ИТОГО',
         inhibitor: (() =>
             columnTotal['Ингибитор, %'] && columnTotal['Ингибитор, %']['percentTrue'])(),
         viscosity: (() =>
@@ -78,13 +78,13 @@ export default function({
             rowClassName={(record, index) => record['name'] === param && 'selected'}
             onRow={(record, rowIndex) => {
                 return {
-                    onClick: event => {
+                    onClick: (event) => {
                         handleChangeParam(record)
                     }
                 }
             }}
         >
-            <Column title="Пр-во" dataIndex="fabric" key="fabric" width={80} align="center" />
+            {/*<Column title="Пр-во" dataIndex="fabric" key="fabric" width={80} align="center" />*/}
 
             <Column title="Наименование" dataIndex="name" key="name" width={200} align="center" />
             <ColumnGroup title="Контролируемые параметры">
@@ -111,7 +111,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 'Ингибитор, %' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -143,7 +143,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 'Вязкость, мм2/сек' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -174,7 +174,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 'H2O, %' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -206,7 +206,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 'Механические примеси, %' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -238,7 +238,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 'Металлические включения' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -270,7 +270,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 't вспышки, не менее град С' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -302,7 +302,7 @@ export default function({
                     width={50}
                     align="center"
                     className={prop === 'Кислотное число, мг.кон' ? 'selected' : null}
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)

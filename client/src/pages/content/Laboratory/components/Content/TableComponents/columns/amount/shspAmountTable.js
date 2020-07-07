@@ -1,17 +1,17 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 // Antd
 import { Table } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 const { Column, ColumnGroup } = Table
 
-export default function({ amount, param, prop, handleChangeProp, handleChangeParam }) {
+export default function ({ amount, param, prop, handleChangeProp, handleChangeParam }) {
     let dataSource = []
     Object.keys(amount).forEach((param, i) => {
         const count = ++i
 
         const item = {
             key: count,
-            fabric: 'СПиТК',
+            fabric: '',
             name: param,
             inhibitorTrue: (() =>
                 amount[param]['Ингибитор, %'] && amount[param]['Ингибитор, %']['true'])(),
@@ -63,13 +63,13 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
             rowClassName={(record, index) => record['name'] === param && 'selected'}
             onRow={(record, rowIndex) => {
                 return {
-                    onClick: event => {
+                    onClick: (event) => {
                         handleChangeParam(record)
                     }
                 }
             }}
         >
-            <Column title="Пр-во" dataIndex="fabric" key="fabric" width={80} align="center" />
+            {/*<Column title="Пр-во" dataIndex="fabric" key="fabric" width={80} align="center" />*/}
             <Column title="Наименование" dataIndex="name" key="name" width={200} align="center" />
             <ColumnGroup title="Контролируемые параметры">
                 <ColumnGroup
@@ -90,7 +90,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="Ингибитор, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -135,7 +135,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="Вязкость, мм2/сек"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -179,7 +179,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="H2O, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -224,7 +224,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="Механические примеси, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -269,7 +269,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="Металлические включения"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -314,7 +314,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="t вспышки, не менее град С"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -359,7 +359,7 @@ export default function({ amount, param, prop, handleChangeProp, handleChangePar
                         )
                     }
                     name="Кислотное число, мг.кон"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)

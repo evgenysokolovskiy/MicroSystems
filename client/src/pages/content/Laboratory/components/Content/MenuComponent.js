@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
-import { TableOutlined, AlignCenterOutlined, LineChartOutlined } from '@ant-design/icons'
 
 export default class MenuComponent extends PureComponent {
     state = {
         collapsed: false
     }
 
-    handleClick = e => {
+    handleClick = (e) => {
         this.props.handleClickMenu(e.key)
     }
 

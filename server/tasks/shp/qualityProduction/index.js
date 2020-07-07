@@ -1,19 +1,20 @@
 const clonedeep = require('lodash.clonedeep')
-const interval = require('../../../config/shp/interval')
-const calculateDataOneCard = require('../helpers/calculateDataOneCard')
-const convertDateToString = require('../helpers/calculateDates').convertDateToString
-const convertStringToDateBatchLoadingTime = require('../helpers/calculateDates')
-    .convertStringToDateBatchLoadingTime
+const interval = require(appRoot + '/server/config/shp/interval')
+const calculateDataOneCard = require(appRoot + '/server/tasks/shp/helpers/calculateDataOneCard')
+const convertDateToString = require(appRoot + '/server/tasks/shp/helpers/calculateDates')
+    .convertDateToString
+const convertStringToDateBatchLoadingTime = require(appRoot +
+    '/server/tasks/shp/helpers/calculateDates').convertStringToDateBatchLoadingTime
 
 // На выходе необходимо получить 2 объекта:
 // - Помнит все данные после завершения процедуры (для анализа, например, для осевого графика)
 // - Данные в реальном времени (не сохраняет данные по завершенным процедурам)
-module.exports = function({ joinTechnologyFact, mtime }) {
+module.exports = function ({ joinTechnologyFact, mtime }) {
     let realTimeObj = {} // Только действующие процедуры
     let rememberObj = {} // Только завершённые процедуры
     let allObj = {} // Все процедуры за всё время
 
-    Object.entries(clonedeep(joinTechnologyFact)).forEach(procedure => {
+    Object.entries(clonedeep(joinTechnologyFact)).forEach((procedure) => {
         const realTime = {
             quality: {}, // Перечень карт с качественной продукцией (на момент последней проверки)
             defect: {}, // Перечень карт с дефектной продукцией (на момент последней проверки)
@@ -45,16 +46,16 @@ module.exports = function({ joinTechnologyFact, mtime }) {
         }
 
         // 1) По весу продукции
-        Object.values(procedure).forEach(item => {
+        Object.values(procedure).forEach((item) => {
             if (typeof item !== 'object') return
-            Object.entries(item).forEach(type => {
+            Object.entries(item).forEach((type) => {
                 if (!+type[0]) return
                 // Технология
                 const technology = type[1]['technology']
                 // Факт
                 const fact = type[1]['fact']
 
-                Object.entries(type[1]['fact']).forEach(card => {
+                Object.entries(type[1]['fact']).forEach((card) => {
                     let val = clonedeep(
                         calculateDataOneCard({
                             technology,
@@ -67,10 +68,12 @@ module.exports = function({ joinTechnologyFact, mtime }) {
                     )
 
                     // Начальный вес партии
-                    const hasWeight = card[1].find(item => item['weight'])
+                    const hasWeight = card[1].find((item) => item['weight'])
                     const weight = hasWeight && hasWeight['weight']
                     // Проработка партии на данной процедуре завершена (имеет вес качественной продукции)
-                    const hasQualityWeight = card[1].reverse().find(item => item['qualityProducts'])
+                    const hasQualityWeight = card[1]
+                        .reverse()
+                        .find((item) => item['qualityProducts'])
                     const qualityWeight = hasQualityWeight && hasQualityWeight['qualityProducts']
                     // Вес дефектной продукции
                     const defectiveWeight = weight && qualityWeight && +weight - +qualityWeight
@@ -85,19 +88,19 @@ module.exports = function({ joinTechnologyFact, mtime }) {
                         let rememberQuality, rememberDefect, rememberNotFact
                         const hasFact = val['diameter']
                             .reverse()
-                            .find(item => item['falseFact'] || item['trueFact'])
+                            .find((item) => item['falseFact'] || item['trueFact'])
 
                         if (hasFact) {
                             rememberQuality =
                                 hasFact['trueFact'] &&
-                                card[1].reverse().find(item => item['qualityProducts'])
+                                card[1].reverse().find((item) => item['qualityProducts'])
                             rememberDefect =
                                 hasFact['falseFact'] &&
-                                card[1].reverse().find(item => item['qualityProducts'])
+                                card[1].reverse().find((item) => item['qualityProducts'])
                         } else {
                             rememberNotFact = card[1]
                                 .reverse()
-                                .find(item => item['qualityProducts'])
+                                .find((item) => item['qualityProducts'])
                         }
 
                         const qualityItem = rememberQuality && {
@@ -135,15 +138,15 @@ module.exports = function({ joinTechnologyFact, mtime }) {
                         let realQuality, realDefect, realNotFact
                         const realHasFact = val['diameter']
                             .reverse()
-                            .find(item => item['falseFact'] || item['trueFact'])
+                            .find((item) => item['falseFact'] || item['trueFact'])
 
                         if (realHasFact) {
                             realQuality =
-                                realHasFact['trueFact'] && card[1].find(item => item['weight'])
+                                realHasFact['trueFact'] && card[1].find((item) => item['weight'])
                             realDefect =
-                                realHasFact['falseFact'] && card[1].find(item => item['weight'])
+                                realHasFact['falseFact'] && card[1].find((item) => item['weight'])
                         } else {
-                            realNotFact = card[1].find(item => item['weight'])
+                            realNotFact = card[1].find((item) => item['weight'])
                         }
 
                         const realQualityItem = realQuality && {
@@ -179,13 +182,15 @@ module.exports = function({ joinTechnologyFact, mtime }) {
                     let allQuality, allDefect, allNotFact
                     const allHasFact = val['diameter']
                         .reverse()
-                        .find(item => item['falseFact'] || item['trueFact'])
+                        .find((item) => item['falseFact'] || item['trueFact'])
 
                     if (allHasFact) {
-                        allQuality = allHasFact['trueFact'] && card[1].find(item => item['weight'])
-                        allDefect = allHasFact['falseFact'] && card[1].find(item => item['weight'])
+                        allQuality =
+                            allHasFact['trueFact'] && card[1].find((item) => item['weight'])
+                        allDefect =
+                            allHasFact['falseFact'] && card[1].find((item) => item['weight'])
                     } else {
-                        allNotFact = card[1].find(item => item['weight'])
+                        allNotFact = card[1].find((item) => item['weight'])
                     }
 
                     const allQualityItem = allQuality && {
@@ -236,7 +241,7 @@ module.exports = function({ joinTechnologyFact, mtime }) {
     // 2) По количеству карт
 
     // По процедурам в реальном времени
-    Object.entries(realTimeObj).forEach(procedure => {
+    Object.entries(realTimeObj).forEach((procedure) => {
         if (procedure[0] === 'total' || procedure[0] === 'cards') return
         const quality = getAmountCards(procedure[1]['quality'])
         const defect = getAmountCards(procedure[1]['defect'])
@@ -249,7 +254,7 @@ module.exports = function({ joinTechnologyFact, mtime }) {
     })
 
     // По завершенным процедурам
-    Object.entries(rememberObj).forEach(procedure => {
+    Object.entries(rememberObj).forEach((procedure) => {
         if (procedure[0] === 'total' || procedure[0] === 'cards') return
         const quality = getAmountCards(procedure[1]['quality'])
         const defect = getAmountCards(procedure[1]['defect'])
@@ -262,7 +267,7 @@ module.exports = function({ joinTechnologyFact, mtime }) {
     })
 
     // По всем процедурам
-    Object.entries(allObj).forEach(procedure => {
+    Object.entries(allObj).forEach((procedure) => {
         if (procedure[0] === 'total' || procedure[0] === 'cards') return
         const quality = getAmountCards(procedure[1]['quality'])
         const defect = getAmountCards(procedure[1]['defect'])
@@ -324,7 +329,7 @@ module.exports = function({ joinTechnologyFact, mtime }) {
 // Подсчитать количество карт
 function getAmountCards(obj) {
     let count = 0
-    Object.values(obj).forEach(item => {
+    Object.values(obj).forEach((item) => {
         count += Object.keys(item).length
     })
     return count
@@ -337,10 +342,10 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join, mtime) {
     const cards = {}
     const types = {}
 
-    Object.entries(obj).forEach(procedure => {
-        Object.entries(procedure[1]).forEach(quality => {
-            Object.entries(quality[1]).forEach(type => {
-                Object.entries(type[1]).forEach(card => {
+    Object.entries(obj).forEach((procedure) => {
+        Object.entries(procedure[1]).forEach((quality) => {
+            Object.entries(quality[1]).forEach((type) => {
+                Object.entries(type[1]).forEach((card) => {
                     // 1) Добавить свойство - quality(качество продукции)
                     if (quality[0] === 'quality') {
                         const value = {
@@ -375,7 +380,7 @@ function groupCardsQualityBatchLoadingUnLoadingTime(obj, join, mtime) {
 
                     // Получить фактические данные о времени загрузки и выгрузки
                     const d = join[procedure[0]][type[0]]['fact'][card[0]]
-                    d.forEach(c => {
+                    d.forEach((c) => {
                         // Если имеет weight, то загрузка партии
                         if (c['weight']) batchLoadingDate = c['date']
                         if (c['weight']) batchLoadingTime = c['batchLoadingTime']

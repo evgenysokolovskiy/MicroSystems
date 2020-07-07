@@ -1,5 +1,5 @@
 // Конвертировать дату в строку
-module.exports.convertDateToString = function(milliseconds) {
+module.exports.convertDateToString = function (milliseconds) {
     if (!milliseconds) return
     const date = new Date(milliseconds)
     const hours = date.getHours()
@@ -13,7 +13,7 @@ module.exports.convertDateToString = function(milliseconds) {
 
 // Конкатенировать дату и время проверки
 // конвертировать в дату(в миллисекундах) с округлением до получаса
-module.exports.convertStringToDate = function(obj) {
+module.exports.convertStringToDate = function (obj) {
     if (!obj['date'] || !obj['measurementTime']) return
     const dd = obj['date'].split('.')[0]
     const mm = obj['date'].split('.')[1] - 1
@@ -29,7 +29,7 @@ module.exports.convertStringToDate = function(obj) {
 }
 
 // Конвертировать строку в дату (в миллисекундах) с округлением до получаса
-module.exports.convertStringToDateBatchLoadingTime = function(date, str) {
+module.exports.convertStringToDateBatchLoadingTime = function (date, str) {
     if (!str) return
     const time = typeof str === 'number' ? ExcelDateToJSDate(str) : str
     const dd = date.split('.')[0]

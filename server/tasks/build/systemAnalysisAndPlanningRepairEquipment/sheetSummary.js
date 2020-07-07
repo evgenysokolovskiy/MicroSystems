@@ -1,11 +1,12 @@
 // Сводная
 
-const nameNodes = require('../../../constants/nameNodes')
-const createCell = require('../helpers/cellCreator').createCell
-const createCellCenter = require('../helpers/cellCreator').createCellCenter
-const createCellTitle = require('../helpers/cellCreator').createCellTitle
+const nameNodes = require(appRoot + '/server/constants/nameNodes')
+const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCell
+const createCellCenter = require(appRoot + '/server/tasks/build/helpers/cellCreator')
+    .createCellCenter
+const createCellTitle = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCellTitle
 
-module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }) {
+module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle }) {
     ws.row(2).freeze()
     ws.column(1).setWidth(45)
     ws.column(1).freeze()
@@ -54,7 +55,7 @@ module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }
 
     Object.keys(summary['nodes'])
         .sort()
-        .forEach(node => {
+        .forEach((node) => {
             // Наименование узла
             createCell(ws, [row, 1], nameNodes[node], defaultStyle)
             // Обозначение узла
@@ -77,7 +78,7 @@ module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }
     let step1 = 5
     let step3 = 5
     let nodeStep = 5
-    Object.keys(plan).forEach(key => {
+    Object.keys(plan).forEach((key) => {
         if (key === 'undefined' || key === 'Произ-во' || key === '71' || key === '77') return // здесь фильтровать нужные производства
 
         // Названия производств
@@ -121,7 +122,7 @@ module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }
                 let row = 12
                 Object.keys(collapseNodes[key]['nodes'])
                     .sort()
-                    .forEach(node => {
+                    .forEach((node) => {
                         if (node === item) {
                             row = 12 + i
                             // Обозначение узла
@@ -163,12 +164,12 @@ module.exports = function({ collapseNodes, plan, ws, defaultStyle, borderStyle }
 function calculateSummary(plan, collapseNodes) {
     const nodes = {}
     let summary = {}
-    Object.keys(plan).forEach(key => {
+    Object.keys(plan).forEach((key) => {
         if (key === 'undefined' || key === 'Произ-во' || key === '71' || key === '77') return // здесь фильтровать нужные производства
 
         Object.keys(collapseNodes[key]['nodes'])
             .sort()
-            .forEach(node => {
+            .forEach((node) => {
                 // Получить суммарные показатели по количеству и времени остановок по узлам
                 if (nodes[node]) {
                     nodes[node]['amount'] += collapseNodes[key]['nodes'][node]['amount']

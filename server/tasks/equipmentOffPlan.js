@@ -1,9 +1,10 @@
 // 3) Выделить оборудование, которое не находится в плане ремонтов
 
 const clonedeep = require('lodash.clonedeep')
-const splitProductionEquipment = require('./primaryDataProcessing/_2-splitProductionEquipment')
+const splitProductionEquipment = require(appRoot +
+    '/server/tasks/primaryDataProcessing/_2-splitProductionEquipment')
 
-module.exports = function(data, plan) {
+module.exports = function (data, plan) {
     // объект, где ключи - это номера производств
     // Значения - массив объектов, принадлежащих производству
     const d = clonedeep(splitProductionEquipment(data))
@@ -12,10 +13,10 @@ module.exports = function(data, plan) {
     let obj = {}
 
     // Модифицировать массив d путем удаления объектов оборудования, имеющихся в плане ремонтов
-    keys.forEach(key => {
+    keys.forEach((key) => {
         if (!plan[key]) return
-        plan[key]['data'].forEach(planItem => {
-            planItem.forEach(planItem1 => {
+        plan[key]['data'].forEach((planItem) => {
+            planItem.forEach((planItem1) => {
                 d[key]['data'].forEach((dataItem, index) => {
                     if (dataItem['inn'] === planItem1['inn']) d[key]['data'].splice(index, 1)
                 })

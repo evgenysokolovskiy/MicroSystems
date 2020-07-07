@@ -1,20 +1,21 @@
 // 3) Рассчитать месячное значение трудоемкости
 
 const clonedeep = require('lodash.clonedeep')
-const PLANNING_PERIOD = require('../../config/repaire/').PLANNING_PERIOD
-const calculateComplexityOfEquipmentNodes = require('./_2-calculateComplexityOfEquipmentNodes')
+const PLANNING_PERIOD = require(appRoot + '/server/config/repaire/').PLANNING_PERIOD
+const calculateComplexityOfEquipmentNodes = require(appRoot +
+    '/server/tasks/calculatePlan/_2-calculateComplexityOfEquipmentNodes')
 
-module.exports = function(data) {
+module.exports = function (data) {
     // Рассчитаны трудоемкости для узлов оборудования
     const d = clonedeep(calculateComplexityOfEquipmentNodes(data))
 
-    Object.keys(d).forEach(key => {
+    Object.keys(d).forEach((key) => {
         let sumAmountAllNodes = 0
         let sumTimeAllNodes = 0
         let sumMechanicRepairComplexity = 0
         let sumElectricRepairComplexity = 0
         const nodes = {}
-        d[key]['data'].forEach(item => {
+        d[key]['data'].forEach((item) => {
             if (item['typeOfRepair'] === 'medium') {
                 sumMechanicRepairComplexity += item['mechanicRepairComplexity']
                 sumElectricRepairComplexity += item['electricRepairComplexity']
@@ -22,7 +23,7 @@ module.exports = function(data) {
             if (item['typeOfRepair'] === 'nodes') {
                 let sumMechanicRepairComplexityNodes = 0
                 //let sumElectricRepairComplexityNodes = 0
-                Object.keys(item.nodes).forEach(node => {
+                Object.keys(item.nodes).forEach((node) => {
                     if (node[0] === '1') {
                         const val = +item.nodes[node]['repairСomplexityNode']
                         if (val) {

@@ -1,11 +1,11 @@
 // Совместить технологию с фактом по одной карте
 
 const clonedeep = require('lodash.clonedeep')
-const interval = require('../../../config/shp/interval')
-const calculateDataOneCard = require('./calculateDataOneCard')
+const interval = require(appRoot + '/server/config/shp/interval')
+const calculateDataOneCard = require(appRoot + '/server/tasks/shp/helpers/calculateDataOneCard')
 
 // Совместить технологию с фактом по нескольким картам
-module.exports = function({ technology: t, fact: f, procedure, type, cards, interval }) {
+module.exports = function ({ technology: t, fact: f, procedure, type, cards, interval }) {
     const technology = clonedeep(t)
     const fact = clonedeep(f)
     // Интервал (дробная часть от единицы как количество минут от часа)
@@ -46,17 +46,17 @@ module.exports = function({ technology: t, fact: f, procedure, type, cards, inte
     // rest - все карты, исключая сводную
     const [total, ...rest] = cards['hasBatchLoadingTime']
     // Данные по всем картам данного типа
-    const data = rest.map(card =>
+    const data = rest.map((card) =>
         calculateDataOneCard({ technology, fact, procedure, type, card, interval })
     )
 
     // Максимальная продолжительность тех.процесса для всех карт данного типа
-    const maxFactDiameter = Math.max(...Object.values(data).map(card => +card['diameter'].length))
+    const maxFactDiameter = Math.max(...Object.values(data).map((card) => +card['diameter'].length))
     const maxFactInconstancyDimension = Math.max(
-        ...Object.values(data).map(card => +card['inconstancyDimension'].length)
+        ...Object.values(data).map((card) => +card['inconstancyDimension'].length)
     )
     const maxFactPressureSpeed = Math.max(
-        ...Object.values(data).map(card => +card['pressureSpeed'].length)
+        ...Object.values(data).map((card) => +card['pressureSpeed'].length)
     )
 
     // Дополнить массив diameter до количества членов (объектов), равного max

@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const INDEXES = require('../../../config/shp/fact')
+const INDEXES = require(appRoot + '/server/config/shp/fact')
 const {
     INDEXES_STAMPING,
     INDEXES_RUNNING,
@@ -12,23 +12,23 @@ const {
     INDEXES_FINAL
 } = INDEXES
 
-const convertData = require('../../shp/convertFact/').convertData
-const convertTechnologyFact = require('../../shp/convertTechnologyFact/')
-const convertTechnologyFactData = require('../../shp/convertTechnologyFactData/')
-const qualityProduction = require('../../shp/qualityProduction/')
-const joinTechnologyFactAPI = require('../../../api/joinTechnologyFactAPI')
-const qualityProductionAPI = require('../../../api/qualityProductionAPI')
-const intervalAPI = require('../../../api/intervalAPI')
-const mtimeAPI = require('../../../api/mtimeAPI')
+const convertData = require(appRoot + '/server/tasks/shp/convertFact/').convertData
+const convertTechnologyFact = require(appRoot + '/server/tasks/shp/convertTechnologyFact/')
+const convertTechnologyFactData = require(appRoot + '/server/tasks/shp/convertTechnologyFactData/')
+const qualityProduction = require(appRoot + '/server/tasks/shp/qualityProduction/')
+const joinTechnologyFactAPI = require(appRoot + '/server/api/joinTechnologyFactAPI')
+const qualityProductionAPI = require(appRoot + '/server/api/qualityProductionAPI')
+const intervalAPI = require(appRoot + '/server/api/intervalAPI')
+const mtimeAPI = require(appRoot + '/server/api/mtimeAPI')
 
-module.exports = function({ app, parseShpFact, technology }) {
-    fs.readdir(parseShpFact, function(err, files) {
-        const paths = files.map(item => `${parseShpFact}/${item}`)
+module.exports = function ({ app, parseShpFact, technology }) {
+    fs.readdir(parseShpFact, function (err, files) {
+        const paths = files.map((item) => `${parseShpFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
+            new Promise(function (resolve, reject) {
                 let stamping, running, grinding, rough, clean, final
 
-                xlsx.parse(`${paths[i]}`).forEach(sheet => {
+                xlsx.parse(`${paths[i]}`).forEach((sheet) => {
                     if (sheet['name'].toLowerCase() === 'штамповка')
                         stamping = convertData(sheet['data'], INDEXES_STAMPING)
                     if (sheet['name'].toLowerCase() === 'обкатка')
@@ -93,7 +93,7 @@ module.exports = function({ app, parseShpFact, technology }) {
                 } else {
                     reject(new Error('Err'))
                 }
-            }).catch(err => console.log(err))
+            }).catch((err) => console.log(err))
         }
     })
 }

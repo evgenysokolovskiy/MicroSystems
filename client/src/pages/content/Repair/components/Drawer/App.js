@@ -1,9 +1,10 @@
 import React, { Suspense, lazy } from 'react'
-import { Drawer, Icon } from 'antd'
+import { Drawer } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const InfoEquipment = lazy(() => import('./InfoEquipment'))
 
-export const App = props => {
+export const App = (props) => {
     const { data, period, visible, handleClickCloseDrawer } = props
 
     return (
@@ -18,8 +19,7 @@ export const App = props => {
                 {visible && (
                     <Suspense
                         fallback={
-                            <Icon
-                                type="loading"
+                            <LoadingOutlined
                                 className="loading"
                                 style={{ fontSize: '20px', color: 'red' }}
                             />

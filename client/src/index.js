@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { store } from './store/'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Router, Switch, Route } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { LoadingOutlined } from '@ant-design/icons'
 // Обработчик ошибок

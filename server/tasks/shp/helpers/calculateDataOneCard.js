@@ -1,12 +1,13 @@
 // Совместить технологию с фактом по одной карте
 
 const clonedeep = require('lodash.clonedeep')
-const interval = require('../../../config/shp/interval')
-const convertDateToString = require('./calculateDates').convertDateToString
-const convertStringToDateBatchLoadingTime = require('./calculateDates')
-    .convertStringToDateBatchLoadingTime
+const interval = require(appRoot + '/server/config/shp/interval')
+const convertDateToString = require(appRoot + '/server/tasks/shp/helpers/calculateDates')
+    .convertDateToString
+const convertStringToDateBatchLoadingTime = require(appRoot +
+    '/server/tasks/shp/helpers/calculateDates').convertStringToDateBatchLoadingTime
 
-module.exports = function({ technology: t, fact: f, procedure, type, card, interval }) {
+module.exports = function ({ technology: t, fact: f, procedure, type, card, interval }) {
     if (card === 'Сводная') return
 
     const technology = clonedeep(t)
@@ -29,7 +30,7 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
     const convertFactJointDate =
         fact &&
         card &&
-        fact[card].map(item => {
+        fact[card].map((item) => {
             if (item['weight']) {
                 if (item['date']) batchLoadingDate = item['date']
                 if (item['batchLoadingTime']) batchLoadingTime = item['batchLoadingTime']
@@ -124,23 +125,23 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
     const restInconstancyDimension = arr.slice(lastIndexTechnologyInconstancyDimension)
     const restPressureSpeed = arr.slice(lastIndexTechnologyPressureSpeed)
 
-    restDiameter.forEach(item => {
+    restDiameter.forEach((item) => {
         pointsDiameterDate = [...pointsDiameterDate, { date: item }]
     })
 
-    restInconstancyDimension.forEach(item => {
+    restInconstancyDimension.forEach((item) => {
         pointsInconstancyDimensionDate = [...pointsInconstancyDimensionDate, { date: item }]
     })
 
-    restPressureSpeed.forEach(item => {
+    restPressureSpeed.forEach((item) => {
         pointsPressureSpeedDate = [...pointsPressureSpeedDate, { date: item }]
     })
 
     // 6) Добавить факт к массивам с дополненной датой
     // Диаметр
-    const diameter = [...pointsDiameterDate].map(technology => {
+    const diameter = [...pointsDiameterDate].map((technology) => {
         convertFactJointDate &&
-            [...convertFactJointDate].forEach(fact => {
+            [...convertFactJointDate].forEach((fact) => {
                 let factDiameter = replaceToDot(fact['diameter'])
 
                 if (technology['date'] === fact['jointDate']) {
@@ -244,9 +245,9 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
     })
 
     // Непостоянство, разноразмерность
-    const inconstancyDimension = [...pointsInconstancyDimensionDate].map(technology => {
+    const inconstancyDimension = [...pointsInconstancyDimensionDate].map((technology) => {
         convertFactJointDate &&
-            [...convertFactJointDate].forEach(fact => {
+            [...convertFactJointDate].forEach((fact) => {
                 const factInconstancy = fact['inconstancy']
                 const factDimension = fact['dimension']
                 if (technology['date'] === fact['jointDate']) {
@@ -268,9 +269,9 @@ module.exports = function({ technology: t, fact: f, procedure, type, card, inter
     })
 
     // Давление, скорость
-    const pressureSpeed = [...pointsPressureSpeedDate].map(technology => {
+    const pressureSpeed = [...pointsPressureSpeedDate].map((technology) => {
         convertFactJointDate &&
-            [...convertFactJointDate].forEach(fact => {
+            [...convertFactJointDate].forEach((fact) => {
                 const factPressure = fact['pressure']
                 const factSpeed = fact['speed']
                 const factSpeedElevator = fact['speedElevator']

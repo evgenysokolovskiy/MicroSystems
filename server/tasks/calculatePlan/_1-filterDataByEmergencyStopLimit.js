@@ -1,10 +1,12 @@
 // 1) Фильтровать данные по лимиту аварийных остановок
 
 const clonedeep = require('lodash.clonedeep')
-const LIMIT_NUMBER_EMERGENCY_STOPS = require('../../config/repaire/').LIMIT_NUMBER_EMERGENCY_STOPS
-const splitProductionEquipment = require('../primaryDataProcessing/_2-splitProductionEquipment')
+const LIMIT_NUMBER_EMERGENCY_STOPS = require(appRoot + '/server/config/repaire/')
+    .LIMIT_NUMBER_EMERGENCY_STOPS
+const splitProductionEquipment = require(appRoot +
+    '/server/tasks/primaryDataProcessing/_2-splitProductionEquipment')
 
-module.exports = function(data) {
+module.exports = function (data) {
     // объект, где ключи - это номера производств
     // Значения - массив объектов, принадлежащих производству
     const d = clonedeep(splitProductionEquipment(data))
@@ -18,8 +20,8 @@ module.exports = function(data) {
     // - Во втором цикле вернуть новый массив с кодами из третьего цикла
     // - В первом цикле каждому производству (ключ объекта) присвоить новый массив
     let obj = {}
-    keys.forEach(key => {
-        const filteredObj = d[key]['data'].filter(item => {
+    keys.forEach((key) => {
+        const filteredObj = d[key]['data'].filter((item) => {
             let sumAmount = 0 // Суммарное количество остановок по всем узлам
             let sumTime = 0 // Суммарное время остановок по всем узлам
             let oneRepairTime = 0 // Среднее время одного ремонта узла
@@ -27,7 +29,7 @@ module.exports = function(data) {
             let sumOneRepairTimeElectric = 0 // Суммарное время одного ремонта всех узлов по механической части
             let lengthNodesMechanic = 0 // Количество узлов по механике
             let lengthNodesElectric = 0 // Количество узлов по электрике
-            Object.keys(item.nodes).forEach(node => {
+            Object.keys(item.nodes).forEach((node) => {
                 // LIMIT_NUMBER_EMERGENCY_STOPS[key] - лимит аварийных остановок для текущего производства
                 if (item.nodes[node].amount < LIMIT_NUMBER_EMERGENCY_STOPS[key]) {
                     // Удалить код простоя, если его количество меньше допустимого лимита

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
-import { Statistic, Card, Row, Col, Typography, Icon } from 'antd'
+import { Statistic, Card, Row, Col, Typography } from 'antd'
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons'
 const { Text } = Typography
 
 export default class StatisticComponent extends PureComponent {
@@ -19,15 +20,35 @@ export default class StatisticComponent extends PureComponent {
 
         // Иконки стрелок
         const iconDifferenceDiameter =
-            differenceDiameter > 0 ? 'arrow-up' : differenceDiameter < 0 ? 'arrow-down' : null
+            differenceDiameter > 0 ? (
+                <ArrowUpOutlined />
+            ) : differenceDiameter < 0 ? (
+                <ArrowDownOutlined />
+            ) : null
         const iconDifferenceInconstancy =
-            differenceInconstancy > 0 ? 'arrow-up' : differenceInconstancy < 0 ? 'arrow-down' : null
+            differenceInconstancy > 0 ? (
+                <ArrowUpOutlined />
+            ) : differenceInconstancy < 0 ? (
+                ArrowDownOutlined
+            ) : null
         const iconDifferenceDimension =
-            differenceDimension > 0 ? 'arrow-up' : differenceDimension < 0 ? 'arrow-down' : null
+            differenceDimension > 0 ? (
+                <ArrowUpOutlined />
+            ) : differenceDimension < 0 ? (
+                ArrowDownOutlined
+            ) : null
         const iconDifferencePressure =
-            differencePressure > 0 ? 'arrow-up' : differencePressure < 0 ? 'arrow-down' : null
+            differencePressure > 0 ? (
+                <ArrowUpOutlined />
+            ) : differencePressure < 0 ? (
+                ArrowDownOutlined
+            ) : null
         const iconDifferenceSpeed =
-            differenceSpeed > 0 ? 'arrow-up' : differenceSpeed < 0 ? 'arrow-down' : null
+            differenceSpeed > 0 ? (
+                <ArrowUpOutlined />
+            ) : differenceSpeed < 0 ? (
+                ArrowDownOutlined
+            ) : null
 
         return (
             <div style={{ background: '#ECECEC', padding: '30px' }}>
@@ -40,7 +61,7 @@ export default class StatisticComponent extends PureComponent {
                                 value={Math.abs(differenceDiameter)}
                                 precision={2}
                                 valueStyle={{ color: differenceDiameter ? '#cf1322' : '#3f8600' }}
-                                prefix={<Icon type={iconDifferenceDiameter} />}
+                                prefix={iconDifferenceDiameter}
                                 suffix="(мкр)"
                             />
                         </Card>
@@ -55,7 +76,7 @@ export default class StatisticComponent extends PureComponent {
                                 valueStyle={{
                                     color: differenceInconstancy > 0 ? '#cf1322' : '#3f8600'
                                 }}
-                                prefix={<Icon type={iconDifferenceInconstancy} />}
+                                prefix={iconDifferenceInconstancy}
                                 suffix="(мкр)"
                             />
                         </Card>
@@ -70,7 +91,7 @@ export default class StatisticComponent extends PureComponent {
                                 valueStyle={{
                                     color: differenceDimension > 0 ? '#cf1322' : '#3f8600'
                                 }}
-                                prefix={<Icon type={iconDifferenceDimension} />}
+                                prefix={iconDifferenceDimension}
                                 suffix="(мкр)"
                             />
                         </Card>
@@ -85,7 +106,7 @@ export default class StatisticComponent extends PureComponent {
                                 value={Math.abs(differencePressure)}
                                 precision={2}
                                 valueStyle={{ color: differencePressure ? '#cf1322' : '#3f8600' }}
-                                prefix={<Icon type={iconDifferencePressure} />}
+                                prefix={iconDifferencePressure}
                                 suffix="(Па)"
                             />
                         </Card>
@@ -98,7 +119,7 @@ export default class StatisticComponent extends PureComponent {
                                 value={Math.abs(differenceSpeed)}
                                 precision={2}
                                 valueStyle={{ color: differenceSpeed ? '#cf1322' : '#3f8600' }}
-                                prefix={<Icon type={iconDifferenceSpeed} />}
+                                prefix={iconDifferenceSpeed}
                                 suffix="(об/мин)"
                             />
                         </Card>

@@ -2,10 +2,9 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
+const clonedeep = require('lodash.clonedeep')
 
 // 1) Схлопнуть данные по инвентарным номерам
-
-const clonedeep = require('lodash.clonedeep')
 
 // Номер колонки в таблице Excel
 const INDEXES = {
@@ -22,7 +21,7 @@ const INDEXES = {
     percent: 11 // Процент выполнения
 }
 
-const collapseDataByInn = function(data) {
+const collapseDataByInn = function (data) {
     const d = clonedeep(data)
     const {
         inn,
@@ -41,7 +40,7 @@ const collapseDataByInn = function(data) {
 
     let nodes = {}
     let descriptions = {}
-    d.forEach(item => {
+    d.forEach((item) => {
         if (!obj[item[inn]]) {
             nodes = {}
             descriptions = {}
@@ -73,7 +72,7 @@ const collapseDataByInn = function(data) {
     return arr
 }
 
-module.exports = function({
+module.exports = function ({
     app,
     parsePathRepairCompleted,
     repairPlan,
@@ -82,10 +81,10 @@ module.exports = function({
     collapseNodes,
     buildPath
 }) {
-    fs.readdir(parsePathRepairCompleted, function(err, files) {
-        const paths = files.map(item => `${parsePathRepairCompleted}/${item}`)
+    fs.readdir(parsePathRepairCompleted, function (err, files) {
+        const paths = files.map((item) => `${parsePathRepairCompleted}/${item}`)
         for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
+            new Promise(function (resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
                 const data = xlsx.parse(`${paths[i]}`)[0].data
 
@@ -105,7 +104,7 @@ module.exports = function({
                 } else {
                     reject(new Error('Err'))
                 }
-            }).catch(err => console.log(err))
+            }).catch((err) => console.log(err))
         }
     })
 }

@@ -1,6 +1,6 @@
 // Преобразовать фактические данные
 
-module.exports.convertFact = function({ fact }) {
+module.exports.convertFact = function ({ fact }) {
     const { running, grinding, rough, clean, final } = fact
 
     const obj = {
@@ -13,14 +13,14 @@ module.exports.convertFact = function({ fact }) {
     return obj
 }
 
-module.exports.convertData = function(data, INDEXES) {
+module.exports.convertData = function (data, INDEXES) {
     let arr = []
     // Преобразовать объект в массив
     const indexes = [...Object.entries(INDEXES)]
-    data.forEach(item => {
+    data.forEach((item) => {
         if (!item[0]) return
         const obj = {}
-        indexes.forEach(i => {
+        indexes.forEach((i) => {
             const indexDate = i[0] === 'date' ? i[1] : null
             obj[i[0]] =
                 typeof item[indexDate] === 'number' ? getDateFromText(item[indexDate]) : item[i[1]]
@@ -28,7 +28,7 @@ module.exports.convertData = function(data, INDEXES) {
         arr = [...arr, obj]
     })
 
-    const batchLoadingTimeArr = arr.map(item => {
+    const batchLoadingTimeArr = arr.map((item) => {
         item['batchLoadingTime'] = ExcelDateToJSDate(item['batchLoadingTime'])
         return item
     })
@@ -64,7 +64,7 @@ function ExcelDateToJSDate(serial) {
 function convertDataFinal(data) {
     const obj = {}
     data &&
-        Object.values(data).forEach(item => {
+        Object.values(data).forEach((item) => {
             if (obj[item['type']]) {
                 obj[item['type']] = [...obj[item['type']], item]
             } else {

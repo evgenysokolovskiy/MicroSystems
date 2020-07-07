@@ -4,11 +4,11 @@ import shspAmountTable from './columns/amount/shspAmountTable'
 import sogAmountTable from './columns/amount/sogAmountTable'
 
 export default class TableAmountComponent extends PureComponent {
-    handleChangeParam = record => {
+    handleChangeParam = (record) => {
         this.props.handleClickParam(record['name'])
     }
 
-    handleChangeProp = column => {
+    handleChangeProp = (column) => {
         this.props.handleClickProp(column['name'])
     }
 

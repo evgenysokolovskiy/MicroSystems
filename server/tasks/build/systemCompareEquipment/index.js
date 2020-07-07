@@ -1,9 +1,9 @@
 // Отчёт "система_анализа_и_планирования_ремонтов_оборудования"
 
 const xl = require('excel4node') // create excel file
-const sheetEquipment = require('./sheetEquipment')
+const sheetEquipment = require(appRoot + '/server/tasks/systemCompareEquipment/sheetEquipment')
 
-module.exports = function({ convertedFact, buildPathDetail }) {
+module.exports = function ({ convertedFact, buildPathDetail }) {
     const wb = new xl.Workbook()
 
     const defaultStyle = wb.createStyle({
@@ -55,7 +55,7 @@ module.exports = function({ convertedFact, buildPathDetail }) {
         borderStyle
     }) // Оборудование
 
-    wb.write(`${buildPathDetail}/система_сравнения_оборудования_до_и_после_ремонта.xlsx`, err => {
+    wb.write(`${buildPathDetail}/система_сравнения_оборудования_до_и_после_ремонта.xlsx`, (err) => {
         err ? console.error(err) : console.log('Файл успешно сохранён!')
     })
 }

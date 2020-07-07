@@ -1,6 +1,6 @@
 const clonedeep = require('lodash.clonedeep')
-const INDEXES_TECHNOLOGY = require('../../../../config/laboratory/shp/technology')
-const INDEXES_FACT = require('../../../../config/laboratory/shp/fact')
+const INDEXES_TECHNOLOGY = require(appRoot + '/server/config/laboratory/shp/technology')
+const INDEXES_FACT = require(appRoot + '/server/config/laboratory/shp/fact')
 
 // indexes technology
 const indexTechnologyName = INDEXES_TECHNOLOGY['name']
@@ -13,6 +13,7 @@ const indexTechnologyMechanicalAdmixture = INDEXES_TECHNOLOGY['mechanicalAdmixtu
 const indexTechnologyMetalInclusions = INDEXES_TECHNOLOGY['metalInclusions']
 const indexTechnologyFlashPoint = INDEXES_TECHNOLOGY['flashPoint']
 const indexTechnologyAcidNumber = INDEXES_TECHNOLOGY['acidNumber']
+
 // indexes fact
 const indexFactDate = INDEXES_FACT['date']
 const indexFactName = INDEXES_FACT['name']
@@ -24,29 +25,30 @@ const indexFactMechanicalAdmixture = INDEXES_FACT['mechanicalAdmixture']
 const indexFactMetalInclusions = INDEXES_FACT['metalInclusions']
 const indexFactFlashPoint = INDEXES_FACT['flashPoint']
 const indexFactAcidNumber = INDEXES_FACT['acidNumber']
+
 // Столько дней назад от текущей даты учитываются данные
 // Данные к API отправляются только за период с началом (текущая дата минус указанное число дней)
 // При изменении интервала времени на клиенте, перерасчёт будет производится на клиенте
 // Так же на клиент будут отправлены сырые данные за весь период на другой адрес API
 const BEFORE_DAYS_RANGE = 365
 
-module.exports = function({ fact: f, technology: t }) {
+module.exports = function ({ fact: f, technology: t }) {
     const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
 
     // Начальная дата в миллисекундах в соответствии с BEFORE_DAYS_RANGE
     const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
     // Получить массив с датой в миллисекундах
-    const all = clonedeep(allFact).map(item => {
+    const all = clonedeep(allFact).map((item) => {
         item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
         return item
     })
     // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
+    const fact = clonedeep(all).filter((item) => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach(t => {
+    technology.forEach((t) => {
         const obj = {}
         if (typeof t[indexTechnologyInhibitorMin] === 'number') {
             obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
@@ -76,7 +78,7 @@ module.exports = function({ fact: f, technology: t }) {
     // 2) На основании технологии и факта просчитать количество true/false для каждого свойства и значения
     let amount = {}
     let source = {}
-    fact.forEach(f => {
+    fact.forEach((f) => {
         if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
@@ -330,9 +332,9 @@ module.exports = function({ fact: f, technology: t }) {
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach(item => {
+    Object.entries(amount).forEach((item) => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach(prop => {
+        Object.entries(item[1]).forEach((prop) => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
@@ -396,7 +398,7 @@ function getDateBeforeDaysFromNow(range) {
 // Удалить свойства, равные {}, т.е., когда нет фактических данных
 function deleteEmptyProps(data) {
     let obj = {}
-    Object.entries(data).forEach(item => {
+    Object.entries(data).forEach((item) => {
         if (Object.values(item[1])[0]) {
             obj[item[0]] = item[1]
         }

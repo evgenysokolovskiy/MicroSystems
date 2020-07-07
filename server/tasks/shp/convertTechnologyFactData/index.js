@@ -1,18 +1,18 @@
 const clonedeep = require('lodash.clonedeep')
-const interval = require('../../../config/shp/interval')
-const calculateDataOneCard = require('../helpers/calculateDataOneCard')
-const getCards = require('../helpers/getCards')
-const calculateDataFewCards = require('../helpers/calculateDataFewCards')
+const interval = require(appRoot + '/server/config/shp/interval')
+const calculateDataOneCard = require(appRoot + '/server/tasks/shp/helpers/calculateDataOneCard')
+const getCards = require(appRoot + '/server/tasks/shp/helpers/getCards')
+const calculateDataFewCards = require(appRoot + '/server/tasks/shp/helpers/calculateDataFewCards')
 
-module.exports = function({ joinTechnologyFact: joint }) {
+module.exports = function ({ joinTechnologyFact: joint }) {
     const joinTechnologyFact = clonedeep(joint)
     const obj = {}
 
-    Object.entries(joinTechnologyFact).forEach(procedure => {
-        Object.values(procedure).forEach(item => {
+    Object.entries(joinTechnologyFact).forEach((procedure) => {
+        Object.values(procedure).forEach((item) => {
             if (typeof item !== 'object') return
 
-            Object.entries(item).forEach(type => {
+            Object.entries(item).forEach((type) => {
                 if (!+type[0]) return
                 type[1]['dataOneCard'] = {}
                 type[1]['dataFewCards'] = {}
@@ -34,7 +34,7 @@ module.exports = function({ joinTechnologyFact: joint }) {
                     interval
                 })
 
-                Object.entries(type[1]['fact']).forEach(card => {
+                Object.entries(type[1]['fact']).forEach((card) => {
                     type[1]['dataOneCard'] = {
                         ...type[1]['dataOneCard'],
                         [card[0]]: calculateDataOneCard({
