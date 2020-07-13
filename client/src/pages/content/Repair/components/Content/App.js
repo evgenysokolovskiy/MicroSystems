@@ -5,12 +5,14 @@ import MenuComponent from './MenuComponent'
 import { Layout } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 
-const { Content } = Layout
-const TableComponent = lazy(() => import('./TableComponent'))
-const CheckComponent = lazy(() => import('./CheckComponent'))
-const SchemeComponent = lazy(() => import('./SchemeComponent'))
+import componentLoader from '../../../componentLoader'
 
-export const App = (props) => {
+const { Content } = Layout
+const TableComponent = lazy(() => componentLoader(() => import('./TableComponent')))
+const CheckComponent = lazy(() => componentLoader(() => import('./CheckComponent')))
+const SchemeComponent = lazy(() => componentLoader(() => import('./SchemeComponent')))
+
+export const App = props => {
     const {
         data,
         checkForGeneralUse,

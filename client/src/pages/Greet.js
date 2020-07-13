@@ -1,11 +1,10 @@
-import React, { lazy } from 'react'
+import React from 'react'
+// Components
+import Header from './utils/Header/App'
+import Footer from './utils/Footer/App'
+import Content from './content/Greet/App'
 // Antd
 import { Layout } from 'antd'
-// Utils
-const Header = lazy(() => import('./utils/Header/App'))
-const Footer = lazy(() => import('./utils/Footer/App'))
-// Content
-const Content = lazy(() => import('./content/Greet/App'))
 
 export default function App() {
     return (

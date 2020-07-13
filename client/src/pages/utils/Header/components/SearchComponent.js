@@ -9,7 +9,7 @@ export const SearchComponent = () => {
             className="search"
             placeholder="input search text"
             style={{ width: 200 }}
-            onSearch={(value) => console.log(value)}
+            onSearch={value => console.log(value)}
             enterButton
         />
     )

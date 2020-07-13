@@ -40,10 +40,10 @@ const columnsPlan = [
         title: 'Вид ремонта',
         dataIndex: 'typeOfRepair',
         key: 'typeOfRepair',
-        render: (typeOfRepair) => (
+        render: typeOfRepair => (
             <span>
                 {typeOfRepair &&
-                    typeOfRepair.map((type) => {
+                    typeOfRepair.map(type => {
                         const color = type === 'Средний' ? 'lightcoral' : 'geekblue'
                         return (
                             <Tag color={color} key={type}>
@@ -79,7 +79,7 @@ const statisticPlan = [
     }
 ]
 
-export default function (props) {
+export default function(props) {
     const { data, period, visible } = props
     const { model, inn, num, mtbf, sumAmount, sumTime, typeOfRepair } = data
 
@@ -111,7 +111,7 @@ export default function (props) {
     let d = []
 
     visible &&
-        Object.entries(data['nodes']).forEach((node) => {
+        Object.entries(data['nodes']).forEach(node => {
             // Дробное значение времени в исходной таблице excel предоставляется с запятой, имеет тип строки
             // Необходимо преобразовать к числу с плавающей точкой
             // Для натуральных чисел преобразование не требуется

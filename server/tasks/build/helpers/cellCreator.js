@@ -1,5 +1,5 @@
 // Создать ячейку с данными
-module.exports.createCell = function (ws, int, str, defaultStyle) {
+module.exports.createCell = function(ws, int, str, defaultStyle) {
     if (str) {
         if (typeof str === 'string') {
             ws.cell(...int)

@@ -1,6 +1,6 @@
 // Преобразовать исходные данные для построения таблицы в ANTD Design формат
 
-module.exports = function (data) {
+module.exports = function(data) {
     let columns = []
     let dataSource = []
 

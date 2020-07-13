@@ -3,7 +3,7 @@
 const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCell
 const createCellTitle = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCellTitle
 
-module.exports = function ({ plan, ws, defaultStyle }) {
+module.exports = function({ plan, ws, defaultStyle }) {
     // Закрепить строку, столбец
     ws.row(3).freeze()
     ws.column(1).setWidth(15)
@@ -15,7 +15,7 @@ module.exports = function ({ plan, ws, defaultStyle }) {
     let step4 = 2
     let stepTitle = 2
 
-    Object.keys(plan).forEach((key) => {
+    Object.keys(plan).forEach(key => {
         if (key === '71' || key === '77' || key === 'undefined' || key === 'Произ-во') return // здесь фильтровать нужные производства
 
         // Ширина колонок с моделью
@@ -37,7 +37,7 @@ module.exports = function ({ plan, ws, defaultStyle }) {
             createCellTitle(ws, [row, 1], plan[key]['period'][i], defaultStyle)
 
             // Модель, инвентарный номер, цеховой номер, вид ремонта
-            timeInterval.forEach((item) => {
+            timeInterval.forEach(item => {
                 createCell(ws, [row, step1], item['model'], defaultStyle)
                 createCell(ws, [row, ++step1], item['num'], defaultStyle)
                 createCell(ws, [row, ++step1], item['inn'], defaultStyle)
@@ -82,7 +82,7 @@ function startRowsArr(plan) {
     // Свойства объекта - порядковый номер массива из перебираемого массива plan
     // Значения свойств - максимальное количество станков из всех производств для каждого периода времени
     let maxEquipmentObj = {}
-    Object.keys(plan).forEach((key) => {
+    Object.keys(plan).forEach(key => {
         plan[key]['data'].forEach((timeInterval, i) => {
             if (!maxEquipmentObj[i] || timeInterval.length > maxEquipmentObj[i]) {
                 maxEquipmentObj[i] = timeInterval.length

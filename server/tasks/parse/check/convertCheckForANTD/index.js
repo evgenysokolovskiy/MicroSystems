@@ -1,9 +1,9 @@
 // Преобразовать исходные данные для построения таблицы в ANTD Design на клиенте
 
-module.exports = function (data) {
+module.exports = function(data) {
     let columns = []
     let dataSource = []
-    data.forEach((item) => {
+    data.forEach(item => {
         item.forEach((arr, i) => {
             if (!arr.length) return
 

@@ -9,17 +9,19 @@ import { Layout, Collapse, Tabs, Typography } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Container, Message } from '../../styles/'
 
+import componentLoader from '../../../componentLoader'
+
 const { Content } = Layout
 const { Panel } = Collapse
 const { TabPane } = Tabs
 const { Title, Text } = Typography
 
-const TableComponent = lazy(() => import('./TableComponent/App'))
-const AxisComponent = lazy(() => import('./AxisComponent/App'))
-const DiameterComponent = lazy(() => import('./ChartComponents/DiameterComponent'))
+const TableComponent = lazy(() => componentLoader(() => import('./TableComponent/App')))
+const AxisComponent = lazy(() => componentLoader(() => import('./AxisComponent/App')))
+const DiameterComponent = lazy(() => componentLoader(() => import('./ChartComponents/DiameterComponent')))
 
 // Функция правильного отображения числовых значений для отсечек на XAxis
-const CustomizedAxisTick = (props) => {
+const CustomizedAxisTick = props => {
     const { x, y, payload } = props
 
     return (
@@ -73,7 +75,7 @@ export default class App extends PureComponent {
                             type="card"
                             onChange={this.handleChangeType}
                         >
-                            {types.map((type) => (
+                            {types.map(type => (
                                 <TabPane tab={type} key={type}>
                                     <AxisComponent
                                         type={type}
@@ -122,13 +124,13 @@ export default class App extends PureComponent {
                 const visibleCards =
                     cards &&
                     cards['hasBatchLoadingTime'] &&
-                    cards['hasBatchLoadingTime'].map((card) => <TabPane tab={card} key={card} />)
+                    cards['hasBatchLoadingTime'].map(card => <TabPane tab={card} key={card} />)
 
                 // Неактивные карты
                 const disabledCards =
                     cards &&
                     cards['notBatchLoadingTime'] &&
-                    cards['notBatchLoadingTime'].map((card) => (
+                    cards['notBatchLoadingTime'].map(card => (
                         <TabPane tab={card} key={card} disabled />
                     ))
 
@@ -178,7 +180,7 @@ export default class App extends PureComponent {
                         type="card"
                         onChange={this.handleChangeType}
                     >
-                        {types.map((type) => (
+                        {types.map(type => (
                             <TabPane tab={type} key={type}>
                                 <Tabs
                                     defaultActiveKey={card ? card : nameTotalTab}
@@ -234,7 +236,7 @@ export default class App extends PureComponent {
     }
 
     // Получить текущие показатели при наведении мыши
-    getData = (data) => {
+    getData = data => {
         if (data.payload && typeof data.payload[0] !== 'undefined') {
             const { date } = data.payload[0].payload
             this.setState({ date })
@@ -249,17 +251,17 @@ export default class App extends PureComponent {
     }
 
     // Событие по типу подшипника
-    handleChangeType = (e) => {
+    handleChangeType = e => {
         this.props.handleClickChangeTechType(e)
     }
 
     // Событие по карте
-    handleChangeCards = (e) => {
+    handleChangeCards = e => {
         this.props.handleClickChangeTechCards(e)
     }
 
     // Открытые панели
-    handleChangePanel = (key) => {
+    handleChangePanel = key => {
         // Передать key последней по времени открытой панели
         this.props.handleLastOpenedPanel(key[key.length - 1])
     }

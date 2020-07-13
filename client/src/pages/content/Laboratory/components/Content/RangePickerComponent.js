@@ -10,10 +10,20 @@ const dateFormat = 'DD.MM.YYYY'
 
 export default class RangePickerComponent extends React.Component {
     onChange = (value, dateString) => {
+        const { defaultStart } = this.props
+        const now = new Date().getTime()
+
         this.props.handleClickRangeDate([
             stringToMsDate(dateString[0]),
             stringToMsDate(dateString[1])
         ])
+
+        if (!dateString[0] || !dateString[1]) {
+            this.props.handleClickRangeDate([
+                stringToMsDate(msDateToString(defaultStart)),
+                stringToMsDate(msDateToString(now))
+            ])
+        }
     }
 
     render() {

@@ -7,13 +7,13 @@ const calculateDataShp = require(appRoot + '/server/tasks/laboratory/helpers/shp
 const calculateDataShsp = require(appRoot + '/server/tasks/laboratory/helpers/shsp/')
 const calculateDataSog = require(appRoot + '/server/tasks/laboratory/helpers/sog/')
 
-module.exports = function ({ app, parseLaboratoryFact, technology }) {
+module.exports = function({ app, parseLaboratoryFact, technology }) {
     const { technologyShp, technologyShsp, technologySog } = technology
 
-    fs.readdir(parseLaboratoryFact, function (err, files) {
-        const paths = files.map((item) => `${parseLaboratoryFact}/${item}`)
+    fs.readdir(parseLaboratoryFact, function(err, files) {
+        const paths = files.map(item => `${parseLaboratoryFact}/${item}`)
         for (let i = 0; i < paths.length; i++) {
-            new Promise(function (resolve, reject) {
+            new Promise(function(resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
                 if (!xlsx.parse(`${paths[i]}`)[2]) return
                 const factShp = xlsx.parse(`${paths[i]}`)[0]['data']
@@ -47,7 +47,7 @@ module.exports = function ({ app, parseLaboratoryFact, technology }) {
                 } else {
                     reject(new Error('Err'))
                 }
-            }).catch((err) => console.log(err))
+            }).catch(err => console.log(err))
         }
     })
 }

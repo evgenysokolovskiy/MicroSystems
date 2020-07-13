@@ -1,6 +1,6 @@
 const clonedeep = require('lodash.clonedeep')
-const INDEXES_TECHNOLOGY = require('./config/shp/technology')
-const INDEXES_FACT = require('./config/shp/fact')
+const INDEXES_TECHNOLOGY = require('./config/technology')
+const INDEXES_FACT = require('./config/fact')
 
 // indexes technology
 const indexTechnologyName = INDEXES_TECHNOLOGY['name']
@@ -25,13 +25,13 @@ const indexFactMetalInclusions = INDEXES_FACT['metalInclusions']
 const indexFactFlashPoint = INDEXES_FACT['flashPoint']
 const indexFactAcidNumber = INDEXES_FACT['acidNumber']
 
-export default function calculateDataShp({ fact: f, technology: t, startDate }) {
-    const fact = clonedeep(f).slice(4)
-    const technology = clonedeep(t).slice(5)
+export default function calculateDataShp({ fact: f, technology: t }) {
+    const fact = clonedeep(f)
+    const technology = clonedeep(t)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach((t) => {
+    technology.forEach(t => {
         const obj = {}
         if (typeof t[indexTechnologyInhibitorMin] === 'number') {
             obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
@@ -61,9 +61,11 @@ export default function calculateDataShp({ fact: f, technology: t, startDate }) 
     // 2) На основании технологии и факта просчитать количество true/false для каждого свойства и значения
     let amount = {}
     let source = {}
-    fact.forEach((f) => {
+
+    fact.forEach(f => {
         if (!f[indexFactName] || !f[indexFactDate]) return
-        const name = f[indexFactName] || f[indexFactName].trim()
+        const name = f[indexFactName].trim()
+
         if (!amount[name]) amount[name] = {}
         if (!source[name]) source[name] = {}
 
@@ -315,17 +317,15 @@ export default function calculateDataShp({ fact: f, technology: t, startDate }) 
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach((item) => {
+    Object.entries(amount).forEach(item => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach((prop) => {
+        Object.entries(item[1]).forEach(prop => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
             ).toFixed()
         })
     })
-
-    if (Object.keys(percent).length === 0 || Object.keys(percent).length === 0) return
 
     source = deleteEmptyProps(source)
     percent = deleteEmptyProps(percent)
@@ -350,7 +350,7 @@ function msDateToString(ms) {
 // Удалить свойства, равные {}, т.е., когда нет фактических данных
 function deleteEmptyProps(data) {
     let obj = {}
-    Object.entries(data).forEach((item) => {
+    Object.entries(data).forEach(item => {
         if (Object.values(item[1])[0]) {
             obj[item[0]] = item[1]
         }

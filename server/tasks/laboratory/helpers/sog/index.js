@@ -37,27 +37,33 @@ const indexFactSoap = INDEXES_FACT['soap']
 // Данные к API отправляются только за период с началом (текущая дата минус указанное число дней)
 // При изменении интервала времени на клиенте, перерасчёт будет производится на клиенте
 // Так же на клиент будут отправлены сырые данные за весь период на другой адрес API
-const BEFORE_DAYS_RANGE = 365
 
-module.exports = function ({ fact: f, technology: t }) {
+//const BEFORE_DAYS_RANGE = 365
+
+module.exports = function({ fact: f, technology: t }) {
     const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
 
+    const currentYear = new Date().getFullYear()
+    const firstDayCurrentYear = new Date(currentYear, 0, 1)
+
+    // Начальная дата в миллисекундах - первый день текущего года
+    const startDate = firstDayCurrentYear
     // Начальная дата в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
+    //const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
 
     // Получить массив с датой в миллисекундах
-    const all = clonedeep(allFact).map((item) => {
+    const all = clonedeep(allFact).map(item => {
         item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
         return item
     })
 
     // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const fact = clonedeep(all).filter((item) => item[indexFactDate] > startDate)
+    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach((t) => {
+    technology.forEach(t => {
         const obj = {}
         if (typeof t[indexTechnologyPhMin] === 'number') {
             obj['phMin'] = t[indexTechnologyPhMin]
@@ -98,7 +104,7 @@ module.exports = function ({ fact: f, technology: t }) {
     let amount = {}
     let source = {}
 
-    fact.forEach((f) => {
+    fact.forEach(f => {
         if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
         if (!amount[name]) amount[name] = {}
@@ -387,7 +393,7 @@ module.exports = function ({ fact: f, technology: t }) {
             }
         }
 
-        // Концентрация
+        // Мыло
         if (
             f[indexFactSoap] &&
             objTechnology[name] &&
@@ -426,17 +432,15 @@ module.exports = function ({ fact: f, technology: t }) {
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach((item) => {
+    Object.entries(amount).forEach(item => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach((prop) => {
+        Object.entries(item[1]).forEach(prop => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
             ).toFixed()
         })
     })
-
-    if (Object.keys(percent).length === 0 || Object.keys(amount).length === 0) return
 
     source = deleteEmptyProps(source)
     percent = deleteEmptyProps(percent)
@@ -462,7 +466,7 @@ function ExcelDateToJSMsDate(serial) {
     } else if (typeof serial === 'string') {
         currentDate = new Date()
         const y = serial.split('.')[2]
-        const yyyy = y.length === 2 ? `20${y}` : y
+        const yyyy = y && y.length === 2 ? `20${y}` : y
         const mm = serial.split('.')[1] - 1
         const dd = serial.split('.')[0]
         currentDate = new Date(yyyy, mm, dd).getTime()
@@ -492,7 +496,7 @@ function getDateBeforeDaysFromNow(range) {
 // Удалить свойства, равные {}, т.е., когда нет фактических данных
 function deleteEmptyProps(data) {
     let obj = {}
-    Object.entries(data).forEach((item) => {
+    Object.entries(data).forEach(item => {
         if (Object.values(item[1])[0]) {
             obj[item[0]] = item[1]
         }

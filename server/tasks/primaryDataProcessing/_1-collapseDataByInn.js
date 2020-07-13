@@ -3,12 +3,12 @@
 const clonedeep = require('lodash.clonedeep')
 const INDEXES = require(appRoot + '/server/config/repaire/').INDEXES
 
-module.exports = function (data) {
+module.exports = function(data) {
     const d = clonedeep(data)
     const { spot, model, inn, num, code, description, amount, time, ps, mtbf } = INDEXES
     const obj = {}
 
-    d.forEach((item) => {
+    d.forEach(item => {
         const prev = obj[item[inn]] ? obj[item[inn]].nodes : []
         const nodes = {
             ...prev,

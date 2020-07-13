@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import image1 from '../../../../images/download.png'
-
 export const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
@@ -18,7 +16,6 @@ export const Message = styled.div`
 `
 export const Image1 = styled.img`
     position: absolute;
-    background: url(${image1}) 100% 100% no-repeat;
     background-size: cover;
     width: 100%;
     height: 100vh;

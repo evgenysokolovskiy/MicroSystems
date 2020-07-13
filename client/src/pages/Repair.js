@@ -1,4 +1,4 @@
-import React, { lazy } from 'react'
+import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchDataMiddleware } from '../api/middlewares/fetchDataMiddleware'
@@ -7,16 +7,15 @@ import {
     fetchCheckForAntdMiddleware
 } from '../api/middlewares/fetchCheckMiddleware'
 import { fetchSchemeMiddleware } from '../api/middlewares/fetchSchemeMiddleware'
+// Components
+import Modal from './utils/Modal/App'
+import Footer from './utils/Footer/App'
+import Content from './content/Repair/App'
 // Antd
 import { Layout } from 'antd'
 import { HomeOutlined } from '@ant-design/icons'
-// Utils
-const Modal = lazy(() => import('./utils/Modal/App'))
-const Footer = lazy(() => import('./utils/Footer/App'))
-// Content
-const Content = lazy(() => import('./content/Repair/App'))
 
-export class App extends React.Component {
+export class Repair extends PureComponent {
     componentDidMount() {
         const {
             fetchDataMiddleware,
@@ -64,4 +63,4 @@ const mapDispatchToProps = {
     fetchSchemeMiddleware
 }
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(Repair)

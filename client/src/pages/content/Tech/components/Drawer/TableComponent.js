@@ -42,7 +42,7 @@ const columns = [
 ]
 
 export default class TableComponent extends PureComponent {
-    onChange = (page) => {
+    onChange = page => {
         this.props.changeTechTargetTimeStamp(+page)
     }
 

@@ -4,19 +4,19 @@ const clonedeep = require('lodash.clonedeep')
 const splitProductionEquipment = require(appRoot +
     '/server/tasks/primaryDataProcessing/_2-splitProductionEquipment')
 
-module.exports = function (data) {
+module.exports = function(data) {
     // объект, где ключи - это номера производств
     // Значения - массив объектов, принадлежащих производству
     const d = clonedeep(splitProductionEquipment(data))
     // keys - Обозначение производств (свойства объекта)
     const keys = Object.keys(d)
     let obj = {}
-    keys.forEach((key) => {
+    keys.forEach(key => {
         let sumAmountAllNodes = 0 // Суммарное количество остановок по всем узлам
         let sumTimeAllNodes = 0 // Суммарное время остановок по всем узлам
         let nodes = {}
-        d[key]['data'].forEach((item) => {
-            Object.keys(item.nodes).forEach((node) => {
+        d[key]['data'].forEach(item => {
+            Object.keys(item.nodes).forEach(node => {
                 // Суммировать время простоев
                 // Дробное значение времени в исходной таблице excel предоставляется с запятой, имеет тип строки
                 // Необходимо преобразовать к числу с плавающей точкой

@@ -2,9 +2,11 @@ import React, { Suspense, lazy } from 'react'
 import { Drawer } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 
-const InfoEquipment = lazy(() => import('./InfoEquipment'))
+import componentLoader from '../../../componentLoader'
 
-export const App = (props) => {
+const InfoEquipment = lazy(() => componentLoader(() => import('./InfoEquipment')))
+
+export const App = props => {
     const { data, period, visible, handleClickCloseDrawer } = props
 
     return (

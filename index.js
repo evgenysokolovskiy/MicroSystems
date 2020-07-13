@@ -1,4 +1,5 @@
 const express = require('express')
+const helmet = require('helmet')
 const app = express()
 const fs = require('fs')
 const path = require('path')
@@ -12,6 +13,7 @@ const server = require('http')
 global.appRoot = path.resolve(__dirname)
 
 app.use(express.static(appRoot + '/client/build'))
+app.use(helmet())
 app.use(express.json({ limit: '50mb' }))
 app.use(
     express.urlencoded({

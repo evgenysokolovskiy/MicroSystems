@@ -4,7 +4,7 @@ const PRESSURE = 10
 const SPEED = 60
 const SPEED_ELEVATOR = 0.2
 
-module.exports = function (data) {
+module.exports = function(data) {
     calculateIntermediatePointsTechnologyDiameter(data)
     calculateIntermediatePointsTechnologyInconstancy(data)
     calculateIntermediatePointsTechnologyDimension(data)
@@ -13,7 +13,7 @@ module.exports = function (data) {
 
 // Рассчитать промежуточные точки для Диаметра
 function calculateIntermediatePointsTechnologyDiameter(data) {
-    data.map((item) => {
+    data.map(item => {
         let {
             minDiameter: min,
             maxDiameter: max,
@@ -40,7 +40,7 @@ function calculateIntermediatePointsTechnologyDiameter(data) {
 
 // Рассчитать промежуточные точки для Непостоянства
 function calculateIntermediatePointsTechnologyInconstancy(data) {
-    data.map((item) => {
+    data.map(item => {
         let { len, inconstancy, inconstancyEnd } = item
         let pointsInconstancy = [inconstancy]
         const a = inconstancy
@@ -57,7 +57,7 @@ function calculateIntermediatePointsTechnologyInconstancy(data) {
 
 // Рассчитать промежуточные точки для Разноразмерности
 function calculateIntermediatePointsTechnologyDimension(data) {
-    data.map((item) => {
+    data.map(item => {
         let { len, dimension, dimensionEnd } = item
         let pointsDimension = [dimension]
         const a = dimension
@@ -73,7 +73,7 @@ function calculateIntermediatePointsTechnologyDimension(data) {
 }
 
 function addPressureSpeed(data, PRESSURE, SPEED, SPEED_ELEVATOR) {
-    data.map((item) => {
+    data.map(item => {
         const { len } = item
         let pointsPressure = [],
             pointsSpeed = [],

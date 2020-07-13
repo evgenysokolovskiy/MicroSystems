@@ -4,16 +4,16 @@ import shspAmountTable from './columns/amount/shspAmountTable'
 import sogAmountTable from './columns/amount/sogAmountTable'
 
 export default class TableAmountComponent extends PureComponent {
-    handleChangeParam = (record) => {
+    handleChangeParam = record => {
         this.props.handleClickParam(record['name'])
     }
 
-    handleChangeProp = (column) => {
+    handleChangeProp = column => {
         this.props.handleClickProp(column['name'])
     }
 
     render() {
-        const { menu, amount, param, prop } = this.props
+        const { menu, amount, rowTotal, columnTotal, param, prop } = this.props
 
         let table
         if (menu === 'shp') {
@@ -21,6 +21,8 @@ export default class TableAmountComponent extends PureComponent {
                 amount,
                 param,
                 prop,
+                rowTotal,
+                columnTotal,
                 handleChangeProp: this.handleChangeProp,
                 handleChangeParam: this.handleChangeParam
             })
@@ -29,6 +31,8 @@ export default class TableAmountComponent extends PureComponent {
                 amount,
                 param,
                 prop,
+                rowTotal,
+                columnTotal,
                 handleChangeProp: this.handleChangeProp,
                 handleChangeParam: this.handleChangeParam
             })
@@ -37,6 +41,8 @@ export default class TableAmountComponent extends PureComponent {
                 amount,
                 param,
                 prop,
+                rowTotal,
+                columnTotal,
                 handleChangeProp: this.handleChangeProp,
                 handleChangeParam: this.handleChangeParam
             })
@@ -45,7 +51,7 @@ export default class TableAmountComponent extends PureComponent {
         return (
             <>
                 <h4 style={{ paddingTop: 20, paddingLeft: 20 }}>
-                    Журнал регистрации анализов нефтепродуктов СПиТК
+                    Журнал регистрации анализов нефтепродуктов
                 </h4>
                 {table}
             </>

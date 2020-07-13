@@ -2,8 +2,10 @@ import React, { PureComponent, Suspense, lazy } from 'react'
 import { Drawer, Typography } from 'antd'
 import { LoadingOutlined } from '@ant-design/icons'
 
-const TableComponent = lazy(() => import('./TableComponent'))
-const StatisticComponent = lazy(() => import('./StatisticComponent'))
+import componentLoader from '../../../componentLoader'
+
+const TableComponent = lazy(() => componentLoader(() => import('./TableComponent')))
+const StatisticComponent = lazy(() => componentLoader(() => import('./StatisticComponent')))
 const { Title } = Typography
 
 export default class App extends PureComponent {
@@ -14,7 +16,7 @@ export default class App extends PureComponent {
         differencePressure: null,
         differenceSpeed: null
     }
-    onGetData = (data) => {
+    onGetData = data => {
         const {
             differenceDiameter,
             differenceInconstancy,

@@ -1,13 +1,13 @@
 import { changeAmount } from '../../store/laboratory/actions/labAmountAction'
 
 export function fetchLabAmountMiddleware(url, self) {
-    return (dispatch) => {
+    return dispatch => {
         fetch(url)
-            .then((res) => res.json())
-            .then((data) => {
+            .then(res => res.json())
+            .then(data => {
                 dispatch(changeAmount(data))
             })
             .then(() => self.setState({ isLoadedAmount: true }))
-            .catch((error) => console.log(error))
+            .catch(error => console.log(error))
     }
 }

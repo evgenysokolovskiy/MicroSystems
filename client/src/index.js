@@ -1,37 +1,31 @@
-import React, { Suspense, lazy } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { store } from './store/'
-import { Router, Switch, Route } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
-import { LoadingOutlined } from '@ant-design/icons'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 // Обработчик ошибок
 import ErrorBoundary from './ErrorBoundary'
 // Стили
 import './styles/index.css'
 
-const history = createBrowserHistory()
-
-const Greet = lazy(() => import('./pages/Greet'))
-const Repair = lazy(() => import('./pages/Repair'))
-const Tech = lazy(() => import('./pages/Tech'))
-const Laboratory = lazy(() => import('./pages/Laboratory'))
+import Greet from './pages/Greet'
+import Repair from './pages/Repair'
+import Tech from './pages/Tech'
+import Laboratory from './pages/Laboratory'
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router history={history}>
+        <BrowserRouter>
             <ErrorBoundary>
-                <Suspense fallback={<LoadingOutlined className="loading" />}>
-                    <Switch>
-                        <Route exact path="/" component={Greet} />
-                        <Route path="/repair" component={Repair} />
-                        <Route path="/tech" component={Tech} />
-                        <Route path="/laboratory" component={Laboratory} />
-                        <Route path="*" component={Greet} />
-                    </Switch>
-                </Suspense>
+                <Switch>
+                    <Route exact={true} path="/" component={Greet} />
+                    <Route path="/repair" component={Repair} />
+                    <Route path="/tech" component={Tech} />
+                    <Route path="/laboratory" component={Laboratory} />
+                    <Redirect to="/" />
+                </Switch>
             </ErrorBoundary>
-        </Router>
+        </BrowserRouter>
     </Provider>,
     document.getElementById('root')
 )

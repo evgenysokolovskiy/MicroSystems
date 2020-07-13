@@ -3,7 +3,7 @@ import React, { PureComponent, Suspense, lazy } from 'react'
 import MenuComponent from './MenuComponent'
 import RangePickerComponent from './RangePickerComponent'
 // Antd
-import { Layout, Typography, Tabs } from 'antd'
+import { Layout, Typography, Tabs/*, Button, Radio */ } from 'antd'
 import {
     LoadingOutlined,
     PercentageOutlined,
@@ -13,16 +13,18 @@ import {
 // Styled-components
 import { Container, Message } from '../../styles/'
 
-const TablePercentComponent = lazy(() => import('./TableComponents/TablePercentComponent'))
-const TableAmountComponent = lazy(() => import('./TableComponents/TableAmountComponent'))
-const ChartComponent = lazy(() => import('./ChartComponents/ChartComponent'))
+import componentLoader from '../../../componentLoader'
+
+const TablePercentComponent = lazy(() => componentLoader(() => import('./TableComponents/TablePercentComponent')))
+const TableAmountComponent = lazy(() => componentLoader(() => import('./TableComponents/TableAmountComponent')))
+const ChartComponent = lazy(() => componentLoader(() => import('./ChartComponents/ChartComponent')))
 
 const { Content } = Layout
 const { TabPane } = Tabs
 const { Title } = Typography
 
 // Функция правильного отображения числовых значений для отсечек на XAxis
-const CustomizedAxisTick = (props) => {
+const CustomizedAxisTick = props => {
     const { x, y, payload } = props
 
     return (
@@ -58,7 +60,7 @@ export default class App extends PureComponent {
             (source && param && !prop && prevProps.source !== source) ||
             prevProps.param !== param
         ) {
-            const val = Object.values(source).find((item) => Object.keys(item).length)
+            const val = Object.values(source).find(item => Object.keys(item).length)
             val && handleClickProp(Object.keys(val)[0])
         }
 
@@ -73,19 +75,23 @@ export default class App extends PureComponent {
         }
     }
 
-    handleChange = (e) => {
-        this.props.handleClickAmount(e)
+    handleChange = e => {
         this.setState({ activeTab: e })
     }
 
-    handleChangeParam = (e) => {
+    handleChangeParam = e => {
         this.props.handleClickParam(e)
     }
 
-    handleChangeProp = (e) => {
+    handleChangeProp = e => {
         this.props.handleClickProp(e)
+        //document.querySelector('.radio').blur()
     }
-
+/*
+    handleButton = e => {
+        console.log(e.target.value)
+    }
+*/
     onPrint = () => {
         //const content = document.querySelector('.labTable')
         //const root = document.getElementById('root')
@@ -134,6 +140,7 @@ export default class App extends PureComponent {
         let {
             menu,
             range,
+            defaultStart,
             param,
             prop,
             equipment,
@@ -206,8 +213,15 @@ export default class App extends PureComponent {
                         {tabs}
                         <RangePickerComponent
                             range={range}
+                            defaultStart={defaultStart}
                             handleClickRangeDate={handleClickRangeDate}
                         />
+{/*
+                        <Radio.Group size="large" buttonStyle="solid" onChange={this.handleButton}>
+                            <Radio.Button value="7day" onClick={this.handleButton}>7 дней </Radio.Button>
+                            <Radio.Button value="30days" onClick={this.handleButton} className="radio">30 дней</Radio.Button>
+                        </Radio.Group>
+*/}
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',
@@ -240,8 +254,15 @@ export default class App extends PureComponent {
                         {tabs}
                         <RangePickerComponent
                             range={range}
+                            defaultStart={defaultStart}
                             handleClickRangeDate={handleClickRangeDate}
                         />
+{/*
+                        <Radio.Group size="large" onChange={this.handleButton}>
+                            <Radio.Button value="7day" onClick={this.handleButton}>7 дней </Radio.Button>
+                            <Radio.Button value="30days" onClick={this.handleButton}>30 дней</Radio.Button>
+                        </Radio.Group>
+*/}
                         <PrinterOutlined
                             style={{
                                 fontSize: '20px',

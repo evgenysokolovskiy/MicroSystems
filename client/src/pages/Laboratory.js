@@ -1,16 +1,15 @@
-import React, { lazy } from 'react'
+import React, { PureComponent } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+// Components
+import Modal from './utils/Modal/App'
+import Footer from './utils/Footer/App'
+import Content from './content/Laboratory/App'
 // Antd
 import { Layout } from 'antd'
 import { HomeOutlined } from '@ant-design/icons'
-// Utils
-const Modal = lazy(() => import('./utils/Modal/App'))
-const Footer = lazy(() => import('./utils/Footer/App'))
-// Content
-const Content = lazy(() => import('./content/Laboratory/App'))
 
-export class App extends React.Component {
+export class Laboratory extends PureComponent {
     render() {
         return (
             <Layout>
@@ -39,4 +38,4 @@ export class App extends React.Component {
 
 const mapDispatchToProps = {}
 
-export default connect(null, mapDispatchToProps)(App)
+export default connect(null, mapDispatchToProps)(Laboratory)

@@ -4,7 +4,15 @@ import { Table } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 const { Column, ColumnGroup } = Table
 
-export default function ({ amount, param, prop, handleChangeProp, handleChangeParam }) {
+export default function({
+    amount,
+    param,
+    prop,
+    rowTotal,
+    columnTotal,
+    handleChangeProp,
+    handleChangeParam
+}) {
     let dataSource = []
     Object.keys(amount).forEach((param, i) => {
         const count = ++i
@@ -47,10 +55,61 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                 amount[param]['Механические примеси, %'] &&
                 amount[param]['Механические примеси, %']['false'])(),
             soapTrue: (() => amount[param]['Мыло, г/л'] && amount[param]['Мыло, г/л']['true'])(),
-            soapFalse: (() => amount[param]['Мыло, г/л'] && amount[param]['Мыло, г/л']['false'])()
+            soapFalse: (() => amount[param]['Мыло, г/л'] && amount[param]['Мыло, г/л']['false'])(),
+            rowTotal: (() => rowTotal[param] && rowTotal[param]['all'])(),
+            rowTotalTrue: (() => rowTotal[param] && rowTotal[param]['true'])(),
+            rowTotalFalse: (() => rowTotal[param] && rowTotal[param]['false'])()
         }
         dataSource = [...dataSource, item]
     })
+
+    let t = 0,
+        f = 0
+    Object.values(rowTotal).forEach(item => {
+        t += item['true']
+        f += item['false']
+    })
+
+    const total = {
+        key: 1000,
+        fabric: '',
+        name: 'ИТОГО',
+        phTrue: (() => columnTotal['pH, %'] && columnTotal['pH, %']['true'])(),
+        phFalse: (() => columnTotal['pH, %'] && columnTotal['pH, %']['false'])(),
+        densityTrue: (() =>
+            columnTotal['Концентрация, %'] && columnTotal['Концентрация, %']['true'])(),
+        densityFalse: (() =>
+            columnTotal['Концентрация, %'] && columnTotal['Концентрация, %']['false'])(),
+        sodaTrue: (() => columnTotal['Сода, г/л'] && columnTotal['Сода, г/л']['true'])(),
+        sodaFalse: (() => columnTotal['Сода, г/л'] && columnTotal['Сода, г/л']['false'])(),
+        bicarbonateTrue: (() =>
+            columnTotal['Бикарбонат натрия, %'] && columnTotal['Бикарбонат натрия, %']['true'])(),
+        bicarbonateFalse: (() =>
+            columnTotal['Бикарбонат натрия, %'] && columnTotal['Бикарбонат натрия, %']['false'])(),
+        nitriteTrue: (() =>
+            columnTotal['Нитрит натрия, %'] && columnTotal['Нитрит натрия, %']['true'])(),
+        nitriteFalse: (() =>
+            columnTotal['Нитрит натрия, %'] && columnTotal['Нитрит натрия, %']['false'])(),
+        degreeTrue: (() =>
+            columnTotal['Степень биопоражения'] && columnTotal['Степень биопоражения']['true'])(),
+        degreeFalse: (() =>
+            columnTotal['Степень биопоражения'] && columnTotal['Степень биопоражения']['false'])(),
+        corrosionTrue: (() => columnTotal['Коррозия'] && columnTotal['Коррозия']['true'])(),
+        corrosionFalse: (() => columnTotal['Коррозия'] && columnTotal['Коррозия']['false'])(),
+        mechanicalAdmixtureTrue: (() =>
+            columnTotal['Механические примеси, %'] &&
+            columnTotal['Механические примеси, %']['true'])(),
+        mechanicalAdmixtureFalse: (() =>
+            columnTotal['Механические примеси, %'] &&
+            columnTotal['Механические примеси, %']['false'])(),
+        soapTrue: (() => columnTotal['Мыло, г/л'] && columnTotal['Мыло, г/л']['true'])(),
+        soapFalse: (() => columnTotal['Мыло, г/л'] && columnTotal['Мыло, г/л']['false'])(),
+        rowTotalTrue: t,
+        rowTotalFalse: f,
+        rowTotal: t + f
+    }
+
+    dataSource = [...dataSource, total]
 
     const table = (
         <Table
@@ -63,7 +122,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
             rowClassName={(record, index) => record['name'] === param && 'selected'}
             onRow={(record, rowIndex) => {
                 return {
-                    onClick: (event) => {
+                    onClick: event => {
                         handleChangeParam(record)
                     }
                 }
@@ -90,7 +149,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="pH, %"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -134,7 +193,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Концентрация, %"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -178,7 +237,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Сода, г/л"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -223,7 +282,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Бикарбонат натрия, %"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -267,7 +326,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Нитрит натрия, %"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -312,7 +371,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Степень биопоражения"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -356,7 +415,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Коррозия"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -401,7 +460,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Механические примеси, %"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -445,7 +504,7 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         )
                     }
                     name="Мыло, г/л"
-                    onHeaderCell={(column) => {
+                    onHeaderCell={column => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -470,6 +529,32 @@ export default function ({ amount, param, prop, handleChangeProp, handleChangePa
                         className={prop === 'Мыло, г/л' ? 'false' : null}
                     />
                 </ColumnGroup>
+            </ColumnGroup>
+
+            <ColumnGroup title="ИТОГО">
+                <Column
+                    title="+"
+                    dataIndex="rowTotalTrue"
+                    key="rowTotalTrue"
+                    className="true"
+                    width={30}
+                    align="center"
+                />
+                <Column
+                    title="-"
+                    dataIndex="rowTotalFalse"
+                    key="rowTotalFalse"
+                    className="false"
+                    width={30}
+                    align="center"
+                />
+                <Column
+                    title="&#8721;"
+                    dataIndex="rowTotal"
+                    key="rowTotal"
+                    width={30}
+                    align="center"
+                />
             </ColumnGroup>
         </Table>
     )
