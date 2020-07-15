@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux'
+// greet
+import greetMenuReducer from './greet/reducers/greetMenuReducer'
 // repair
 import fetchReducer from './repair/reducers/fetchReducer'
 import fetchCheckForGeneralUseReducer from './repair/reducers/fetchCheckForGeneralUseReducer'
@@ -23,6 +25,9 @@ import techDrawerReducer from './tech/reducers/techDrawerReducer'
 import techTypeReducer from './tech/reducers/techTypeReducer'
 import techCardNumberReducer from './tech/reducers/techCardNumberReducer'
 // laboratory
+import labLastShpReducer from './laboratory/reducers/labLastShpReducer'
+import labLastShspReducer from './laboratory/reducers/labLastShspReducer'
+import labLastSogReducer from './laboratory/reducers/labLastSogReducer'
 import labAllReducer from './laboratory/reducers/labAllReducer'
 import labPercentReducer from './laboratory/reducers/labPercentReducer'
 import labAmountReducer from './laboratory/reducers/labAmountReducer'
@@ -34,6 +39,8 @@ import labEquipmentNumberReducer from './laboratory/reducers/labEquipmentNumberR
 import labChangedRangeDateReducer from './laboratory/reducers/labChangedRangeDateReducer'
 
 export default combineReducers({
+    // greet
+    greetMenuReducer,
     // repair
     fetchReducer,
     fetchCheckForGeneralUseReducer,
@@ -58,6 +65,9 @@ export default combineReducers({
     techTypeReducer,
     techCardNumberReducer,
     //laboratory
+    labLastShpReducer,
+    labLastShspReducer,
+    labLastSogReducer,
     labAllReducer,
     labPercentReducer,
     labAmountReducer,

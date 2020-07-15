@@ -3,10 +3,21 @@ const INDEXES_FACT_DATE_SHP = require(appRoot + '/server/config/laboratory/shp/f
 const INDEXES_FACT_DATE_SHSP = require(appRoot + '/server/config/laboratory/shsp/fact')['date']
 const INDEXES_FACT_DATE_SOG = require(appRoot + '/server/config/laboratory/sog/fact')['date']
 
+const getOnlyLastTimeElementsShp = require(appRoot + '/server/tasks/laboratory/helpers/shp/getOnlyLastTimeElements')
+const getOnlyLastTimeElementsShsp = require(appRoot + '/server/tasks/laboratory/helpers/shsp/getOnlyLastTimeElements')
+const getOnlyLastTimeElementsSog = require(appRoot + '/server/tasks/laboratory/helpers/sog/getOnlyLastTimeElements')
+
 module.exports = function({ app, data }) {
     const { shp, shsp, sog } = data
 
     if (shp) {
+        app.get('/api/laboratory/lastshp', function(req, res) {
+            const source = getOnlyLastTimeElementsShp(shp['source'])
+            res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
+            res.json(source)
+            console.log('Данные отправлены на /api/laboratory/lastshp')
+        })
+
         app.get('/api/laboratory/percentshp', function(req, res) {
             res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
             res.json(shp['percent'])
@@ -38,6 +49,13 @@ module.exports = function({ app, data }) {
     }
 
     if (shsp) {
+        app.get('/api/laboratory/lastshsp', function(req, res) {
+            const source = getOnlyLastTimeElementsShsp(shsp['source'])
+            res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
+            res.json(source)
+            console.log('Данные отправлены на /api/laboratory/lastshsp')
+        })
+
         app.get('/api/laboratory/percentshsp', function(req, res) {
             res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
             res.json(shsp['percent'])
@@ -69,6 +87,13 @@ module.exports = function({ app, data }) {
     }
 
     if (sog) {
+        app.get('/api/laboratory/lastsog', function(req, res) {
+            const source = getOnlyLastTimeElementsSog(sog['source'])
+            res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
+            res.json(source)
+            console.log('Данные отправлены на /api/laboratory/lastsog')
+        })
+
         app.get('/api/laboratory/percentsog', function(req, res) {
             res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
             res.json(sog['percent'])

@@ -23,7 +23,7 @@ import { calculateTargetData } from '../helpers/calculateTargetData'
 
 const origin = window.location.origin
 
-export class Content extends PureComponent {
+class Content extends PureComponent {
     constructor(props) {
         super(props)
         this.nameTotalTab = 'Сводная'

@@ -5,7 +5,7 @@ import { changeTargetMenu } from '../../../../store/repair/actions/targetMenuAct
 import { changeTargetInn } from '../../../../store/repair/actions/targetInnAction'
 import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
 
-export class Content extends PureComponent {
+class Content extends PureComponent {
     handleClickMenu = item => {
         this.props.changeTargetMenu(item)
     }

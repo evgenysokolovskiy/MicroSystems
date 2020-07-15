@@ -1,3 +1,30 @@
+export const _LAB_LAST_SHP = {
+    types: {
+        LAB_LAST_SHP: 'LAB_LAST_SHP'
+    },
+    init: {
+        labLastShp: null
+    }
+}
+
+export const _LAB_LAST_SHSP = {
+    types: {
+        LAB_LAST_SHSP: 'LAB_LAST_SHSP'
+    },
+    init: {
+        labLastShsp: null
+    }
+}
+
+export const _LAB_LAST_SOG = {
+    types: {
+        LAB_LAST_SOG: 'LAB_LAST_SOG'
+    },
+    init: {
+        labLastSog: null
+    }
+}
+
 export const _LAB_ALL = {
     types: {
         LAB_ALL: 'LAB_ALL'

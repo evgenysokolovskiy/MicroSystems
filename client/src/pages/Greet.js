@@ -1,17 +1,22 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
+import { connect } from 'react-redux'
 // Components
-import Header from './utils/Header/App'
-import Footer from './utils/Footer/App'
 import Content from './content/Greet/App'
+import Footer from './utils/Footer/App'
 // Antd
 import { Layout } from 'antd'
 
-export default function App() {
-    return (
-        <Layout>
-            <Header />
-            <Content />
-            <Footer />
-        </Layout>
-    )
+export class Greet extends PureComponent {
+	render() {
+	    return (
+	        <Layout>
+	            <Content />
+	            <Footer />
+	        </Layout>
+	    )
+	}
 }
+
+const mapDispatchToProps = {}
+
+export default connect(null, mapDispatchToProps)(Greet)

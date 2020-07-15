@@ -1,16 +1,9 @@
 import React from 'react'
-// Antd
-import { Carousel } from 'antd'
+// Компоненты
+import Content from './containers/Content'
 // Стили
-import { Bg1, Bg2, Bg3, Bg4 } from './styles/'
+import './styles/index.css'
 
 export default function App() {
-    return (
-        <Carousel effect="fade">
-            <Bg1 />
-            <Bg2 />
-            <Bg3 />
-            <Bg4 />
-        </Carousel>
-    )
+    return <Content />
 }

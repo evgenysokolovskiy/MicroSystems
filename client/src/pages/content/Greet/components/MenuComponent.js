@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 
 export default class MenuComponent extends React.Component {
+    handleClick = target => {
+        this.props.handleClickMenu(target['key'].slice(1))
+    }
     render() {
         const currentPath = `/${window.location.pathname.split('/')[1]}/`
         return (
@@ -12,6 +15,7 @@ export default class MenuComponent extends React.Component {
                 mode="horizontal"
                 selectedKeys={[currentPath]}
                 style={{ lineHeight: '15vh', marginRight: 'auto' }}
+                onSelect={this.handleClick}
             >
                 <Menu.Item key="/repair">
                     <h1 className="mainMenuLink">

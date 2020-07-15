@@ -47,17 +47,20 @@ export const qualityProduction = `${origin}/api/qualityproduction`
 export const mtime = `${origin}/api/mtime`
 
 // Laboratory
+export const laboratoryLastShp = `${origin}/api/laboratory/lastshp`
+export const laboratoryAllShp = `${origin}/api/laboratory/allshp`
 export const laboratoryPercentShp = `${origin}/api/laboratory/percentshp`
 export const laboratoryAmountShp = `${origin}/api/laboratory/amountshp`
 export const laboratorySourceShp = `${origin}/api/laboratory/sourceshp`
-export const laboratoryAllShp = `${origin}/api/laboratory/allshp`
 
+export const laboratoryLastShsp = `${origin}/api/laboratory/lastshsp`
+export const laboratoryAllShsp = `${origin}/api/laboratory/allshsp`
 export const laboratoryPercentShsp = `${origin}/api/laboratory/percentshsp`
 export const laboratoryAmountShsp = `${origin}/api/laboratory/amountshsp`
 export const laboratorySourceShsp = `${origin}/api/laboratory/sourceshsp`
-export const laboratoryAllShsp = `${origin}/api/laboratory/allshsp`
 
+export const laboratoryLastSog = `${origin}/api/laboratory/lastsog`
+export const laboratoryAllSog = `${origin}/api/laboratory/allsog`
 export const laboratoryPercentSog = `${origin}/api/laboratory/percentsog`
 export const laboratoryAmountSog = `${origin}/api/laboratory/amountsog`
 export const laboratorySourceSog = `${origin}/api/laboratory/sourcesog`
-export const laboratoryAllSog = `${origin}/api/laboratory/allsog`

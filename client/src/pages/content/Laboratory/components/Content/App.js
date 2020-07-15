@@ -15,6 +15,8 @@ import { Container, Message } from '../../styles/'
 
 import componentLoader from '../../../componentLoader'
 
+import TableTotalComponent from './TableComponents/TableTotalComponent'
+//const TableTotalComponent = lazy(() => componentLoader(() => import('./TableComponents/TableTotalComponent')))
 const TablePercentComponent = lazy(() => componentLoader(() => import('./TableComponents/TablePercentComponent')))
 const TableAmountComponent = lazy(() => componentLoader(() => import('./TableComponents/TableAmountComponent')))
 const ChartComponent = lazy(() => componentLoader(() => import('./ChartComponents/ChartComponent')))
@@ -138,6 +140,9 @@ export default class App extends PureComponent {
 
     render() {
         let {
+            lastShp,
+            lastShsp,
+            lastSog,
             menu,
             range,
             defaultStart,
@@ -293,6 +298,13 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
+
+                        <TableTotalComponent 
+                            lastShp={lastShp}
+                            lastShsp={lastShsp}
+                            lastSog={lastSog}
+                        />
+
                         {!source && menu && download}
                         {menu && activeTab === 'percent' && source && param && prop && (
                             <Suspense fallback={mount}>

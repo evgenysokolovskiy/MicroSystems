@@ -7,6 +7,9 @@ import calculateDataShsp from '../helpers/shsp/'
 import calculateDataSog from '../helpers/sog/'
 
 // fetch
+import { fetchLabLastShpMiddleware } from '../../../../api/middlewares/fetchLabLastShpMiddleware'
+import { fetchLabLastShspMiddleware } from '../../../../api/middlewares/fetchLabLastShspMiddleware'
+import { fetchLabLastSogMiddleware } from '../../../../api/middlewares/fetchLabLastSogMiddleware'
 import { fetchLabAllMiddleware } from '../../../../api/middlewares/fetchLabAllMiddleware'
 import { fetchLabPercentMiddleware } from '../../../../api/middlewares/fetchLabPercentMiddleware'
 import { fetchLabAmountMiddleware } from '../../../../api/middlewares/fetchLabAmountMiddleware'
@@ -23,26 +26,53 @@ import { changeEquipmentNumber } from '../../../../store/laboratory/actions/labE
 import { changeRangeDate } from '../../../../store/laboratory/actions/labChangedRangeDateAction'
 // URLs
 import {
+    laboratoryLastShp,
     laboratoryAllShp,
     laboratoryPercentShp,
     laboratoryAmountShp,
     laboratorySourceShp,
+    laboratoryLastShsp,
     laboratoryAllShsp,
     laboratoryPercentShsp,
     laboratoryAmountShsp,
     laboratorySourceShsp,
+    laboratoryLastSog,
     laboratoryAllSog,
     laboratoryPercentSog,
     laboratoryAmountSog,
     laboratorySourceSog
 } from '../../../../api/urls/data'
 
-export class Content extends PureComponent {
+class Content extends PureComponent {
     state = {
         isLoadedAll: false,
         isLoadedPercent: false,
         isLoadedAmount: false,
         isLoadedSource: false
+    }
+
+    componentDidMount(prevProps) {
+        const {
+            fetchLabLastShpMiddleware,
+            fetchLabLastShspMiddleware,
+            fetchLabLastSogMiddleware
+        } = this.props
+
+        fetchLabLastShpMiddleware(laboratoryLastShp, this)
+        fetchLabLastShspMiddleware(laboratoryLastShsp, this)
+        fetchLabLastSogMiddleware(laboratoryLastSog, this)
+
+        /*
+        const { greetMenu } = this.props
+
+
+        console.log(prevProps.greetMenu, greetMenu)
+*/
+/*
+        if (prevProps.greetMenu !== greetMenu && greetMenu === 'laboratory') {
+            console.log('hello')
+        }
+*/
     }
 
     // Событие по меню (выбора процедуры)
@@ -147,6 +177,9 @@ export class Content extends PureComponent {
 
     render() {
         const {
+            labLastShp: lastShp,
+            labLastShsp: lastShsp,
+            labLastSog: lastSog,
             labAll: all,
             labPercent: percent,
             labAmount: amount,
@@ -195,6 +228,9 @@ export class Content extends PureComponent {
 
         return (
             <App
+                lastShp={lastShp}
+                lastShsp={lastShsp}
+                lastSog={lastSog}
                 menu={menu}
                 range={range}
                 defaultStart={defaultStart}
@@ -222,6 +258,10 @@ export class Content extends PureComponent {
 
 function mapStateToProps(store) {
     return {
+        ...store.greetMenuReducer,
+        ...store.labLastShpReducer,
+        ...store.labLastShspReducer,
+        ...store.labLastSogReducer,
         ...store.labAllReducer,
         ...store.labPercentReducer,
         ...store.labAmountReducer,
@@ -235,6 +275,9 @@ function mapStateToProps(store) {
 }
 
 const mapDispatchToProps = {
+    fetchLabLastShpMiddleware,
+    fetchLabLastShspMiddleware,
+    fetchLabLastSogMiddleware,
     fetchLabAllMiddleware,
     fetchLabPercentMiddleware,
     fetchLabAmountMiddleware,
