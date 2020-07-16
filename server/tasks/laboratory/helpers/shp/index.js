@@ -33,12 +33,12 @@ const indexFactAcidNumber = INDEXES_FACT['acidNumber']
 
 //const BEFORE_DAYS_RANGE = 365
 
-module.exports = function({ fact: f, technology: t }) {
+module.exports = function ({ fact: f, technology: t }) {
     const allFact = clonedeep(f).slice(4)
     const technology = clonedeep(t).slice(5)
 
     const currentYear = new Date().getFullYear()
-    const firstDayCurrentYear = new Date(currentYear, 0, 1)
+    const firstDayCurrentYear = new Date(currentYear, 5, 1)
 
     // Начальная дата в миллисекундах - первый день текущего года
     const startDate = firstDayCurrentYear
@@ -46,16 +46,16 @@ module.exports = function({ fact: f, technology: t }) {
     //const startDate = getDateBeforeDaysFromNow(BEFORE_DAYS_RANGE)
 
     // Получить массив с датой в миллисекундах
-    const all = clonedeep(allFact).map(item => {
+    const all = clonedeep(allFact).map((item) => {
         item[indexFactDate] = ExcelDateToJSMsDate(item[indexFactDate])
         return item
     })
     // Отфильтровать массив с датой в миллисекундах в соответствии с BEFORE_DAYS_RANGE
-    const fact = clonedeep(all).filter(item => item[indexFactDate] > startDate)
+    const fact = clonedeep(all).filter((item) => item[indexFactDate] > startDate)
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach(t => {
+    technology.forEach((t) => {
         const obj = {}
         if (typeof t[indexTechnologyInhibitorMin] === 'number') {
             obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
@@ -85,7 +85,7 @@ module.exports = function({ fact: f, technology: t }) {
     // 2) На основании технологии и факта просчитать количество true/false для каждого свойства и значения
     let amount = {}
     let source = {}
-    fact.forEach(f => {
+    fact.forEach((f) => {
         if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
 
@@ -340,9 +340,9 @@ module.exports = function({ fact: f, technology: t }) {
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach(item => {
+    Object.entries(amount).forEach((item) => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach(prop => {
+        Object.entries(item[1]).forEach((prop) => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
@@ -404,7 +404,7 @@ function getDateBeforeDaysFromNow(range) {
 // Удалить свойства, равные {}, т.е., когда нет фактических данных
 function deleteEmptyProps(data) {
     let obj = {}
-    Object.entries(data).forEach(item => {
+    Object.entries(data).forEach((item) => {
         if (Object.values(item[1])[0]) {
             obj[item[0]] = item[1]
         }

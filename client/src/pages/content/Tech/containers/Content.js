@@ -151,7 +151,7 @@ class Content extends PureComponent {
     } // end componentDidUpdate
 
     // Событие по меню (выбора процедуры)
-    handleClickMenu = item => {
+    handleClickMenu = (item) => {
         this.props.changeTechTargetMenu(item)
         this.props.changeCardNumber(this.nameTotalTab)
         // Перевести в false состояние для новых загрузок
@@ -168,7 +168,7 @@ class Content extends PureComponent {
     }
 
     // Событие по типу подшипника
-    handleClickChangeTechType = e => {
+    handleClickChangeTechType = (e) => {
         // Изменить тип подшипника
         this.props.changeType(+e)
         // Изменить номер карты
@@ -184,7 +184,7 @@ class Content extends PureComponent {
     }
 
     // Событие по карте
-    handleClickChangeTechCards = e => {
+    handleClickChangeTechCards = (e) => {
         // Изменить номер карты
         this.props.changeCardNumber(e)
         this.setState({
@@ -196,13 +196,13 @@ class Content extends PureComponent {
     }
 
     // Событие выбора временной отметки
-    handleClickTimeStamp = item => {
+    handleClickTimeStamp = (item) => {
         this.props.changeTechTargetTimeStamp(item)
         this.props.changeTechDrawerVisible(true)
     }
 
     // Последяя открытая панель
-    handleLastOpenedPanel = key => {
+    handleLastOpenedPanel = (key) => {
         this.setState({ lastOpenedPanel: key })
     }
 

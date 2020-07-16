@@ -2,14 +2,14 @@ import React from 'react'
 // Antd
 import { Table } from 'antd'
 
-export default function(props) {
+export default function (props) {
     const { checkForAntd } = props
 
     let columns = checkForAntd['columns']
     let dataSource = checkForAntd['dataSource']
 
     // Добавить сортировку, фильтрацию для колонок
-    const addColumns = columns.map(item => {
+    const addColumns = columns.map((item) => {
         item.title === 'Дата проверки' && sorter(item)
         item.title === 'Цеховой номер' && sorter(item)
         if (item.title === 'Работает/ не работает') item = filter(item)

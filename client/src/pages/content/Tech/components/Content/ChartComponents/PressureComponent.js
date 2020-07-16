@@ -14,7 +14,7 @@ export default class PressureComponent extends PureComponent {
     render() {
         const { pressureSpeed, CustomizedAxisTick } = this.props
         // Для верного отображения столбцов из показателя скорости вычесть показатель давления
-        const convertedDataPressureSpeed = pressureSpeed.map(item => {
+        const convertedDataPressureSpeed = pressureSpeed.map((item) => {
             const diff = item['speed'] - item['pressure']
             item['convertedSpeed'] = diff
             return item

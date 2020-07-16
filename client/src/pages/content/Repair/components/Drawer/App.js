@@ -6,7 +6,7 @@ import componentLoader from '../../../componentLoader'
 
 const InfoEquipment = lazy(() => componentLoader(() => import('./InfoEquipment')))
 
-export const App = props => {
+export const App = (props) => {
     const { data, period, visible, handleClickCloseDrawer } = props
 
     return (

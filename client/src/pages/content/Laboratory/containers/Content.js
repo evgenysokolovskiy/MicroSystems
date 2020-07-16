@@ -45,6 +45,9 @@ import {
 
 class Content extends PureComponent {
     state = {
+        isLoadedLastShp: false,
+        isLoadedLastShsp: false,
+        isLoadedLastSog: false,
         isLoadedAll: false,
         isLoadedPercent: false,
         isLoadedAmount: false,
@@ -61,22 +64,10 @@ class Content extends PureComponent {
         fetchLabLastShpMiddleware(laboratoryLastShp, this)
         fetchLabLastShspMiddleware(laboratoryLastShsp, this)
         fetchLabLastSogMiddleware(laboratoryLastSog, this)
-
-        /*
-        const { greetMenu } = this.props
-
-
-        console.log(prevProps.greetMenu, greetMenu)
-*/
-/*
-        if (prevProps.greetMenu !== greetMenu && greetMenu === 'laboratory') {
-            console.log('hello')
-        }
-*/
     }
 
     // Событие по меню (выбора процедуры)
-    handleClickMenu = item => {
+    handleClickMenu = (item) => {
         const {
             fetchLabAmountMiddleware,
             fetchLabPercentMiddleware,
@@ -90,6 +81,7 @@ class Content extends PureComponent {
             fetchLabPercentMiddleware(laboratoryPercentShp, this)
             fetchLabSourceMiddleware(laboratorySourceShp, this)
             fetchLabAllMiddleware(laboratoryAllShp, this)
+            this.setState({ isLoadedLastShp: false })
         }
 
         if (item === 'shsp') {
@@ -117,23 +109,23 @@ class Content extends PureComponent {
         })
     }
 
-    handleClickParam = item => {
+    handleClickParam = (item) => {
         const { changeParam, changeEquipmentNumber } = this.props
         changeParam(item)
         changeEquipmentNumber('Сводная')
     }
 
-    handleClickProp = item => {
+    handleClickProp = (item) => {
         const { changeProp, changeEquipmentNumber } = this.props
         changeProp(item)
         changeEquipmentNumber('Сводная')
     }
 
-    handleClickEquipment = item => {
+    handleClickEquipment = (item) => {
         this.props.changeEquipmentNumber(item)
     }
 
-    handleClickRangeDate = range => {
+    handleClickRangeDate = (range) => {
         const {
             labAll,
             labTargetMenu: menu,
@@ -152,7 +144,7 @@ class Content extends PureComponent {
         const fact =
             defaultData['data'] &&
             defaultData['data'].filter(
-                item => item[dateIndex] > range[0] && item[dateIndex] < range[1]
+                (item) => item[dateIndex] > range[0] && item[dateIndex] < range[1]
             )
 
         let current
@@ -162,7 +154,7 @@ class Content extends PureComponent {
 
         changeRangeDate(range)
 
-        Object.entries(current['source']).forEach(item => {
+        Object.entries(current['source']).forEach((item) => {
             if (Object.keys(item[1])[0]) {
                 changeParam(item[0])
                 changeProp(Object.keys(item[1])[0])
@@ -177,6 +169,7 @@ class Content extends PureComponent {
 
     render() {
         const {
+            greetMenu,
             labLastShp: lastShp,
             labLastShsp: lastShsp,
             labLastSog: lastSog,
@@ -190,17 +183,25 @@ class Content extends PureComponent {
             labEquipmentNumber: equipment,
             labChangedRangeDate: range
         } = this.props
-        const { isLoadedAll, isLoadedPercent, isLoadedAmount, isLoadedSource } = this.state
+        const {
+            isLoadedLastShp,
+            isLoadedLastShsp,
+            isLoadedLastSog,
+            isLoadedAll,
+            isLoadedPercent,
+            isLoadedAmount,
+            isLoadedSource
+        } = this.state
         const defaultStart = all && all['default']['defaultStart']
 
         const rowTotal = {}
         amount &&
-            Object.entries(amount).forEach(item => {
+            Object.entries(amount).forEach((item) => {
                 let t = 0
                 let f = 0
                 rowTotal[item[0]] = {}
 
-                Object.values(item[1]).forEach(val => {
+                Object.values(item[1]).forEach((val) => {
                     t += val['true']
                     f += val['false']
                 })
@@ -213,8 +214,8 @@ class Content extends PureComponent {
 
         const columnTotal = {}
         amount &&
-            Object.values(amount).forEach(item => {
-                Object.entries(item).forEach(val => {
+            Object.values(amount).forEach((item) => {
+                Object.entries(item).forEach((val) => {
                     if (!columnTotal[val[0]]) columnTotal[val[0]] = { true: 0, false: 0 }
                     columnTotal[val[0]]['true'] += val[1]['true']
                     columnTotal[val[0]]['false'] += val[1]['false']
@@ -228,6 +229,7 @@ class Content extends PureComponent {
 
         return (
             <App
+                greetMenu={greetMenu}
                 lastShp={lastShp}
                 lastShsp={lastShsp}
                 lastSog={lastSog}
@@ -242,6 +244,9 @@ class Content extends PureComponent {
                 source={source}
                 rowTotal={rowTotal}
                 columnTotal={columnTotal}
+                isLoadedLastShp={isLoadedLastShp}
+                isLoadedLastShsp={isLoadedLastShsp}
+                isLoadedLastSog={isLoadedLastSog}
                 isLoadedAll={isLoadedAll}
                 isLoadedPercent={isLoadedPercent}
                 isLoadedAmount={isLoadedAmount}

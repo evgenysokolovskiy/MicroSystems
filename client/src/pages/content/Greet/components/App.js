@@ -7,16 +7,16 @@ import Bg from './Bg'
 import { Layout } from 'antd'
 const { Header } = Layout
 
-export const App = props => {
-	const { handleClickMenu } = props
+export const App = (props) => {
+    const { handleClickMenu } = props
 
     return (
-    	<>
-	        <Header className="header">
-	            <MenuComponent  handleClickMenu={handleClickMenu} />
-	            <SearchComponent />
-	        </Header>
-	        <Bg />
-	    </>
+        <>
+            <Header className="header">
+                <MenuComponent handleClickMenu={handleClickMenu} />
+                <SearchComponent />
+            </Header>
+            <Bg />
+        </>
     )
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { Menu } from 'antd'
 
 export default class MenuComponent extends React.Component {
-    handleClick = target => {
+    handleClick = (target) => {
         this.props.handleClickMenu(target['key'].slice(1))
     }
     render() {

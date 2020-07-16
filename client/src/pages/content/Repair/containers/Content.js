@@ -6,11 +6,11 @@ import { changeTargetInn } from '../../../../store/repair/actions/targetInnActio
 import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
 
 class Content extends PureComponent {
-    handleClickMenu = item => {
+    handleClickMenu = (item) => {
         this.props.changeTargetMenu(item)
     }
-    handleClickRow = item => this.props.changeTargetInn(item)
-    handleClickOpenDrawer = item => this.props.changeDrawerVisible(true)
+    handleClickRow = (item) => this.props.changeTargetInn(item)
+    handleClickOpenDrawer = (item) => this.props.changeDrawerVisible(true)
 
     render() {
         const { data, checkForGeneralUse, checkForAntd, scheme, targetMenu } = this.props
@@ -19,7 +19,7 @@ class Content extends PureComponent {
         let c
         targetMenu &&
             targetMenu.match(/check/) &&
-            Object.values(checkForAntd).forEach(item => {
+            Object.values(checkForAntd).forEach((item) => {
                 if (String(Object.keys(item)) === String(targetMenu.match(/[0-9]+/)[0])) {
                     c = item[targetMenu.match(/[0-9]+/)[0]]
                 }
@@ -29,7 +29,7 @@ class Content extends PureComponent {
         let s
         targetMenu &&
             targetMenu.match(/scheme/) &&
-            Object.values(scheme).forEach(item => {
+            Object.values(scheme).forEach((item) => {
                 if (String(Object.keys(item)) === String(targetMenu.match(/[0-9]+/)[0])) {
                     s = item[targetMenu.match(/[0-9]+/)[0]]
                 }

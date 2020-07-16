@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { PieChart, Pie, Sector } from 'recharts'
 
-const renderActiveShape = props => {
+const renderActiveShape = (props) => {
     const RADIAN = Math.PI / 180
     const {
         cx,

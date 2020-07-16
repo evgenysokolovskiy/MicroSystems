@@ -31,7 +31,7 @@ export default function calculateDataShsp({ fact: f, technology: t }) {
 
     // 1) Преобразовать технологию
     let objTechnology = {}
-    technology.forEach(t => {
+    technology.forEach((t) => {
         const obj = {}
         if (typeof t[indexTechnologyInhibitorMin] === 'number') {
             obj['inhibitorMin'] = t[indexTechnologyInhibitorMin]
@@ -62,7 +62,7 @@ export default function calculateDataShsp({ fact: f, technology: t }) {
     let amount = {}
     let source = {}
 
-    fact.forEach(f => {
+    fact.forEach((f) => {
         if (!f[indexFactName] || !f[indexFactDate]) return
         const name = f[indexFactName].trim()
 
@@ -318,9 +318,9 @@ export default function calculateDataShsp({ fact: f, technology: t }) {
 
     // 3) Рассчитать процент true для каждого свойства и значения
     let percent = {}
-    Object.entries(amount).forEach(item => {
+    Object.entries(amount).forEach((item) => {
         percent[item[0]] = {}
-        Object.entries(item[1]).forEach(prop => {
+        Object.entries(item[1]).forEach((prop) => {
             percent[item[0]][prop[0]] = (
                 (prop[1]['true'] / (prop[1]['true'] + prop[1]['false'])) *
                 100
@@ -351,7 +351,7 @@ function msDateToString(ms) {
 // Удалить свойства, равные {}, т.е., когда нет фактических данных
 function deleteEmptyProps(data) {
     let obj = {}
-    Object.entries(data).forEach(item => {
+    Object.entries(data).forEach((item) => {
         if (Object.values(item[1])[0]) {
             obj[item[0]] = item[1]
         }

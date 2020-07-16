@@ -4,11 +4,11 @@ import shspPercentTable from './columns/percent/shspPercentTable'
 import sogPercentTable from './columns/percent/sogPercentTable'
 
 export default class TablePercentComponent extends PureComponent {
-    handleChangeParam = record => {
+    handleChangeParam = (record) => {
         this.props.handleClickParam(record['name'])
     }
 
-    handleChangeProp = column => {
+    handleChangeProp = (column) => {
         this.props.handleClickProp(column['name'])
     }
 

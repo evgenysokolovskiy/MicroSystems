@@ -4,10 +4,10 @@ const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').
 const createCellCenter = require(appRoot + '/server/tasks/build/helpers/cellCreator')
     .createCellCenter
 
-module.exports = function({ plan, offPlan, data, wb, defaultStyle }) {
+module.exports = function ({ plan, offPlan, data, wb, defaultStyle }) {
     const obj = {}
 
-    Object.keys(plan).forEach(key => {
+    Object.keys(plan).forEach((key) => {
         if (key === '71' || key === '77' || key === 'undefined' || key === 'Произ-во') return // здесь фильтровать нужные производства
 
         obj[key] = wb.addWorksheet(key)
@@ -65,13 +65,15 @@ module.exports = function({ plan, offPlan, data, wb, defaultStyle }) {
         createCellCenter(ws, [3, 12], `Расшифровка`, defaultStyle)
         // Построение данных из плана
         plan[key]['data'].forEach((timeInterval, i) => {
-            timeInterval.forEach(item => {
+            timeInterval.forEach((item) => {
                 createCell(ws, [row, 1], item['model'], defaultStyle)
                 createCell(ws, [row, 2], item['num'], defaultStyle)
                 createCell(ws, [row, 3], item['inn'], defaultStyle)
                 createCell(ws, [row, 4], item['mtbf'], defaultStyle)
                 // Выполненные ремонты
-                const repairCompleted = data.filter(completed => +completed['inn'] === +item['inn'])
+                const repairCompleted = data.filter(
+                    (completed) => +completed['inn'] === +item['inn']
+                )
                 if (repairCompleted[0]) {
                     createCell(ws, [row, 5], repairCompleted[0]['endDate'], defaultStyle)
                     createCell(ws, [row, 6], repairCompleted[0]['typeOfRepair'], defaultStyle)
@@ -89,7 +91,7 @@ module.exports = function({ plan, offPlan, data, wb, defaultStyle }) {
                 // Расшифровка узлов
                 let descriptions = []
                 Object.values(item['nodes']).length &&
-                    [...Object.values(item['nodes'])].forEach(val => {
+                    [...Object.values(item['nodes'])].forEach((val) => {
                         descriptions = [...descriptions, val['description']]
                     })
 
@@ -110,13 +112,13 @@ module.exports = function({ plan, offPlan, data, wb, defaultStyle }) {
         })
 
         // Добавить оборудование, не входящее в план
-        offPlan[key]['offPlan'].forEach(item => {
+        offPlan[key]['offPlan'].forEach((item) => {
             createCell(ws, [row, 1], item['model'], defaultStyle)
             createCell(ws, [row, 2], item['num'], defaultStyle)
             createCell(ws, [row, 3], item['inn'], defaultStyle)
             createCell(ws, [row, 4], item['mtbf'], defaultStyle)
             // Выполненные ремонты
-            const repairCompleted = data.filter(completed => +completed['inn'] === +item['inn'])
+            const repairCompleted = data.filter((completed) => +completed['inn'] === +item['inn'])
             if (repairCompleted[0]) {
                 createCell(ws, [row, 5], repairCompleted[0]['endDate'], defaultStyle)
                 createCell(ws, [row, 6], repairCompleted[0]['typeOfRepair'], defaultStyle)

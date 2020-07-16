@@ -4,10 +4,10 @@ const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').
 const createCellCenter = require(appRoot + '/server/tasks/build/helpers/cellCreator')
     .createCellCenter
 
-module.exports = function({ convertedFact, wb, defaultStyle }) {
+module.exports = function ({ convertedFact, wb, defaultStyle }) {
     const obj = {}
 
-    Object.entries(convertedFact).forEach(item => {
+    Object.entries(convertedFact).forEach((item) => {
         if (!item[0]) return // здесь фильтровать нужные производства
         obj[item[0]] = wb.addWorksheet(item[0])
         const ws = obj[item[0]]
@@ -42,7 +42,7 @@ module.exports = function({ convertedFact, wb, defaultStyle }) {
         createCellCenter(ws, [3, 9], `Время`, defaultStyle)
 
         // Данные
-        Object.entries(item[1]).forEach(inn => {
+        Object.entries(item[1]).forEach((inn) => {
             createCellCenter(ws, [row, 1], inn[1]['model'], defaultStyle)
             createCellCenter(ws, [row, 2], inn[1]['num'], defaultStyle)
             createCellCenter(ws, [row, 3], inn[0], defaultStyle)

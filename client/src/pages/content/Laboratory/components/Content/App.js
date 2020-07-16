@@ -3,7 +3,7 @@ import React, { PureComponent, Suspense, lazy } from 'react'
 import MenuComponent from './MenuComponent'
 import RangePickerComponent from './RangePickerComponent'
 // Antd
-import { Layout, Typography, Tabs/*, Button, Radio */ } from 'antd'
+import { Layout, Typography, Tabs /*, Button, Radio */ } from 'antd'
 import {
     LoadingOutlined,
     PercentageOutlined,
@@ -15,10 +15,15 @@ import { Container, Message } from '../../styles/'
 
 import componentLoader from '../../../componentLoader'
 
-import TableTotalComponent from './TableComponents/TableTotalComponent'
-//const TableTotalComponent = lazy(() => componentLoader(() => import('./TableComponents/TableTotalComponent')))
-const TablePercentComponent = lazy(() => componentLoader(() => import('./TableComponents/TablePercentComponent')))
-const TableAmountComponent = lazy(() => componentLoader(() => import('./TableComponents/TableAmountComponent')))
+const TableTotalComponent = lazy(() =>
+    componentLoader(() => import('./TableComponents/TableTotalComponent'))
+)
+const TablePercentComponent = lazy(() =>
+    componentLoader(() => import('./TableComponents/TablePercentComponent'))
+)
+const TableAmountComponent = lazy(() =>
+    componentLoader(() => import('./TableComponents/TableAmountComponent'))
+)
 const ChartComponent = lazy(() => componentLoader(() => import('./ChartComponents/ChartComponent')))
 
 const { Content } = Layout
@@ -26,7 +31,7 @@ const { TabPane } = Tabs
 const { Title } = Typography
 
 // Функция правильного отображения числовых значений для отсечек на XAxis
-const CustomizedAxisTick = props => {
+const CustomizedAxisTick = (props) => {
     const { x, y, payload } = props
 
     return (
@@ -62,7 +67,7 @@ export default class App extends PureComponent {
             (source && param && !prop && prevProps.source !== source) ||
             prevProps.param !== param
         ) {
-            const val = Object.values(source).find(item => Object.keys(item).length)
+            const val = Object.values(source).find((item) => Object.keys(item).length)
             val && handleClickProp(Object.keys(val)[0])
         }
 
@@ -77,19 +82,19 @@ export default class App extends PureComponent {
         }
     }
 
-    handleChange = e => {
+    handleChange = (e) => {
         this.setState({ activeTab: e })
     }
 
-    handleChangeParam = e => {
+    handleChangeParam = (e) => {
         this.props.handleClickParam(e)
     }
 
-    handleChangeProp = e => {
+    handleChangeProp = (e) => {
         this.props.handleClickProp(e)
         //document.querySelector('.radio').blur()
     }
-/*
+    /*
     handleButton = e => {
         console.log(e.target.value)
     }
@@ -140,6 +145,7 @@ export default class App extends PureComponent {
 
     render() {
         let {
+            greetMenu,
             lastShp,
             lastShsp,
             lastSog,
@@ -154,6 +160,9 @@ export default class App extends PureComponent {
             source,
             rowTotal,
             columnTotal,
+            isLoadedLastShp,
+            isLoadedLastShsp,
+            isLoadedLastSog,
             isLoadedPercent,
             isLoadedAmount,
             handleClickMenu,
@@ -187,6 +196,17 @@ export default class App extends PureComponent {
             </Container>
         )
 
+        const total = (
+            <Container>
+                <Message>
+                    <Title level={4}>
+                        <LoadingOutlined className="circleBlue" />
+                        ПОСТРОЕНИЕ СВОДНОЙ ТАБЛИЦЫ
+                    </Title>
+                </Message>
+            </Container>
+        )
+
         const tabs = (
             <Tabs type="card" defaultActiveKey={activeTab} onChange={this.handleChange}>
                 <TabPane
@@ -211,6 +231,14 @@ export default class App extends PureComponent {
             />
         )
 
+        const totalTable = (
+            <TableTotalComponent
+                lastShp={lastShp}
+                lastShsp={lastShsp}
+                lastSog={lastSog}
+            />
+        )
+
         const percentTable = (
             <>
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
@@ -221,7 +249,7 @@ export default class App extends PureComponent {
                             defaultStart={defaultStart}
                             handleClickRangeDate={handleClickRangeDate}
                         />
-{/*
+                        {/*
                         <Radio.Group size="large" buttonStyle="solid" onChange={this.handleButton}>
                             <Radio.Button value="7day" onClick={this.handleButton}>7 дней </Radio.Button>
                             <Radio.Button value="30days" onClick={this.handleButton} className="radio">30 дней</Radio.Button>
@@ -262,7 +290,7 @@ export default class App extends PureComponent {
                             defaultStart={defaultStart}
                             handleClickRangeDate={handleClickRangeDate}
                         />
-{/*
+                        {/*
                         <Radio.Group size="large" onChange={this.handleButton}>
                             <Radio.Button value="7day" onClick={this.handleButton}>7 дней </Radio.Button>
                             <Radio.Button value="30days" onClick={this.handleButton}>30 дней</Radio.Button>
@@ -298,12 +326,9 @@ export default class App extends PureComponent {
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '92vh' }}>
-
-                        <TableTotalComponent 
-                            lastShp={lastShp}
-                            lastShsp={lastShsp}
-                            lastSog={lastSog}
-                        />
+                        {greetMenu === 'laboratory' && !menu && (
+                            <Suspense fallback={total}>{totalTable}</Suspense>
+                        )}
 
                         {!source && menu && download}
                         {menu && activeTab === 'percent' && source && param && prop && (

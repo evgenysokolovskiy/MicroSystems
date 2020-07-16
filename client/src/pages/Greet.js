@@ -7,14 +7,14 @@ import Footer from './utils/Footer/App'
 import { Layout } from 'antd'
 
 export class Greet extends PureComponent {
-	render() {
-	    return (
-	        <Layout>
-	            <Content />
-	            <Footer />
-	        </Layout>
-	    )
-	}
+    render() {
+        return (
+            <Layout>
+                <Content />
+                <Footer />
+            </Layout>
+        )
+    }
 }
 
 const mapDispatchToProps = {}

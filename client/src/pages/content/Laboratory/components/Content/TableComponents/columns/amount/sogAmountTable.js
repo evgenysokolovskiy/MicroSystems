@@ -4,7 +4,7 @@ import { Table } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 const { Column, ColumnGroup } = Table
 
-export default function({
+export default function ({
     amount,
     param,
     prop,
@@ -65,7 +65,7 @@ export default function({
 
     let t = 0,
         f = 0
-    Object.values(rowTotal).forEach(item => {
+    Object.values(rowTotal).forEach((item) => {
         t += item['true']
         f += item['false']
     })
@@ -122,7 +122,7 @@ export default function({
             rowClassName={(record, index) => record['name'] === param && 'selected'}
             onRow={(record, rowIndex) => {
                 return {
-                    onClick: event => {
+                    onClick: (event) => {
                         handleChangeParam(record)
                     }
                 }
@@ -149,7 +149,7 @@ export default function({
                         )
                     }
                     name="pH, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -193,7 +193,7 @@ export default function({
                         )
                     }
                     name="Концентрация, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -237,7 +237,7 @@ export default function({
                         )
                     }
                     name="Сода, г/л"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -282,7 +282,7 @@ export default function({
                         )
                     }
                     name="Бикарбонат натрия, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -326,7 +326,7 @@ export default function({
                         )
                     }
                     name="Нитрит натрия, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -371,7 +371,7 @@ export default function({
                         )
                     }
                     name="Степень биопоражения"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -415,7 +415,7 @@ export default function({
                         )
                     }
                     name="Коррозия"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -460,7 +460,7 @@ export default function({
                         )
                     }
                     name="Механические примеси, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -504,7 +504,7 @@ export default function({
                         )
                     }
                     name="Мыло, г/л"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)

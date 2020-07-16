@@ -12,7 +12,7 @@ export default class App extends React.Component {
         goodPass: false
     }
 
-    onChange = e => {
+    onChange = (e) => {
         e.target.value === pass
             ? this.setState({ goodPass: true })
             : this.setState({ goodPass: false })

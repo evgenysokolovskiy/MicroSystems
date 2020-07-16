@@ -15,7 +15,7 @@ import {
 import { LoadingOutlined } from '@ant-design/icons'
 
 export default class DiameterComponent extends PureComponent {
-    handleClick = e => {
+    handleClick = (e) => {
         this.props.handleClickEquipment(e.key)
     }
 
@@ -29,13 +29,13 @@ export default class DiameterComponent extends PureComponent {
             d = source && source[equipment] ? clonedeep([source[equipment]]) : null
         }
 
-        const data = d && d.filter(item => item !== null)
+        const data = d && d.filter((item) => item !== null)
 
         let total = []
         data &&
             data.forEach((item, i) => {
                 item &&
-                    item.forEach(val => {
+                    item.forEach((val) => {
                         const fact = +val['fact']
 
                         if (item[0]['technology'][0]) {
@@ -69,7 +69,7 @@ export default class DiameterComponent extends PureComponent {
 
         // Группировать объекты по дате. Свойства объекта - дата
         const obj = {}
-        total.forEach(item => {
+        total.forEach((item) => {
             const fact =
                 obj[item['date']] && obj[item['date']]['fact']
                     ? [...obj[item['date']]['fact'], item['fact']]
@@ -88,7 +88,7 @@ export default class DiameterComponent extends PureComponent {
         // Меню (оборудование)
         let items = []
         source &&
-            clonedeep(Object.keys(source)).forEach(item => {
+            clonedeep(Object.keys(source)).forEach((item) => {
                 items = [
                     ...items,
                     <Menu.Item key={item}>

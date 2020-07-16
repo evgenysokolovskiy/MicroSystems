@@ -4,7 +4,7 @@ import { Table } from 'antd'
 import { CaretDownOutlined } from '@ant-design/icons'
 const { Column, ColumnGroup } = Table
 
-export default function({
+export default function ({
     amount,
     param,
     prop,
@@ -65,7 +65,7 @@ export default function({
 
     let t = 0,
         f = 0
-    Object.values(rowTotal).forEach(item => {
+    Object.values(rowTotal).forEach((item) => {
         t += item['true']
         f += item['false']
     })
@@ -126,7 +126,7 @@ export default function({
             rowClassName={(record, index) => record['name'] === param && 'selected'}
             onRow={(record, rowIndex) => {
                 return {
-                    onClick: event => {
+                    onClick: (event) => {
                         handleChangeParam(record)
                     }
                 }
@@ -153,7 +153,7 @@ export default function({
                         )
                     }
                     name="Ингибитор, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -198,7 +198,7 @@ export default function({
                         )
                     }
                     name="Вязкость, мм2/сек"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -242,7 +242,7 @@ export default function({
                         )
                     }
                     name="H2O, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -287,7 +287,7 @@ export default function({
                         )
                     }
                     name="Механические примеси, %"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -332,7 +332,7 @@ export default function({
                         )
                     }
                     name="Металлические включения"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -377,7 +377,7 @@ export default function({
                         )
                     }
                     name="t вспышки, не менее град С"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)
@@ -422,7 +422,7 @@ export default function({
                         )
                     }
                     name="Кислотное число, мг.кон"
-                    onHeaderCell={column => {
+                    onHeaderCell={(column) => {
                         return {
                             onClick: () => {
                                 handleChangeProp(column)

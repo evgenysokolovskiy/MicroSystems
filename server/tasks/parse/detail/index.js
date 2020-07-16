@@ -47,17 +47,17 @@ const start = startRepair - period * month
 // Окончание периода после ремонта
 const end = endRepair + period * month
 
-module.exports = function({ app, parsePathDetail, buildPathDetail }) {
-    fs.readdir(parsePathDetail, function(err, files) {
-        const paths = files.map(item => `${parsePathDetail}/${item}`)
+module.exports = function ({ app, parsePathDetail, buildPathDetail }) {
+    fs.readdir(parsePathDetail, function (err, files) {
+        const paths = files.map((item) => `${parsePathDetail}/${item}`)
         for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
+            new Promise(function (resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
                 const data = xlsx.parse(`${paths[i]}`)[0].data
 
                 if (data) {
                     let convertedFact = {}
-                    Object.entries(fact).forEach(factItem => {
+                    Object.entries(fact).forEach((factItem) => {
                         let before = []
                         let after = []
                         let inns = {}
@@ -68,8 +68,8 @@ module.exports = function({ app, parsePathDetail, buildPathDetail }) {
                         let model
                         let num
 
-                        factItem[1].forEach(inn => {
-                            data.forEach(item => {
+                        factItem[1].forEach((inn) => {
+                            data.forEach((item) => {
                                 if (inn == item[6]) {
                                     if (item[4] == 61) console.log(item)
                                     const date = convertStringToDate(item[2])
@@ -133,7 +133,7 @@ module.exports = function({ app, parsePathDetail, buildPathDetail }) {
                 } else {
                     reject(new Error('Err'))
                 }
-            }).catch(err => console.log(err))
+            }).catch((err) => console.log(err))
         }
     })
 }

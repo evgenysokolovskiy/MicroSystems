@@ -4,7 +4,7 @@ const calculateIntermediatePoints = require(appRoot +
     '/server/tasks/shp/helpers/calculateIntermediatePoints')
 const calculateLength = require(appRoot + '/server/tasks/shp/helpers/calculateLength')
 
-module.exports = function({ technology }) {
+module.exports = function ({ technology }) {
     const { stamping, running, grinding, rough, clean, final } = technology
 
     // Добавить продолжительность операции в часах
@@ -36,7 +36,7 @@ module.exports = function({ technology }) {
 function convertDataFinal(data) {
     const obj = {}
     data &&
-        Object.values(data).forEach(item => {
+        Object.values(data).forEach((item) => {
             obj[item['type']] = item
         })
     return obj

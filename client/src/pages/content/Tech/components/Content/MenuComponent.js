@@ -9,7 +9,7 @@ export default class MenuComponent extends PureComponent {
         collapsed: false
     }
 
-    handleClick = e => {
+    handleClick = (e) => {
         this.props.handleClickMenu(e.key)
     }
 

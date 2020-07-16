@@ -45,20 +45,12 @@ const columns = [
     }
 ]
 
-const now = (function() {
+const now = (function () {
     const date = new Date()
-    return (
-        date &&
-        date
-            .toISOString()
-            .slice(0, 10)
-            .split('-')
-            .reverse()
-            .join('.')
-    )
+    return date && date.toISOString().slice(0, 10).split('-').reverse().join('.')
 })()
 
-export default function(props) {
+export default function (props) {
     const { quality: q } = props
     const quality = q['realTime']
 

@@ -16,7 +16,7 @@ export default class App extends PureComponent {
         differencePressure: null,
         differenceSpeed: null
     }
-    onGetData = data => {
+    onGetData = (data) => {
         const {
             differenceDiameter,
             differenceInconstancy,

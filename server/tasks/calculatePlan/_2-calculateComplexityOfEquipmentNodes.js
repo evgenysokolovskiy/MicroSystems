@@ -9,12 +9,12 @@ const MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = require(appRoot + '/server/confi
 const filterDataByEmergencyStopLimit = require(appRoot +
     '/server/tasks/calculatePlan/_1-filterDataByEmergencyStopLimit')
 
-module.exports = function(data) {
+module.exports = function (data) {
     // Отфильтрованные данные по лимиту аварийных остановок
     const d = clonedeep(filterDataByEmergencyStopLimit(data))
 
     const obj = {}
-    Object.keys(d).forEach(key => {
+    Object.keys(d).forEach((key) => {
         d[key]['data'].forEach((item, index) => {
             // Удалить текущий объект, если нет узлов ни по механике ни по электрике
             if (item['lengthNodesMechanic'] === 0 && item['lengthNodesElectric'] === 0) {
@@ -32,7 +32,7 @@ module.exports = function(data) {
             // Добавить свойства - (полная) ремонтная сложность среднего ремонта по механике и электрике
             if (model[item.model]) item['mechanicRepairComplexity'] = model[item.model].mechanic
             if (model[item.model]) item['electricRepairComplexity'] = model[item.model].electric
-            Object.keys(item.nodes).forEach(node => {
+            Object.keys(item.nodes).forEach((node) => {
                 if (node[0] === '1') {
                     const percentMechanic =
                         +item.nodes[node]['oneRepairTime'] / +item['sumOneRepairTimeMechanic']

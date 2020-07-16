@@ -2,7 +2,7 @@
 
 const num = 'Цеховой номер'
 
-module.exports = function(source, name) {
+module.exports = function (source, name) {
     let data = {}
     // Индекс цехового номера в массиве
     const indexNum = source[0].indexOf(num)

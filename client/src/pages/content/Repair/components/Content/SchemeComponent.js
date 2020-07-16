@@ -3,7 +3,7 @@ import React from 'react'
 import { Table } from 'antd'
 const OIL_LEAK = 'Течи масла (СОЖ)'
 
-export default function(props) {
+export default function (props) {
     const { scheme, checkForGeneralUse } = props
 
     let columns = scheme['columns']
@@ -11,16 +11,16 @@ export default function(props) {
 
     let hasOilLeak = []
     checkForGeneralUse &&
-        Object.entries(checkForGeneralUse).forEach(item => {
+        Object.entries(checkForGeneralUse).forEach((item) => {
             if (item[1][OIL_LEAK] === '+') hasOilLeak = [...hasOilLeak, item[0]]
         })
 
-    const coloredColumns = columns.map(item => {
+    const coloredColumns = columns.map((item) => {
         const coloredCell = {
             render(text) {
                 return {
                     props: {
-                        className: hasOilLeak.some(num => String(num) === String(text))
+                        className: hasOilLeak.some((num) => String(num) === String(text))
                             ? 'false'
                             : ''
                     },

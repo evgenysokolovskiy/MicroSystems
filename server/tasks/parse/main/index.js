@@ -14,24 +14,24 @@ const inn = require(appRoot + '/server/config/repaire/').INDEXES['inn']
 //Если filter отсутствует, то обрабатываются все данные
 //const filter = require('../constants/audit/avtovaz/equipment').safe
 
-module.exports = function({
+module.exports = function ({
     app,
     parsePath,
     parsePathRepairCompleted,
     buildPath,
     repairCompleted
 }) {
-    fs.readdir(parsePath, function(err, files) {
-        const paths = files.map(item => `${parsePath}/${item}`)
+    fs.readdir(parsePath, function (err, files) {
+        const paths = files.map((item) => `${parsePath}/${item}`)
         for (let i = 0; i < paths.length; i++) {
-            new Promise(function(resolve, reject) {
+            new Promise(function (resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
                 const data = xlsx.parse(`${paths[i]}`)[0].data
                 if (data) {
                     // Фильтровать данные (при наличии filter)
                     const filteredData =
                         typeof filter !== 'undefined'
-                            ? data.filter(item => filter.some(num => +item[inn] === +num))
+                            ? data.filter((item) => filter.some((num) => +item[inn] === +num))
                             : null
                     // Рассчитать план ремонтов оборудования
                     const plan = calculatePlan(filteredData || data)
@@ -58,7 +58,7 @@ module.exports = function({
                 } else {
                     reject(new Error('Err'))
                 }
-            }).catch(err => console.log(err))
+            }).catch((err) => console.log(err))
         }
     })
 }
