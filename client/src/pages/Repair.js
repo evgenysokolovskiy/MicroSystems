@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { fetchDataMiddleware } from '../api/middlewares/fetchDataMiddleware'
 import {
@@ -9,11 +8,11 @@ import {
 import { fetchSchemeMiddleware } from '../api/middlewares/fetchSchemeMiddleware'
 // Components
 import Modal from './utils/Modal/App'
+import Header from './utils/Header/App'
 import Footer from './utils/Footer/App'
 import Content from './content/Repair/App'
 // Antd
 import { Layout } from 'antd'
-import { HomeOutlined } from '@ant-design/icons'
 
 export class Repair extends PureComponent {
     componentDidMount() {
@@ -34,21 +33,7 @@ export class Repair extends PureComponent {
         return (
             <Layout>
                 <Modal />
-                <div
-                    style={{
-                        minHeight: '3vh',
-                        paddingRight: '20px',
-                        color: '#222',
-                        display: 'flex',
-                        flexFlow: 'row wrap',
-                        justifyContent: 'flex-end',
-                        alignItems: 'center'
-                    }}
-                >
-                    <Link to="/">
-                        <HomeOutlined style={{ fontSize: '16px', textAlign: 'right' }} />
-                    </Link>
-                </div>
+                <Header />
                 <Content />
                 <Footer />
             </Layout>

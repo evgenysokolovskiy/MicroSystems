@@ -316,7 +316,7 @@ export default class App extends PureComponent {
             <Content>
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
-                    <Content style={{ minHeight: '92vh' }}>
+                    <Content style={{ minHeight: '88vh' }}>
                         {menu && menu === 'table' && (
                             <Suspense fallback={mount}>{table ? table : download}</Suspense>
                         )}

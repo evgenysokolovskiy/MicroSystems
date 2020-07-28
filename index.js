@@ -1,6 +1,7 @@
 const express = require('express')
-const helmet = require('helmet')
+//const helmet = require('helmet')
 const app = express()
+//const https = require('https')
 const fs = require('fs')
 const path = require('path')
 const port = process.env.PORT || 5000
@@ -13,7 +14,7 @@ const server = require('http')
 global.appRoot = path.resolve(__dirname)
 
 app.use(express.static(appRoot + '/client/build'))
-app.use(helmet())
+//app.use(helmet())
 app.use(express.json({ limit: '50mb' }))
 app.use(
     express.urlencoded({
@@ -64,6 +65,8 @@ require(appRoot + '/server/tasks/parse/laboratory/joinTechnologyFact')({
     parseLaboratoryTechnology,
     parseLaboratoryFact
 })
+
+//require(appRoot + '/server/tasks/fetchWeather/')({ https })
 
 //require('./server/tasks/parse/detail/')({ app, parsePathDetail, buildPathDetail })
 

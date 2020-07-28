@@ -122,7 +122,7 @@ export default class TableTotalComponent extends PureComponent {
         }
     }
 
-    handleClick = (item) => {
+    handleClickMenu = (item) => {
         let last
         if (item === 'shp') {
             last = this.props.lastShp
@@ -142,63 +142,64 @@ export default class TableTotalComponent extends PureComponent {
         let dataSource = []
         let count = 1
 
-        Object.entries(last).forEach((param) => {
-            Object.entries(param[1]).forEach((prop, i) => {
-                Object.entries(prop[1]).forEach((equip) => {
-                    const item = {
-                        key: `${param[0]}${prop[0]}${equip[0]}`,
-                        index: count,
-                        param: param[0],
-                        prop: prop[0],
-                        inn: equip[0],
-                        lastDate: equip[1]['date'],
-                        technology: (() => {
-                            let res
-                            const technology = equip[1]['technology']
-                            if (Array.isArray(equip[1]['technology'])) {
-                                res = `[ ${technology[0]} / ${technology[1]} ]`
-                            } else {
-                                res = technology
-                            }
-                            return res
-                        })(),
-                        fact: equip[1]['fact'],
-                        result: (() => {
-                            let res
-                            const fact = +equip[1]['fact']
-                            const technology = equip[1]['technology']
-                            // Если технология массив (минимальное, максимальное значение)
-                            if (Array.isArray(technology)) {
-                                const min = +technology[0]
-                                const max = +technology[1]
+        last &&
+            Object.entries(last).forEach((param) => {
+                Object.entries(param[1]).forEach((prop, i) => {
+                    Object.entries(prop[1]).forEach((equip) => {
+                        const item = {
+                            key: `${param[0]}${prop[0]}${equip[0]}`,
+                            index: count,
+                            param: param[0],
+                            prop: prop[0],
+                            inn: equip[0],
+                            lastDate: equip[1]['date'],
+                            technology: (() => {
+                                let res
+                                const technology = equip[1]['technology']
+                                if (Array.isArray(equip[1]['technology'])) {
+                                    res = `[ ${technology[0]} / ${technology[1]} ]`
+                                } else {
+                                    res = technology
+                                }
+                                return res
+                            })(),
+                            fact: equip[1]['fact'],
+                            result: (() => {
+                                let res
+                                const fact = +equip[1]['fact']
+                                const technology = equip[1]['technology']
+                                // Если технология массив (минимальное, максимальное значение)
+                                if (Array.isArray(technology)) {
+                                    const min = +technology[0]
+                                    const max = +technology[1]
 
-                                if (fact < min) {
-                                    res = `-${(min - fact).toFixed(3)}`
+                                    if (fact < min) {
+                                        res = `-${(min - fact).toFixed(3)}`
+                                    }
+
+                                    if (fact > max) {
+                                        res = `+${(fact - max).toFixed(3)}`
+                                    }
+                                } else if (prop[0] === 't вспышки, не менее град С') {
+                                    if (fact < +technology) {
+                                        res = `-${(+technology - fact).toFixed(3)}`
+                                    }
+                                } else {
+                                    if (fact > +technology) {
+                                        res = `+${(fact - +technology).toFixed(3)}`
+                                    }
                                 }
 
-                                if (fact > max) {
-                                    res = `+${(fact - max).toFixed(3)}`
-                                }
-                            } else if (prop[0] === 't вспышки, не менее град С') {
-                                if (fact < +technology) {
-                                    res = `-${(+technology - fact).toFixed(3)}`
-                                }
-                            } else {
-                                if (fact > +technology) {
-                                    res = `+${(fact - +technology).toFixed(3)}`
-                                }
-                            }
+                                return res
+                            })(),
+                            comment: ''
+                        }
 
-                            return res
-                        })(),
-                        comment: ''
-                    }
-
-                    dataSource = [...dataSource, item]
-                    count++
+                        dataSource = [...dataSource, item]
+                        count++
+                    })
                 })
             })
-        })
 
         this.setState({ dataSource })
     }
@@ -214,13 +215,13 @@ export default class TableTotalComponent extends PureComponent {
                         title="Сводная карта состояния жидкостей: "
                         subTitle={description}
                         extra={[
-                            <Button key="shp" onClick={() => this.handleClick('shp')}>
+                            <Button key="shp" onClick={() => this.handleClickMenu('shp')}>
                                 ШП
                             </Button>,
-                            <Button key="shsp" onClick={() => this.handleClick('shsp')}>
+                            <Button key="shsp" onClick={() => this.handleClickMenu('shsp')}>
                                 ШСП
                             </Button>,
-                            <Button key="sog" onClick={() => this.handleClick('sog')}>
+                            <Button key="sog" onClick={() => this.handleClickMenu('sog')}>
                                 СОЖ
                             </Button>
                         ]}
@@ -241,6 +242,25 @@ export default class TableTotalComponent extends PureComponent {
                     pagination={false}
                     scroll={{ x: 'max-content' }}
                     className="labTable"
+                    // Событие на строке
+                    onRow={(record, rowIndex) => {
+                        return {
+                            onClick: (event) => {
+                                //handleClickOpenDrawer()
+                                //console.log(event.currentTarget, rowIndex)
+                                const arr = [...event.currentTarget.children]
+
+                                /*
+                                const arr = [...event.currentTarget.children]
+                                arr.forEach(
+                                    (item) =>
+                                        item.hasAttribute('inn') &&
+                                        handleClickRow(item.getAttribute('inn'))
+                                )
+                                */
+                            }
+                        }
+                    }}
                 />
             </>
         )

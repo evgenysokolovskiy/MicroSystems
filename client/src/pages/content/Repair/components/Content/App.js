@@ -28,7 +28,7 @@ export const App = (props) => {
         <Content style={{ padding: '0 10px' }}>
             <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                 <MenuComponent handleClickMenu={handleClickMenu} />
-                <Content style={{ minHeight: '92vh' }}>
+                <Content style={{ minHeight: '88vh' }}>
                     {targetMenu && targetMenu.match(/plan/) && data && (
                         <Suspense fallback={<LoadingOutlined className="loading" />}>
                             <TableComponent

@@ -232,11 +232,7 @@ export default class App extends PureComponent {
         )
 
         const totalTable = (
-            <TableTotalComponent
-                lastShp={lastShp}
-                lastShsp={lastShsp}
-                lastSog={lastSog}
-            />
+            <TableTotalComponent lastShp={lastShp} lastShsp={lastShsp} lastSog={lastSog} />
         )
 
         const percentTable = (
@@ -325,7 +321,7 @@ export default class App extends PureComponent {
             <Content>
                 <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                     <MenuComponent handleClickMenu={handleClickMenu} />
-                    <Content style={{ minHeight: '92vh' }}>
+                    <Content style={{ minHeight: '88vh' }}>
                         {greetMenu === 'laboratory' && !menu && (
                             <Suspense fallback={total}>{totalTable}</Suspense>
                         )}
