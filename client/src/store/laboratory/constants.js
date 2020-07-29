@@ -61,6 +61,15 @@ export const _LAB_SOURCE = {
     }
 }
 
+export const _LAB_TARGET_TOTAL_TABLE_MENU = {
+    types: {
+        LAB_TARGET_TOTAL_TABLE_MENU: 'LAB_TARGET_TOTAL_TABLE_MENU'
+    },
+    init: {
+        labTargetTotalTableMenu: null
+    }
+}
+
 export const _LAB_TARGET_MENU = {
     types: {
         LAB_TARGET_MENU: 'LAB_TARGET_MENU'
@@ -103,5 +112,14 @@ export const _LAB_CHANGED_RANGEDATE = {
     },
     init: {
         labChangedRangeDate: []
+    }
+}
+
+export const _LAB_DRAWER_VISIBLE = {
+    types: {
+        LAB_DRAWER_VISIBLE: 'LAB_DRAWER_VISIBLE'
+    },
+    init: {
+        labDrawerVisible: false
     }
 }

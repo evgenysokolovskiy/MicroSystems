@@ -15,6 +15,7 @@ import { fetchLabPercentMiddleware } from '../../../../api/middlewares/fetchLabP
 import { fetchLabAmountMiddleware } from '../../../../api/middlewares/fetchLabAmountMiddleware'
 import { fetchLabSourceMiddleware } from '../../../../api/middlewares/fetchLabSourceMiddleware'
 // actions
+import { changeLabTargetTotalTableMenu } from '../../../../store/laboratory/actions/labTargetTotalTableMenuAction'
 import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTargetMenuAction'
 import { changeAll } from '../../../../store/laboratory/actions/labAllAction'
 import { changePercent } from '../../../../store/laboratory/actions/labPercentAction'
@@ -24,6 +25,7 @@ import { changeParam } from '../../../../store/laboratory/actions/labParamAction
 import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
 import { changeEquipmentNumber } from '../../../../store/laboratory/actions/labEquipmentNumberAction'
 import { changeRangeDate } from '../../../../store/laboratory/actions/labChangedRangeDateAction'
+import { changeLabDrawerVisible } from '../../../../store/laboratory/actions/labDrawerAction'
 // URLs
 import {
     laboratoryLastShp,
@@ -56,14 +58,53 @@ class Content extends PureComponent {
 
     componentDidMount(prevProps) {
         const {
+            fetchLabSourceMiddleware,
             fetchLabLastShpMiddleware,
             fetchLabLastShspMiddleware,
-            fetchLabLastSogMiddleware
+            fetchLabLastSogMiddleware,
+            changeLabTargetTotalTableMenu
         } = this.props
 
+        fetchLabSourceMiddleware(laboratorySourceSog, this)
         fetchLabLastShpMiddleware(laboratoryLastShp, this)
         fetchLabLastShspMiddleware(laboratoryLastShsp, this)
         fetchLabLastSogMiddleware(laboratoryLastSog, this)
+        //changeLabTargetTotalTableMenu('shp')
+
+        this.setState({ isLoadedLastShp: false })
+    }
+
+    handleClickTotalTableMenu = (target) => {
+        const { fetchLabSourceMiddleware } = this.props
+
+        if (target === 'shp') {
+            fetchLabSourceMiddleware(laboratorySourceShp, this)
+            this.setState({ isLoadedLastShp: false })
+        }
+
+        if (target === 'shsp') {
+            fetchLabSourceMiddleware(laboratorySourceShsp, this)
+            this.setState({ isLoadedLastShsp: false })
+        }
+
+        if (target === 'sog') {
+            fetchLabSourceMiddleware(laboratorySourceSog, this)
+            this.setState({ isLoadedLastSog: false })
+        }
+        this.props.changeLabTargetTotalTableMenu(target)
+
+        // Перевести в false состояние для новых загрузок
+        this.setState({
+            isLoadedSource: false
+        })
+    }
+
+    handleClickRowTotalTable = (item) => {
+        const { changeParam, changeProp, changeEquipmentNumber } = this.props
+
+        changeParam(item['param'])
+        changeProp(item['prop'])
+        changeEquipmentNumber(item['equipment'])
     }
 
     // Событие по меню (выбора процедуры)
@@ -89,6 +130,7 @@ class Content extends PureComponent {
             fetchLabPercentMiddleware(laboratoryPercentShsp, this)
             fetchLabSourceMiddleware(laboratorySourceShsp, this)
             fetchLabAllMiddleware(laboratoryAllShsp, this)
+            this.setState({ isLoadedLastShsp: false })
         }
 
         if (item === 'sog') {
@@ -96,6 +138,7 @@ class Content extends PureComponent {
             fetchLabPercentMiddleware(laboratoryPercentSog, this)
             fetchLabSourceMiddleware(laboratorySourceSog, this)
             fetchLabAllMiddleware(laboratoryAllSog, this)
+            this.setState({ isLoadedLastSog: false })
         }
 
         changeLabTargetMenu(item)
@@ -166,6 +209,8 @@ class Content extends PureComponent {
         changeSource(current['source'])
         changeAll({ default: defaultData, current })
     }
+
+    handleClickOpenDrawer = (item) => this.props.changeLabDrawerVisible(true)
 
     render() {
         const {
@@ -251,11 +296,14 @@ class Content extends PureComponent {
                 isLoadedPercent={isLoadedPercent}
                 isLoadedAmount={isLoadedAmount}
                 isLoadedSource={isLoadedSource}
+                handleClickTotalTableMenu={this.handleClickTotalTableMenu}
                 handleClickMenu={this.handleClickMenu}
                 handleClickParam={this.handleClickParam}
                 handleClickProp={this.handleClickProp}
                 handleClickEquipment={this.handleClickEquipment}
                 handleClickRangeDate={this.handleClickRangeDate}
+                handleClickRowTotalTable={this.handleClickRowTotalTable}
+                handleClickOpenDrawer={this.handleClickOpenDrawer}
             />
         )
     }
@@ -271,11 +319,13 @@ function mapStateToProps(store) {
         ...store.labPercentReducer,
         ...store.labAmountReducer,
         ...store.labSourceReducer,
+        ...store.labTargetTotalTableMenuReducer,
         ...store.labTargetMenuReducer,
         ...store.labParamReducer,
         ...store.labPropReducer,
         ...store.labEquipmentNumberReducer,
-        ...store.labChangedRangeDateReducer
+        ...store.labChangedRangeDateReducer,
+        ...store.labDrawerReducer
     }
 }
 
@@ -287,6 +337,7 @@ const mapDispatchToProps = {
     fetchLabPercentMiddleware,
     fetchLabAmountMiddleware,
     fetchLabSourceMiddleware,
+    changeLabTargetTotalTableMenu,
     changeLabTargetMenu,
     changeAll,
     changePercent,
@@ -295,7 +346,8 @@ const mapDispatchToProps = {
     changeParam,
     changeProp,
     changeEquipmentNumber,
-    changeRangeDate
+    changeRangeDate,
+    changeLabDrawerVisible
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

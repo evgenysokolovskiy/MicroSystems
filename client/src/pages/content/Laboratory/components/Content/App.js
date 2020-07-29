@@ -57,19 +57,18 @@ export default class App extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        let { source, param, prop, handleClickParam, handleClickProp } = this.props
+        let { source, param, prop, labTargetMenu, handleClickParam, handleClickProp } = this.props
 
-        if (/*!prevProps.source && */ prevProps.source !== source) {
+        if (prevProps.source !== source) {
             handleClickParam(Object.keys(source)[0])
         }
 
-        if (
-            (source && param && !prop && prevProps.source !== source) ||
-            prevProps.param !== param
-        ) {
+        //if (labTargetMenu && source) {
+        if ((param && !prop && prevProps.source !== source) || prevProps.param !== param) {
             const val = Object.values(source).find((item) => Object.keys(item).length)
             val && handleClickProp(Object.keys(val)[0])
         }
+        //}
 
         if (
             source &&
@@ -165,11 +164,14 @@ export default class App extends PureComponent {
             isLoadedLastSog,
             isLoadedPercent,
             isLoadedAmount,
+            handleClickTotalTableMenu,
             handleClickMenu,
             handleClickParam,
             handleClickProp,
             handleClickEquipment,
-            handleClickRangeDate
+            handleClickRangeDate,
+            handleClickRowTotalTable,
+            handleClickOpenDrawer
         } = this.props
 
         const { activeTab } = this.state
@@ -226,13 +228,21 @@ export default class App extends PureComponent {
                 source={source[param][prop]}
                 prop={prop}
                 equipment={equipment}
+                menu={menu}
                 CustomizedAxisTick={CustomizedAxisTick}
                 handleClickEquipment={handleClickEquipment}
             />
         )
 
         const totalTable = (
-            <TableTotalComponent lastShp={lastShp} lastShsp={lastShsp} lastSog={lastSog} />
+            <TableTotalComponent
+                lastShp={lastShp}
+                lastShsp={lastShsp}
+                lastSog={lastSog}
+                handleClickTotalTableMenu={handleClickTotalTableMenu}
+                handleClickRowTotalTable={handleClickRowTotalTable}
+                handleClickOpenDrawer={handleClickOpenDrawer}
+            />
         )
 
         const percentTable = (

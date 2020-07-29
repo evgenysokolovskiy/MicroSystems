@@ -1,34 +1,29 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/Drawer/App'
-//import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
+import { changeLabDrawerVisible } from '../../../../store/laboratory/actions/labDrawerAction'
 
 export class Drawer extends PureComponent {
-    //handleClickCloseDrawer = () => this.props.changeDrawerVisible(false)
+    handleClickCloseDrawer = () => this.props.changeLabDrawerVisible(false)
 
     render() {
-        const { data, targetMenu, targetInn, visible } = this.props
-
-        let dataInn = {}
-        let period
-        const d = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
-        d &&
-            d['data'].forEach((item, i) =>
-                item.forEach((it) => {
-                    if (+it['inn'] === +targetInn) {
-                        dataInn = it
-                        period = d['period'][i]
-                    }
-                })
-            )
+        const {
+            labSource: source,
+            labParam: param,
+            labProp: prop,
+            labEquipmentNumber: equipment,
+            labDrawerVisible: visible
+        } = this.props
 
         return (
             <>
                 <App
-                    data={dataInn}
-                    period={period}
+                    source={source}
+                    param={param}
+                    prop={prop}
+                    equipment={equipment}
                     visible={visible}
-                    /*handleClickCloseDrawer={this.handleClickCloseDrawer}*/
+                    handleClickCloseDrawer={this.handleClickCloseDrawer}
                 />
             </>
         )
@@ -37,15 +32,16 @@ export class Drawer extends PureComponent {
 
 function mapStateToProps(store) {
     return {
-        ...store.fetchReducer,
-        ...store.targetMenuReducer,
-        ...store.targetInnReducer,
-        ...store.drawerReducer
+        ...store.labSourceReducer,
+        ...store.labParamReducer,
+        ...store.labPropReducer,
+        ...store.labEquipmentNumberReducer,
+        ...store.labDrawerReducer
     }
 }
 
 const mapDispatchToProps = {
-    //changeDrawerVisible
+    changeLabDrawerVisible
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Drawer)

@@ -19,16 +19,15 @@ export default class MenuComponent extends PureComponent {
                     inlineCollapsed={this.state.collapsed}
                     onClick={this.handleClick}
                 >
+                    <Menu.Item key="sog">
+                        <span>СОЖ</span>
+                    </Menu.Item>
                     <Menu.Item key="shp">
                         <span>ШП</span>
                     </Menu.Item>
 
                     <Menu.Item key="shsp">
                         <span>ШСП</span>
-                    </Menu.Item>
-
-                    <Menu.Item key="sog">
-                        <span>СОЖ</span>
                     </Menu.Item>
                 </Menu>
             </div>

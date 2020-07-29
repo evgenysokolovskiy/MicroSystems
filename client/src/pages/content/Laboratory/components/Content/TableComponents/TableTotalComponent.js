@@ -55,12 +55,12 @@ export default class TableTotalComponent extends PureComponent {
     state = { dataSource: [], description: 'ШАРИКОВОЕ ПРОИЗВОДСТВО' }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.lastShp !== this.props.lastShp) {
-            const { lastShp } = this.props
+        if (prevProps.lastSog !== this.props.lastSog) {
+            const { lastSog } = this.props
             let dataSource = []
             let count = 1
 
-            Object.entries(lastShp).forEach((param) => {
+            Object.entries(lastSog).forEach((param) => {
                 Object.entries(param[1]).forEach((prop, i) => {
                     Object.entries(prop[1]).forEach((equip) => {
                         const item = {
@@ -126,17 +126,20 @@ export default class TableTotalComponent extends PureComponent {
         let last
         if (item === 'shp') {
             last = this.props.lastShp
-            this.setState({ description: 'ШАРИКОВОЕ ПРОИЗВОДСТВО' })
+            this.setState({ description: 'ШП' })
+            this.props.handleClickTotalTableMenu('shp')
         }
 
         if (item === 'shsp') {
             last = this.props.lastShsp
-            this.setState({ description: 'ШЛИФОВАЛЬНОЕ ПРОИЗВОДСТВО' })
+            this.setState({ description: 'ШСП' })
+            this.props.handleClickTotalTableMenu('shsp')
         }
 
         if (item === 'sog') {
             last = this.props.lastSog
             this.setState({ description: 'СОЖ' })
+            this.props.handleClickTotalTableMenu('sog')
         }
 
         let dataSource = []
@@ -204,7 +207,12 @@ export default class TableTotalComponent extends PureComponent {
         this.setState({ dataSource })
     }
 
+    handleClickRow = (item) => {
+        this.props.handleClickRowTotalTable(item)
+    }
+
     render() {
+        const { handleClickOpenDrawer } = this.props
         const { dataSource, description } = this.state
 
         return (
@@ -246,18 +254,14 @@ export default class TableTotalComponent extends PureComponent {
                     onRow={(record, rowIndex) => {
                         return {
                             onClick: (event) => {
-                                //handleClickOpenDrawer()
-                                //console.log(event.currentTarget, rowIndex)
-                                const arr = [...event.currentTarget.children]
+                                handleClickOpenDrawer()
 
-                                /*
                                 const arr = [...event.currentTarget.children]
-                                arr.forEach(
-                                    (item) =>
-                                        item.hasAttribute('inn') &&
-                                        handleClickRow(item.getAttribute('inn'))
-                                )
-                                */
+                                this.handleClickRow({
+                                    param: arr[1]['innerText'],
+                                    prop: arr[2]['innerText'],
+                                    equipment: arr[3]['innerText']
+                                })
                             }
                         }
                     }}

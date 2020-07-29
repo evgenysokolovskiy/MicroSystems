@@ -32,11 +32,13 @@ import labAllReducer from './laboratory/reducers/labAllReducer'
 import labPercentReducer from './laboratory/reducers/labPercentReducer'
 import labAmountReducer from './laboratory/reducers/labAmountReducer'
 import labSourceReducer from './laboratory/reducers/labSourceReducer'
+import labTargetTotalTableMenuReducer from './laboratory/reducers/labTargetTotalTableMenuReducer'
 import labTargetMenuReducer from './laboratory/reducers/labTargetMenuReducer'
 import labParamReducer from './laboratory/reducers/labParamReducer'
 import labPropReducer from './laboratory/reducers/labPropReducer'
 import labEquipmentNumberReducer from './laboratory/reducers/labEquipmentNumberReducer'
 import labChangedRangeDateReducer from './laboratory/reducers/labChangedRangeDateReducer'
+import labDrawerReducer from './laboratory/reducers/labDrawerReducer'
 
 export default combineReducers({
     // greet
@@ -72,9 +74,11 @@ export default combineReducers({
     labPercentReducer,
     labAmountReducer,
     labSourceReducer,
+    labTargetTotalTableMenuReducer,
     labTargetMenuReducer,
     labParamReducer,
     labPropReducer,
     labEquipmentNumberReducer,
-    labChangedRangeDateReducer
+    labChangedRangeDateReducer,
+    labDrawerReducer
 })

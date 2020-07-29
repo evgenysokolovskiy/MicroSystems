@@ -20,7 +20,7 @@ export default class DiameterComponent extends PureComponent {
     }
 
     render() {
-        const { source, prop, equipment, CustomizedAxisTick } = this.props
+        const { menu, source, prop, equipment, CustomizedAxisTick } = this.props
 
         let d
         if (equipment === 'Сводная') {
@@ -97,7 +97,7 @@ export default class DiameterComponent extends PureComponent {
                 ]
             })
 
-        const MenuComponent = (
+        const MenuComponent = menu && (
             <div className="laboratoryMenu">
                 <Menu
                     mode="inline"

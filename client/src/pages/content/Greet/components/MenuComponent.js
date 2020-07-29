@@ -22,14 +22,14 @@ export default class MenuComponent extends React.Component {
                         <Link to="/repair">УПРАВЛЕНИЕ РЕМОНТОВ</Link>
                     </h1>
                 </Menu.Item>
-                <Menu.Item key="/tech">
-                    <h1 className="mainMenuLink">
-                        <Link to="/tech">ПРИКАЗ №17</Link>
-                    </h1>
-                </Menu.Item>
                 <Menu.Item key="/laboratory">
                     <h1 className="mainMenuLink">
                         <Link to="/laboratory">ЛАБОРАТОРИЯ</Link>
+                    </h1>
+                </Menu.Item>
+                <Menu.Item key="/tech">
+                    <h1 className="mainMenuLink">
+                        <Link to="/tech">ПРИКАЗ №17</Link>
                     </h1>
                 </Menu.Item>
                 {/*
