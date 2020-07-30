@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import App from '../components/Drawer/App'
 import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDrawerAction'
-import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
+import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techMainFunctionalityAction'
 
 export class Drawer extends PureComponent {
     handleClickCloseTechDrawer = () => this.props.changeTechDrawerVisible(false)

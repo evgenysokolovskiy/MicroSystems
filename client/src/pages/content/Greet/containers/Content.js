@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { App } from '../components/App'
 import { changeGreetMenu } from '../../../../store/greet/actions/greetMenuAction'
-import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTargetMenuAction'
+import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labMenuAction'
 
 class Content extends React.Component {
     handleClickMenu = (target) => {

@@ -2,23 +2,28 @@ import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import clonedeep from 'lodash.clonedeep'
 import App from '../components/Content/App'
-// fetch
-import { fetchTypesMiddleware } from '../../../../api/middlewares/fetchTypesMiddleware'
-import { fetchCardsMiddleware } from '../../../../api/middlewares/fetchCardsMiddleware'
+// * FETCH
 import {
     fetchDiameterMiddleware,
     fetchInconstancyDimensionMiddleware,
-    fetchPressureSpeedMiddleware
-} from '../../../../api/middlewares/fetchJoinTechnologyFactMiddleware'
-import { fetchQualityProductionMiddleware } from '../../../../api/middlewares/fetchQualityProductionMiddleware'
-import { fetchMtimeMiddleware } from '../../../../api/middlewares/fetchMtimeMiddleware'
-// actions
-import { changeTechTargetMenu } from '../../../../store/tech/actions/techTargetMenuAction'
-import { changeTechTargetTimeStamp } from '../../../../store/tech/actions/techTargetTimeStampAction'
-import { changeTechTargetTimeStampData } from '../../../../store/tech/actions/techTargetTimeStampDataAction'
+    fetchPressureSpeedMiddleware,
+    fetchCardsMiddleware,
+    fetchTypesMiddleware,
+    fetchMtimeMiddleware,
+    fetchQualityProductionMiddleware
+} from '../../../../api/middlewares/tech/'
+
+// * ACTION
+import {
+    changeType,
+    changeCardNumber,
+    changeTechTargetTimeStamp,
+    changeTechTargetTimeStampData
+} from '../../../../store/tech/actions/techMainFunctionalityAction'
+
+import { changeTechTargetMenu } from '../../../../store/tech/actions/techMenuAction'
 import { changeTechDrawerVisible } from '../../../../store/tech/actions/techDrawerAction'
-import { changeType } from '../../../../store/tech/actions/techTypeAction'
-import { changeCardNumber } from '../../../../store/tech/actions/techCardNumberAction'
+
 import { calculateTargetData } from '../helpers/calculateTargetData'
 
 const origin = window.location.origin

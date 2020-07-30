@@ -1,7 +1,6 @@
 const express = require('express')
-//const helmet = require('helmet')
+const helmet = require('helmet')
 const app = express()
-//const https = require('https')
 const fs = require('fs')
 const path = require('path')
 const port = process.env.PORT || 5000
@@ -14,7 +13,7 @@ const server = require('http')
 global.appRoot = path.resolve(__dirname)
 
 app.use(express.static(appRoot + '/client/build'))
-//app.use(helmet())
+app.use(helmet())
 app.use(express.json({ limit: '50mb' }))
 app.use(
     express.urlencoded({
@@ -25,18 +24,18 @@ app.use(
 )
 
 // Путь, куда сохранять отчёты
-const buildPath = appRoot + '/xlsx/build'
-const buildPathDetail = appRoot + '/xlsx/build/detail'
+const buildPath = appRoot + '/files/xlsx/build'
+const buildPathDetail = appRoot + '/files/xlsx/build/detail'
 // Путь, что парсить
-const parsePath = appRoot + '/xlsx/parse'
+const parsePath = appRoot + '/files/xlsx/parse'
 const parsePathRepairCompleted = appRoot + '/xlsx/repairCompleted'
-const parsePathCheck = appRoot + '/xlsx/check'
-const parsePathScheme = appRoot + '/xlsx/scheme'
-const parseShpFact = appRoot + '/xlsx/shp/fact'
-const parseShpTechnology = appRoot + '/xlsx/shp/technology'
-const parsePathDetail = appRoot + '/xlsx/detail'
-const parseLaboratoryFact = appRoot + '/xlsx/laboratory/fact'
-const parseLaboratoryTechnology = appRoot + '/xlsx/laboratory/technology'
+const parsePathCheck = appRoot + '/files/xlsx/check'
+const parsePathScheme = appRoot + '/files/xlsx/scheme'
+const parseShpFact = appRoot + '/files/xlsx/shp/fact'
+const parseShpTechnology = appRoot + '/files/xlsx/shp/technology'
+const parsePathDetail = appRoot + '/files/xlsx/detail'
+const parseLaboratoryFact = appRoot + '/files/xlsx/laboratory/fact'
+const parseLaboratoryTechnology = appRoot + '/files/xlsx/laboratory/technology'
 const repairCompleted = require(appRoot + '/server/tasks/parse/repairCompleted')
 require(appRoot + '/server/tasks/parse/main')({
     app,
@@ -77,3 +76,5 @@ app.get('/download/file.xlsx', function(req, res) {
     console.log('Данные отправлены на /download/file.xlsx')
 })
 */
+
+require(appRoot + '/server/api/imagesAPI')(app)

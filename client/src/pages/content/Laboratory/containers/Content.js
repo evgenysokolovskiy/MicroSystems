@@ -1,31 +1,44 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import clonedeep from 'lodash.clonedeep'
+// Компонент
 import App from '../components/Content/App'
-import calculateDataShp from '../helpers/shp/'
-import calculateDataShsp from '../helpers/shsp/'
-import calculateDataSog from '../helpers/sog/'
 
-// fetch
-import { fetchLabLastShpMiddleware } from '../../../../api/middlewares/fetchLabLastShpMiddleware'
-import { fetchLabLastShspMiddleware } from '../../../../api/middlewares/fetchLabLastShspMiddleware'
-import { fetchLabLastSogMiddleware } from '../../../../api/middlewares/fetchLabLastSogMiddleware'
-import { fetchLabAllMiddleware } from '../../../../api/middlewares/fetchLabAllMiddleware'
-import { fetchLabPercentMiddleware } from '../../../../api/middlewares/fetchLabPercentMiddleware'
-import { fetchLabAmountMiddleware } from '../../../../api/middlewares/fetchLabAmountMiddleware'
-import { fetchLabSourceMiddleware } from '../../../../api/middlewares/fetchLabSourceMiddleware'
-// actions
-import { changeLabTargetTotalTableMenu } from '../../../../store/laboratory/actions/labTargetTotalTableMenuAction'
-import { changeLabTargetMenu } from '../../../../store/laboratory/actions/labTargetMenuAction'
-import { changeAll } from '../../../../store/laboratory/actions/labAllAction'
-import { changePercent } from '../../../../store/laboratory/actions/labPercentAction'
-import { changeAmount } from '../../../../store/laboratory/actions/labAmountAction'
-import { changeSource } from '../../../../store/laboratory/actions/labSourceAction'
-import { changeParam } from '../../../../store/laboratory/actions/labParamAction'
-import { changeProp } from '../../../../store/laboratory/actions/labPropAction'
-import { changeEquipmentNumber } from '../../../../store/laboratory/actions/labEquipmentNumberAction'
-import { changeRangeDate } from '../../../../store/laboratory/actions/labChangedRangeDateAction'
+// * FETCH
+// Основные Данные
+import {
+    fetchLabAllMiddleware,
+    fetchLabPercentMiddleware,
+    fetchLabAmountMiddleware,
+    fetchLabSourceMiddleware,
+    fetchLabLastShpMiddleware,
+    fetchLabLastShspMiddleware,
+    fetchLabLastSogMiddleware
+} from '../../../../api/middlewares/laboratory/'
+
+// * ACTIONS
+// Изменение основных данных
+import {
+    changeAll,
+    changeAmount,
+    changePercent,
+    changeSource
+} from '../../../../store/laboratory/actions/labDataAction'
+// Меню
+import {
+    changeLabTargetMenu,
+    changeLabTargetTotalTableMenu
+} from '../../../../store/laboratory/actions/labMenuAction'
+// Основной функционал
+import {
+    changeParam,
+    changeProp,
+    changeEquipmentNumber,
+    changeRangeDate
+} from '../../../../store/laboratory/actions/labMainFunctionalityAction'
+// Всплывающее окно
 import { changeLabDrawerVisible } from '../../../../store/laboratory/actions/labDrawerAction'
+
 // URLs
 import {
     laboratoryLastShp,
@@ -43,7 +56,12 @@ import {
     laboratoryPercentSog,
     laboratoryAmountSog,
     laboratorySourceSog
-} from '../../../../api/urls/data'
+} from '../../../../api/urls/'
+
+// Вспомогательные функции
+import calculateDataShp from '../helpers/shp/'
+import calculateDataShsp from '../helpers/shsp/'
+import calculateDataSog from '../helpers/sog/'
 
 class Content extends PureComponent {
     state = {
@@ -69,11 +87,11 @@ class Content extends PureComponent {
         fetchLabLastShpMiddleware(laboratoryLastShp, this)
         fetchLabLastShspMiddleware(laboratoryLastShsp, this)
         fetchLabLastSogMiddleware(laboratoryLastSog, this)
-        //changeLabTargetTotalTableMenu('shp')
 
         this.setState({ isLoadedLastShp: false })
     }
 
+    // Событие по меню (выбор операции в сводном отчёте)
     handleClickTotalTableMenu = (target) => {
         const { fetchLabSourceMiddleware } = this.props
 
@@ -107,7 +125,7 @@ class Content extends PureComponent {
         changeEquipmentNumber(item['equipment'])
     }
 
-    // Событие по меню (выбора процедуры)
+    // Событие по меню (выбора операции)
     handleClickMenu = (item) => {
         const {
             fetchLabAmountMiddleware,

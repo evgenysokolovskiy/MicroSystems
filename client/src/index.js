@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { store } from './store/'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+// Компоненты
+import { Greet } from './pages/Greet'
+import { Repair } from './pages/Repair'
+import { Laboratory } from './pages/Laboratory'
+import { Tech } from './pages/Tech'
 // Обработчик ошибок
 import ErrorBoundary from './ErrorBoundary'
 // Стили
 import './styles/index.css'
-
-import Greet from './pages/Greet'
-import Repair from './pages/Repair'
-import Tech from './pages/Tech'
-import Laboratory from './pages/Laboratory'
 
 ReactDOM.render(
     <Provider store={store}>

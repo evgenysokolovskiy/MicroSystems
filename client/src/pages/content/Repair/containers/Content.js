@@ -1,11 +1,34 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
+// Компоненты
 import { App } from '../components/Content/App'
-import { changeTargetMenu } from '../../../../store/repair/actions/targetMenuAction'
-import { changeTargetInn } from '../../../../store/repair/actions/targetInnAction'
-import { changeDrawerVisible } from '../../../../store/repair/actions/drawerAction'
+// * FETCH
+import {
+    fetchDataMiddleware,
+    fetchSchemeMiddleware,
+    fetchCheckForGeneralUseMiddleware,
+    fetchCheckForAntdMiddleware
+} from '../../../../api/middlewares/repaire/'
+// * ACTION
+import { changeTargetMenu } from '../../../../store/repair/actions/repaireMenuAction'
+import { changeTargetInn } from '../../../../store/repair/actions/repaireInnAction'
+import { changeDrawerVisible } from '../../../../store/repair/actions/repaireDrawerAction'
 
 class Content extends PureComponent {
+    componentDidMount() {
+        const {
+            fetchDataMiddleware,
+            fetchCheckForGeneralUseMiddleware,
+            fetchCheckForAntdMiddleware,
+            fetchSchemeMiddleware
+        } = this.props
+
+        fetchDataMiddleware()
+        fetchCheckForGeneralUseMiddleware()
+        fetchCheckForAntdMiddleware()
+        fetchSchemeMiddleware()
+    }
+
     handleClickMenu = (item) => {
         this.props.changeTargetMenu(item)
     }
@@ -65,6 +88,10 @@ function mapStateToProps(store) {
 }
 
 const mapDispatchToProps = {
+    fetchDataMiddleware,
+    fetchCheckForGeneralUseMiddleware,
+    fetchCheckForAntdMiddleware,
+    fetchSchemeMiddleware,
     changeTargetMenu,
     changeTargetInn,
     changeDrawerVisible
