@@ -12,7 +12,7 @@ const repairPlan = require(appRoot +
 const inn = require(appRoot + '/server/config/repaire/').INDEXES['inn']
 // Фильтр - массив инвентарных номеров
 //Если filter отсутствует, то обрабатываются все данные
-//const filter = require('../constants/audit/avtovaz/equipment').safe
+//const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['_256707']
 
 module.exports = function ({
     app,

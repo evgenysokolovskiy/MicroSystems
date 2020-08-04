@@ -1,5 +1,5 @@
 const express = require('express')
-const helmet = require('helmet')
+//const helmet = require('helmet')
 const app = express()
 const fs = require('fs')
 const path = require('path')
@@ -13,7 +13,8 @@ const server = require('http')
 global.appRoot = path.resolve(__dirname)
 
 app.use(express.static(appRoot + '/client/build'))
-app.use(helmet())
+
+//app.use(helmet())
 app.use(express.json({ limit: '50mb' }))
 app.use(
     express.urlencoded({
@@ -28,7 +29,7 @@ const buildPath = appRoot + '/files/xlsx/build'
 const buildPathDetail = appRoot + '/files/xlsx/build/detail'
 // Путь, что парсить
 const parsePath = appRoot + '/files/xlsx/parse'
-const parsePathRepairCompleted = appRoot + '/xlsx/repairCompleted'
+const parsePathRepairCompleted = appRoot + '/files/xlsx/repairCompleted'
 const parsePathCheck = appRoot + '/files/xlsx/check'
 const parsePathScheme = appRoot + '/files/xlsx/scheme'
 const parseShpFact = appRoot + '/files/xlsx/shp/fact'
@@ -37,6 +38,8 @@ const parsePathDetail = appRoot + '/files/xlsx/detail'
 const parseLaboratoryFact = appRoot + '/files/xlsx/laboratory/fact'
 const parseLaboratoryTechnology = appRoot + '/files/xlsx/laboratory/technology'
 const repairCompleted = require(appRoot + '/server/tasks/parse/repairCompleted')
+
+require(appRoot + '/server/api/imagesAPI')(app)
 require(appRoot + '/server/tasks/parse/main')({
     app,
     parsePath,
@@ -69,12 +72,8 @@ require(appRoot + '/server/tasks/parse/laboratory/joinTechnologyFact')({
 
 //require('./server/tasks/parse/detail/')({ app, parsePathDetail, buildPathDetail })
 
-/*
-app.get('/download/file.xlsx', function(req, res) {
-	const file = `${buildPath}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`
+app.get('/download/file.xlsx', function (req, res) {
+    const file = `${buildPath}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`
     res.download(file)
     console.log('Данные отправлены на /download/file.xlsx')
 })
-*/
-
-require(appRoot + '/server/api/imagesAPI')(app)

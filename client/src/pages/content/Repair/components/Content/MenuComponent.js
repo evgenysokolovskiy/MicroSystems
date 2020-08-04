@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
-import { SolutionOutlined, TableOutlined, ToolOutlined } from '@ant-design/icons'
+import { SolutionOutlined, TableOutlined, ToolOutlined, FileExcelOutlined  } from '@ant-design/icons'
+import { file } from '../../../../../api/urls/'
 
 const { SubMenu } = Menu
 
@@ -11,6 +12,28 @@ export default class MenuComponent extends PureComponent {
 
     handleClick = (e) => {
         this.props.handleClickMenu(e.key)
+    }
+
+    saveFile = (url, fileName) => {
+        ;(async function () {
+            const res = await fetch(url)
+            const blob = await res.blob()
+            let link = document.createElement('a')
+            link.setAttribute('download', fileName)
+            link.setAttribute('target', '_blank')
+            link.href = URL.createObjectURL(blob)
+            link.click()
+            URL.revokeObjectURL(link.href)
+        })()
+
+        /*
+        let link = document.createElement('a')
+        link.download = 'hello.txt'
+        let blob = new Blob(['Hello world!'], {type: 'text/plain'})
+        link.href = URL.createObjectURL(blob)
+        link.click()
+        URL.revokeObjectURL(link.href)
+*/
     }
 
     render() {
@@ -79,6 +102,27 @@ export default class MenuComponent extends PureComponent {
                         <Menu.Item key="check93">АТЦ</Menu.Item>
                         <Menu.Item key="check561">56(1)</Menu.Item>
                         <Menu.Item key="check562">56(2)</Menu.Item>
+                    </SubMenu>
+
+                    <SubMenu
+                        key="upload"
+                        title={
+                            <span>
+                                <FileExcelOutlined  />
+                            </span>
+                        }
+                    >
+                        <Menu.Item
+                            key="upload-system"
+                            onClick={() =>
+                                this.saveFile(
+                                    file,
+                                    'система_анализа_и_планирования_ремонтов_оборудования.xlsx'
+                                )
+                            }
+                        >
+                            Система анализа и планирования ремонтов
+                        </Menu.Item>
                     </SubMenu>
                 </Menu>
             </div>

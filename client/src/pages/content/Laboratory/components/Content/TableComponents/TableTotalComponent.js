@@ -52,7 +52,7 @@ const columns = [
 ]
 
 export default class TableTotalComponent extends PureComponent {
-    state = { dataSource: [], description: 'ШАРИКОВОЕ ПРОИЗВОДСТВО' }
+    state = { dataSource: [], description: 'СОЖ', menu: 'sog' }
 
     componentDidUpdate(prevProps) {
         if (prevProps.lastSog !== this.props.lastSog) {
@@ -126,19 +126,19 @@ export default class TableTotalComponent extends PureComponent {
         let last
         if (item === 'shp') {
             last = this.props.lastShp
-            this.setState({ description: 'ШП' })
+            this.setState({ description: 'ШП', menu: 'shp' })
             this.props.handleClickTotalTableMenu('shp')
         }
 
         if (item === 'shsp') {
             last = this.props.lastShsp
-            this.setState({ description: 'ШСП' })
+            this.setState({ description: 'ШСП', menu: 'shsp' })
             this.props.handleClickTotalTableMenu('shsp')
         }
 
         if (item === 'sog') {
             last = this.props.lastSog
-            this.setState({ description: 'СОЖ' })
+            this.setState({ description: 'СОЖ', menu: 'sog' })
             this.props.handleClickTotalTableMenu('sog')
         }
 
@@ -213,7 +213,7 @@ export default class TableTotalComponent extends PureComponent {
 
     render() {
         const { handleClickOpenDrawer } = this.props
-        const { dataSource, description } = this.state
+        const { dataSource, description, menu } = this.state
 
         return (
             <>
@@ -223,13 +223,25 @@ export default class TableTotalComponent extends PureComponent {
                         title="Сводная карта состояния жидкостей: "
                         subTitle={description}
                         extra={[
-                            <Button key="shp" onClick={() => this.handleClickMenu('shp')}>
+                            <Button
+                                key="shp"
+                                type={menu === 'shp' && 'primary'}
+                                onClick={() => this.handleClickMenu('shp')}
+                            >
                                 ШП
                             </Button>,
-                            <Button key="shsp" onClick={() => this.handleClickMenu('shsp')}>
+                            <Button
+                                key="shsp"
+                                type={menu === 'shsp' && 'primary'}
+                                onClick={() => this.handleClickMenu('shsp')}
+                            >
                                 ШСП
                             </Button>,
-                            <Button key="sog" onClick={() => this.handleClickMenu('sog')}>
+                            <Button
+                                key="sog"
+                                type={menu === 'sog' && 'primary'}
+                                onClick={() => this.handleClickMenu('sog')}
+                            >
                                 СОЖ
                             </Button>
                         ]}

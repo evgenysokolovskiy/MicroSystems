@@ -69,3 +69,6 @@ export const laboratorySourceSog = `${origin}/api/laboratory/sourcesog`
 export const image1 = `${origin}/api/image1.jpg`
 export const image2 = `${origin}/api/image2.jpg`
 export const image3 = `${origin}/api/image3.jpg`
+
+// Test
+export const file = `${origin}/download/file.xlsx`
