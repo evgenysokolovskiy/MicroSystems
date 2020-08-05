@@ -65,6 +65,8 @@ module.exports = function (data) {
                     item['sumAmount'] = sumAmount
                     // Добавить свойство "sumTime" - сумма времени простоев
                     item['sumTime'] = sumTime
+                    // Добавить свойство - процент sumtime (сумма времени простоев) от наработки оборудования
+                    item['percentTimeOfMtbf'] = (sumTime / item['mtbf']) * 100
                 }
             })
             // Добавить свойства - суммарное время одного ремонта всех узлов по механике и электрике
@@ -76,6 +78,7 @@ module.exports = function (data) {
 
             return item
         })
+
         obj[key] = {
             data: filteredObj,
             allEquipment: d[key]['allEquipment']

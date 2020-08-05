@@ -1,5 +1,5 @@
 const express = require('express')
-//const helmet = require('helmet')
+const helmet = require('helmet')
 const app = express()
 const fs = require('fs')
 const path = require('path')
@@ -14,7 +14,7 @@ global.appRoot = path.resolve(__dirname)
 
 app.use(express.static(appRoot + '/client/build'))
 
-//app.use(helmet())
+app.use(helmet())
 app.use(express.json({ limit: '50mb' }))
 app.use(
     express.urlencoded({
@@ -76,4 +76,10 @@ app.get('/download/file.xlsx', function (req, res) {
     const file = `${buildPath}/система_анализа_и_планирования_ремонтов_оборудования.xlsx`
     res.download(file)
     console.log('Данные отправлены на /download/file.xlsx')
+})
+
+app.post('/files', function (req, res) {
+    if (req) {
+        console.log(req.body)
+    }
 })

@@ -1,13 +1,13 @@
 // 3) Выделить оборудование, которое не находится в плане ремонтов
 
 const clonedeep = require('lodash.clonedeep')
-const splitProductionEquipment = require(appRoot +
-    '/server/tasks/primaryDataProcessing/_2-splitProductionEquipment')
+const calculateRepairComplexityInPlanningPeriod = require(appRoot +
+    '/server/tasks/calculatePlan/_3-calculateRepairComplexityInPlanningPeriod')
 
 module.exports = function (data, plan) {
     // объект, где ключи - это номера производств
     // Значения - массив объектов, принадлежащих производству
-    const d = clonedeep(splitProductionEquipment(data))
+    const d = clonedeep(calculateRepairComplexityInPlanningPeriod(data))
     // keys - Обозначение производств (свойства объекта)
     const keys = Object.keys(d)
     let obj = {}

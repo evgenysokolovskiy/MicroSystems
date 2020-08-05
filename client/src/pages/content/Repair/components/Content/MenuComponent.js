@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
-import { SolutionOutlined, TableOutlined, ToolOutlined, FileExcelOutlined  } from '@ant-design/icons'
+import { SolutionOutlined, TableOutlined, ToolOutlined, FileExcelOutlined } from '@ant-design/icons'
 import { file } from '../../../../../api/urls/'
 
 const { SubMenu } = Menu
@@ -108,7 +108,7 @@ export default class MenuComponent extends PureComponent {
                         key="upload"
                         title={
                             <span>
-                                <FileExcelOutlined  />
+                                <FileExcelOutlined />
                             </span>
                         }
                     >
