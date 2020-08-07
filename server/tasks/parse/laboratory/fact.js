@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
-const laboratoryAPI = require(appRoot + '/server/api/laboratoryAPI')
+const laboratoryAPI = require(appRoot + '/server/requests/api/laboratoryAPI')
 const calculateDataShp = require(appRoot + '/server/tasks/laboratory/helpers/shp/')
 const calculateDataShsp = require(appRoot + '/server/tasks/laboratory/helpers/shsp/')
 const calculateDataSog = require(appRoot + '/server/tasks/laboratory/helpers/sog/')

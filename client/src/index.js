@@ -18,10 +18,18 @@ ReactDOM.render(
         <BrowserRouter>
             <ErrorBoundary>
                 <Switch>
-                    <Route exact={true} path="/" component={Greet} />
-                    <Route path="/repair" component={Repair} />
-                    <Route path="/tech" component={Tech} />
-                    <Route path="/laboratory" component={Laboratory} />
+                    <Route exact={true} path="/">
+                        <Greet />
+                    </Route>
+                    <Route path="/repair">
+                        <Repair />
+                    </Route>
+                    <Route path="/tech">
+                        <Tech />
+                    </Route>
+                    <Route path="/laboratory">
+                        <Laboratory />
+                    </Route>
                     <Redirect to="/" />
                 </Switch>
             </ErrorBoundary>

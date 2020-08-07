@@ -16,10 +16,10 @@ const convertData = require(appRoot + '/server/tasks/shp/convertFact/').convertD
 const convertTechnologyFact = require(appRoot + '/server/tasks/shp/convertTechnologyFact/')
 const convertTechnologyFactData = require(appRoot + '/server/tasks/shp/convertTechnologyFactData/')
 const qualityProduction = require(appRoot + '/server/tasks/shp/qualityProduction/')
-const joinTechnologyFactAPI = require(appRoot + '/server/api/joinTechnologyFactAPI')
-const qualityProductionAPI = require(appRoot + '/server/api/qualityProductionAPI')
-const intervalAPI = require(appRoot + '/server/api/intervalAPI')
-const mtimeAPI = require(appRoot + '/server/api/mtimeAPI')
+const joinTechnologyFactAPI = require(appRoot + '/server/requests/api/joinTechnologyFactAPI')
+const qualityProductionAPI = require(appRoot + '/server/requests/api/qualityProductionAPI')
+const intervalAPI = require(appRoot + '/server/requests/api/intervalAPI')
+const mtimeAPI = require(appRoot + '/server/requests/api/mtimeAPI')
 
 module.exports = function ({ app, parseShpFact, technology }) {
     fs.readdir(parseShpFact, function (err, files) {

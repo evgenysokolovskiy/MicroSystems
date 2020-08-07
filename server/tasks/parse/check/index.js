@@ -5,8 +5,9 @@ const xlsx = require('node-xlsx') // parse excel file
 const convertCheckForGeneralUse = require(appRoot +
     '/server/tasks/parse/check/convertCheckForGeneralUse/')
 const convertCheckForANTD = require(appRoot + '/server/tasks/parse/check/convertCheckForANTD/')
-const checkForGeneralUseCheckAPI = require(appRoot + '/server/api/checkAPI').checkForGeneralUse
-const convertedCheckAPI = require(appRoot + '/server/api/checkAPI').converted
+const checkForGeneralUseCheckAPI = require(appRoot + '/server/requests/api/checkAPI')
+    .checkForGeneralUse
+const convertedCheckAPI = require(appRoot + '/server/requests/api/checkAPI').converted
 
 module.exports = function ({ app, parsePathCheck, buildPath }) {
     fs.readdir(parsePathCheck, function (err, files) {

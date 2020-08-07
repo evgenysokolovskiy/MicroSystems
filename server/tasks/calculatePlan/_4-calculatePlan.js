@@ -1,5 +1,8 @@
 // 4) Расчитать план ремонтов по производствам
 
+const LIMIT_NUMBER_EMERGENCY_STOPS = require(appRoot + '/server/config/repaire/')
+    .LIMIT_NUMBER_EMERGENCY_STOPS
+
 const NAMES_PLANNING_PERIOD = require('../../config/repaire/').NAMES_PLANNING_PERIOD
 const calculateRepairComplexityInPlanningPeriod = require(appRoot +
     '/server/tasks/calculatePlan/_3-calculateRepairComplexityInPlanningPeriod')

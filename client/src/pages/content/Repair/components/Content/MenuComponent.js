@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
 import { SolutionOutlined, TableOutlined, ToolOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { file } from '../../../../../api/urls/'
+import { plan } from '../../../../../api/urls/'
 
 const { SubMenu } = Menu
 
@@ -116,7 +116,7 @@ export default class MenuComponent extends PureComponent {
                             key="upload-system"
                             onClick={() =>
                                 this.saveFile(
-                                    file,
+                                    plan,
                                     'система_анализа_и_планирования_ремонтов_оборудования.xlsx'
                                 )
                             }

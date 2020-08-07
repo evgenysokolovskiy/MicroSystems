@@ -12,7 +12,7 @@ module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle 
     ws.column(1).freeze()
 
     // Название листа
-    createCell(ws, [1, 1], 'Итоги 2019г', defaultStyle)
+    createCell(ws, [1, 1], 'Итоги за период', defaultStyle)
 
     // column 1
     createCell(ws, [3, 1], 'Всего оборудования', defaultStyle)
@@ -79,7 +79,14 @@ module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle 
     let step3 = 5
     let nodeStep = 5
     Object.keys(plan).forEach((key) => {
-        if (key === 'undefined' || key === 'Произ-во' || key === '71' || key === '77') return // здесь фильтровать нужные производства
+        if (
+            key === '60' ||
+            key === 'undefined' ||
+            key === 'Произ-во' ||
+            key === '71' ||
+            key === '77'
+        )
+            return // здесь фильтровать нужные производства
 
         // Названия производств
         createCellTitle(ws, [2, step3, 2, step3 + 2, true], `Производство №${key}`, defaultStyle)

@@ -3,6 +3,9 @@
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 const clonedeep = require('lodash.clonedeep')
+const systemAnalysisAndPlanningRepairEquipment = require(appRoot +
+    '/server/tasks/build/systemAnalysisAndPlanningRepairEquipment/')
+const allEquipment = require(appRoot + '/server/tasks/build/allEquipment/')
 
 // 1) Схлопнуть данные по инвентарным номерам
 
@@ -72,15 +75,7 @@ const collapseDataByInn = function (data) {
     return arr
 }
 
-module.exports = function ({
-    app,
-    parsePathRepairCompleted,
-    repairPlan,
-    plan,
-    offPlan,
-    collapseNodes,
-    buildPath
-}) {
+module.exports = function ({ parsePathRepairCompleted, plan, offPlan, collapseNodes, buildPath }) {
     fs.readdir(parsePathRepairCompleted, function (err, files) {
         const paths = files.map((item) => `${parsePathRepairCompleted}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -92,7 +87,15 @@ module.exports = function ({
                     resolve(
                         (() => {
                             // Сформировать данные для отчётов excel
-                            repairPlan({
+                            systemAnalysisAndPlanningRepairEquipment({
+                                plan,
+                                collapseNodes,
+                                data: collapseDataByInn(data),
+                                buildPath
+                            })
+
+                            // Сформировать данные для отчётов excel
+                            allEquipment({
                                 plan,
                                 offPlan,
                                 collapseNodes,

@@ -537,7 +537,7 @@ export default function ({
                     dataIndex="rowTotalTrue"
                     key="rowTotalTrue"
                     className="true"
-                    width={30}
+                    width={40}
                     align="center"
                 />
                 <Column
@@ -545,14 +545,14 @@ export default function ({
                     dataIndex="rowTotalFalse"
                     key="rowTotalFalse"
                     className="false"
-                    width={30}
+                    width={40}
                     align="center"
                 />
                 <Column
                     title="&#8721;"
                     dataIndex="rowTotal"
                     key="rowTotal"
-                    width={30}
+                    width={40}
                     align="center"
                 />
             </ColumnGroup>

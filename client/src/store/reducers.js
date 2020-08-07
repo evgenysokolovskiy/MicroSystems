@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux'
+// utils
+import accessReducer from './utils/reducers/accessReducer'
 // greet
 import greetMenuReducer from './greet/reducers/greetMenuReducer'
 // repair
@@ -67,6 +69,7 @@ export default combineReducers({
     techTypeReducer,
     techCardNumberReducer,
     //laboratory
+    accessReducer,
     labLastShpReducer,
     labLastShspReducer,
     labLastSogReducer,

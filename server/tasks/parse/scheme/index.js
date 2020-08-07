@@ -3,7 +3,7 @@
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 const convertShemeForANTD = require(appRoot + '/server/tasks/parse/scheme/convertSchemeForANTD/')
-const schemeAPI = require(appRoot + '/server/api/schemeAPI')
+const schemeAPI = require(appRoot + '/server/requests/api/schemeAPI')
 
 module.exports = function ({ app, parsePathScheme, buildPath }) {
     fs.readdir(parsePathScheme, function (err, files) {

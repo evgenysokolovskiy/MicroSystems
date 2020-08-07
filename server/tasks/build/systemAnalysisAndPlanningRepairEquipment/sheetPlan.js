@@ -9,14 +9,21 @@ module.exports = function ({ plan, ws, defaultStyle }) {
     ws.column(1).setWidth(15)
     ws.column(1).freeze()
     // Название листа
-    createCell(ws, [1, 1], 'План 2020г', defaultStyle)
+    createCell(ws, [1, 1], 'План ремонтов', defaultStyle)
 
     let step1 = 2
     let step4 = 2
     let stepTitle = 2
 
     Object.keys(plan).forEach((key) => {
-        if (key === '71' || key === '77' || key === 'undefined' || key === 'Произ-во') return // здесь фильтровать нужные производства
+        if (
+            key === '60' ||
+            key === '71' ||
+            key === '77' ||
+            key === 'undefined' ||
+            key === 'Произ-во'
+        )
+            return // здесь фильтровать нужные производства
 
         // Ширина колонок с моделью
         ws.column(step4).setWidth(15)
