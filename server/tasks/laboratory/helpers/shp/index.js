@@ -38,7 +38,7 @@ module.exports = function ({ fact: f, technology: t }) {
     const technology = clonedeep(t).slice(5)
 
     const currentYear = new Date().getFullYear()
-    const firstDayCurrentYear = new Date(currentYear, 5, 1)
+    const firstDayCurrentYear = new Date(currentYear, 6, 1)
 
     // Начальная дата в миллисекундах - первый день текущего года
     const startDate = firstDayCurrentYear

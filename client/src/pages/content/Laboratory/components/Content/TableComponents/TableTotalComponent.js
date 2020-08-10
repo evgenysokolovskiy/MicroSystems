@@ -248,7 +248,7 @@ export default class TableTotalComponent extends PureComponent {
                     >
                         <Descriptions size="small" column={1}>
                             <Descriptions.Item>
-                                * Данные с 01.06.2020 (учитывается последняя проверка)
+                                * Данные с 01.07.2020 (учитывается последняя проверка)
                             </Descriptions.Item>
                         </Descriptions>
                     </PageHeader>

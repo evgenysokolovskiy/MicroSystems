@@ -70,5 +70,8 @@ export const image1 = `${origin}/api/image1.jpg`
 export const image2 = `${origin}/api/image2.jpg`
 export const image3 = `${origin}/api/image3.jpg`
 
-// Test
+// Download files
 export const plan = `${origin}/download/plan.xlsx`
+export const equipmentSortedNum = `${origin}/download/allEquipment/sortedNum.xlsx`
+export const equipmentSortedPercent = `${origin}/download/allEquipment/sortedPercent.xlsx`
+export const equipmentFilteredPercentMoreNorm = `${origin}/download/allEquipment/filteredPercentMoreNorm.xlsx`

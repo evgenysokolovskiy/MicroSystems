@@ -11,7 +11,7 @@ const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
 const inn = require(appRoot + '/server/config/repaire/').INDEXES['inn']
 // Фильтр - массив инвентарных номеров
 //Если filter отсутствует, то обрабатываются все данные
-//const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['_256707']
+const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['safe']
 
 module.exports = function ({
     app,

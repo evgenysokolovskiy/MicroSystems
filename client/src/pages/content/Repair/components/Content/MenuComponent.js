@@ -1,7 +1,12 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
 import { SolutionOutlined, TableOutlined, ToolOutlined, FileExcelOutlined } from '@ant-design/icons'
-import { plan } from '../../../../../api/urls/'
+import {
+    plan,
+    equipmentSortedNum,
+    equipmentSortedPercent,
+    equipmentFilteredPercentMoreNorm
+} from '../../../../../api/urls/'
 
 const { SubMenu } = Menu
 
@@ -113,7 +118,7 @@ export default class MenuComponent extends PureComponent {
                         }
                     >
                         <Menu.Item
-                            key="upload-system"
+                            key="upload-plan"
                             onClick={() =>
                                 this.saveFile(
                                     plan,
@@ -122,6 +127,42 @@ export default class MenuComponent extends PureComponent {
                             }
                         >
                             Система анализа и планирования ремонтов
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="upload-sortedNum"
+                            onClick={() =>
+                                this.saveFile(
+                                    equipmentSortedNum,
+                                    'оборудование_с_сортировкой_по_цеховому_номеру.xlsx'
+                                )
+                            }
+                        >
+                            Оборудование с сортировкой по цеховому номеру
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="upload-sortedPercent"
+                            onClick={() =>
+                                this.saveFile(
+                                    equipmentSortedPercent,
+                                    'оборудование_с_сортировкой_по_проценту.xlsx'
+                                )
+                            }
+                        >
+                            Оборудование с сортировкой по проценту (простои / наработка)
+                        </Menu.Item>
+
+                        <Menu.Item
+                            key="upload-filteredPercentMoreNorm"
+                            onClick={() =>
+                                this.saveFile(
+                                    equipmentFilteredPercentMoreNorm,
+                                    'оборудование_не_соответствующее_нормативам_по_простоям.xlsx'
+                                )
+                            }
+                        >
+                            Оборудование, не соответствующее нормативам по простоям
                         </Menu.Item>
                     </SubMenu>
                 </Menu>
