@@ -20,16 +20,36 @@ export default function ({
             key: count,
             fabric: '',
             name: param,
-            ph: (() => percent[param]['pH, %'])(),
-            density: (() => percent[param]['Концентрация, %'])(),
-            soda: (() => (percent[param]['Сода, г/л'] ? percent[param]['H2O, %'] : ''))(),
-            bicarbonate: (() => percent[param]['Бикарбонат натрия, %'])(),
-            nitrite: (() => percent[param]['Нитрит натрия, %'])(),
-            degree: (() => percent[param]['Степень биопоражения'])(),
-            corrosion: (() => percent[param]['Коррозия'])(),
-            mechanicalAdmixture: (() => percent[param]['Механические примеси, %'])(),
-            soap: (() => percent[param]['Мыло, г/л'])(),
-            rowTotal: (() => rowTotal[param] && rowTotal[param]['percentTrue'])()
+            ph: (() => (!isNaN(percent[param]['pH, %']) ? percent[param]['pH, %'] : ''))(),
+            density: (() =>
+                !isNaN(percent[param]['Концентрация, %'])
+                    ? percent[param]['Концентрация, %']
+                    : '')(),
+            soda: (() =>
+                !isNaN(percent[param]['Сода, г/л']) ? percent[param]['Сода, г/л'] : '')(),
+            bicarbonate: (() =>
+                !isNaN(percent[param]['Бикарбонат натрия, %'])
+                    ? percent[param]['Бикарбонат натрия, %']
+                    : '')(),
+            nitrite: (() =>
+                !isNaN(percent[param]['Нитрит натрия, %'])
+                    ? percent[param]['Нитрит натрия, %']
+                    : '')(),
+            degree: (() =>
+                !isNaN(percent[param]['Степень биопоражения'])
+                    ? percent[param]['Степень биопоражения']
+                    : '')(),
+            corrosion: (() =>
+                !isNaN(percent[param]['Коррозия']) ? percent[param]['Коррозия'] : '')(),
+            mechanicalAdmixture: (() =>
+                !isNaN(percent[param]['Механические примеси, %'])
+                    ? percent[param]['Механические примеси, %']
+                    : '')(),
+            soap: (() =>
+                !isNaN(percent[param]['Мыло, г/л']) ? percent[param]['Мыло, г/л'] : '')(),
+            rowTotal: (() =>
+                rowTotal[param] &&
+                (!isNaN(rowTotal[param]['percentTrue']) ? rowTotal[param]['percentTrue'] : ''))()
         }
         dataSource = [...dataSource, item]
     })
@@ -47,23 +67,51 @@ export default function ({
         key: 1000,
         fabric: '',
         name: 'ИТОГО',
-        ph: (() => columnTotal['pH, %'] && columnTotal['pH, %']['percentTrue'])(),
+        ph: (() =>
+            columnTotal['pH, %'] &&
+            (!isNaN(columnTotal['pH, %']['percentTrue'])
+                ? columnTotal['pH, %']['percentTrue']
+                : ''))(),
         density: (() =>
-            columnTotal['Концентрация, %'] && columnTotal['Концентрация, %']['percentTrue'])(),
-        soda: (() => columnTotal['Сода, г/л'] && columnTotal['Сода, г/л']['percentTrue'])(),
+            columnTotal['Концентрация, %'] &&
+            (!isNaN(columnTotal['Концентрация, %']['percentTrue'])
+                ? columnTotal['Концентрация, %']['percentTrue']
+                : ''))(),
+        soda: (() =>
+            columnTotal['Сода, г/л'] &&
+            (!isNaN(columnTotal['Сода, г/л']['percentTrue'])
+                ? columnTotal['Сода, г/л']['percentTrue']
+                : ''))(),
         bicarbonate: (() =>
             columnTotal['Бикарбонат натрия, %'] &&
-            columnTotal['Бикарбонат натрия, %']['percentTrue'])(),
+            (!isNaN(columnTotal['Бикарбонат натрия, %']['percentTrue'])
+                ? columnTotal['Бикарбонат натрия, %']['percentTrue']
+                : ''))(),
         nitrite: (() =>
-            columnTotal['Нитрит натрия, %'] && columnTotal['Нитрит натрия, %']['percentTrue'])(),
+            columnTotal['Нитрит натрия, %'] &&
+            (!isNaN(columnTotal['Нитрит натрия, %']['percentTrue'])
+                ? columnTotal['Нитрит натрия, %']['percentTrue']
+                : ''))(),
         degree: (() =>
             columnTotal['Степень биопоражения'] &&
-            columnTotal['Степень биопоражения']['percentTrue'])(),
-        corrosion: (() => columnTotal['Коррозия'] && columnTotal['Коррозия']['percentTrue'])(),
+            (!isNaN(columnTotal['Степень биопоражения']['percentTrue'])
+                ? columnTotal['Степень биопоражения']['percentTrue']
+                : ''))(),
+        corrosion: (() =>
+            columnTotal['Коррозия'] &&
+            (!isNaN(columnTotal['Коррозия']['percentTrue'])
+                ? columnTotal['Коррозия']['percentTrue']
+                : ''))(),
         mechanicalAdmixture: (() =>
             columnTotal['Механические примеси, %'] &&
-            columnTotal['Механические примеси, %']['percentTrue'])(),
-        soap: (() => columnTotal['Мыло, г/л'] && columnTotal['Мыло, г/л']['percentTrue'])(),
+            (!isNaN(columnTotal['Механические примеси, %']['percentTrue'])
+                ? columnTotal['Механические примеси, %']['percentTrue']
+                : ''))(),
+        soap: (() =>
+            columnTotal['Мыло, г/л'] &&
+            (!isNaN(columnTotal['Мыло, г/л']['percentTrue'])
+                ? columnTotal['Мыло, г/л']['percentTrue']
+                : ''))(),
         rowTotal: p
     }
 

@@ -75,45 +75,47 @@ class Content extends PureComponent {
     }
 
     componentDidMount(prevProps) {
-        const {
-            fetchLabSourceMiddleware,
-            fetchLabLastShpMiddleware,
-            fetchLabLastShspMiddleware,
-            fetchLabLastSogMiddleware,
-            changeLabTargetTotalTableMenu
-        } = this.props
+        const { fetchLabSourceMiddleware, fetchLabLastSogMiddleware } = this.props
 
         fetchLabSourceMiddleware(laboratorySourceSog, this)
-        fetchLabLastShpMiddleware(laboratoryLastShp, this)
-        fetchLabLastShspMiddleware(laboratoryLastShsp, this)
         fetchLabLastSogMiddleware(laboratoryLastSog, this)
 
         this.setState({ isLoadedLastShp: false })
     }
-
+    /*
+    componentDidUpdate(prevState) {
+        // Перевести в false состояние для новых загрузок
+        if (prevState.isLoadedLastShp !== this.state.isLoadedLastShp) this.setState({ isLoadedLastShp: false })
+        if (prevState.isLoadedLastShsp !== this.state.isLoadedLastShsp) this.setState({ isLoadedLastShsp: false })
+        if (prevState.isLoadedLastSog !== this.state.isLoadedLastSog) this.setState({ isLoadedLastSog: false })
+    }
+*/
     // Событие по меню (выбор операции в сводном отчёте)
     handleClickTotalTableMenu = (target) => {
-        const { fetchLabSourceMiddleware } = this.props
+        const {
+            fetchLabSourceMiddleware,
+            fetchLabLastShpMiddleware,
+            fetchLabLastShspMiddleware,
+            changeLabTargetTotalTableMenu
+        } = this.props
 
         if (target === 'shp') {
             fetchLabSourceMiddleware(laboratorySourceShp, this)
-            this.setState({ isLoadedLastShp: false })
+            fetchLabLastShpMiddleware(laboratoryLastShp, this)
         }
 
         if (target === 'shsp') {
             fetchLabSourceMiddleware(laboratorySourceShsp, this)
-            this.setState({ isLoadedLastShsp: false })
+            fetchLabLastShspMiddleware(laboratoryLastShsp, this)
         }
 
-        if (target === 'sog') {
-            fetchLabSourceMiddleware(laboratorySourceSog, this)
-            this.setState({ isLoadedLastSog: false })
-        }
-        this.props.changeLabTargetTotalTableMenu(target)
+        changeLabTargetTotalTableMenu(target)
 
         // Перевести в false состояние для новых загрузок
         this.setState({
-            isLoadedSource: false
+            isLoadedLastShp: false,
+            isLoadedLastShsp: false,
+            isLoadedLastSog: false
         })
     }
 
@@ -140,7 +142,6 @@ class Content extends PureComponent {
             fetchLabPercentMiddleware(laboratoryPercentShp, this)
             fetchLabSourceMiddleware(laboratorySourceShp, this)
             fetchLabAllMiddleware(laboratoryAllShp, this)
-            this.setState({ isLoadedLastShp: false })
         }
 
         if (item === 'shsp') {
@@ -148,7 +149,6 @@ class Content extends PureComponent {
             fetchLabPercentMiddleware(laboratoryPercentShsp, this)
             fetchLabSourceMiddleware(laboratorySourceShsp, this)
             fetchLabAllMiddleware(laboratoryAllShsp, this)
-            this.setState({ isLoadedLastShsp: false })
         }
 
         if (item === 'sog') {
@@ -156,7 +156,6 @@ class Content extends PureComponent {
             fetchLabPercentMiddleware(laboratoryPercentSog, this)
             fetchLabSourceMiddleware(laboratorySourceSog, this)
             fetchLabAllMiddleware(laboratoryAllSog, this)
-            this.setState({ isLoadedLastSog: false })
         }
 
         changeLabTargetMenu(item)
@@ -240,6 +239,7 @@ class Content extends PureComponent {
             labPercent: percent,
             labAmount: amount,
             labSource: source,
+            labTargetTotalTableMenu: totalTableMenu,
             labTargetMenu: menu,
             labParam: param,
             labProp: prop,
@@ -296,6 +296,7 @@ class Content extends PureComponent {
                 lastShp={lastShp}
                 lastShsp={lastShsp}
                 lastSog={lastSog}
+                totalTableMenu={totalTableMenu}
                 menu={menu}
                 range={range}
                 defaultStart={defaultStart}

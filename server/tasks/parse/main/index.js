@@ -11,7 +11,7 @@ const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
 const inn = require(appRoot + '/server/config/repaire/').INDEXES['inn']
 // Фильтр - массив инвентарных номеров
 //Если filter отсутствует, то обрабатываются все данные
-const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['safe']
+//const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['safe']
 
 module.exports = function ({
     app,
@@ -37,6 +37,9 @@ module.exports = function ({
 
                     resolve(
                         (() => {
+                            // Отправить данные к API
+                            dataAPI({ app, plan })
+                            /*
                             // Сформировать данные для отчётов excel
                             repairCompleted({
                                 parsePathRepairCompleted,
@@ -46,9 +49,7 @@ module.exports = function ({
                                 collapseNodes: (() => collapseNodes(filteredData || data))(),
                                 buildPath
                             })
-
-                            // Отправить данные к API
-                            dataAPI({ app, plan })
+                            */
                         })()
                     )
                 } else {

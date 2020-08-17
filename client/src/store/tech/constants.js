@@ -84,7 +84,7 @@ export const _TECH_TYPE = {
         TECH_TYPE: 'TECH_TYPE'
     },
     init: {
-        techType: 9.525
+        techType: 7.144
     }
 }
 

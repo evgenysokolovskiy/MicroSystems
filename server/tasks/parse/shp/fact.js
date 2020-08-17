@@ -57,7 +57,6 @@ module.exports = function ({ app, parseShpFact, technology }) {
                     const joinTechnologyFact = convertTechnologyFact({ technology, fact })
                     // Добавлены данные для построения графиков
                     const joinTechnologyFactData = convertTechnologyFactData({ joinTechnologyFact })
-
                     resolve(
                         (() => {
                             joinTechnologyFactAPI({

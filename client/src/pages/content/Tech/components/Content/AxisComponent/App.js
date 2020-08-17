@@ -143,8 +143,8 @@ export default class AxisCardComponent extends PureComponent {
                             val = 0
                         }
                         return val
-                    })(),
-
+                    })()
+                    /*
                     spaceAfterMtimeBeforeGrindingFuture: (() => {
                         let val
                         if (!card[1]['grinding'] && card[1]['running']) {
@@ -160,7 +160,7 @@ export default class AxisCardComponent extends PureComponent {
                         }
                         return val
                     })()
-
+*/
                     /*
                     spaceBeforeCleanClosed: (() =>
                         !card[1]['clean']
@@ -241,19 +241,21 @@ export default class AxisCardComponent extends PureComponent {
                     />
                     <Bar dataKey="grindingTechnology" stackId="a" fill="#8884d8" name="шлифовка" />
                     <Bar dataKey="grindingClosed" stackId="a" fill="#ccc" legendType="none" />
+                    {/*
                     <Bar
                         dataKey="spaceBeforeMtime"
                         stackId="a"
                         fill="rgba(0,0,0,0)"
                         legendType="none"
                     />
+*/}
                     <ReferenceLine
                         x={mtime - minDate}
                         stroke="rgba(230,200,215,0.2)"
                         strokeWidth={60}
                     />
                     <ReferenceLine x={mtime - minDate} stroke="red" />
-
+                    {/*
                     <Bar
                         dataKey="spaceAfterMtimeBeforeGrindingFuture"
                         stackId="a"
@@ -261,6 +263,7 @@ export default class AxisCardComponent extends PureComponent {
                         legendType="none"
                     />
                     <Bar dataKey="grindingFuture" stackId="a" fill="#8884d8" name="шлифовка" />
+*/}
                 </BarChart>
             </ResponsiveContainer>
         )

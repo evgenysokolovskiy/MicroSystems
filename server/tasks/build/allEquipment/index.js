@@ -9,8 +9,12 @@ const sheetEquipmentSortedPercent = require(appRoot +
     '/server/tasks/build/allEquipment/sheetEquipmentSortedPercent')
 const sheetEquipmentFilteredPercentMoreNorm = require(appRoot +
     '/server/tasks/build/allEquipment/sheetEquipmentFilteredPercentMoreNorm')
-const { NAMES_PLANNING_PERIOD, PERCENT_MONTH, MIN_MTBF_MONTH } = require(appRoot +
-    '/server/config/repaire/')
+const {
+    NAMES_PLANNING_PERIOD,
+    PERCENT_MONTH,
+    MIN_MTBF_MONTH,
+    MIN_SUM_TIME_MONTH
+} = require(appRoot + '/server/config/repaire/')
 
 module.exports = function ({ plan, offPlan, data, buildPath }) {
     const wb1 = new xl.Workbook()
@@ -80,7 +84,11 @@ module.exports = function ({ plan, offPlan, data, buildPath }) {
     // Для удобства берутся отсортированные по проценту массивы
     keys.forEach((key) => {
         const filteredArr = clonedeep(equipmentSortedPercent)[key].filter((item) => {
-            if (+item['percentTimeOfMtbf'] > PERCENT_MONTH && item['mtbf'] > MIN_MTBF_MONTH)
+            if (
+                +item['percentTimeOfMtbf'] > PERCENT_MONTH &&
+                item['mtbf'] > MIN_MTBF_MONTH &&
+                item['sumTime'] > MIN_SUM_TIME_MONTH
+            )
                 return item
         })
         equipmentFilteredPercentMoreNorm[key] = filteredArr

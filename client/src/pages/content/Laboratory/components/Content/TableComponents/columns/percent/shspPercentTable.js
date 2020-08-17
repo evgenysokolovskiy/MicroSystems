@@ -20,14 +20,32 @@ export default function ({
             key: count,
             fabric: '',
             name: param,
-            inhibitor: (() => percent[param]['Ингибитор, %'])(),
-            viscosity: (() => percent[param]['Вязкость, мм2/сек'])(),
-            H2O: (() => (percent[param]['H2O, %'] ? percent[param]['H2O, %'] : ''))(),
-            mechanicalAdmixture: (() => percent[param]['Механические примеси, %'])(),
-            metalInclusions: (() => percent[param]['Металлические включения'])(),
-            flashPoint: (() => percent[param]['t вспышки, не менее град С'])(),
-            acidNumber: (() => percent[param]['Кислотное число, мг.кон'])(),
-            rowTotal: (() => rowTotal[param] && rowTotal[param]['percentTrue'])()
+            inhibitor: (() =>
+                !isNaN(percent[param]['Ингибитор, %']) ? percent[param]['Ингибитор, %'] : '')(),
+            viscosity: (() =>
+                !isNaN(percent[param]['Вязкость, мм2/сек'])
+                    ? percent[param]['Вязкость, мм2/сек']
+                    : '')(),
+            H2O: (() => (!isNaN(percent[param]['H2O, %']) ? percent[param]['H2O, %'] : ''))(),
+            mechanicalAdmixture: (() =>
+                !isNaN(percent[param]['Механические примеси, %'])
+                    ? percent[param]['Механические примеси, %']
+                    : '')(),
+            metalInclusions: (() =>
+                !isNaN(percent[param]['Металлические включения'])
+                    ? percent[param]['Металлические включения']
+                    : '')(),
+            flashPoint: (() =>
+                !isNaN(percent[param]['t вспышки, не менее град С'])
+                    ? percent[param]['t вспышки, не менее град С']
+                    : '')(),
+            acidNumber: (() =>
+                !isNaN(percent[param]['Кислотное число, мг.кон'])
+                    ? percent[param]['Кислотное число, мг.кон']
+                    : '')(),
+            rowTotal: (() =>
+                rowTotal[param] &&
+                (!isNaN(rowTotal[param]['percentTrue']) ? rowTotal[param]['percentTrue'] : ''))()
         }
         dataSource = [...dataSource, item]
     })
@@ -46,22 +64,40 @@ export default function ({
         fabric: '',
         name: 'ИТОГО',
         inhibitor: (() =>
-            columnTotal['Ингибитор, %'] && columnTotal['Ингибитор, %']['percentTrue'])(),
+            columnTotal['Ингибитор, %'] &&
+            (!isNaN(columnTotal['Ингибитор, %']['percentTrue'])
+                ? columnTotal['Ингибитор, %']['percentTrue']
+                : ''))(),
         viscosity: (() =>
-            columnTotal['Вязкость, мм2/сек'] && columnTotal['Вязкость, мм2/сек']['percentTrue'])(),
-        H2O: (() => columnTotal['H2O, %'] && columnTotal['H2O, %']['percentTrue'])(),
+            columnTotal['Вязкость, мм2/сек'] &&
+            (!isNaN(columnTotal['Вязкость, мм2/сек']['percentTrue'])
+                ? columnTotal['Вязкость, мм2/сек']['percentTrue']
+                : ''))(),
+        H2O: (() =>
+            columnTotal['H2O, %'] &&
+            (!isNaN(columnTotal['H2O, %']['percentTrue'])
+                ? columnTotal['H2O, %']['percentTrue']
+                : ''))(),
         mechanicalAdmixture: (() =>
             columnTotal['Механические примеси, %'] &&
-            columnTotal['Механические примеси, %']['percentTrue'])(),
+            (!isNaN(columnTotal['Механические примеси, %']['percentTrue'])
+                ? columnTotal['Механические примеси, %']['percentTrue']
+                : ''))(),
         metalInclusions: (() =>
             columnTotal['Металлические включения'] &&
-            columnTotal['Металлические включения']['percentTrue'])(),
+            (!isNaN(columnTotal['Металлические включения']['percentTrue'])
+                ? columnTotal['Металлические включения']['percentTrue']
+                : ''))(),
         flashPoint: (() =>
             columnTotal['t вспышки, не менее град С'] &&
-            columnTotal['t вспышки, не менее град С']['percentTrue'])(),
+            (!isNaN(columnTotal['t вспышки, не менее град С']['percentTrue'])
+                ? columnTotal['t вспышки, не менее град С']['percentTrue']
+                : ''))(),
         acidNumber: (() =>
             columnTotal['Кислотное число, мг.кон'] &&
-            columnTotal['Кислотное число, мг.кон']['percentTrue'])(),
+            (!isNaN(columnTotal['Кислотное число, мг.кон']['percentTrue'])
+                ? columnTotal['Кислотное число, мг.кон']['percentTrue']
+                : ''))(),
         rowTotal: p
     }
 

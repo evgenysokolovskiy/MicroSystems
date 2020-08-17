@@ -67,3 +67,4 @@ module.exports.MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = 3
 */
 module.exports.PERCENT_MONTH = 5
 module.exports.MIN_MTBF_MONTH = 0.6
+module.exports.MIN_SUM_TIME_MONTH = 0

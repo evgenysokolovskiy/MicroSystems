@@ -32,6 +32,7 @@ module.exports.convertData = function (data, INDEXES) {
         item['batchLoadingTime'] = ExcelDateToJSDate(item['batchLoadingTime'])
         return item
     })
+
     return arr
 }
 

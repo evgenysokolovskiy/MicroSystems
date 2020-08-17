@@ -24,6 +24,7 @@ module.exports = function ({ joinTechnologyFact: joint }) {
                 // Номера карт для выбранного типа подшипника
                 const cards = getCards({ fact })
                 type[1]['cards'] = cards
+
                 // Данные для построения сводного графика всех карт для данного типа
                 type[1]['dataFewCards'] = calculateDataFewCards({
                     technology,

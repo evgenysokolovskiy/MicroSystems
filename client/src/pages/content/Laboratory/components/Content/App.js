@@ -57,18 +57,18 @@ export default class App extends PureComponent {
     }
 
     componentDidUpdate(prevProps) {
-        let { source, param, prop, labTargetMenu, handleClickParam, handleClickProp } = this.props
+        let { source, param, prop, menu, handleClickParam, handleClickProp } = this.props
 
         if (prevProps.source !== source) {
             handleClickParam(Object.keys(source)[0])
         }
 
-        //if (labTargetMenu && source) {
-        if ((param && !prop && prevProps.source !== source) || prevProps.param !== param) {
-            const val = Object.values(source).find((item) => Object.keys(item).length)
-            val && handleClickProp(Object.keys(val)[0])
+        if (menu) {
+            if ((param && !prop && prevProps.source !== source) || prevProps.param !== param) {
+                const val = Object.values(source).find((item) => Object.keys(item).length)
+                val && handleClickProp(Object.keys(val)[0])
+            }
         }
-        //}
 
         if (
             source &&
@@ -148,6 +148,7 @@ export default class App extends PureComponent {
             lastShp,
             lastShsp,
             lastSog,
+            totalTableMenu,
             menu,
             range,
             defaultStart,
@@ -198,17 +199,6 @@ export default class App extends PureComponent {
             </Container>
         )
 
-        const total = (
-            <Container>
-                <Message>
-                    <Title level={4}>
-                        <LoadingOutlined className="circleBlue" />
-                        ПОСТРОЕНИЕ СВОДНОЙ ТАБЛИЦЫ
-                    </Title>
-                </Message>
-            </Container>
-        )
-
         const tabs = (
             <Tabs type="card" defaultActiveKey={activeTab} onChange={this.handleChange}>
                 <TabPane
@@ -234,11 +224,22 @@ export default class App extends PureComponent {
             />
         )
 
+        let last = ''
+        if (totalTableMenu === 'sog') {
+            last = lastSog
+        } else if (totalTableMenu === 'shp') {
+            last = lastShp
+        } else if (totalTableMenu === 'shsp') {
+            last = lastShsp
+        } else {
+            // Загрузка по дефолту
+            last = lastSog
+        }
+
         const totalTable = (
             <TableTotalComponent
-                lastShp={lastShp}
-                lastShsp={lastShsp}
-                lastSog={lastSog}
+                menu={totalTableMenu ? totalTableMenu : 'sog'}
+                last={last}
                 handleClickTotalTableMenu={handleClickTotalTableMenu}
                 handleClickRowTotalTable={handleClickRowTotalTable}
                 handleClickOpenDrawer={handleClickOpenDrawer}
@@ -333,7 +334,7 @@ export default class App extends PureComponent {
                     <MenuComponent handleClickMenu={handleClickMenu} />
                     <Content style={{ minHeight: '88vh' }}>
                         {greetMenu === 'laboratory' && !menu && (
-                            <Suspense fallback={total}>{totalTable}</Suspense>
+                            <Suspense fallback={mount}>{totalTable}</Suspense>
                         )}
 
                         {!source && menu && download}

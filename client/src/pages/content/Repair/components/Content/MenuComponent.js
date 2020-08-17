@@ -118,7 +118,7 @@ export default class MenuComponent extends PureComponent {
                         }
                     >
                         <Menu.Item
-                            key="upload-plan"
+                            key="upload-data"
                             onClick={() =>
                                 this.saveFile(
                                     plan,
