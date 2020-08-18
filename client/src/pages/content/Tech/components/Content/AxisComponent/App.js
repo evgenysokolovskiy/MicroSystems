@@ -32,6 +32,7 @@ export default class AxisCardComponent extends PureComponent {
         //const end = convertDateToString(Math.max(...endArr))
 
         const minDate = Math.min(...startArr)
+        //const minDate = new Date(mtime - (14 * 86400000)).getTime()
         //const maxDate = Math.max(...endArr)
 
         let data = []

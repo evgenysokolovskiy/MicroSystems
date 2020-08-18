@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
+const period = require(appRoot + '/server/config/shp/period')
 const INDEXES = require(appRoot + '/server/config/shp/fact')
 const {
     INDEXES_STAMPING,
@@ -24,52 +25,85 @@ const mtimeAPI = require(appRoot + '/server/requests/api/mtimeAPI')
 module.exports = function ({ app, parseShpFact, technology }) {
     fs.readdir(parseShpFact, function (err, files) {
         const paths = files.map((item) => `${parseShpFact}/${item}`)
-        for (let i = 0; i < paths.length; i++) {
-            new Promise(function (resolve, reject) {
-                let stamping, running, grinding, rough, clean, final
+        fs.stat(parseShpFact, (err, stat) => {
+            const mtime = stat['mtime']
 
-                xlsx.parse(`${paths[i]}`).forEach((sheet) => {
-                    if (sheet['name'].toLowerCase() === 'штамповка')
-                        stamping = convertData(sheet['data'], INDEXES_STAMPING)
-                    if (sheet['name'].toLowerCase() === 'обкатка')
-                        running = convertData(sheet['data'], INDEXES_RUNNING)
-                    if (sheet['name'].toLowerCase() === 'шлифовка')
-                        grinding = convertData(sheet['data'], INDEXES_GRINDING)
-                    if (sheet['name'].toLowerCase() === 'доводка1')
-                        rough = convertData(sheet['data'], INDEXES_ROUGH)
-                    if (sheet['name'].toLowerCase() === 'доводка3')
-                        clean = convertData(sheet['data'], INDEXES_CLEAN)
-                    if (sheet['name'].toLowerCase() === 'доводка4')
-                        final = convertData(sheet['data'], INDEXES_FINAL)
-                })
+            for (let i = 0; i < paths.length; i++) {
+                new Promise(function (resolve, reject) {
+                    let stamping, running, grinding, rough, clean, final
 
-                const fact = {
-                    stamping,
-                    running,
-                    grinding,
-                    rough,
-                    clean,
-                    final
-                }
-
-                if (technology && fact) {
-                    // Совмещена технология и факт
-                    const joinTechnologyFact = convertTechnologyFact({ technology, fact })
-                    // Добавлены данные для построения графиков
-                    const joinTechnologyFactData = convertTechnologyFactData({ joinTechnologyFact })
-                    resolve(
-                        (() => {
-                            joinTechnologyFactAPI({
-                                app,
-                                joinTechnologyFact: joinTechnologyFactData
+                    xlsx.parse(`${paths[i]}`).forEach((sheet) => {
+                        if (sheet['name'].toLowerCase() === 'штамповка')
+                            stamping = convertData({
+                                data: sheet['data'],
+                                INDEXES: INDEXES_STAMPING,
+                                mtime,
+                                period
                             })
+                        if (sheet['name'].toLowerCase() === 'обкатка')
+                            running = convertData({
+                                data: sheet['data'],
+                                INDEXES: INDEXES_RUNNING,
+                                mtime,
+                                period
+                            })
+                        if (sheet['name'].toLowerCase() === 'шлифовка')
+                            grinding = convertData({
+                                data: sheet['data'],
+                                INDEXES: INDEXES_GRINDING,
+                                mtime,
+                                period
+                            })
+                        if (sheet['name'].toLowerCase() === 'доводка1')
+                            rough = convertData({
+                                data: sheet['data'],
+                                INDEXES: INDEXES_ROUGH,
+                                mtime,
+                                period
+                            })
+                        if (sheet['name'].toLowerCase() === 'доводка3')
+                            clean = convertData({
+                                data: sheet['data'],
+                                INDEXES: INDEXES_CLEAN,
+                                mtime,
+                                period
+                            })
+                        if (sheet['name'].toLowerCase() === 'доводка4')
+                            final = convertData({
+                                data: sheet['data'],
+                                INDEXES: INDEXES_FINAL,
+                                mtime,
+                                period
+                            })
+                    })
 
-                            // Градация
-                            intervalAPI({ app })
+                    const fact = {
+                        stamping,
+                        running,
+                        grinding,
+                        rough,
+                        clean,
+                        final
+                    }
 
-                            // Дата последнего изменения файла
-                            fs.stat(parseShpFact, (err, stat) => {
-                                const mtime = stat['mtime']
+                    if (technology && fact) {
+                        // Совмещена технология и факт
+                        const joinTechnologyFact = convertTechnologyFact({ technology, fact })
+                        // Добавлены данные для построения графиков
+                        const joinTechnologyFactData = convertTechnologyFactData({
+                            joinTechnologyFact
+                        })
+                        resolve(
+                            (() => {
+                                joinTechnologyFactAPI({
+                                    app,
+                                    joinTechnologyFact: joinTechnologyFactData
+                                })
+
+                                // Градация
+                                intervalAPI({ app })
+
+                                // Дата последнего изменения файла
                                 mtimeAPI({ app, mtime })
                                 // Сведения о состоянии производственных процессов:
                                 // realTime - только действующие
@@ -86,13 +120,13 @@ module.exports = function ({ app, parseShpFact, technology }) {
                                     remember,
                                     all
                                 })
-                            })
-                        })()
-                    )
-                } else {
-                    reject(new Error('Err'))
-                }
-            }).catch((err) => console.log(err))
-        }
+                            })()
+                        )
+                    } else {
+                        reject(new Error('Err'))
+                    }
+                }).catch((err) => console.log(err))
+            }
+        })
     })
 }

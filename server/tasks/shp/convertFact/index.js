@@ -13,12 +13,20 @@ module.exports.convertFact = function ({ fact }) {
     return obj
 }
 
-module.exports.convertData = function (data, INDEXES) {
+module.exports.convertData = function ({ data, INDEXES, mtime, period }) {
     let arr = []
     // Преобразовать объект в массив
     const indexes = [...Object.entries(INDEXES)]
+
     data.forEach((item) => {
+        // Фильтрация: нет даты и если дата раньше установленной даты
         if (!item[0]) return
+        if (
+            new Date(getDateFromText(item[0]).split('.').reverse().join('.')).getTime() <
+            mtime - period
+        )
+            return
+
         const obj = {}
         indexes.forEach((i) => {
             const indexDate = i[0] === 'date' ? i[1] : null
