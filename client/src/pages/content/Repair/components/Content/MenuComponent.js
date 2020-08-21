@@ -1,6 +1,12 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
-import { SolutionOutlined, TableOutlined, ToolOutlined, FileExcelOutlined } from '@ant-design/icons'
+import {
+    VerticalLeftOutlined,
+    SolutionOutlined,
+    TableOutlined,
+    ToolOutlined,
+    FileExcelOutlined
+} from '@ant-design/icons'
 import {
     plan,
     equipmentSortedNum,
@@ -51,6 +57,20 @@ export default class MenuComponent extends PureComponent {
                     onClick={this.handleClick}
                 >
                     <SubMenu
+                        key="equipment"
+                        title={
+                            <span>
+                                <VerticalLeftOutlined />
+                            </span>
+                        }
+                    >
+                        <Menu.Item key="equipment50">50</Menu.Item>
+                        <Menu.Item key="equipment56">56</Menu.Item>
+                        <Menu.Item key="equipment57">57</Menu.Item>
+                        <Menu.Item key="equipment61">61</Menu.Item>
+                    </SubMenu>
+
+                    <SubMenu
                         key="plan"
                         title={
                             <span>
@@ -62,7 +82,6 @@ export default class MenuComponent extends PureComponent {
                         <Menu.Item key="plan56">56</Menu.Item>
                         <Menu.Item key="plan57">57</Menu.Item>
                         <Menu.Item key="plan61">61</Menu.Item>
-                        <Menu.Item key="plan63">63</Menu.Item>
                     </SubMenu>
 
                     <SubMenu

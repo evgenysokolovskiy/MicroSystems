@@ -3,7 +3,7 @@
 const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCell
 const createCellTitle = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCellTitle
 
-module.exports = function ({ plan, ws, defaultStyle }) {
+module.exports = function ({ equipment, ws, defaultStyle }) {
     // Закрепить строку, столбец
     ws.row(3).freeze()
     ws.column(1).setWidth(15)
@@ -15,7 +15,7 @@ module.exports = function ({ plan, ws, defaultStyle }) {
     let step4 = 2
     let stepTitle = 2
 
-    Object.keys(plan).forEach((key) => {
+    Object.keys(equipment).forEach((key) => {
         if (
             key === '60' ||
             key === '71' ||
@@ -37,11 +37,11 @@ module.exports = function ({ plan, ws, defaultStyle }) {
         createCell(ws, [3, ++stepTitle], 'Вид ремонта', defaultStyle)
 
         // Построение данных для производства key
-        const start = startRowsArr(plan)
-        plan[key]['data'].forEach((timeInterval, i) => {
+        const start = startRowsArr(equipment)
+        equipment[key]['data'].forEach((timeInterval, i) => {
             let row = start[i]
             // Название периода времени (например, месяц)
-            createCellTitle(ws, [row, 1], plan[key]['period'][i], defaultStyle)
+            createCellTitle(ws, [row, 1], equipment[key]['period'][i], defaultStyle)
 
             // Модель, инвентарный номер, цеховой номер, вид ремонта
             timeInterval.forEach((item) => {
@@ -81,16 +81,16 @@ module.exports = function ({ plan, ws, defaultStyle }) {
 }
 
 // Определить строку начала каждого периода времени
-function startRowsArr(plan) {
+function startRowsArr(equipment) {
     // Каждое производство имеет разное количество оборудования в определенный период
     // Требуется найти строку, которая будет ниже, чем последняя строка производства с максимальным количеством станков
     // Для этого:
     // Определить максимальное количество оборудования среди производств в плане в каждый период времени
-    // Свойства объекта - порядковый номер массива из перебираемого массива plan
+    // Свойства объекта - порядковый номер массива из перебираемого массива equipment
     // Значения свойств - максимальное количество станков из всех производств для каждого периода времени
     let maxEquipmentObj = {}
-    Object.keys(plan).forEach((key) => {
-        plan[key]['data'].forEach((timeInterval, i) => {
+    Object.keys(equipment).forEach((key) => {
+        equipment[key]['data'].forEach((timeInterval, i) => {
             if (!maxEquipmentObj[i] || timeInterval.length > maxEquipmentObj[i]) {
                 maxEquipmentObj[i] = timeInterval.length
             }

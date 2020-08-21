@@ -73,6 +73,11 @@ const statisticPlan = [
         key: 'sumTime'
     },
     {
+        title: 'Процент',
+        dataIndex: 'percentTimeOfMtbf',
+        key: 'percentTimeOfMtbf'
+    },
+    {
         title: 'Последний ремонт',
         dataIndex: 'last',
         key: 'last'
@@ -80,8 +85,20 @@ const statisticPlan = [
 ]
 
 export default function (props) {
-    const { data, period, visible } = props
-    const { model, inn, num, mtbf, sumAmount, sumTime, typeOfRepair } = data
+    const { data, visible } = props
+
+    const {
+        model,
+        inn,
+        num,
+        mtbf,
+        sumAmount,
+        sumTime,
+        percentTimeOfMtbf,
+        typeOfRepair,
+        period,
+        nodes
+    } = data
 
     const plan = [
         {
@@ -89,13 +106,21 @@ export default function (props) {
             model,
             inn,
             num,
-            period,
-            typeOfRepair: (() =>
-                typeOfRepair === 'medium'
-                    ? ['Средний']
-                    : typeOfRepair === 'nodes'
-                    ? Object.keys(data['nodes'])
-                    : null)()
+            period: (() => (period ? period : null))(),
+            typeOfRepair: (() => {
+                let type
+                if (typeOfRepair) {
+                    type =
+                        typeOfRepair === 'medium'
+                            ? ['Средний']
+                            : typeOfRepair === 'nodes'
+                            ? Object.keys(data['nodes'])
+                            : null
+                } else {
+                    type = null
+                }
+                return type
+            })()
         }
     ]
 
@@ -104,14 +129,15 @@ export default function (props) {
             key: '1',
             mtbf,
             sumAmount,
-            sumTime
+            sumTime: (() => sumTime && sumTime.toFixed(2))(),
+            percentTimeOfMtbf: (() => percentTimeOfMtbf && percentTimeOfMtbf.toFixed(2))()
         }
     ]
 
     let d = []
 
     visible &&
-        Object.entries(data['nodes']).forEach((node) => {
+        Object.entries(nodes).forEach((node) => {
             // Дробное значение времени в исходной таблице excel предоставляется с запятой, имеет тип строки
             // Необходимо преобразовать к числу с плавающей точкой
             // Для натуральных чисел преобразование не требуется

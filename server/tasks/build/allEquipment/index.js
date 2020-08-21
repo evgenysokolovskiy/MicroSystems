@@ -16,14 +16,13 @@ const {
     MIN_SUM_TIME_MONTH
 } = require(appRoot + '/server/config/repaire/')
 
-module.exports = function ({ plan, offPlan, data, buildPath }) {
+module.exports = function ({ equipment: eq, data, buildPath }) {
     const wb1 = new xl.Workbook()
     const wb2 = new xl.Workbook()
     const wb3 = new xl.Workbook()
 
     // Объединить план и внеплана
-    let p = clonedeep(plan)
-    let off = clonedeep(offPlan)
+    let p = clonedeep(eq)
     const keys = Object.keys(p)
     let equipment = {}
 
@@ -33,7 +32,7 @@ module.exports = function ({ plan, offPlan, data, buildPath }) {
             period.forEach((item) => (item['period'] = NAMES_PLANNING_PERIOD[i]))
             equipment[key] = [...equipment[key], ...period]
         })
-        equipment[key] = [...equipment[key], ...off[key]]
+        equipment[key] = [...equipment[key], ...p[key]['offPlan']]
     })
 
     const defaultStyle = wb1.createStyle({
@@ -51,6 +50,7 @@ module.exports = function ({ plan, offPlan, data, buildPath }) {
     keys.forEach((key) => {
         equipmentSortedNum[key].sort((a, b) => +a['num'] - +b['num'])
     })
+
     sheetEquipmentSortedNum({
         equipmentSortedNum,
         data,

@@ -11,6 +11,27 @@ import {
     Legend
 } from 'recharts'
 
+// Функция правильного отображения числовых значений для отсечек на XAxis
+const CustomizedAxisTick = (props) => {
+    const { x, y, payload } = props
+
+    return (
+        <g transform={`translate(${x}, ${y})`}>
+            <text
+                x={0}
+                y={0}
+                dy={16}
+                textAnchor="end"
+                fill="#000"
+                transform="rotate(-35)"
+                fontSize={12}
+            >
+                {payload.value}
+            </text>
+        </g>
+    )
+}
+
 export default class AxisCardComponent extends PureComponent {
     render() {
         const { type: t, quality: q, mtime: m } = this.props
@@ -32,7 +53,6 @@ export default class AxisCardComponent extends PureComponent {
         //const end = convertDateToString(Math.max(...endArr))
 
         const minDate = Math.min(...startArr)
-        //const minDate = new Date(mtime - (14 * 86400000)).getTime()
         //const maxDate = Math.max(...endArr)
 
         let data = []
@@ -207,6 +227,8 @@ export default class AxisCardComponent extends PureComponent {
             }
         })
 
+        console.log(data)
+
         return (
             <ResponsiveContainer width="100%" aspect={1.5 / 1}>
                 <BarChart
@@ -223,7 +245,15 @@ export default class AxisCardComponent extends PureComponent {
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <YAxis type="category" dataKey="name" />
+
                     <XAxis type="number" domain={['dataMin', 'dataMax']} />
+
+                    {/*
+
+<XAxis dataKey="date" tick={<CustomizedAxisTick />} />
+
+*/}
+
                     <Legend />
                     <Bar
                         dataKey="spaceBeforeRunningClosed"

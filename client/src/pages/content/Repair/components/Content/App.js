@@ -8,13 +8,17 @@ import { LoadingOutlined } from '@ant-design/icons'
 import componentLoader from '../../../componentLoader'
 
 const { Content } = Layout
-const TableComponent = lazy(() => componentLoader(() => import('./TableComponent')))
+const AllEquipmentTableComponent = lazy(() =>
+    componentLoader(() => import('./AllEquipmentTableComponent'))
+)
+const PlanTableComponent = lazy(() => componentLoader(() => import('./PlanTableComponent')))
 const CheckComponent = lazy(() => componentLoader(() => import('./CheckComponent')))
 const SchemeComponent = lazy(() => componentLoader(() => import('./SchemeComponent')))
 
 export const App = (props) => {
     const {
-        data,
+        plan,
+        equipment,
         checkForGeneralUse,
         checkForAntd,
         scheme,
@@ -29,10 +33,22 @@ export const App = (props) => {
             <Layout style={{ background: '#fff' }} className="ant-layout-has-sider">
                 <MenuComponent handleClickMenu={handleClickMenu} />
                 <Content style={{ minHeight: '88vh' }}>
-                    {targetMenu && targetMenu.match(/plan/) && data && (
+                    {targetMenu && targetMenu.match(/equipment/) && equipment && (
                         <Suspense fallback={<LoadingOutlined className="loading" />}>
-                            <TableComponent
-                                data={data}
+                            <AllEquipmentTableComponent
+                                data={equipment}
+                                targetMenu={targetMenu}
+                                handleClickRow={handleClickRow}
+                                handleClickOpenDrawer={handleClickOpenDrawer}
+                                className={'table'}
+                            />
+                        </Suspense>
+                    )}
+
+                    {targetMenu && targetMenu.match(/plan/) && plan && (
+                        <Suspense fallback={<LoadingOutlined className="loading" />}>
+                            <PlanTableComponent
+                                data={plan}
                                 targetMenu={targetMenu}
                                 handleClickRow={handleClickRow}
                                 handleClickOpenDrawer={handleClickOpenDrawer}

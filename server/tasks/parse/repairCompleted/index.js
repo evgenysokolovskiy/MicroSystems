@@ -75,7 +75,7 @@ const collapseDataByInn = function (data) {
     return arr
 }
 
-module.exports = function ({ parsePathRepairCompleted, plan, offPlan, collapseNodes, buildPath }) {
+module.exports = function ({ parsePathRepairCompleted, equipment, collapseNodes, buildPath }) {
     fs.readdir(parsePathRepairCompleted, function (err, files) {
         const paths = files.map((item) => `${parsePathRepairCompleted}/${item}`)
         for (let i = 0; i < paths.length; i++) {
@@ -88,7 +88,7 @@ module.exports = function ({ parsePathRepairCompleted, plan, offPlan, collapseNo
                         (() => {
                             // Сформировать данные для отчётов excel
                             systemAnalysisAndPlanningRepairEquipment({
-                                plan,
+                                equipment,
                                 collapseNodes,
                                 data: collapseDataByInn(data),
                                 buildPath
@@ -96,8 +96,7 @@ module.exports = function ({ parsePathRepairCompleted, plan, offPlan, collapseNo
 
                             // Сформировать данные для отчётов excel
                             allEquipment({
-                                plan,
-                                offPlan,
+                                equipment,
                                 collapseNodes,
                                 data: collapseDataByInn(data),
                                 buildPath

@@ -15,6 +15,7 @@ module.exports = function (data) {
     // За основу взята механическая часть
     const plan = {}
     let arr = []
+
     Object.keys(d).forEach((key) => {
         // Сортировать массивы объекта по значению свойства sumAmount от максимального значения
         sortBySumAmount(d[key]['data'])
@@ -64,7 +65,6 @@ module.exports = function (data) {
         if (accumulator.length) arr = [...arr, accumulator]
         plan[key] = {
             data: arr,
-            offPlan: d[key]['offPlan'],
             allEquipment: d[key]['allEquipment'],
             filteredEquipment: (() => +middleCount + +nodesCount)(),
             middleCount,

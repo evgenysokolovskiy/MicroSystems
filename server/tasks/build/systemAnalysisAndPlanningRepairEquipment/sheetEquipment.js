@@ -4,10 +4,10 @@ const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').
 const createCellCenter = require(appRoot + '/server/tasks/build/helpers/cellCreator')
     .createCellCenter
 
-module.exports = function ({ plan, data, wb, defaultStyle }) {
+module.exports = function ({ equipment, data, wb, defaultStyle }) {
     const obj = {}
 
-    Object.keys(plan).forEach((key) => {
+    Object.keys(equipment).forEach((key) => {
         if (
             key === '60' ||
             key === '71' ||
@@ -81,7 +81,7 @@ module.exports = function ({ plan, data, wb, defaultStyle }) {
         createCellCenter(ws, [3, 16], `Расшифровка`, defaultStyle)
 
         let count = 1
-        plan[key]['data'].forEach((timeInterval, i) => {
+        equipment[key]['data'].forEach((timeInterval, i) => {
             timeInterval.forEach((item) => {
                 const percent = item['percentTimeOfMtbf']
                 const percentTimeOfMtbf = percent ? percent.toFixed(1) : percent

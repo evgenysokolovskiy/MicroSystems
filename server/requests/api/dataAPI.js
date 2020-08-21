@@ -1,9 +1,9 @@
-// Отправить данные к '/api/plan'
+// Отправить данные к '/api/equipment'
 
-module.exports = function ({ app, plan }) {
-    app.get('/api/plan', function (req, res) {
+module.exports = function ({ app, equipment }) {
+    app.get('/api/equipment', function (req, res) {
         res.set('Set-Cookie', 'HttpOnly;Secure;SameSite=Strict')
-        res.json(plan)
-        console.log('Данные отправлены на /api/plan')
+        res.json(equipment)
+        console.log('Данные отправлены на /api/equipment')
     })
 }

@@ -2,8 +2,10 @@
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
+const clonedeep = require('lodash.clonedeep')
 const calculatePlan = require(appRoot + '/server/tasks/calculatePlan/_4-calculatePlan')
 const equipmentOffPlan = require(appRoot + '/server/tasks/equipmentOffPlan/')
+const equipmentAll = require(appRoot + '/server/tasks/equipmentAll/')
 const collapseNodes = require(appRoot + '/server/tasks/collapseNodes')
 const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
 
@@ -11,7 +13,7 @@ const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
 const inn = require(appRoot + '/server/config/repaire/').INDEXES['inn']
 // Фильтр - массив инвентарных номеров
 //Если filter отсутствует, то обрабатываются все данные
-//const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['safe']
+//const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['avtovaz']
 
 module.exports = function ({
     app,
@@ -32,19 +34,29 @@ module.exports = function ({
                         typeof filter !== 'undefined'
                             ? data.filter((item) => filter.some((num) => +item[inn] === +num))
                             : null
-                    // Рассчитать план ремонтов оборудования
+                    // Оборудование в плане ремонтов
                     const plan = calculatePlan(filteredData || data)
+                    // Оборудование, не входящее в план ремонтов
+                    const offPlan = equipmentOffPlan(filteredData || data, plan)
+                    // Все оборудование
+                    const all = plan && offPlan && equipmentAll({ plan, offPlan })
+                    // Добавить к объекту свойства "all" и "offPlan"
+                    Object.entries(plan).forEach((item) => {
+                        item[1]['all'] = all[item[0]]
+                        item[1]['offPlan'] = offPlan[item[0]]
+                    })
+
+                    const equipment = clonedeep(plan)
 
                     resolve(
                         (() => {
                             // Отправить данные к API
-                            dataAPI({ app, plan })
-                            /*
-                            // Сформировать данные для отчётов excel
+                            dataAPI({ app, equipment })
+                            /* 
+                            // Сформировать отчёты excel
                             repairCompleted({
                                 parsePathRepairCompleted,
-                                plan,
-                                offPlan: (() => equipmentOffPlan(filteredData || data, plan))(),
+                                equipment,
                                 // Сумма всех узлов по производствам
                                 collapseNodes: (() => collapseNodes(filteredData || data))(),
                                 buildPath

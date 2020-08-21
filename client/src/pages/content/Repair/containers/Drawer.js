@@ -9,24 +9,36 @@ export class Drawer extends PureComponent {
     render() {
         const { data, targetMenu, targetInn, visible } = this.props
 
-        let dataInn = {}
+        let innPlan = {}
+        let innOffPlan = {}
         let period
-        const d = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
-        d &&
-            d['data'].forEach((item, i) =>
+
+        const p = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
+        const eq =
+            targetMenu && targetMenu.match(/equipment/) && data[targetMenu.match(/[0-9]+/)[0]]
+
+        // Выбранное оборудование входит в план ремонтов
+        p &&
+            p['data'].forEach((item, i) =>
                 item.forEach((it) => {
                     if (+it['inn'] === +targetInn) {
-                        dataInn = it
-                        period = d['period'][i]
+                        innPlan = it
+                        period = p['period'][i]
                     }
                 })
             )
+        // Выбранное оборудование не входит в план ремонтов
+        eq &&
+            eq['all'].forEach((item) => {
+                if (+item['inn'] === +targetInn) {
+                    innOffPlan = item
+                }
+            })
 
         return (
             <>
                 <App
-                    data={dataInn}
-                    period={period}
+                    data={Object.keys(innPlan).length ? innPlan : innOffPlan}
                     visible={visible}
                     handleClickCloseDrawer={this.handleClickCloseDrawer}
                 />

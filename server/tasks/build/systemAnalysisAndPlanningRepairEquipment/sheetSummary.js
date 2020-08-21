@@ -6,7 +6,7 @@ const createCellCenter = require(appRoot + '/server/tasks/build/helpers/cellCrea
     .createCellCenter
 const createCellTitle = require(appRoot + '/server/tasks/build/helpers/cellCreator').createCellTitle
 
-module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle }) {
+module.exports = function ({ collapseNodes, equipment, ws, defaultStyle, borderStyle }) {
     ws.row(2).freeze()
     ws.column(1).setWidth(45)
     ws.column(1).freeze()
@@ -24,7 +24,7 @@ module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle 
     createCell(ws, [9, 1], 'Рем.сл.(мех. ч)/месяц', defaultStyle)
 
     // Суммарные показатели по всем производствам (column 2-4)
-    const summary = calculateSummary(plan, collapseNodes)
+    const summary = calculateSummary(equipment, collapseNodes)
     ws.column(2).setWidth(8)
     ws.column(3).setWidth(8)
     ws.column(4).setWidth(8)
@@ -78,7 +78,7 @@ module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle 
     let step1 = 5
     let step3 = 5
     let nodeStep = 5
-    Object.keys(plan).forEach((key) => {
+    Object.keys(equipment).forEach((key) => {
         if (
             key === '60' ||
             key === 'undefined' ||
@@ -90,26 +90,31 @@ module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle 
 
         // Названия производств
         createCellTitle(ws, [2, step3, 2, step3 + 2, true], `Производство №${key}`, defaultStyle)
-        createCell(ws, [3, step3, 3, step3 + 2, true], plan[key]['allEquipment'], defaultStyle)
-        createCell(ws, [4, step3, 4, step3 + 2, true], plan[key]['filteredEquipment'], defaultStyle)
-        createCell(ws, [5, step3, 5, step3 + 2, true], plan[key]['middleCount'], defaultStyle)
-        createCell(ws, [6, step3, 6, step3 + 2, true], plan[key]['nodesCount'], defaultStyle)
+        createCell(ws, [3, step3, 3, step3 + 2, true], equipment[key]['allEquipment'], defaultStyle)
+        createCell(
+            ws,
+            [4, step3, 4, step3 + 2, true],
+            equipment[key]['filteredEquipment'],
+            defaultStyle
+        )
+        createCell(ws, [5, step3, 5, step3 + 2, true], equipment[key]['middleCount'], defaultStyle)
+        createCell(ws, [6, step3, 6, step3 + 2, true], equipment[key]['nodesCount'], defaultStyle)
         createCell(
             ws,
             [7, step3, 7, step3 + 2, true],
-            plan[key]['sumMechanicRepairComplexity'],
+            equipment[key]['sumMechanicRepairComplexity'],
             defaultStyle
         )
         createCell(
             ws,
             [8, step3, 8, step3 + 2, true],
-            plan[key]['sumElectricRepairComplexity'],
+            equipment[key]['sumElectricRepairComplexity'],
             defaultStyle
         )
         createCell(
             ws,
             [9, step3, 9, step3 + 2, true],
-            plan[key]['inPlanningPeriodMechanicRepairComplexity'],
+            equipment[key]['inPlanningPeriodMechanicRepairComplexity'],
             defaultStyle
         )
 
@@ -168,10 +173,10 @@ module.exports = function ({ collapseNodes, plan, ws, defaultStyle, borderStyle 
 }
 
 // Рассчитать суммарные данные по всем производствам
-function calculateSummary(plan, collapseNodes) {
+function calculateSummary(equipment, collapseNodes) {
     const nodes = {}
     let summary = {}
-    Object.keys(plan).forEach((key) => {
+    Object.keys(equipment).forEach((key) => {
         if (key === 'undefined' || key === 'Произ-во' || key === '71' || key === '77') return // здесь фильтровать нужные производства
 
         Object.keys(collapseNodes[key]['nodes'])
@@ -192,36 +197,38 @@ function calculateSummary(plan, collapseNodes) {
         summary = {
             allEquipment: (() =>
                 this.allEquipment
-                    ? (this.allEquipment += plan[key]['allEquipment'])
-                    : (this.allEquipment = plan[key]['allEquipment']))(),
+                    ? (this.allEquipment += equipment[key]['allEquipment'])
+                    : (this.allEquipment = equipment[key]['allEquipment']))(),
             filteredEquipment: (() =>
                 this.filteredEquipment
-                    ? (this.filteredEquipment += plan[key]['filteredEquipment'])
-                    : (this.filteredEquipment = plan[key]['filteredEquipment']))(),
+                    ? (this.filteredEquipment += equipment[key]['filteredEquipment'])
+                    : (this.filteredEquipment = equipment[key]['filteredEquipment']))(),
             middleCount: (() =>
                 this.middleCount
-                    ? (this.middleCount += plan[key]['middleCount'])
-                    : (this.middleCount = plan[key]['middleCount']))(),
+                    ? (this.middleCount += equipment[key]['middleCount'])
+                    : (this.middleCount = equipment[key]['middleCount']))(),
             nodesCount: (() =>
                 this.nodesCount
-                    ? (this.nodesCount += plan[key]['nodesCount'])
-                    : (this.nodesCount = plan[key]['nodesCount']))(),
+                    ? (this.nodesCount += equipment[key]['nodesCount'])
+                    : (this.nodesCount = equipment[key]['nodesCount']))(),
             sumMechanicRepairComplexity: (() =>
                 this.sumMechanicRepairComplexity
-                    ? (this.sumMechanicRepairComplexity += plan[key]['sumMechanicRepairComplexity'])
+                    ? (this.sumMechanicRepairComplexity +=
+                          equipment[key]['sumMechanicRepairComplexity'])
                     : (this.sumMechanicRepairComplexity =
-                          plan[key]['sumMechanicRepairComplexity']))(),
+                          equipment[key]['sumMechanicRepairComplexity']))(),
             sumElectricRepairComplexity: (() =>
                 this.sumElectricRepairComplexity
-                    ? (this.sumElectricRepairComplexity += plan[key]['sumElectricRepairComplexity'])
+                    ? (this.sumElectricRepairComplexity +=
+                          equipment[key]['sumElectricRepairComplexity'])
                     : (this.sumElectricRepairComplexity =
-                          plan[key]['sumElectricRepairComplexity']))(),
+                          equipment[key]['sumElectricRepairComplexity']))(),
             inPlanningPeriodMechanicRepairComplexity: (() =>
                 this.inPlanningPeriodMechanicRepairComplexity
                     ? (this.inPlanningPeriodMechanicRepairComplexity +=
-                          plan[key]['inPlanningPeriodMechanicRepairComplexity'])
+                          equipment[key]['inPlanningPeriodMechanicRepairComplexity'])
                     : (this.inPlanningPeriodMechanicRepairComplexity =
-                          plan[key]['inPlanningPeriodMechanicRepairComplexity']))(),
+                          equipment[key]['inPlanningPeriodMechanicRepairComplexity']))(),
             nodes
         }
     })

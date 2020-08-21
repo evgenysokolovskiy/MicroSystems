@@ -8,7 +8,7 @@ const sheetPlan = require(appRoot +
 const sheetEquipment = require(appRoot +
     '/server/tasks/build/systemAnalysisAndPlanningRepairEquipment/sheetEquipment')
 
-module.exports = function ({ plan, collapseNodes, data, buildPath }) {
+module.exports = function ({ equipment, collapseNodes, data, buildPath }) {
     const wb = new xl.Workbook()
     const ws1 = wb.addWorksheet('Сводная')
     const ws2 = wb.addWorksheet('План ремонтов')
@@ -57,18 +57,18 @@ module.exports = function ({ plan, collapseNodes, data, buildPath }) {
 
     sheetSummary({
         collapseNodes,
-        plan,
+        equipment,
         ws: ws1,
         defaultStyle,
         borderStyle
     }) // Итоги
     sheetPlan({
-        plan,
+        equipment,
         ws: ws2,
         defaultStyle
     }) // План
     sheetEquipment({
-        plan,
+        equipment,
         data,
         wb,
         defaultStyle,

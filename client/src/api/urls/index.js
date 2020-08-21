@@ -1,7 +1,7 @@
 const origin = window.location.origin
 
 // Repair
-export const data = `${origin}/api/plan`
+export const data = `${origin}/api/equipment`
 export const checkForGeneralUse = [
     `${origin}/api/checkforgeneraluse/3`,
     `${origin}/api/checkforgeneraluse/4`
