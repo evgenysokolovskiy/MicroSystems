@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
 // Antd
-import { Table, Tabs, Tag } from 'antd'
-
-const { TabPane } = Tabs
+import { Table, Button, Tag } from 'antd'
+// XLSX
+import XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 export default class AllEquipmentTableComponent extends PureComponent {
     state = {
@@ -27,9 +28,22 @@ export default class AllEquipmentTableComponent extends PureComponent {
         this.setState({ filteredInfo: null })
     }
 
+    createExcelFileFromTable = () => {
+        // Parse html table, create workbook
+        const workbook = XLSX.utils.book_new()
+        const ws1 = XLSX.utils.table_to_sheet(document.querySelector('.ant-table-container'))
+        XLSX.utils.book_append_sheet(workbook, ws1, "Оборудование")
+        //console.log(workbook)
+
+        // Write file xlsx from workbook
+        var wopts = { bookType:'xlsx', bookSST:false, type:'array' }
+        var wbout = XLSX.write(workbook,wopts)
+        saveAs(new Blob([wbout],{type:"application/octet-stream"}), "Оборудование.xlsx")
+    }
+
     render() {
         const { data, handleClickRow, handleClickOpenDrawer } = this.props
-        let { filteredInfo } = this.state
+        let { filteredInfo, pagination } = this.state
 
         filteredInfo = filteredInfo || {}
 
@@ -208,7 +222,9 @@ export default class AllEquipmentTableComponent extends PureComponent {
                         dataSource={dataSource}
                         bordered
                         onChange={this.onChange}
-                        pagination={false}
+                        pagination={ 
+                            {defaultPageSize: 20, showSizeChanger: true, pageSizeOptions: ['20', '30', data['allEquipment']]}
+                        }
                         scroll={{ x: 'max-content', y: '80vh' }}
                         size="small"
                         // Событие на строке
@@ -233,13 +249,10 @@ export default class AllEquipmentTableComponent extends PureComponent {
 
         return (
             <>
+                <Button onClick={this.clearFilters}>Очистить фильтры</Button>
+                <Button onClick={this.createExcelFileFromTable}>Экспорт в Excel</Button>
                 <div>{table}</div>
             </>
         )
     }
 }
-/*
-function onChange(pagination, filters, sorter, extra) {
-    console.log('params', pagination, filters, sorter, extra)
-}
-*/

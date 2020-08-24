@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Menu } from 'antd'
 import {
-    VerticalLeftOutlined,
-    SolutionOutlined,
-    TableOutlined,
-    ToolOutlined,
-    FileExcelOutlined
-} from '@ant-design/icons'
-import {
     plan,
     equipmentSortedNum,
     equipmentSortedPercent,
@@ -60,7 +53,7 @@ export default class MenuComponent extends PureComponent {
                         key="equipment"
                         title={
                             <span>
-                                <VerticalLeftOutlined />
+                                Оборудование
                             </span>
                         }
                     >
@@ -74,7 +67,7 @@ export default class MenuComponent extends PureComponent {
                         key="plan"
                         title={
                             <span>
-                                <SolutionOutlined />
+                                План ППР
                             </span>
                         }
                     >
@@ -88,7 +81,7 @@ export default class MenuComponent extends PureComponent {
                         key="scheme"
                         title={
                             <span>
-                                <TableOutlined />
+                                Схемы пр-в
                             </span>
                         }
                     >
@@ -110,7 +103,7 @@ export default class MenuComponent extends PureComponent {
                         key="check"
                         title={
                             <span>
-                                <ToolOutlined />
+                                Тех. проверки
                             </span>
                         }
                     >
@@ -132,7 +125,7 @@ export default class MenuComponent extends PureComponent {
                         key="upload"
                         title={
                             <span>
-                                <FileExcelOutlined />
+                                Отчёты Excel
                             </span>
                         }
                     >
