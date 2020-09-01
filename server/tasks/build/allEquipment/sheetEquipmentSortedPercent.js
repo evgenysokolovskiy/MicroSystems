@@ -4,7 +4,7 @@ const createCell = require(appRoot + '/server/tasks/build/helpers/cellCreator').
 const createCellCenter = require(appRoot + '/server/tasks/build/helpers/cellCreator')
     .createCellCenter
 
-module.exports = function ({ equipmentSortedPercent, data, wb, defaultStyle }) {
+module.exports = function ({ equipmentSortedPercent, plan, data, wb, defaultStyle }) {
     const obj = {}
 
     Object.keys(equipmentSortedPercent).forEach((key) => {
@@ -52,8 +52,10 @@ module.exports = function ({ equipmentSortedPercent, data, wb, defaultStyle }) {
         ws.column(8).setWidth(5)
         ws.column(11).setWidth(5)
         ws.column(12).setWidth(40)
+        ws.column(13).setWidth(15)
         ws.column(15).setWidth(5)
         ws.column(16).setWidth(40)
+        ws.column(17).setWidth(20)
 
         // Название листа
         createCell(
@@ -78,15 +80,16 @@ module.exports = function ({ equipmentSortedPercent, data, wb, defaultStyle }) {
         createCellCenter(ws, [3, 10], `Вид ремонта`, defaultStyle)
         createCellCenter(ws, [3, 11], `Узлы`, defaultStyle)
         createCellCenter(ws, [3, 12], `Расшифровка`, defaultStyle)
-        createCellCenter(ws, [2, 13, 2, 16, true], `Предварительный план на год`, defaultStyle)
+        createCellCenter(ws, [2, 13, 2, 17, true], `Утверждённый график ремонтов`, defaultStyle)
         createCellCenter(ws, [3, 13], `Дата`, defaultStyle)
         createCellCenter(ws, [3, 14], `Вид ремонта`, defaultStyle)
         createCellCenter(ws, [3, 15], `Узлы`, defaultStyle)
         createCellCenter(ws, [3, 16], `Расшифровка`, defaultStyle)
+        createCellCenter(ws, [3, 17], `Комментарии`, defaultStyle)
 
         let count = 1
         equipmentSortedPercent[key].forEach((item) => {
-            const percent = item['percentTimeOfMtbf']
+            const percent = isFinite(item['percentTimeOfMtbf']) ? item['percentTimeOfMtbf'] : 0
             const percentTimeOfMtbf = percent ? percent.toFixed(1) : percent
             createCell(ws, [row, 1], count, defaultStyle)
             createCell(ws, [row, 2], item['model'], defaultStyle)
@@ -104,7 +107,21 @@ module.exports = function ({ equipmentSortedPercent, data, wb, defaultStyle }) {
                 createCell(ws, [row, 11], repairCompleted[0]['nodes'], defaultStyle)
                 createCell(ws, [row, 12], repairCompleted[0]['description'], defaultStyle)
             }
+            // Утверждённый план ремонтов
+            const repairPlan =
+                plan &&
+                plan[key] &&
+                plan[key].filter((planItem) => +planItem['inn'] === +item['inn'])
+            if (repairPlan && repairPlan[0]) {
+                createCell(ws, [row, 13], repairPlan[0]['date'], defaultStyle)
+                createCell(ws, [row, 14], repairPlan[0]['typeOfRepair'], defaultStyle)
+                createCell(ws, [row, 15], repairPlan[0]['nodes'], defaultStyle)
+                createCell(ws, [row, 16], repairPlan[0]['description'], defaultStyle)
+                createCell(ws, [row, 17], repairPlan[0]['comment'], defaultStyle)
+            }
 
+            // Предварительный план ремонтов (вместо утверждённого)
+            /*
             createCell(ws, [row, 13], item['period'], defaultStyle)
             createCell(
                 ws,
@@ -132,12 +149,12 @@ module.exports = function ({ equipmentSortedPercent, data, wb, defaultStyle }) {
                 item['typeOfRepair'] === 'nodes' && descriptions.join('\n'),
                 defaultStyle
             )
-
+            */
             count++
             row++
         })
 
-        ws.cell(2, 1, --row, 16).style(borderStyle)
+        ws.cell(2, 1, --row, 17).style(borderStyle)
         // Вертикальная граница
         ws.cell(2, 9, row, 9).style({ border: { left: { style: 'thin' } } })
         ws.cell(2, 13, row, 13).style({ border: { left: { style: 'thin' } } })

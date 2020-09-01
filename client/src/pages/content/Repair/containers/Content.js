@@ -60,7 +60,12 @@ class Content extends PureComponent {
 
         return (
             <App
-                plan={targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]}
+                plan={
+                    targetMenu &&
+                    targetMenu.match(/plan/) &&
+                    data &&
+                    data[targetMenu.match(/[0-9]+/)[0]]
+                }
                 equipment={
                     targetMenu &&
                     targetMenu.match(/equipment/) &&

@@ -6,23 +6,10 @@ const clonedeep = require('lodash.clonedeep')
 const systemAnalysisAndPlanningRepairEquipment = require(appRoot +
     '/server/tasks/build/systemAnalysisAndPlanningRepairEquipment/')
 const allEquipment = require(appRoot + '/server/tasks/build/allEquipment/')
+const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
+const INDEXES = require(appRoot + '/server/config/repaire/cols').INDEXES_REPAIR_COMPLETED
 
 // 1) Схлопнуть данные по инвентарным номерам
-
-// Номер колонки в таблице Excel
-const INDEXES = {
-    inn: 1, // Инвентарный номер
-    act: 2, // Номер акта выполненных работ
-    order: 3, // Номер межцехового заказа
-    customer: 4, // Заказчик
-    executor: 5, // Исполнитель
-    startDate: 6, // Дата начала ремонта
-    endDate: 7, // Дата окончания ремонта
-    typeOfRepair: 8, // Вид ремонта
-    node: 9, // Узлы
-    description: 10, //Расшифровка узлов
-    percent: 11 // Процент выполнения
-}
 
 const collapseDataByInn = function (data) {
     const d = clonedeep(data)
@@ -75,32 +62,93 @@ const collapseDataByInn = function (data) {
     return arr
 }
 
-module.exports = function ({ parsePathRepairCompleted, equipment, collapseNodes, buildPath }) {
+module.exports = function ({
+    app,
+    parsePathRepairCompleted,
+    equipment,
+    plan,
+    collapseNodes,
+    buildPath
+}) {
+    const obj = {}
+    const checkEquipmentInPlanButDontHaveInAllObj = {}
+    Object.entries(equipment).forEach((spot) => {
+        obj[spot[0]] = {}
+        // checkEquipmentInPlanButDontHaveInAll - Оборудование в плане, которого нет в all
+        // т.к. у оборудования нет данных по наработке, оно не попало в полный список
+        let checkEquipmentInPlanButDontHaveInAll = clonedeep(plan[spot[0]])
+
+        spot[1]['all'].forEach((item) => {
+            plan[spot[0]] &&
+                plan[spot[0]].forEach((planItem, i) => {
+                    if (+item['inn'] === +planItem['inn']) {
+                        item['period'] = planItem['period']
+                        if (!obj[spot[0]][planItem['period']]) obj[spot[0]][planItem['period']] = []
+                        obj[spot[0]] = {
+                            ...obj[spot[0]],
+                            [planItem['period']]: [...obj[spot[0]][planItem['period']], item]
+                        }
+
+                        delete checkEquipmentInPlanButDontHaveInAll[i]
+                    }
+                })
+        })
+
+        if (checkEquipmentInPlanButDontHaveInAll) {
+            checkEquipmentInPlanButDontHaveInAll.forEach((item) => {
+                if (!item) return
+                const period = item['period']
+                const description = item['description']
+                const comment = item['comment']
+                let parseNodesItem = {}
+                if (item['nodes']) {
+                    const nodes = item['nodes'].split('\r\n')
+                    nodes.forEach((node) => {
+                        parseNodesItem[node] = {
+                            time: 0,
+                            amount: 0,
+                            description: '',
+                            oneRepairTime: 0
+                        }
+                    })
+                }
+                item['nodes'] = parseNodesItem
+                obj[spot[0]][period] = [...obj[spot[0]][period], item]
+            })
+        }
+    })
+
+    Object.entries(equipment).forEach((spot) => (spot[1]['approved'] = obj[spot[0]]))
+
     fs.readdir(parsePathRepairCompleted, function (err, files) {
         const paths = files.map((item) => `${parsePathRepairCompleted}/${item}`)
         for (let i = 0; i < paths.length; i++) {
             new Promise(function (resolve, reject) {
                 // Прочитать файл по ссылке paths[i]
                 const data = xlsx.parse(`${paths[i]}`)[0].data
-
                 if (data) {
                     resolve(
                         (() => {
-                            // Сформировать данные для отчётов excel
+                            // ОТПРАВИТЬ ДАННЫЕ К API
+                            dataAPI({ app, equipment })
+
+                            /*
+                            // СФОРМИРОВАТЬ ОТЧЁТЫ EXCEL
                             systemAnalysisAndPlanningRepairEquipment({
                                 equipment,
                                 collapseNodes,
                                 data: collapseDataByInn(data),
                                 buildPath
                             })
-
-                            // Сформировать данные для отчётов excel
+                            
                             allEquipment({
                                 equipment,
+                                plan,
                                 collapseNodes,
                                 data: collapseDataByInn(data),
                                 buildPath
                             })
+                            */
                         })()
                     )
                 } else {

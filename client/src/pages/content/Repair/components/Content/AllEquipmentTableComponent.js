@@ -32,13 +32,13 @@ export default class AllEquipmentTableComponent extends PureComponent {
         // Parse html table, create workbook
         const workbook = XLSX.utils.book_new()
         const ws1 = XLSX.utils.table_to_sheet(document.querySelector('.ant-table-container'))
-        XLSX.utils.book_append_sheet(workbook, ws1, "Оборудование")
+        XLSX.utils.book_append_sheet(workbook, ws1, 'Оборудование')
         //console.log(workbook)
 
         // Write file xlsx from workbook
-        var wopts = { bookType:'xlsx', bookSST:false, type:'array' }
-        var wbout = XLSX.write(workbook,wopts)
-        saveAs(new Blob([wbout],{type:"application/octet-stream"}), "Оборудование.xlsx")
+        var wopts = { bookType: 'xlsx', bookSST: false, type: 'array' }
+        var wbout = XLSX.write(workbook, wopts)
+        saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'Оборудование.xlsx')
     }
 
     render() {
@@ -222,9 +222,11 @@ export default class AllEquipmentTableComponent extends PureComponent {
                         dataSource={dataSource}
                         bordered
                         onChange={this.onChange}
-                        pagination={ 
-                            {defaultPageSize: 20, showSizeChanger: true, pageSizeOptions: ['20', '30', data['allEquipment']]}
-                        }
+                        pagination={{
+                            defaultPageSize: 20,
+                            showSizeChanger: true,
+                            pageSizeOptions: ['20', '30', data['allEquipment']]
+                        }}
                         scroll={{ x: 'max-content', y: '80vh' }}
                         size="small"
                         // Событие на строке

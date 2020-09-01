@@ -49,42 +49,21 @@ export default class MenuComponent extends PureComponent {
                     inlineCollapsed={this.state.collapsed}
                     onClick={this.handleClick}
                 >
-                    <SubMenu
-                        key="equipment"
-                        title={
-                            <span>
-                                Оборудование
-                            </span>
-                        }
-                    >
+                    <SubMenu key="equipment" title={<span>Оборудование</span>}>
                         <Menu.Item key="equipment50">50</Menu.Item>
                         <Menu.Item key="equipment56">56</Menu.Item>
                         <Menu.Item key="equipment57">57</Menu.Item>
                         <Menu.Item key="equipment61">61</Menu.Item>
                     </SubMenu>
 
-                    <SubMenu
-                        key="plan"
-                        title={
-                            <span>
-                                План ППР
-                            </span>
-                        }
-                    >
+                    <SubMenu key="plan" title={<span>План ППР</span>}>
                         <Menu.Item key="plan50">50</Menu.Item>
                         <Menu.Item key="plan56">56</Menu.Item>
                         <Menu.Item key="plan57">57</Menu.Item>
                         <Menu.Item key="plan61">61</Menu.Item>
                     </SubMenu>
 
-                    <SubMenu
-                        key="scheme"
-                        title={
-                            <span>
-                                Схемы пр-в
-                            </span>
-                        }
-                    >
+                    <SubMenu key="scheme" title={<span>Схемы пр-в</span>}>
                         <Menu.Item key="scheme1">ШСЦ1</Menu.Item>
                         <Menu.Item key="scheme2">ШСЦ2</Menu.Item>
                         <Menu.Item key="scheme3">ШСЦ3</Menu.Item>
@@ -99,14 +78,7 @@ export default class MenuComponent extends PureComponent {
                         <Menu.Item key="scheme562">56(2)</Menu.Item>
                     </SubMenu>
 
-                    <SubMenu
-                        key="check"
-                        title={
-                            <span>
-                                Тех. проверки
-                            </span>
-                        }
-                    >
+                    <SubMenu key="check" title={<span>Тех. проверки</span>}>
                         <Menu.Item key="check1">ШСЦ1</Menu.Item>
                         <Menu.Item key="check2">ШСЦ2</Menu.Item>
                         <Menu.Item key="check3">ШСЦ3</Menu.Item>
@@ -121,14 +93,7 @@ export default class MenuComponent extends PureComponent {
                         <Menu.Item key="check562">56(2)</Menu.Item>
                     </SubMenu>
 
-                    <SubMenu
-                        key="upload"
-                        title={
-                            <span>
-                                Отчёты Excel
-                            </span>
-                        }
-                    >
+                    <SubMenu key="upload" title={<span>Отчёты Excel</span>}>
                         <Menu.Item
                             key="upload-data"
                             onClick={() =>

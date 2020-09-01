@@ -29,6 +29,7 @@ const buildPath = appRoot + '/files/xlsx/build'
 const buildPathDetail = appRoot + '/files/xlsx/build/detail'
 // Путь, что парсить
 const parsePath = appRoot + '/files/xlsx/parse'
+const parsePathPlan = appRoot + '/files/xlsx/planRepair'
 const parsePathRepairCompleted = appRoot + '/files/xlsx/repairCompleted'
 const parsePathCheck = appRoot + '/files/xlsx/check'
 const parsePathScheme = appRoot + '/files/xlsx/scheme'
@@ -40,13 +41,18 @@ const parseLaboratoryTechnology = appRoot + '/files/xlsx/laboratory/technology'
 
 // * Отправить JSON, STREAM данные к API (при первоначальной загрузке сервера)
 require(appRoot + '/server/requests/api/imagesAPI')(app)
+
 const repairCompleted = require(appRoot + '/server/tasks/parse/repairCompleted')
+const planRepair = require(appRoot + '/server/tasks/parse/planRepair')
+
 require(appRoot + '/server/tasks/parse/main')({
     app,
     parsePath,
     parsePathRepairCompleted,
+    parsePathPlan,
     buildPath,
-    repairCompleted
+    repairCompleted,
+    planRepair
 })
 require(appRoot + '/server/tasks/parse/check')({
     app,

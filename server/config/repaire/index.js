@@ -1,29 +1,3 @@
-/*
-spot     - номер производства
-model    - модель оборудования
-inn      - инвентарный номер
-num      - цеховой номер
-code     - код неисправности
-amount   - количество остановок по данной неисправности
-time     - время простоев по данной неисправности
-ps       - производственная система
-mtbf  	 - Наработка оборудования
-*/
-
-// Номер колонки в таблице Excel
-module.exports.INDEXES = {
-    spot: 1,
-    model: 2,
-    inn: 3,
-    num: 4,
-    code: 5,
-    description: 6,
-    amount: 8,
-    time: 9,
-    ps: 10,
-    mtbf: 11
-}
-
 // Предельное количество аварийных остановок для производств
 module.exports.LIMIT_NUMBER_EMERGENCY_STOPS = {
     '50': 10,
@@ -66,5 +40,5 @@ module.exports.MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES = 3
     Учитывается наработка и аварийные выходы из строя оборудования
 */
 module.exports.PERCENT_MONTH = 5
-module.exports.MIN_MTBF_MONTH = 0.6
+module.exports.MIN_MTBF_MONTH = 8
 module.exports.MIN_SUM_TIME_MONTH = 0

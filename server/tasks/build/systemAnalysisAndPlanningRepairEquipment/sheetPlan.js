@@ -50,11 +50,11 @@ module.exports = function ({ equipment, ws, defaultStyle }) {
                 createCell(ws, [row, ++step1], item['inn'], defaultStyle)
 
                 // Если средний ремонт, вывести "Средний"
-                if (item['typeOfRepair'] === 'medium') {
-                    createCell(ws, [row, ++step1], 'Средний', defaultStyle)
+                if (item['typeOfRepair'] === 'средний') {
+                    createCell(ws, [row, ++step1], 'средний', defaultStyle)
                 }
                 // Если текущий ремонт, вывести перечень узлов
-                if (item['typeOfRepair'] === 'nodes') {
+                if (item['typeOfRepair'] === 'текущий') {
                     createCell(
                         ws,
                         [row, ++step1],

@@ -42,13 +42,13 @@ module.exports = function (data) {
 
         d[key]['data'].forEach((item) => {
             if (rest > 0) {
-                if (item['typeOfRepair'] === 'medium') {
+                if (item['typeOfRepair'] === 'средний') {
                     accumulator = [...accumulator, item]
                     rest -= item['mechanicRepairComplexity']
                     middleCount++
                 }
 
-                if (item['typeOfRepair'] === 'nodes') {
+                if (item['typeOfRepair'] === 'текущий') {
                     accumulator = [...accumulator, item]
                     rest -= item['sumMechanicRepairComplexityNodes']
                     nodesCount++

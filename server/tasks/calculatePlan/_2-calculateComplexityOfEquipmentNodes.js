@@ -25,8 +25,8 @@ module.exports = function (data) {
             ;+item['lengthNodesMechanic'] + +item['lengthNodesElectric'] >=
                 LENGTH_MEDIUM_REPAIR_NODES &&
             +item['lengthNodesMechanic'] >= MIN_LENGTH_MEDIUM_REPAIR_MECHANIC_NODES
-                ? (item['typeOfRepair'] = 'medium')
-                : (item['typeOfRepair'] = 'nodes')
+                ? (item['typeOfRepair'] = 'средний')
+                : (item['typeOfRepair'] = 'текущий')
 
             if (!model[item.model]) obj[item.model] = true
             // Добавить свойства - (полная) ремонтная сложность среднего ремонта по механике и электрике

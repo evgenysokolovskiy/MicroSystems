@@ -11,22 +11,25 @@ export class Drawer extends PureComponent {
 
         let innPlan = {}
         let innOffPlan = {}
-        let period
 
-        const p = targetMenu && targetMenu.match(/plan/) && data[targetMenu.match(/[0-9]+/)[0]]
+        const p =
+            targetMenu && targetMenu.match(/plan/) && data && data[targetMenu.match(/[0-9]+/)[0]]
         const eq =
-            targetMenu && targetMenu.match(/equipment/) && data[targetMenu.match(/[0-9]+/)[0]]
+            targetMenu &&
+            targetMenu.match(/equipment/) &&
+            data &&
+            data[targetMenu.match(/[0-9]+/)[0]]
 
         // Выбранное оборудование входит в план ремонтов
         p &&
-            p['data'].forEach((item, i) =>
+            Object.values(p['approved']).forEach((item) =>
                 item.forEach((it) => {
                     if (+it['inn'] === +targetInn) {
                         innPlan = it
-                        period = p['period'][i]
                     }
                 })
             )
+
         // Выбранное оборудование не входит в план ремонтов
         eq &&
             eq['all'].forEach((item) => {

@@ -32,7 +32,7 @@ const columnsPlan = [
         key: 'num'
     },
     {
-        title: 'План',
+        title: 'Дата',
         dataIndex: 'period',
         key: 'period'
     },
@@ -97,7 +97,8 @@ export default function (props) {
         percentTimeOfMtbf,
         typeOfRepair,
         period,
-        nodes
+        nodes,
+        comment
     } = data
 
     const plan = [
@@ -111,9 +112,9 @@ export default function (props) {
                 let type
                 if (typeOfRepair) {
                     type =
-                        typeOfRepair === 'medium'
+                        typeOfRepair === 'средний'
                             ? ['Средний']
-                            : typeOfRepair === 'nodes'
+                            : typeOfRepair === 'текущий'
                             ? Object.keys(data['nodes'])
                             : null
                 } else {
@@ -137,6 +138,7 @@ export default function (props) {
     let d = []
 
     visible &&
+        nodes &&
         Object.entries(nodes).forEach((node) => {
             // Дробное значение времени в исходной таблице excel предоставляется с запятой, имеет тип строки
             // Необходимо преобразовать к числу с плавающей точкой
@@ -153,27 +155,20 @@ export default function (props) {
             d = [...d, obj]
         })
 
-    return (
+    const hasAmountElement = (
         <>
-            <Title level={4}>План ремонтов:</Title>
-            <Table
-                dataSource={plan}
-                columns={columnsPlan}
-                bordered
-                size="small"
-                pagination={false}
-            />
             <Title level={4} style={{ marginTop: '40px' }}>
                 Статистические данные:
             </Title>
             <Table
-                dataSource={statistic}
+                dataSource={sumAmount && statistic}
                 columns={statisticPlan}
                 bordered
                 size="small"
                 pagination={false}
                 style={{ marginBottom: '20px' }}
             />
+
             <Text>Статистика узлов, которым необходим ремонт</Text>
             <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
                 <BarChart
@@ -194,6 +189,39 @@ export default function (props) {
                     <Bar dataKey="uv" fill="#82ca9d" name="Количество остановок" />
                 </BarChart>
             </ResponsiveContainer>
+
+            <Title level={4} style={{ marginTop: '40px' }}>
+                Основание для включения в план:
+            </Title>
+            <Text>Анализ по аварийным выходам оборудования</Text>
+        </>
+    )
+
+    const dontHaveAmountElement = (
+        <>
+            <Title level={4} style={{ marginTop: '40px' }}>
+                Статистические данные:
+            </Title>
+            <Text>Не имеет данных по аварийным остановкам</Text>
+
+            <Title level={4} style={{ marginTop: '40px' }}>
+                Основание для включения в план:
+            </Title>
+            <Text>{comment}</Text>
+        </>
+    )
+
+    return (
+        <>
+            <Title level={4}>План ремонтов:</Title>
+            <Table
+                dataSource={plan}
+                columns={columnsPlan}
+                bordered
+                size="small"
+                pagination={false}
+            />
+            {sumAmount ? hasAmountElement : dontHaveAmountElement}
         </>
     )
 }

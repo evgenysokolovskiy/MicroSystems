@@ -7,10 +7,9 @@ const calculatePlan = require(appRoot + '/server/tasks/calculatePlan/_4-calculat
 const equipmentOffPlan = require(appRoot + '/server/tasks/equipmentOffPlan/')
 const equipmentAll = require(appRoot + '/server/tasks/equipmentAll/')
 const collapseNodes = require(appRoot + '/server/tasks/collapseNodes')
-const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
 
 // Индекс инвентарного номера (для фильтрации исходных данных по filter)
-const inn = require(appRoot + '/server/config/repaire/').INDEXES['inn']
+const inn = require(appRoot + '/server/config/repaire/cols').INDEXES['inn']
 // Фильтр - массив инвентарных номеров
 //Если filter отсутствует, то обрабатываются все данные
 //const filter = require(appRoot + '/server/constants/audit/avtovaz/equipment')['avtovaz']
@@ -19,8 +18,10 @@ module.exports = function ({
     app,
     parsePath,
     parsePathRepairCompleted,
+    parsePathPlan,
     buildPath,
-    repairCompleted
+    repairCompleted,
+    planRepair
 }) {
     fs.readdir(parsePath, function (err, files) {
         const paths = files.map((item) => `${parsePath}/${item}`)
@@ -34,9 +35,9 @@ module.exports = function ({
                         typeof filter !== 'undefined'
                             ? data.filter((item) => filter.some((num) => +item[inn] === +num))
                             : null
-                    // Оборудование в плане ремонтов
+                    // Оборудование в предварительном плане ремонтов
                     const plan = calculatePlan(filteredData || data)
-                    // Оборудование, не входящее в план ремонтов
+                    // Оборудование, не входящее в предварительный план ремонтов
                     const offPlan = equipmentOffPlan(filteredData || data, plan)
                     // Все оборудование
                     const all = plan && offPlan && equipmentAll({ plan, offPlan })
@@ -50,18 +51,17 @@ module.exports = function ({
 
                     resolve(
                         (() => {
-                            // Отправить данные к API
-                            dataAPI({ app, equipment })
-                            /* 
-                            // Сформировать отчёты excel
-                            repairCompleted({
+                            // Прочитать из файла данные утверждённого плана ремонтов
+                            // Пробросить для использования внутри функцию чтения из файла данных о выполненных ремонтах с параметрами
+                            planRepair({
+                                app,
+                                parsePathPlan,
+                                repairCompleted,
                                 parsePathRepairCompleted,
                                 equipment,
-                                // Сумма всех узлов по производствам
                                 collapseNodes: (() => collapseNodes(filteredData || data))(),
                                 buildPath
                             })
-                            */
                         })()
                     )
                 } else {

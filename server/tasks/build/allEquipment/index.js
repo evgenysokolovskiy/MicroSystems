@@ -16,7 +16,7 @@ const {
     MIN_SUM_TIME_MONTH
 } = require(appRoot + '/server/config/repaire/')
 
-module.exports = function ({ equipment: eq, data, buildPath }) {
+module.exports = function ({ equipment: eq, plan, data, buildPath }) {
     const wb1 = new xl.Workbook()
     const wb2 = new xl.Workbook()
     const wb3 = new xl.Workbook()
@@ -53,6 +53,7 @@ module.exports = function ({ equipment: eq, data, buildPath }) {
 
     sheetEquipmentSortedNum({
         equipmentSortedNum,
+        plan,
         data,
         wb: wb1,
         defaultStyle
@@ -71,6 +72,7 @@ module.exports = function ({ equipment: eq, data, buildPath }) {
     })
     sheetEquipmentSortedPercent({
         equipmentSortedPercent,
+        plan,
         data,
         wb: wb2,
         defaultStyle
@@ -95,6 +97,7 @@ module.exports = function ({ equipment: eq, data, buildPath }) {
     })
     sheetEquipmentFilteredPercentMoreNorm({
         equipmentFilteredPercentMoreNorm,
+        plan,
         data,
         wb: wb3,
         defaultStyle

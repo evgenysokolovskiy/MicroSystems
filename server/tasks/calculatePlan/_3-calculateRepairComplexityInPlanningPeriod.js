@@ -16,11 +16,11 @@ module.exports = function (data) {
         let sumElectricRepairComplexity = 0
         const nodes = {}
         d[key]['data'].forEach((item) => {
-            if (item['typeOfRepair'] === 'medium') {
+            if (item['typeOfRepair'] === 'средний') {
                 sumMechanicRepairComplexity += item['mechanicRepairComplexity']
                 sumElectricRepairComplexity += item['electricRepairComplexity']
             }
-            if (item['typeOfRepair'] === 'nodes') {
+            if (item['typeOfRepair'] === 'текущий') {
                 let sumMechanicRepairComplexityNodes = 0
                 //let sumElectricRepairComplexityNodes = 0
                 Object.keys(item.nodes).forEach((node) => {

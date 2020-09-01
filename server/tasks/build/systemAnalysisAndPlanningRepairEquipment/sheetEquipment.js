@@ -104,13 +104,8 @@ module.exports = function ({ equipment, data, wb, defaultStyle }) {
                     createCell(ws, [row, 12], repairCompleted[0]['description'], defaultStyle)
                 }
 
-                createCell(ws, [row, 13], item['period'], defaultStyle)
-                createCell(
-                    ws,
-                    [row, 14],
-                    item['typeOfRepair'] === 'medium' ? 'Средний' : 'nodes' ? '' : '',
-                    defaultStyle
-                )
+                createCell(ws, [row, 13], equipment[key]['period'][i], defaultStyle)
+                createCell(ws, [row, 14], item['typeOfRepair'], defaultStyle)
 
                 // Расшифровка узлов
                 let descriptions = []
@@ -122,13 +117,13 @@ module.exports = function ({ equipment, data, wb, defaultStyle }) {
                 createCell(
                     ws,
                     [row, 15],
-                    item['typeOfRepair'] === 'nodes' && Object.keys(item['nodes']).join('\n'),
+                    item['typeOfRepair'] === 'текущий' && Object.keys(item['nodes']).join('\n'),
                     defaultStyle
                 )
                 createCell(
                     ws,
                     [row, 16],
-                    item['typeOfRepair'] === 'nodes' && descriptions.join('\n'),
+                    item['typeOfRepair'] === 'текущий' && descriptions.join('\n'),
                     defaultStyle
                 )
 
