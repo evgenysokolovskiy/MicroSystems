@@ -1,4 +1,5 @@
-// Парсить данные из parse и передать функции
+// Парсить файл Excel "План ремонтов"
+// Работать с полученными из функции данными
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file

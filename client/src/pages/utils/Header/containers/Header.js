@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { App } from '../components/Header/App'
 
 const city = 'Vologda, ru'
-const key = ''
-const url = ``
+const key = '************************'
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${key}&lang=ru`
 
 export class Header extends React.Component {
     constructor(props) {

@@ -1,4 +1,5 @@
-// Парсить данные из parse и передать функции
+// Парсить файл Excel "Выполненные ремонты"
+// Работать с полученными из функции данными
 
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
@@ -8,24 +9,26 @@ const systemAnalysisAndPlanningRepairEquipment = require(appRoot +
 const allEquipment = require(appRoot + '/server/tasks/build/allEquipment/')
 const dataAPI = require(appRoot + '/server/requests/api/dataAPI')
 const INDEXES = require(appRoot + '/server/config/repaire/cols').INDEXES_REPAIR_COMPLETED
+const LIMIT_NUMBER_EMERGENCY_STOPS = require(appRoot + '/server/config/repaire/')
+    .LIMIT_NUMBER_EMERGENCY_STOPS
+const {
+    inn,
+    act,
+    order,
+    customer,
+    executor,
+    startDate,
+    endDate,
+    typeOfRepair,
+    node,
+    description,
+    percent
+} = INDEXES
 
 // 1) Схлопнуть данные по инвентарным номерам
 
 const collapseDataByInn = function (data) {
     const d = clonedeep(data)
-    const {
-        inn,
-        act,
-        order,
-        customer,
-        executor,
-        startDate,
-        endDate,
-        typeOfRepair,
-        node,
-        description,
-        percent
-    } = INDEXES
     const obj = {}
 
     let nodes = {}
@@ -83,6 +86,13 @@ module.exports = function ({
                 plan[spot[0]].forEach((planItem, i) => {
                     if (+item['inn'] === +planItem['inn']) {
                         item['period'] = planItem['period']
+                        if (planItem['typeOfRepair'])
+                            item['typeOfRepair'] = planItem['typeOfRepair']
+                        if (planItem['nodes'])
+                            item['approvedNodes'] = planItem['nodes'].split('\r\n')
+                        if (planItem['comment']) item['comment'] = planItem['comment']
+                        // Добавить значение LIMIT_NUMBER_EMERGENCY_STOPS
+                        item['limitNumber'] = LIMIT_NUMBER_EMERGENCY_STOPS[spot[0]]
                         if (!obj[spot[0]][planItem['period']]) obj[spot[0]][planItem['period']] = []
                         obj[spot[0]] = {
                             ...obj[spot[0]],
@@ -100,6 +110,8 @@ module.exports = function ({
                 const period = item['period']
                 const description = item['description']
                 const comment = item['comment']
+                // Добавить значение LIMIT_NUMBER_EMERGENCY_STOPS
+                item['limitNumber'] = LIMIT_NUMBER_EMERGENCY_STOPS[spot[0]]
                 let parseNodesItem = {}
                 if (item['nodes']) {
                     const nodes = item['nodes'].split('\r\n')
@@ -112,13 +124,12 @@ module.exports = function ({
                         }
                     })
                 }
+                item['approvedNodes'] = Object.keys(parseNodesItem)
                 item['nodes'] = parseNodesItem
                 obj[spot[0]][period] = [...obj[spot[0]][period], item]
             })
         }
     })
-
-    Object.entries(equipment).forEach((spot) => (spot[1]['approved'] = obj[spot[0]]))
 
     fs.readdir(parsePathRepairCompleted, function (err, files) {
         const paths = files.map((item) => `${parsePathRepairCompleted}/${item}`)
@@ -127,28 +138,48 @@ module.exports = function ({
                 // Прочитать файл по ссылке paths[i]
                 const data = xlsx.parse(`${paths[i]}`)[0].data
                 if (data) {
+                    const collapsedData = collapseDataByInn(data)
+
+                    Object.entries(equipment).forEach((spot) => {
+                        spot[1]['all'].forEach((item) => {
+                            collapsedData.forEach((completed) => {
+                                if (+item['inn'] === +completed['inn']) {
+                                    item['completed'] = {
+                                        endDate: completed['endDate'],
+                                        typeOfRepair: completed['typeOfRepair'],
+                                        nodes: completed['nodes'],
+                                        description: completed['description']
+                                    }
+                                }
+                            })
+                        })
+                        spot[1]['approved'] = obj[spot[0]]
+                    })
+
                     resolve(
                         (() => {
                             // ОТПРАВИТЬ ДАННЫЕ К API
-                            dataAPI({ app, equipment })
-
+                            dataAPI({
+                                app,
+                                equipment
+                            })
                             /*
                             // СФОРМИРОВАТЬ ОТЧЁТЫ EXCEL
                             systemAnalysisAndPlanningRepairEquipment({
                                 equipment,
                                 collapseNodes,
-                                data: collapseDataByInn(data),
+                                data: collapsedData,
                                 buildPath
                             })
-                            
+
                             allEquipment({
                                 equipment,
                                 plan,
                                 collapseNodes,
-                                data: collapseDataByInn(data),
+                                data: collapsedData,
                                 buildPath
                             })
-                            */
+*/
                         })()
                     )
                 } else {

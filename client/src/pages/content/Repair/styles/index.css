@@ -12,6 +12,7 @@ th {
   font-size: 16px;
 }
 
+.ant-table-tbody,
 .ant-table-fixed-left {
   font-size: 12px;
 }

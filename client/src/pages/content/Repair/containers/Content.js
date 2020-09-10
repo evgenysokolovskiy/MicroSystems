@@ -37,7 +37,6 @@ class Content extends PureComponent {
 
     render() {
         const { data, checkForGeneralUse, checkForAntd, scheme, targetMenu } = this.props
-
         // check
         let c
         targetMenu &&

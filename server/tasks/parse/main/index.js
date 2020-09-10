@@ -3,9 +3,9 @@
 const fs = require('fs')
 const xlsx = require('node-xlsx') // parse excel file
 const clonedeep = require('lodash.clonedeep')
+const getAllEquipment = require(appRoot + '/server/tasks/primaryDataProcessing/_3-getAllEquipment')
 const calculatePlan = require(appRoot + '/server/tasks/calculatePlan/_4-calculatePlan')
 const equipmentOffPlan = require(appRoot + '/server/tasks/equipmentOffPlan/')
-const equipmentAll = require(appRoot + '/server/tasks/equipmentAll/')
 const collapseNodes = require(appRoot + '/server/tasks/collapseNodes')
 
 // Индекс инвентарного номера (для фильтрации исходных данных по filter)
@@ -40,7 +40,7 @@ module.exports = function ({
                     // Оборудование, не входящее в предварительный план ремонтов
                     const offPlan = equipmentOffPlan(filteredData || data, plan)
                     // Все оборудование
-                    const all = plan && offPlan && equipmentAll({ plan, offPlan })
+                    const all = getAllEquipment(filteredData || data)
                     // Добавить к объекту свойства "all" и "offPlan"
                     Object.entries(plan).forEach((item) => {
                         item[1]['all'] = all[item[0]]

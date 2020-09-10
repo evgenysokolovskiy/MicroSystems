@@ -20,7 +20,40 @@ const monthIndexes = {
 
 export default class PlanTableComponent extends PureComponent {
     state = {
-        menu: Object.keys(this.props.data['approved'])[0]
+        sortedDateObj: {},
+        menu: ''
+    }
+
+    async componentDidMount() {
+        const data = await this.props.data
+        // Отсортировать по дате (чтобы tab выстроились в порядке возрастания даты)
+        const sortedDateObj = Object.fromEntries(
+            Object.entries(data['approved']).sort((a, b) => {
+                return (
+                    new Date(2020, monthIndexes[a[0].split(' ')[0]]).getTime() -
+                    new Date(2020, monthIndexes[b[0].split(' ')[0]]).getTime()
+                )
+            })
+        )
+        this.setState({
+            sortedDateObj,
+            menu: Object.keys(sortedDateObj)[0]
+        })
+    }
+
+    async componentDidUpdate(prevProps) {
+        if (prevProps.data !== this.props.data) {
+            // Отсортировать по дате (чтобы tab выстроились в порядке возрастания даты)
+            const sortedDateObj = Object.fromEntries(
+                Object.entries(this.props.data['approved']).sort((a, b) => {
+                    return (
+                        new Date(2020, monthIndexes[a[0].split(' ')[0]]).getTime() -
+                        new Date(2020, monthIndexes[b[0].split(' ')[0]]).getTime()
+                    )
+                })
+            )
+            this.setState({ sortedDateObj })
+        }
     }
 
     onChangeTab = (activeKey) => {
@@ -87,11 +120,14 @@ export default class PlanTableComponent extends PureComponent {
 
         // Получить массив с наименованиями узлов для оборудования в соответствующий период времени
         const obj = {}
-        data['approved'][this.state.menu].forEach((item) => {
-            Object.keys(item['nodes']).forEach((node) => {
-                obj[node] = true
+        this.state.menu &&
+            data['approved'][this.state.menu].forEach((item) => {
+                item['approvedNodes'] &&
+                    item['approvedNodes'].forEach((node) => {
+                        obj[node] = true
+                    })
             })
-        })
+
         const arr = [...Object.keys(obj)]
         const sortedArr = arr.sort((a, b) => +a - +b)
 
@@ -143,21 +179,11 @@ export default class PlanTableComponent extends PureComponent {
 
         let tabsWithTables = [] // Компонент для рендеринга
 
-        if (data) {
-            // Отсортировать по дате (чтобы tab ыстроились в порядке возрастания даты)
-            const sortedDateObj = Object.fromEntries(
-                Object.entries(data['approved']).sort((a, b) => {
-                    return (
-                        new Date(2020, monthIndexes[a[0].split(' ')[0]]).getTime() -
-                        new Date(2020, monthIndexes[b[0].split(' ')[0]]).getTime()
-                    )
-                })
-            )
-
+        if (this.state.sortedDateObj) {
             // Для каждого периода времени строится своя таблица
             // Далее соотносится с Tabs
             let tables = []
-            Object.values(sortedDateObj).forEach((period) => {
+            Object.values(this.state.sortedDateObj).forEach((period) => {
                 // Найти 'dataSource'
                 let dataSource = []
                 period.forEach((item, i) => {
@@ -171,8 +197,8 @@ export default class PlanTableComponent extends PureComponent {
                         ...allNodes
                     }
 
-                    item['nodes'] &&
-                        Object.keys(item['nodes']).forEach((node) => {
+                    item['approvedNodes'] &&
+                        item['approvedNodes'].forEach((node) => {
                             obj[node] = ' '
                         })
 
@@ -211,7 +237,7 @@ export default class PlanTableComponent extends PureComponent {
                 tables = [...tables, table]
             })
 
-            Object.keys(sortedDateObj).forEach(
+            Object.keys(this.state.sortedDateObj).forEach(
                 (item, i) =>
                     (tabsWithTables = [
                         ...tabsWithTables,

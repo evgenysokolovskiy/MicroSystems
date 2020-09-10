@@ -18,7 +18,7 @@ export default class AllEquipmentTableComponent extends PureComponent {
     }
 
     onChange = (pagination, filters, sorter) => {
-        console.log('params', pagination, filters, sorter)
+        //console.log('params', pagination, filters, sorter)
         this.setState({
             filteredInfo: filters
         })
@@ -50,14 +50,29 @@ export default class AllEquipmentTableComponent extends PureComponent {
         const mod = {}
         const per = {}
         const ps = {}
+        const type = {}
+        const completedType = {}
+        const completedData = {}
+
         data['all'].forEach((item) => {
             mod[[item['model']]] = true
             per[[item['period']]] = true
             ps[[item['ps']]] = true
+            if (item['typeOfRepair']) type[[item['typeOfRepair']]] = true
+            if (item['completed']) {
+                if (item['completed']['typeOfRepair'])
+                    completedType[item['completed']['typeOfRepair']] = true
+                if (item['completed']['endDate'])
+                    completedData[item['completed']['endDate'].split('.').reverse()[0]] = true
+            }
         })
         const models = Object.keys(mod)
         const periods = Object.keys(per)
         const pss = Object.keys(ps)
+        const typeOfRepair = Object.keys(type)
+        const completedTypeOfRepair = Object.keys(completedType)
+        const completedEndDate = Object.keys(completedData)
+
         const modelsObj = models.map((item) => {
             return {
                 text: item,
@@ -76,22 +91,39 @@ export default class AllEquipmentTableComponent extends PureComponent {
                 value: item
             }
         })
+        const typeOfRepairObj = typeOfRepair.map((item) => {
+            return {
+                text: item,
+                value: item
+            }
+        })
+        const completedTypeOfRepairObj = completedTypeOfRepair.map((item) => {
+            return {
+                text: item,
+                value: item
+            }
+        })
+        const completedEndDateObj = completedEndDate.map((item) => {
+            return {
+                text: item,
+                value: item
+            }
+        })
 
         let column = [
             {
                 title: '№ п/п',
                 dataIndex: 'idx',
-                width: 60,
-                fixed: 'left'
+                width: 60
             },
             {
                 title: 'Модель',
                 dataIndex: 'model',
-                width: 150,
-                fixed: 'left',
+                width: 120,
                 filters: modelsObj,
                 filteredValue: filteredInfo.model || null,
-                onFilter: (value, record) => record.model.toString().includes(value),
+                onFilter: (value, record) =>
+                    record.model && record.model.toString().includes(value),
                 sorter: (a, b) => a.model.length - b.model.length,
                 sortDirections: ['descend']
             },
@@ -99,7 +131,6 @@ export default class AllEquipmentTableComponent extends PureComponent {
                 title: 'Цех. №',
                 dataIndex: 'num',
                 width: 80,
-                fixed: 'left',
                 sorter: (a, b) => a.num - b.num,
                 sortDirections: ['descend', 'ascend']
             },
@@ -115,66 +146,106 @@ export default class AllEquipmentTableComponent extends PureComponent {
                     }
                 },
 
-                width: 150,
-                fixed: 'left',
+                width: 120,
                 sorter: (a, b) => a.inn - b.inn,
+                sortDirections: ['descend', 'ascend']
+            },
+            {
+                title: 'ПС',
+                dataIndex: 'ps',
+                width: 80,
+                filters: pssObj,
+                filteredValue: filteredInfo.ps || null,
+                onFilter: (value, record) => record.ps && record.ps.toString().includes(value),
+                sorter: (a, b) => a.ps.match(/[0-9].*/) - b.ps.match(/[0-9].*/),
                 sortDirections: ['descend', 'ascend']
             },
             {
                 title: 'Наработка',
                 dataIndex: 'mtbf',
-                width: 120,
-                fixed: 'left',
+                width: 100,
                 sorter: (a, b) => a.mtbf - b.mtbf,
                 sortDirections: ['descend', 'ascend']
             },
             {
                 title: 'Процент',
                 dataIndex: 'percentTimeOfMtbf',
-                width: 120,
-                fixed: 'left',
+                width: 90,
                 sorter: (a, b) => a.percentTimeOfMtbf - b.percentTimeOfMtbf,
                 sortDirections: ['descend', 'ascend']
             },
             {
-                title: 'Вид ремонта',
-                dataIndex: 'typeOfRepair',
-                width: 150,
-                fixed: 'left',
-                render: (typeOfRepair) => (
-                    <span>
-                        {typeOfRepair &&
-                            typeOfRepair.map((type) => {
-                                const color = type === 'Средний' ? 'lightcoral' : 'geekblue'
-                                return (
-                                    <Tag color={color} key={type}>
-                                        {type.toUpperCase()}
-                                    </Tag>
-                                )
-                            })}
-                    </span>
-                )
+                title: 'Последний выполненный ремонт',
+                children: [
+                    {
+                        title: 'Вид',
+                        dataIndex: 'completedTypeOfRepair',
+                        width: 100,
+                        filters: completedTypeOfRepairObj,
+                        filteredValue: filteredInfo.completedTypeOfRepair || null,
+                        onFilter: (value, record) =>
+                            record.completedTypeOfRepair &&
+                            record.completedTypeOfRepair.toString().includes(value)
+                    },
+                    {
+                        title: 'Узлы',
+                        dataIndex: 'completedNodes',
+                        width: 50
+                    },
+                    {
+                        title: 'Дата',
+                        dataIndex: 'completedEndDate',
+                        width: 90,
+                        filters: completedEndDateObj,
+                        filteredValue: filteredInfo.completedEndDate || null,
+                        onFilter: (value, record) =>
+                            record.completedEndDate &&
+                            record.completedEndDate.toString().includes(value)
+                    }
+                ]
             },
             {
-                title: 'Дата ремонта',
-                dataIndex: 'period',
-                width: 120,
-                fixed: 'left',
-                filters: periodsObj,
-                filteredValue: filteredInfo.period || null,
-                onFilter: (value, record) =>
-                    record.period && record.period.toString().includes(value)
-            },
-            {
-                title: 'ПС',
-                dataIndex: 'ps',
-                width: 80,
-                fixed: 'left',
-                filters: pssObj,
-                filteredValue: filteredInfo.ps || null,
-                onFilter: (value, record) => record.ps && record.ps.toString().includes(value),
-                sorter: (a, b) => a.ps.match(/[0-9].*/) - b.ps.match(/[0-9].*/),
-                sortDirections: ['descend', 'ascend']
+                title: 'План ремонтов',
+                children: [
+                    {
+                        title: 'Вид',
+                        dataIndex: 'typeOfRepair',
+                        width: 100,
+                        filters: typeOfRepairObj,
+                        filteredValue: filteredInfo.typeOfRepair || null,
+                        onFilter: (value, record) =>
+                            record.typeOfRepair && record.typeOfRepair.toString().includes(value)
+                        /*
+                        render: (typeOfRepair) => (
+                            <span>
+                                {typeOfRepair &&
+                                    typeOfRepair.map((type) => {
+                                        const color = type === 'Средний' ? 'lightcoral' : 'geekblue'
+                                        return (
+                                            <Tag color={color} key={type}>
+                                                {type.toUpperCase()}
+                                            </Tag>
+                                        )
+                                    })}
+                            </span>
+                        )
+                        */
+                    },
+                    {
+                        title: 'Узлы',
+                        dataIndex: 'nodes',
+                        width: 50
+                    },
+                    {
+                        title: 'Дата',
+                        dataIndex: 'period',
+                        width: 90,
+                        filters: periodsObj,
+                        filteredValue: filteredInfo.period || null,
+                        onFilter: (value, record) =>
+                            record.period && record.period.toString().includes(value)
+                    }
+                ]
             }
         ]
 
@@ -197,18 +268,54 @@ export default class AllEquipmentTableComponent extends PureComponent {
                         let type
                         if (item['typeOfRepair']) {
                             type =
-                                item['typeOfRepair'] === 'medium'
-                                    ? ['Средний']
-                                    : item['typeOfRepair'] === 'nodes'
-                                    ? Object.keys(item['nodes'])
+                                item['typeOfRepair'] === 'средний'
+                                    ? ['средний']
+                                    : item['typeOfRepair'] === 'текущий' || item['approvedNodes']
+                                    ? ['текущий']
                                     : null
                         } else {
                             type = null
                         }
                         return type
                     })(),
+                    nodes: (() => {
+                        if (!item['approvedNodes']) return
+                        const sortedNodes = item['approvedNodes'].sort((a, b) => +a - +b)
+                        const nodes = sortedNodes.map((node) => ` ${node} `)
+                        return nodes
+                    })(),
                     period: item['period'],
-                    ps: (() => item['ps'] && item['ps'])()
+                    ps: (() => item['ps'] && item['ps'])(),
+                    completedTypeOfRepair: (() => {
+                        let type
+                        if (item['completed'] && item['completed']['typeOfRepair']) {
+                            type = item['completed']['typeOfRepair']
+                        } else {
+                            type = null
+                        }
+
+                        return type
+                    })(),
+                    completedNodes: (() => {
+                        let nodes
+                        if (item['completed'] && item['completed']['nodes']) {
+                            nodes = item['completed']['nodes']
+                        } else {
+                            nodes = null
+                        }
+
+                        return nodes
+                    })(),
+                    completedEndDate: (() => {
+                        let date
+                        if (item['completed'] && item['completed']['endDate']) {
+                            date = item['completed']['endDate']
+                        } else {
+                            date = null
+                        }
+
+                        return date
+                    })()
                 }
 
                 dataSource = [...dataSource, obj]
@@ -221,6 +328,7 @@ export default class AllEquipmentTableComponent extends PureComponent {
                         columns={column}
                         dataSource={dataSource}
                         bordered
+                        size="small"
                         onChange={this.onChange}
                         pagination={{
                             defaultPageSize: 20,
@@ -228,7 +336,6 @@ export default class AllEquipmentTableComponent extends PureComponent {
                             pageSizeOptions: ['20', '30', data['allEquipment']]
                         }}
                         scroll={{ x: 'max-content', y: '80vh' }}
-                        size="small"
                         // Событие на строке
                         onRow={(record, rowIndex) => {
                             return {

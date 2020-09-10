@@ -113,7 +113,7 @@ module.exports = function ({ equipmentFilteredPercentMoreNorm, plan, data, wb, d
                 plan[key] &&
                 plan[key].filter((planItem) => +planItem['inn'] === +item['inn'])
             if (repairPlan && repairPlan[0]) {
-                createCell(ws, [row, 13], repairPlan[0]['date'], defaultStyle)
+                createCell(ws, [row, 13], repairPlan[0]['period'], defaultStyle)
                 createCell(ws, [row, 14], repairPlan[0]['typeOfRepair'], defaultStyle)
                 createCell(ws, [row, 15], repairPlan[0]['nodes'], defaultStyle)
                 createCell(ws, [row, 16], repairPlan[0]['description'], defaultStyle)

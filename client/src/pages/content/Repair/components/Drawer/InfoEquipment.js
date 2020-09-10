@@ -9,6 +9,7 @@ import {
     XAxis,
     YAxis,
     CartesianGrid,
+    ReferenceLine,
     Tooltip,
     Legend
 } from 'recharts'
@@ -76,11 +77,30 @@ const statisticPlan = [
         title: 'Процент',
         dataIndex: 'percentTimeOfMtbf',
         key: 'percentTimeOfMtbf'
+    }
+]
+
+const completedPlan = [
+    {
+        title: 'Вид',
+        dataIndex: 'completedTypeOfRepair',
+        key: 'completedTypeOfRepair'
     },
     {
-        title: 'Последний ремонт',
-        dataIndex: 'last',
-        key: 'last'
+        title: 'Узлы',
+        dataIndex: 'completedNodes',
+        key: 'completedNodes',
+        width: 50
+    },
+    {
+        title: 'Наименование',
+        dataIndex: 'completedDescription',
+        key: 'completedDescription'
+    },
+    {
+        title: 'Дата',
+        dataIndex: 'completedEndDate',
+        key: 'completedEndDate'
     }
 ]
 
@@ -97,13 +117,16 @@ export default function (props) {
         percentTimeOfMtbf,
         typeOfRepair,
         period,
+        allNodes,
         nodes,
-        comment
+        comment,
+        limitNumber,
+        completed
     } = data
 
     const plan = [
         {
-            key: '1',
+            key: 'plan',
             model,
             inn,
             num,
@@ -114,8 +137,8 @@ export default function (props) {
                     type =
                         typeOfRepair === 'средний'
                             ? ['Средний']
-                            : typeOfRepair === 'текущий'
-                            ? Object.keys(data['nodes'])
+                            : typeOfRepair === 'текущий' || data['approvedNodes']
+                            ? data['approvedNodes'].sort((a, b) => +a - +b)
                             : null
                 } else {
                     type = null
@@ -127,7 +150,7 @@ export default function (props) {
 
     const statistic = [
         {
-            key: '1',
+            key: 'statistic',
             mtbf,
             sumAmount,
             sumTime: (() => sumTime && sumTime.toFixed(2))(),
@@ -135,25 +158,39 @@ export default function (props) {
         }
     ]
 
+    const completedRepair = completed && [
+        {
+            key: 'completedRepair',
+            completedTypeOfRepair: completed['typeOfRepair'],
+            completedNodes: completed['nodes'],
+            completedDescription: completed['description'],
+            completedEndDate: completed['endDate']
+        }
+    ]
+
     let d = []
 
     visible &&
-        nodes &&
-        Object.entries(nodes).forEach((node) => {
-            // Дробное значение времени в исходной таблице excel предоставляется с запятой, имеет тип строки
-            // Необходимо преобразовать к числу с плавающей точкой
-            // Для натуральных чисел преобразование не требуется
-            let time
-            const nodeTime = node[1]['time']
-            typeof nodeTime === 'string' ? (time = +nodeTime.replace(',', '.')) : (time = +nodeTime)
+        allNodes &&
+        Object.entries(allNodes)
+            .sort((a, b) => +a[0] - +b[0])
+            .forEach((node) => {
+                // Дробное значение времени в исходной таблице excel предоставляется с запятой, имеет тип строки
+                // Необходимо преобразовать к числу с плавающей точкой
+                // Для натуральных чисел преобразование не требуется
+                let time
+                const nodeTime = node[1]['time']
+                typeof nodeTime === 'string'
+                    ? (time = +nodeTime.replace(',', '.'))
+                    : (time = +nodeTime)
 
-            const obj = {
-                name: node[0],
-                uv: +node[1]['amount'],
-                pv: time
-            }
-            d = [...d, obj]
-        })
+                const obj = {
+                    name: node[0],
+                    uv: +node[1]['amount'],
+                    pv: time
+                }
+                d = [...d, obj]
+            })
 
     const hasAmountElement = (
         <>
@@ -169,8 +206,8 @@ export default function (props) {
                 style={{ marginBottom: '20px' }}
             />
 
-            <Text>Статистика узлов, которым необходим ремонт</Text>
-            <ResponsiveContainer width="100%" aspect={2.7 / 1.0}>
+            <Text>Аварийные остановки по узлам</Text>
+            <ResponsiveContainer width="100%" height="auto" aspect={2.7 / 1.0}>
                 <BarChart
                     data={d}
                     margin={{
@@ -183,17 +220,28 @@ export default function (props) {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
+                    <ReferenceLine y={limitNumber} stroke="red" />
                     <Tooltip />
                     <Legend />
                     <Bar dataKey="pv" fill="#8884d8" name="Время остановок" />
                     <Bar dataKey="uv" fill="#82ca9d" name="Количество остановок" />
                 </BarChart>
             </ResponsiveContainer>
-
+            <Title level={4} style={{ marginTop: '40px' }}>
+                Последний выполненный ремонт:
+            </Title>
+            <Table
+                dataSource={completed && completedRepair}
+                columns={completedPlan}
+                bordered
+                size="small"
+                pagination={false}
+                style={{ marginBottom: '20px' }}
+            />
             <Title level={4} style={{ marginTop: '40px' }}>
                 Основание для включения в план:
             </Title>
-            <Text>Анализ по аварийным выходам оборудования</Text>
+            <Text>{comment ? comment : 'Анализ по аварийным выходам оборудования'}</Text>
         </>
     )
 
